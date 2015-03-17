@@ -48,6 +48,14 @@ class EloquentUserRepository extends CRepository implements UserRepository {
 		}
 	}
 
+	public function getIdByUsername($username){
+		$user = User::where('username', '=', $username)->first();
+		if(is_null($user)){
+			return 0;
+		}
+		return $user->id;
+	}
+
 	// skapar eller uppdaterar en användare
 	public function createOrUpdate($input, $id = null)
 	{

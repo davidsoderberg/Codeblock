@@ -11,6 +11,7 @@
 |
 */
 Route::pattern('id', '[0-9]+');
+Route::pattern('username', '[-_0-9A-Za-z]+');
 
 Route::get('/', 'MenuController@index');
 Route::get('browse', 'MenuController@browse');
@@ -32,6 +33,7 @@ Route::get('posts/category/{id}', 'PostController@category');
 Route::get('user/list/{id?}', 'UserController@listUserBlock');
 Route::get('posts/{id}', 'PostController@show');
 Route::get('user/{id?}', 'UserController@show');
+Route::get('user/{username?}', 'UserController@showByUsername');
 Route::group(['middleware' => 'auth'], function() {
 
 	Route::get('posts', 'PostController@index');

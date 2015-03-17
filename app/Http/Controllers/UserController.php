@@ -58,14 +58,18 @@ class UserController extends Controller {
 	 */
 	public function show($id = 0)
 	{
-		if($id == 0){
-			$id = Auth::user()->id;
-		}
 		if(Auth::check()) {
+			if($id == 0){
+				$id = Auth::user()->id;
+			}
 			$user = $this->user->get($id);
 			return View::make('user.show')->with('title', $user->username)->with('user', $user);
 		}
 		return Redirect::action('UserController@listUserBlock', array($id));
+	}
+
+	public function showByUsername($username){
+		return $this->show($this->user->getIdByUsername($username));
 	}
 
 	/**
@@ -75,10 +79,15 @@ class UserController extends Controller {
 	 */
 	public function listUserBlock($id = 0){
 		if($id == 0){
-			$id = Auth::user()->id;
+			if(Auth::check()) {
+				$id = Auth::user()->id;
+			}
 		}
 
 		$user = $this->user->get($id);
+		if(is_null($user)){
+			return Redirect::action('MenuController@browse');
+		}
 		return View::make('user.list')->with('title', $user->username)->with('user', $user)->with('posts', $user->posts);
 	}
 
