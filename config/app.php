@@ -54,6 +54,8 @@ return [
 
 	'locale' => 'en',
 
+	'languages' => array('en'),
+
 	/*
 	|--------------------------------------------------------------------------
 	| Application Fallback Locale
