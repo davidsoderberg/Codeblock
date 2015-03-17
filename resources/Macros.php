@@ -7,6 +7,11 @@ HTML::macro('version', function($path){
 	return asset($path).'?v='.filemtime(public_path().'/'.$path);
 });
 
+HTML::macro('mention', function($text){
+	// Found at: http://granades.com/2009/04/06/using-regular-expressions-to-match-twitter-users-and-hashtags/
+	return preg_replace('/(^|\s)@(\w+)/', '<a class="mention" target="_blank" href="'.action('MenuController@index').'/user/\2">@\2</a>', $text);
+});
+
 /**
  * Visar alla meddelanderna i vyerna.
  */
