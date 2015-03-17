@@ -24,7 +24,7 @@ class EloquentNotificationRepository extends CRepository implements Notification
 			if(!is_null($user)){
 				$this->user = $user;
 			}else{
-				$this->errors = array('user' => 'That user does not exist.');
+				$this->errors = array('user' => array('That user does not exist.'));
 				return false;
 			}
 		}
