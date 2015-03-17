@@ -14,6 +14,13 @@ class EloquentNotificationRepository extends CRepository implements Notification
 		$this->user = $user;
 	}
 
+	public function get($id = 0){
+		if(is_numeric($id) && $id > 0){
+			return Forum::find($id);
+		}
+		return Forum::all();
+	}
+
 	public function send($user_id, $type, $subject, $body, $object) {
 
 		$note = new Notification();
@@ -107,5 +114,13 @@ class EloquentNotificationRepository extends CRepository implements Notification
 			return true;
 		}
 		return false;
+	}
+
+	public function delete($id){
+		$Notification = Notification::find($id);
+		if($Notification == null){
+			return false;
+		}
+		return $Notification->delete();
 	}
 }
