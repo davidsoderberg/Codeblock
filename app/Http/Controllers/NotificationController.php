@@ -20,27 +20,27 @@ class NotificationController extends Controller {
 		$this->notification = $notification;
 	}
 
-
 	/**
-	 *
+	 * @return mixed
 	 */
 	public function index() {
-
+		return View::make('notification.index')->with('title', 'Notifications')->with('notifications', $this->notification->get());
 	}
 
-
 	/**
-	 *
+	 * @return mixed
 	 */
-	public function store() {
-		//
+	public function listNotification(){
+		return View::make('notification.list')->with('title', 'Notifications');
 	}
 
 	/**
 	 * @param $id
+	 * @return mixed
 	 */
 	public function show($id) {
-
+		$notification = $this->notification->get($id);
+		return View::make('notification.show')->with('title', 'Notification: '.$notification->subject)->with('notification', $notification);
 	}
 
 	/**

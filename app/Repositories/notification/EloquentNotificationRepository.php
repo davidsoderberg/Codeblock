@@ -21,26 +21,28 @@ class EloquentNotificationRepository extends CRepository implements Notification
 		return Forum::all();
 	}
 
-	public function send($user_id, $type, $subject, $body, $object) {
+	public function send($user_id, $type, $object, $subject = null, $body = null) {
 
 		$note = new Notification();
 
 		if(is_numeric($user_id)){
 			$note->user_id = $user_id;
 			$user = $this->user->get($user_id);
-			if(!is_null($user)){
-				$this->user = $user;
-			}else{
-				$this->errors = array('user' => array('That user does not exist.'));
-				return false;
-			}
+		}else{
+			$user = $this->user->getIdByUsername($user_id);
+		}
+		if(!is_null($user)){
+			$this->user = $user;
+		}else{
+			$this->errors = array('user' => array('That user does not exist.'));
+			return false;
 		}
 
 		if(isset($type) && NotificationType::isType($type)){
 			$note->type = $type;
 		}
 
-		if(isset($subject) && isset($body)){
+		if(!is_null($subject) && !is_null($body)){
 			$note->subject = $subject;
 			$note->body = $body;
 		}else{
