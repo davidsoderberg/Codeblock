@@ -1,0 +1,121 @@
+*, *:before, *:after {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+* {
+	margin: 0;
+	padding: 0;
+}
+h1, h2, h3, h4 ,h5 ,h6{
+	text-transform: uppercase;
+	text-align: center;
+	border-bottom: 1px solid $browngray;
+	margin-bottom: 0.5em;
+}
+html{
+	background: $white;
+}
+body{
+	@include clearfix();
+	font-family: Consolas, Monaco, 'Andale Mono', monospace;
+	color: $browngray;
+	background: $browngray;
+	max-width: 100%;
+	overflow-x:hidden;
+}
+a{
+	color: $browngray;
+}
+hr{
+	background: $browngray;
+	border:none;
+	height: 1px;
+	margin-top: 1%;
+}
+dt{
+	font-weight: bolder;
+	&:after{
+		content: ':';
+		margin-right: 5px;
+	}
+	& + dd{
+		margin-bottom: 10px;
+	}
+	& + dl{
+		float: left;
+		&:before{
+			clear: both;
+		}
+	}
+}
+form{
+	@include clearfix();
+}
+label{
+	@extend .font-bold;
+}
+input, textarea, select{
+	/* 98.7 */
+	width: 100%;
+	padding: 5px 7.5px;
+	border:1px solid $browngray;
+	margin-bottom: 1em;
+	font-family: Consolas, Monaco, 'Andale Mono', monospace;
+	color: $browngray;
+	display: block;
+	&:focus, &:hover{
+		border:1px solid $browngray;
+		outline: none;
+	}
+	&.has-error{
+		margin-bottom: 0;
+	}
+}
+input[type="checkbox"]{
+	width: auto;
+	padding: 0;
+	display: inline;
+}
+select{
+	width: 100%;
+}
+textarea{
+	resize:vertical;
+}
+button, .button{
+	text-decoration: none;
+	background: transparent;
+	border: none;
+	width: auto;
+	padding: 5px 7.5px;
+	background: $browngray;
+	color: $white;
+	font-family: Consolas, Monaco, 'Andale Mono', monospace;
+	font-size: 16px;
+	float: right;
+	&.big {
+		float: none;
+		font-size: 1.5em;
+		padding: 0.5em 1em;
+		margin-top: 1em !important;
+		text-transform: uppercase;
+		display: inline-block;
+	}
+}
+h2 button{
+	margin-top: 0.1em;
+}
+table{
+	width: 100%;
+	border: 1px solid $browngray;
+	border-collapse: collapse;
+	td, th{
+		text-align: left;
+		padding: 5px;
+		border: 1px solid $browngray;
+	}
+	td:last-of-type a{
+		margin-left: 5px;
+	}
+}

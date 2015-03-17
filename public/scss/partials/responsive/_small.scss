@@ -1,0 +1,166 @@
+@media (max-width: 800px) {
+	.display-inline{
+		display: inline !important;
+	}
+	#menubutton{
+		display: block;
+		line-height: 40px;
+		min-height: 40px;
+		padding: 10px;
+		text-align: center;
+		border-top: 1px solid $browngray;
+		border-bottom: 1px solid $browngray;
+		margin-top: 10px;
+		text-decoration: none;
+		& > i{
+			margin-right: 10px;
+		}
+		&:hover{
+			background: $browngray;
+			color: $white
+		}
+	}
+	#loggo{
+		display: block;
+		float: none;
+		width: 100%;
+		text-align: center;
+		line-height: 1em;
+		padding: 0;
+		margin-top: 10px;
+		a{
+			line-height: 1em;
+		}
+		@include clearfix();
+	}
+	.hideUl + ul, .hideUl + .menu{
+		display: none !important;
+	}
+	.menu{
+		float: none;
+		a{
+			line-height: 40px;
+			min-height: 40px;
+		}
+		ul{
+			display: inline;
+			float: none;
+			li{
+				line-height: 40px;
+				min-height: 40px;
+				&.form:hover a{
+					color: $white;
+				}
+				&:hover{
+					background: $browngray !important;
+					a{
+						color: $white;
+					}
+				}
+				ul{
+					border:none;
+					display: block;
+					position: relative;
+					margin-left: 0;
+					margin-top: 0;
+					li:first-of-type{
+						border-top: 1px solid $browngray;
+					}
+					li:last-of-type{
+						border-bottom: 0;
+					}
+				}
+				text-align: center;
+				float: none;
+				display: block;
+				border-bottom: 1px solid $browngray;
+				&.divider{
+					display: none;
+				}
+				form{
+					width: 90%;
+					margin:0 auto;
+					padding: 0;
+					input{
+						margin-left: -2%;
+					}
+				}
+			}
+			a{
+				padding: 10px;
+			}
+		}
+	}
+	#footer {
+		min-height: 0;
+		line-height: 2em;
+		padding: 10px 0;
+		& > .wrapper > *{
+			float: none;
+			padding: 0;
+			text-align: center;
+			&.menu {
+				a{
+					line-height: 2em;
+					&:hover{
+						color: $browngray;
+						font-weight: bolder;
+					}
+				}
+				ul {
+					min-height: 2em;
+					padding: 0;
+					margin:0;
+					li{
+						min-height: 2em;
+						line-height: 2em;
+						display: inline;
+						float: none;
+						border-bottom: none;
+						&.divider{
+							display: none;
+						}
+					}
+				}
+			}
+		}
+	}
+	.block{
+		width: 100%;
+		margin: 0.5% 0;
+		display: block;
+	}
+	#header, #footer {
+		.wrapper {
+			width: 100%;
+			padding: 0;
+			margin: 0;
+		}
+	}
+	.wrapper{
+		width: auto;
+		margin: 5% 0;
+		padding: 2.5%;
+		.verticalRule {
+			background: none;
+			.text{
+				display: none;
+			}
+			& > .float-right, & > .float-left {
+				float: none;
+				width: 100%;
+			}
+		}
+	}
+	.only-small{
+		display: block;
+	}
+	.only-large{
+		display: none;
+	}
+
+	.pagination, .pager{
+		margin-top: 0;
+		margin-bottom: 1em;
+	}
+}

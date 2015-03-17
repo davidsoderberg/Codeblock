@@ -1,0 +1,33 @@
+@media (max-width: 992px) {
+	table {
+		width: 100%;
+		border: none;
+		thead {
+			display: none;
+		}
+		tbody, tr, th, td {
+			display: block;
+		}
+		th, td {
+			padding: .5em;
+			vertical-align: middle;
+			border-top: none;
+			&:first-of-type{
+				border-top: 1px solid $browngray;
+			}
+		}
+		tbody {
+			tr {
+				margin-bottom: 1em;
+			}
+			td[data-title]:before {
+				content: attr(data-title)': ';
+				font-weight: bolder;
+			}
+		}
+	}
+}
+
+@import "responsive/large";
+@import "responsive/medium";
+@import "responsive/small";

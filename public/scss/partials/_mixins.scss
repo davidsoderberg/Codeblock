@@ -1,0 +1,40 @@
+@mixin clearfix() {
+	*zoom:1;
+
+	&:before,
+	&:after {
+		content:"";
+		display:table;
+	}
+	&:after {
+		clear:both;
+	}
+}
+
+@function color-switch($color){
+	@if $color == red {
+		@return $red;
+	} @else if $color == green {
+		@return $green;
+	} @else if $color == blue {
+		@return $blue;
+	} @else if $color == orange{
+		@return $orange;
+	}
+	@return '';
+}
+
+@mixin color() {
+	$colors: red, green, blue, orange;
+	$alerts: error, success, info, warning;
+
+	@for $i from 1 through length($colors) {
+		.color-#{nth($colors, $i)} {
+			color: color-switch(nth($colors, $i));
+		}
+		.background-#{nth($colors, $i)}, .#{nth($alerts, $i)} {
+			background: color-switch(nth($colors, $i));
+			border:1px solid color-switch(nth($colors, $i));
+		}
+	}
+}

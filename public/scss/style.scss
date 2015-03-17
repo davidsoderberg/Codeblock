@@ -1,0 +1,406 @@
+@import "vendor/font-awesome";
+@import "vendor/chosen";
+@import "vendor/codemirror";
+@import "vendor/mention";
+
+@import "partials/colors";
+@import "partials/mixins";
+@import "partials/reset";
+
+.wrapper{
+	background: $white;
+	width: 85%;
+	margin:5% auto;
+	padding: 2.5%;
+}
+#header, #footer{
+	.wrapper{
+		width: 90%;
+		padding: 0 2.5%;
+		margin:0 auto;
+		position: relative;
+		background: transparent;
+	}
+	background: $white;
+	min-height: 80px;
+	width: 100%;
+	position: relative;
+	@include clearfix();
+}
+#loggo{
+	border: none;
+	margin: 0;
+	float: left;
+	padding-right: 15px;
+	img{
+		vertical-align: middle;
+		margin-top: -5px;
+		margin-left: 5px;
+	}
+	a{
+		line-height: 80px;
+		text-decoration: none;
+	}
+	span{
+		background: $browngray;
+		&:first-of-type{
+			padding-left: 5px;
+		}
+		&:last-of-type{
+			padding-right: 5px;
+		}
+	}
+}
+
+.alert{
+	color: $white;
+	display: block;
+	padding: 0.5% 0;
+	text-align: center;
+	margin-bottom: 1em;
+	@include clearfix();
+	.close-alert{
+		float: right;
+		color: $white;
+		margin-right: 1.5%;
+		text-decoration: none;
+	}
+	a{
+		color: $white;
+	}
+	&:empty {
+		display: none;
+	}
+}
+
+.tag{
+	padding: 0.4% 0.8%;
+	color: $white;
+	font-size: 0.8em;
+	line-height: 0.8em;
+	margin-right: 5px;
+	font-weight: bolder;
+	text-decoration: none;
+	&:nth-child(2n+1) {
+		background: $orange !important;
+	}
+	&:nth-child(n) {
+		background: $green;
+	}
+	&:nth-child(4n+1) {
+		background: $red !important;
+	}
+	&:nth-child(4n) {
+		background: $blue;
+	}
+}
+
+.pagination, .pager{
+	margin-top: 1em;
+	list-style: none;
+	@include clearfix();
+	text-align: center;
+	li{
+		display: inline;
+		padding: 5px;
+		margin-right:5px;
+		background: $browngray;
+		color: $white;
+		a{
+			color: $white;
+		}
+		&:last-of-type{
+			margin-right: 0;
+		}
+		&.disabled{
+			display: none;
+		}
+		&.active{
+			color: $browngray;
+			background: transparent;
+			padding: 4px;
+			border: 1px solid $browngray;
+		}
+	}
+}
+
+.menu {
+	a{
+		line-height: 60px;
+		vertical-align: middle;
+		padding: 0 15px;
+		min-height: 60px;
+		display: block;
+		text-decoration: none;
+	}
+	ul{
+		list-style: none;
+		margin-top: 10px;
+		min-height: 60px;
+		li{
+			float: left;
+			min-height: 60px;
+			position: relative;
+			z-index: 9999;
+			line-height: 60px;
+			&:hover{
+				background: $browngray;
+				a{
+					color: $white;
+				}
+			}
+			&.form{
+				a.search{
+					padding-right: 0;
+					text-align: center;
+				}
+				&:hover{
+					background: transparent;
+					a{
+						color: $browngray;
+					}
+				}
+				input{
+					background: $browngray;
+					color: $white;
+					border: none;
+					box-shadow: inset 0 0 1px 1px $white;
+				}
+			}
+			&.dropdown:hover{
+				background: lighten($browngray, 10%);
+				a{
+					color: $white;
+				}
+				ul li {
+						a{
+						color: $browngray;
+						&:hover{
+							color: $white;
+						}
+					}
+					&:hover{
+						background: $browngray;
+						a{
+							color: $white
+						}
+					}
+				}
+			}
+			&:hover ul{
+				display: block;
+			}
+			a > i{
+				margin-right: 10px;
+			}
+			ul{
+				position: absolute;
+				min-width: 98.75%; //160px
+				// margin-left: -10%;
+				left: 0;
+				display: none;
+				margin-top: -0px;
+				background: $browngray;
+				border:1px solid $browngray;
+				li{
+					width: 100%;
+					text-align: center;
+					display: block;
+					float: none;
+					background: $white;
+					position: relative;
+					z-index: 9999;
+					border-bottom: 1px solid $browngray;
+					&:last-of-type{
+						border-bottom: none;
+					}
+					a{
+						color: $browngray;
+					}
+				}
+			}
+			&.divider{
+				border-right: 1px solid $browngray;
+			}
+			form{
+				display: none;
+				margin-left: -2px;
+				margin-right: 5px;
+				padding-left: 15px;
+				input{
+					padding: 2%;
+					text-align: center;
+					display: inline;
+					margin:0;
+				}
+			}
+		}
+	}
+}
+
+#footer{
+	line-height: 80px;
+	.menu ul {
+		li {
+			z-index: 0;
+			a{
+				padding: 0 20px;
+				& > i{
+					margin-right: 0;
+				}
+			}
+		}
+	}
+}
+
+.block{
+	background: $browngray;
+	border: 1px solid $browngray;
+	height: 80px;
+	line-height: 80px;
+	width: 19%;
+	margin:0.5%;
+	float: left;
+	font-weight: bolder;
+	text-align: center;
+	text-transform: uppercase;
+	font-size: 1.5em;
+	color: $white;
+	text-decoration: none;
+	&:hover{
+		background: $white;
+		color: $browngray;
+	}
+}
+
+#tagList{
+	.block{
+		border: none;
+	}
+	.block:nth-child(2n+1) {
+		background: $orange !important;
+	}
+	.block:nth-child(n) {
+		background: $green;
+	}
+	.block:nth-child(4n+1) {
+		background: $red !important;
+	}
+	.block:nth-child(4n) {
+		background: $blue;
+	}
+	.block:hover{
+		color: $white;
+		background: $browngray !important;
+	}
+}
+
+.comment{
+	border-bottom: 1px solid $browngray;
+	margin-bottom: 0.5em;
+	padding-bottom: 0.5em;
+	@include clearfix();
+	& > div:first-of-type{
+		width: 5%;
+		float: left;
+		text-align: center;
+		font-size: 200%;
+		margin: -0.3em 0;
+		& > *{
+			display: block;
+		}
+		& > a:first-of-type{
+			margin-bottom: -0.25em;
+		}
+		& > a:last-of-type{
+			margin-top: -0.25em;
+		}
+	}
+	& > div:last-of-type{
+		float: right;
+		width: 94%;
+	}
+}
+
+.horizontalRule {
+	height: 1px;
+	background-color: $browngray;
+	text-align: center;
+	margin:1.5em 0;
+	span {
+		background-color: lighten($browngray, 10%);
+		color: $white;
+		position: relative;
+		top: -0.6em;
+		padding:0.1em 0.5em;
+		font-weight: bolder;
+		text-transform: uppercase;
+	}
+}
+
+.verticalRule{
+	background: url('../img/pixel.jpg') 50% 0 repeat-y;
+	position: relative;
+	@include clearfix();
+	& > .float-left, & > .float-right{
+		width: 46%;
+	}
+	span.text {
+		background-color: lighten($browngray, 10%);
+		color: $white;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		-webkit-transform: translate(-50%,-50%);
+		transform: translate(-50%,-50%);
+		padding:0.1em 0.5em;
+		font-weight: bolder;
+		text-transform: uppercase;
+	}
+}
+
+.google-plus-red{
+	color: #d34836;
+}
+.facebook-blue{
+	color: #3B5998;
+}
+.twitter-blue{
+	color: #1AB2E8;
+}
+.bitbucket-blue{
+	color: #205081;
+}
+.github-black{
+	color: #333;
+}
+
+#menubutton{
+	display: none;
+}
+
+.modal{
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: rgba($browngray, 0.5);
+	z-index: 9999;
+	display: none;
+	&.open{
+		display: block;
+	}
+	.license{
+		resize: none;
+		text-align: center;
+	}
+}
+@import "partials/menu";
+@import "partials/tabs";
+@import "partials/mention";
+@import "partials/chosen";
+@import "partials/utilities";
+@import "partials/codemirror";
+@import "partials/responsive";
+@import "partials/print";

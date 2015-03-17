@@ -1,0 +1,4 @@
+I WANT TO ENSURE THAT HOME PAGE WORKS
+
+I am on page '/'
+I see 'codeblock'

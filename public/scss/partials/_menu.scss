@@ -1,0 +1,146 @@
+$seconds: 1s;
+$width: 20%;
+
+.menu-wrap {
+	position: fixed;
+	right: -$width;
+	overflow: auto;
+	z-index: 1001;
+	width: $width;
+	height: 100%;
+	background: $browngray;
+	//padding: 1em 1.5em;
+	-webkit-transition:right $seconds, -webkit-transform $seconds;
+	transition:right $seconds, transform $seconds;
+	.close-button{
+		display: none;
+	}
+	&.full-width{
+		.close-button{
+			display: block;
+			width: auto;
+		}
+		width: 100%;
+		right: -100%;
+		text-align: center;
+		input{
+			width: 20%;
+			margin: 0 auto;
+		}
+	}
+	a {
+		color: $white;
+		display: block;
+		padding: 0.5em;
+		width: 75%;
+		margin: 0 auto;
+		i{
+			margin-right: 10px;
+		}
+	}
+	input{
+		background: transparent;
+		color: $white;
+		border: 2px solid $white;
+	}
+	.float-left, .float-right{
+		float: none;
+	}
+	.divider, .search{
+		display: none;
+	}
+	ul{
+		list-style: none;
+		li{
+			ul{
+				display: none;
+			}
+			&:hover ul{
+				display: block;
+			}
+		}
+	}
+	.wrapper{
+		background: transparent;
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+}
+body{
+	-webkit-transition:right $seconds, -webkit-transform $seconds;
+	transition:right $seconds, transform $seconds;
+	right: 0;
+	position: relative;
+}
+.show-menu{
+	overflow: hidden !important;
+	//right: $width;
+	.menu-wrap{
+		right: 0;
+	}
+}
+#loggo{
+	display: block;
+	float: none;
+	width: 100%;
+	text-align: center;
+	@include clearfix();
+}
+.menu-button{
+	float: right;
+	text-decoration: none;
+	position: relative;
+	i {
+		line-height: 80px;
+	}
+	#notficationNumber{
+		margin-left: 0.5em;
+		float: right;
+		margin-top: 1em;
+		padding: 0.25em;
+	}
+}
+
+@media (max-width: 800px) {
+	.show-menu {
+		right: 0 !important;
+		overflow: auto;
+	}
+	body{
+		#header .wrapper{
+			padding: 0 2.5%;
+		}
+	 	#loggo {
+			margin: 0;
+			display: inline;
+			float: left;
+			width: auto;
+			line-height: 80px;
+		}
+		.menu-wrap {
+			width: 100%;
+			right: -100%;
+			text-align: center;
+			.close-button{
+				display: block;
+			}
+			input {
+				width: 50% !important;
+				margin: 0 auto;
+			}
+			li ul {
+				display: block;
+			}
+			.hideUl + ul {
+				display: none;
+			}
+		}
+	}
+}
+
+.close-button{
+	float: right;
+	text-decoration: none;
+	font-size: 1.5em;
+	padding: 0 !important;
+}

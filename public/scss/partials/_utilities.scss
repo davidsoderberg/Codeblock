@@ -1,0 +1,62 @@
+@include color();
+.float-right{
+	float: right;
+}
+.float-left{
+	float: left;
+}
+.float-none{
+	float: none;
+}
+.clear{
+	clear: both;
+}
+.clearfix{
+	@include clearfix();
+}
+.font-bold{
+	font-weight: bolder;
+}
+.font-normal, .font-normal > *{
+	font-weight: normal !important;
+}
+.font-small{
+	font-size: 75%;
+}
+.half{
+	width: 50%;
+	float: left;
+}
+.text-center{
+	text-align: center;
+}
+.text-left{
+	text-align: left;
+}
+.text-right{
+	text-align: right;
+}
+.display-block, .only-large, .hidden-print{
+	display: block;
+}
+.display-none, .only-small, .close-reply, .visible-print{
+	display: none;
+}
+.margin-top-one{
+	margin-top: 1em !important;
+}
+.margin-top-one-half{
+	margin-top: 1.5em !important;
+}
+.margin-top-half{
+	margin-top: 0.5em !important;
+}
+.margin-bottom-one{
+	margin-bottom: 1em !important;
+}
+.margin-bottom-half{
+	margin-bottom: 0.5em !important;
+}
+.fa-15x{
+	font-size: 1.5em;
+}

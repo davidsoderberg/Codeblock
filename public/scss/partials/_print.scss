@@ -1,0 +1,36 @@
+@media print {
+	body{
+		background: $white;
+	}
+	.wrapper{
+		width: 100%;
+		margin: 0;
+		padding-left: 0;
+		padding-right: 0;
+	}
+	.menu, #menubutton, .hidden-print{
+		display: none;
+	}
+	.visible-print{
+		display: block;
+	}
+	#header{
+		min-height: 0;
+		padding-bottom: 1em;
+		border-bottom: 1px solid $browngray;
+	}
+	#footer{
+		border-top: 1px solid $browngray;
+	}
+	.verticalRule {
+		background: url('../img/pixel.jpg') 50% 0 repeat-y !important;
+		& > .float-right,
+		& > .float-left {
+			width: 46% !important;
+			float: left !important;
+		}
+		.float-right{
+			float: right !important;
+		}
+	}
+}

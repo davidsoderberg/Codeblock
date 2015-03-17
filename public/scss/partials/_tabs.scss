@@ -1,0 +1,39 @@
+.tabs{
+	ul:first-of-type{
+		margin-bottom: 1em;
+		li {
+			display: inline-block;
+			border: 1px solid $browngray;
+			width: 50%;
+			float: left;
+			a{
+				padding: 0.5em;
+				display: block;
+				text-align: center;
+			}
+			&.open{
+				background: $browngray;
+				a{
+					text-decoration: none;
+					font-weight: bolder;
+					color: $white;
+				}
+			}
+		}
+	}
+	ul:last-of-type{
+		li{
+			@include clearfix();
+			display: none;
+			&.open{
+				display: block;
+			}
+		}
+	}
+}
+
+@media (max-width: 800px) {
+	.tabs ul:first-of-type li{
+		width: 100%;
+	}
+}

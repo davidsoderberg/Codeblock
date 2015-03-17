@@ -1,0 +1,53 @@
+@media (min-width: 800px) and (max-width: 992px) {
+	#loggo{
+		a{
+			line-height: 1em;
+		}
+		margin-top: 0.25em;
+		margin-bottom: 0.25em;
+		float: none;
+		padding-right: 0;
+	}
+	#header .menu {
+		ul{
+			margin-top: 0;
+		}
+		.divider {
+			display: none;
+		}
+	}
+	#footer{
+		line-height: 1em;
+		.float-left, .float-right{
+			margin-top: 1em;
+			float: none;
+			text-align: center;
+		}
+		.menu {
+			margin-top: 1em;
+			ul{
+				min-height: 0;
+				margin-bottom: 2em;
+			}
+			a{
+				display: inline;
+				line-height: 1em;
+				&:hover{
+					color: $browngray;
+					font-weight: bolder;
+				}
+			}
+			li{
+				&:hover{
+					background: transparent;
+				}
+				line-height: 1em;
+				display: inline;
+				float: none;
+				&.divider {
+					display: none;
+				}
+			}
+		}
+	}
+}
