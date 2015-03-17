@@ -120,7 +120,7 @@ class MenuController extends Controller {
 
 		if ($v->passes()) {
 			$input['Cmessage'] = $input['message'];
-			$emailInfo = array('toEmail' => 'info@codeblock.se', 'toName' => 'Admin', 'subject' => 'Contact message');
+			$emailInfo = array('toEmail' => env('FROM_ADRESS'), 'toName' => env('FROM_NAME'), 'subject' => 'Contact message');
 			if($ClassRepo->sendEmail('emails.contact', $emailInfo, $input) == 1){
 				return Redirect::back()->with('success', 'Your contact message have been send.');
 			}
