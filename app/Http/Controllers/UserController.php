@@ -1,5 +1,7 @@
 <?php namespace App\Http\Controllers;
 
+use App\NotificationType;
+use App\Repositories\Notification\NotificationRepository;
 use App\Repositories\User\UserRepository;
 use App\Social;
 use Illuminate\Support\Facades\View;
@@ -107,9 +109,16 @@ class UserController extends Controller {
 	 * @param  int $id id på användaren som skall uppdateras.
 	 * @return object     med värden dit användaren skall skickas.
 	 */
-	public function update($id)
+	public function update(NotificationRepository $notification, $id)
 	{
 		if($this->user->update(Input::all(), $id)){
+			$newUser = $this->user->get($id);
+			if($newUser->active < 0){
+				$notification->send($newUser->id, NotificationType::BANNED, $newUser);
+			}
+			if($newUser->role != Input::get('role')){
+				$notification->send($newUser->id, NotificationType::ROLE, $newUser);
+			}
 			return Redirect::back()->with('success','You have change users rights.');
 		}
 

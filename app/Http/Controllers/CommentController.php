@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\NotificationType;
 use App\Repositories\Comment\CommentRepository;
 use App\Repositories\Notification\NotificationRepository;
 use App\Repositories\Post\PostRepository;
@@ -62,7 +63,9 @@ class CommentController extends Controller {
 			if(!is_null($id)){
 				return Redirect::back()->with('success', 'This comment have been saved.');
 			}
-			$this->mentioned(Input::get('comment'), $post->get(Input::get('post_id')), $notification);
+			$post = $post->get(Input::get('post_id'));
+			$notification->send($post->user_id, NotificationType::COMMENT, $post);
+			$this->mentioned(Input::get('comment'), $post, $notification);
 			return Redirect::back();
 		}
 

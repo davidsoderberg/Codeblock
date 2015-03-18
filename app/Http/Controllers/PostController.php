@@ -1,5 +1,7 @@
 <?php namespace App\Http\Controllers;
 
+use App\NotificationType;
+use App\Repositories\Notification\NotificationRepository;
 use App\Repositories\Post\PostRepository;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Tag\TagRepository;
@@ -193,10 +195,12 @@ class PostController extends Controller {
 	 * @param  int $id id för blocket som skall stjärnmärka.
 	 * @return array     Typ av medelande och meddelande
 	 */
-	public function star($id){
+	public function star(NotificationRepository $notification, $id){
 		$star = $this->post->createOrDeleteStar($id);
 		if($star[0]){
 			if($star[1] == 'create'){
+				$post = $this->post->get($id);
+				$notification->send($post->user_id, NotificationType::STAR, $post);
 				return Redirect::back()->with('success', 'You have now add a star to this codblock.');
 			}
 			return Redirect::back()->with('success', 'You have now removed a star from this codblock.');
