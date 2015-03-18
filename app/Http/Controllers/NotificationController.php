@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App\Repositories\Notification\NotificationRepository;
+use Illuminate\Support\Facades\View;
 
 /**
  * Class NotificationController

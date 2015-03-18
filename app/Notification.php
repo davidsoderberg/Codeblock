@@ -28,4 +28,16 @@ class Notification extends Model {
 		'from_id' => 'required|integer',
 	);
 
+	public function sender() {
+		return $this->hasOne('App\User', 'id', 'from_id');
+	}
+
+	public function receiver(){
+		return $this->hasOne('App\User', 'id', 'user_id');
+	}
+
+	public function object() {
+		return $this->hasOne('App\\'.$this->object_type, 'id', 'object_id');
+	}
+
 }

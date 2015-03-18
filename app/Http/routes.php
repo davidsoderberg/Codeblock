@@ -46,6 +46,7 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::get('posts/forked/{id}', 'PostController@forked');
 	Route::get('posts/gist/{id}', 'PostController@forkGist');
 
+	Route::get('notifications/', 'NotificationController@listNotification');
 
 	Route::post('comments/{id?}', 'CommentController@createOrUpdate');
 	Route::get('comments/', 'CommentController@index');
