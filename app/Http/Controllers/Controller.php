@@ -11,21 +11,15 @@ abstract class Controller extends BaseController {
 
 	use DispatchesCommands, ValidatesRequests;
 
-	private $notification;
-
-	public function __construct(NotificationRepository $notification){
-		$this->notification = $notification;
-	}
-
-	protected function mentioned($text, $object){
+	protected function mentioned($text, $object, NotificationRepository $notification){
 		$users = array();
 		preg_match_all('/(^|\s)@(\w+)/', $text, $users);
 		foreach($users as $username) {
-			if(!$this->notification->send($username, NotificationType::MENTION, $object)){
+			if(!$notification->send($username[0], NotificationType::MENTION, $object)){
 				$errors = array(
 					'username' => $username,
 					'type' => NotificationType::MENTION,
-					'errors' => $this->notification->errors
+					'errors' => $notification->errors
 				);
 				Log::error(json_encode($errors));
 			}

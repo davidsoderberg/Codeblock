@@ -1,6 +1,8 @@
 <?php namespace App\Http\Controllers;
 
 use App\Repositories\Comment\CommentRepository;
+use App\Repositories\Notification\NotificationRepository;
+use App\Repositories\Post\PostRepository;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
@@ -54,12 +56,13 @@ class CommentController extends Controller {
 	 * @param  int $id id för kommentar som skall uppdateras
 	 * @return object     med värden dit användaren skall skickas.
 	 */
-	public function createOrUpdate($id = null)
+	public function createOrUpdate(NotificationRepository $notification, PostRepository $post, $id = null)
 	{
 		if($this->comment->createOrUpdate(Input::all(), $id)){
 			if(!is_null($id)){
 				return Redirect::back()->with('success', 'This comment have been saved.');
 			}
+			$this->mentioned(Input::get('comment'), $post->get(Input::get('post_id')), $notification);
 			return Redirect::back();
 		}
 

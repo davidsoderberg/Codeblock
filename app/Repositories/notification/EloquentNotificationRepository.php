@@ -41,22 +41,21 @@ class EloquentNotificationRepository extends CRepository implements Notification
 			$note->type = $type;
 		}
 
-		if(!is_null($subject) && !is_null($body)){
-			$note->subject = $this->stripTrim($subject);
-			$note->body = $this->stripTrim($body);
-		}else{
-			if(isset($type) && NotificationType::isType($type)) {
-				$note = $this->setSubjectAndBody($note, $object);
-			}
-		}
-
-
 		if(is_object($object)){
 			$namespaces = explode('\\', get_class($object));
 			$object_type = $namespaces[count($namespaces)-1];
 			if(class_exists('App\\'.$object_type)) {
 				$note->object_id = $object->id;
 				$note->object_type = $object_type;
+			}
+		}
+
+		if(!is_null($subject) && !is_null($body)){
+			$note->subject = $this->stripTrim($subject);
+			$note->body = $this->stripTrim($body);
+		}else{
+			if(isset($type) && NotificationType::isType($type)) {
+				$note = $this->setSubjectAndBody($note, $object);
 			}
 		}
 
@@ -76,13 +75,15 @@ class EloquentNotificationRepository extends CRepository implements Notification
 		$notification->subject = 'New '.$notification->type;
 		switch($notification->type){
 			case NotificationType::MENTION:
-				$notification->body = 'You have been mention by '.$from->username. ' in a '.strtolower($notification->object_type).' on this ';
 				if($notification->object_type == 'Reply') {
-					$notification->body .= 'topic.';
+					$type = 'topic';
+					$notification->body = 'topic.';
 				}
-				if($notification->object_type == 'Comment') {
-					$notification->body .= 'codeblock.';
+				if($notification->object_type == 'Post') {
+					$type = 'comment';
+					$notification->body = 'codeblock.';
 				}
+				$notification->body = 'You have been mention by '.$from->username. ' in a '.$type.' on this '.$notification->body;
 				break;
 			case NotificationType::COMMENT:
 				$notification->body = 'You have a new comment on this codeblock.';
