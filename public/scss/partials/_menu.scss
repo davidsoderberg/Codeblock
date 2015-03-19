@@ -19,6 +19,9 @@ $width: 20%;
 		.close-button{
 			display: block;
 			width: auto;
+			margin-top: -10px;
+			margin-right: -5px;
+			font-size: 2em !important;
 		}
 		width: 100%;
 		right: -100%;
@@ -123,6 +126,8 @@ body{
 			text-align: center;
 			.close-button{
 				display: block;
+				margin-right: 0.8em !important;
+				margin-top: 0.1em !important;
 			}
 			input {
 				width: 50% !important;
