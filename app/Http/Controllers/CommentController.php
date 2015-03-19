@@ -64,7 +64,9 @@ class CommentController extends Controller {
 				return Redirect::back()->with('success', 'This comment have been saved.');
 			}
 			$post = $post->get(Input::get('post_id'));
-			$notification->send($post->user_id, NotificationType::COMMENT, $post);
+			if(Auth::user()->id != $post->user_id) {
+				$notification->send($post->user_id, NotificationType::COMMENT, $post);
+			}
 			$this->mentioned(Input::get('comment'), $post, $notification);
 			return Redirect::back();
 		}

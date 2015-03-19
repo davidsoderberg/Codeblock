@@ -116,7 +116,7 @@ class UserController extends Controller {
 			if($newUser->active < 0){
 				$notification->send($newUser->id, NotificationType::BANNED, $newUser);
 			}
-			if($newUser->role != Input::get('role')){
+			if($newUser->role != Input::get('role') && Auth::user()->id != $newUser->id){
 				$notification->send($newUser->id, NotificationType::ROLE, $newUser);
 			}
 			return Redirect::back()->with('success','You have change users rights.');
