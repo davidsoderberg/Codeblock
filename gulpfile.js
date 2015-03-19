@@ -10,9 +10,10 @@ var js = [
 	'public/js/script.js'
 ];
 
-gulp.task('default', function() {
-	gulp.watch(['public/scss/style.scss', 'public/scss/partials/**/*.scss'], ['sass']);
-	gulp.watch(js, ['js']);
+gulp.task('default', ['connect-sync'], function() {
+	gulp.watch(['public/scss/style.scss', 'public/scss/partials/**/*.scss'], ['sass', 'reload']);
+	gulp.watch(['resources/views/**/*'], ['reload']);
+	gulp.watch(js, ['js', 'reload']);
 });
 
 gulp.task('deploy', ['js'], function(){
@@ -38,4 +39,23 @@ gulp.task('js', function () {
 		.pipe(uglify({mangle: false}))
 		.pipe(rename('script.min.js'))
 		.pipe(gulp.dest('public/js'));
+});
+
+gulp.task('connect-sync', function() {
+	var connect = require('gulp-connect-php');
+	connect.server({
+		base: 'public',
+		port: 8000,
+		router: '../server.php',
+		watch: true
+	}, function (){
+		browserSync({
+			proxy: 'localhost:8000'
+		});
+	});
+
+	var browserSync = require('browser-sync');
+	gulp.task('reload', function(){
+		browserSync.reload();
+	});
 });
