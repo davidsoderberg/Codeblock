@@ -16,7 +16,7 @@
 					<i class="fa fa-user"></i> <a href="/user/{{$notification->sender->username}}">{{$notification->sender->username}}</a>
 					<i class="fa fa-calendar"></i> {{$notification->sent_at}}
 				</p>
-				<p class="float-right"><i class="fa fa-trash-o"></i> <a href="">Delete</a></p>
+				<p class="float-right"><i class="fa fa-trash-o"></i> <a href="notifications/delete/{{$notification->id}}">Delete</a></p>
 			</div>
 			<p class="text-center">{{$notification->body}}</p>
 			<div class="horizontalRule"></div>

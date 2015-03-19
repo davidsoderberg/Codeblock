@@ -47,6 +47,7 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::get('posts/gist/{id}', 'PostController@forkGist');
 
 	Route::get('notifications/', 'NotificationController@listNotification');
+	Route::get('notifications/delete/{id}', 'NotificationController@delete');
 
 	Route::post('comments/{id?}', 'CommentController@createOrUpdate');
 	Route::get('comments/', 'CommentController@index');

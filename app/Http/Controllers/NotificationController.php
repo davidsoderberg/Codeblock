@@ -2,7 +2,8 @@
 
 use App\Repositories\Notification\NotificationRepository;
 use Illuminate\Support\Facades\View;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 /**
  * Class NotificationController
  * @package App\Http\Controllers
@@ -48,9 +49,12 @@ class NotificationController extends Controller {
 	 * @param $id
 	 * @return mixed
 	 */
-	public function destroy($id) {
-		if($this->notification->delete($id)) {
-			return Redirect::back()->with('success', 'Your forum has been deleted.');
+	public function delete($id) {
+		$note = $this->notification->get($id);
+		if(Auth::user()->id == $note->user_id) {
+			if($this->notification->delete($id)) {
+				return Redirect::back()->with('success', 'Your forum has been deleted.');
+			}
 		}
 
 		return Redirect::back();
