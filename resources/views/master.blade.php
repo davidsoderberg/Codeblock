@@ -29,7 +29,7 @@
 				<div class="menu-button">
 				<a href=""><i class="fa fa-3x fa-bars"></i></a>
 				@if(Auth::check() && Auth::user()->unread->count() > 0)
-					<a href="" id="notficationNumber" class="tag">{{Auth::user()->unread->count()}}</a>
+					<a href="/notifications" id="notficationNumber" class="tag">{{Auth::user()->unread->count()}}</a>
 				@endif
 				</div>
 				<h1 id="loggo">
