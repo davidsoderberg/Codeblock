@@ -1,3 +1,11 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    RewriteCond $1 !^public/
+    RewriteRule ^(.*)/?$ /public/$1 [L]
+</IfModule>
+
 ExpiresActive on
 
 # Perhaps better to whitelist expires rules? Perhaps.
