@@ -14,15 +14,15 @@
             {{ Form::label('loginPassword', 'Password:') }}
             {{ Form::password('loginpassword', array('id' => 'loginPassword', 'placeholder' => 'Password', 'data-validator' => 'required')) }}
             <div class="clearfix">
-                <p class="pull-left">
-                    Login with:
-                    <a href="/oauth/facebook"><i class="fa fa-facebook-square facebook-blue"></i></a>
-                    <a href="/oauth/twitter"><i class="fa fa-twitter-square twitter-blue"></i></a>
-                    <a href="/oauth/google"><i class="fa fa-google-plus-square google-plus-red"></i></a>
-                    <a href="/oauth/bitbucket"><i class="fa fa-bitbucket-square bitbucket-blue"></i></a>
-                    <a href="/oauth/github"><i class="fa fa-github-square github-black"></i></a>
-                </p>
                 {{ Form::button('Login', array('type' => 'submit')) }}
+	            <p class="pull-left">
+		            Login with:
+		            <a href="/oauth/facebook"><i class="fa fa-facebook-square facebook-blue"></i></a>
+		            <a href="/oauth/twitter"><i class="fa fa-twitter-square twitter-blue"></i></a>
+		            <a href="/oauth/google"><i class="fa fa-google-plus-square google-plus-red"></i></a>
+		            <a href="/oauth/bitbucket"><i class="fa fa-bitbucket-square bitbucket-blue"></i></a>
+		            <a href="/oauth/github"><i class="fa fa-github-square github-black"></i></a>
+	            </p>
             </div>
             {{ Form::close() }}
         </div>
