@@ -104,7 +104,7 @@ body{
 	}
 }
 
-@media (max-width: 800px) {
+@media screen and (max-width: 800px) {
 	.show-menu {
 		right: 0 !important;
 		overflow: auto;
@@ -140,6 +140,12 @@ body{
 				display: none;
 			}
 		}
+	}
+}
+
+@media print {
+	.menu-wrap, .menu-button{
+		display: none;
 	}
 }
 
