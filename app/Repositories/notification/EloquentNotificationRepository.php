@@ -5,6 +5,7 @@ use App\NotificationType;
 use App\Repositories\CRepository;
 use App\Repositories\User\UserRepository;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\Routing\Exception\InvalidParameterException;
 
 class EloquentNotificationRepository extends CRepository implements NotificationRepository {
 
@@ -21,26 +22,28 @@ class EloquentNotificationRepository extends CRepository implements Notification
 		return Notification::all();
 	}
 
-	public function send($user_id, $type, $object, $subject = null, $body = null) {
-
-		$note = new Notification();
-
+	public function setUserId($user_id, $note){
 		if(!is_numeric($user_id)){
 			$user_id = $this->user->getIdByUsername($this->stripTrim($user_id));
 		}
-		$user = $this->user->get($user_id);
-		if(!is_null($user)){
+		if(!is_null($this->user->get($user_id))){
 			$note->user_id = $user_id;
-			$this->user = $user;
 		}else{
-			$this->errors = array('user' => array('That user does not exist.'));
-			return false;
+			$this->errors = array('to_user' => array('That user does not exist.'));
+			Throw new InvalidParameterException();
 		}
+		return $note;
+	}
 
+	public function setType($type, $note){
 		if(isset($type) && NotificationType::isType($type)){
 			$note->type = $type;
+			return $note;
 		}
+		return $note;
+	}
 
+	public function setObject($object, $note){
 		if(is_object($object)){
 			$namespaces = explode('\\', get_class($object));
 			$object_type = $namespaces[count($namespaces)-1];
@@ -49,18 +52,52 @@ class EloquentNotificationRepository extends CRepository implements Notification
 				$note->object_type = $object_type;
 			}
 		}
+		return $note;
+	}
 
+	public function setcontent($subject, $body, $type, $note){
 		if(!is_null($subject) && !is_null($body)){
 			$note->subject = $this->stripTrim($subject);
 			$note->body = $this->stripTrim($body);
 		}else{
 			if(isset($type) && NotificationType::isType($type)) {
-				$note = $this->setSubjectAndBody($note, $object);
+				$note = $this->setSubjectAndBody($note);
 			}
 		}
+		return $note;
+	}
 
+	public function setFromId($from_id, $note){
+		if(!is_null($this->user->get($from_id))){
+			$note->from_id = $from_id;
+		}else{
+			$this->errors = array('from_user' => array('That user does not exist.'));
+			Throw new InvalidParameterException();
+		}
+		return $note;
+	}
+
+	public function send($user_id, $type, $object, $subject = null, $body = null) {
+
+		$note = new Notification();
+
+		try{
+			$note = $this->setUserId($user_id, $note);
+		} catch(InvalidParameterException $e){
+			return false;
+		}
+
+		try{
+			$note = $this->setFromId(Auth::user()->id, $note);
+		} catch(InvalidParameterException $e){
+			return false;
+		}
+
+		$note = $this->setType($type, $note);
+		$note = $this->setObject($object, $note);
+		$note = $this->setcontent($subject, $body, $type, $note);
 		$note->sent_at = new \DateTime('now');
-		$note->from_id = Auth::user()->id;
+
 
 		if($note->save()){
 			return $this->sendNotification($note);
@@ -70,8 +107,34 @@ class EloquentNotificationRepository extends CRepository implements Notification
 		}
 	}
 
-	private function setSubjectAndBody($notification, $object){
-		$from = Auth::user();
+	public function getSubjectAndBody(Notification $notification){
+
+		try{
+			$notification = $this->setUserId($notification->user_id, $notification);
+		} catch(InvalidParameterException $e){
+			return $notification;
+		}
+
+		try{
+			$notification = $this->setFromId($notification->from_id, $notification);
+		} catch(InvalidParameterException $e){
+			return $notification;
+		}
+
+		$notification = $this->setType($notification->type, $notification);
+		$notification = $this->setObject($notification->object, $notification);
+		if(isset($notification->type) && NotificationType::isType($notification->type)) {
+			$notification = $this->setSubjectAndBody($notification);
+		}
+
+		$notification->save();
+
+		return $notification;
+	}
+
+	private function setSubjectAndBody(Notification $notification){
+		$object = $notification->object;
+		$from = $this->user->get($notification->from_id);
 		$notification->subject = 'New '.$notification->type;
 		switch($notification->type){
 			case NotificationType::MENTION:
@@ -96,7 +159,8 @@ class EloquentNotificationRepository extends CRepository implements Notification
 				$notification->body = 'You have a new reply on this topic.';
 				break;
 			case NotificationType::ROLE:
-				$notification->body = $from->role->name.' have given you a role as: '.$this->user->role->name;
+				$user = $this->user->get($notification->user_id);
+				$notification->body = $from->role->name.' have given you a role as: '.$user->role->name;
 				break;
 			case NotificationType::STAR:
 				$notification->body = $from->username.' has added a star to your codeblock.';
@@ -109,9 +173,10 @@ class EloquentNotificationRepository extends CRepository implements Notification
 		return $notification;
 	}
 
-	private function sendNotification($notification){
+	private function sendNotification(Notification $notification){
+		$user = $this->user->get($notification->user_id);
 		$data = array('subject' => $notification->subject, 'body' => $notification->body);
-		$emailInfo = array('toEmail' => $this->user->email, 'toName' => $this->user->username, 'subject' => $notification->subject);
+		$emailInfo = array('toEmail' => $user->email, 'toName' => $user->username, 'subject' => $notification->subject);
 		if($this->sendEmail('emails.notification', $emailInfo, $data) == 1) {
 			return true;
 		}
