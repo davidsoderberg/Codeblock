@@ -23,7 +23,7 @@ class MenuController extends Controller {
 					if($param == null){
 						$param = 'master';
 					}
-					$output = shell_exec('git pull ~/git/skolan '.$param);
+					$output = shell_exec('git pull origin '.$param);
 					$content = "<pre>".$output."</pre>";
 					$title = 'Git Pull';
 					break;
