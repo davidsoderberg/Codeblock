@@ -15,13 +15,16 @@ abstract class Controller extends BaseController {
 		$users = array();
 		preg_match_all('/(^|\s)@(\w+)/', $text, $users);
 		foreach($users as $username) {
-			if(!$notification->send($username[0], NotificationType::MENTION, $object)){
-				$errors = array(
-					'username' => $username,
-					'type' => NotificationType::MENTION,
-					'errors' => $notification->errors
-				);
-				Log::error(json_encode($errors));
+			if(count($username) >= 1) {
+				$username = $username[0];
+				if(!$notification->send($username, NotificationType::MENTION, $object)){
+					$errors = array(
+						'username' => $username,
+						'type' => NotificationType::MENTION,
+						'errors' => $notification->errors
+					);
+					Log::error(json_encode($errors));
+				}
 			}
 		}
 	}

@@ -10,10 +10,10 @@ var js = [
 	'public/js/script.js'
 ];
 
-gulp.task('default', ['connect-sync'], function() {
-	gulp.watch(['public/scss/style.scss', 'public/scss/partials/**/*.scss'], ['sass', 'reload']);
-	gulp.watch(['resources/views/**/*'], ['reload']);
-	gulp.watch(js, ['js', 'reload']);
+gulp.task('default', function() {
+	gulp.watch(['public/scss/style.scss', 'public/scss/partials/**/*.scss'], ['sass']);
+	//gulp.watch(['resources/views/**/*'], ['reload']);
+	gulp.watch(js, ['js']);
 });
 
 gulp.task('deploy', ['js'], function(){
