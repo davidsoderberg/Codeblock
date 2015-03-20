@@ -53,7 +53,7 @@ class NotificationController extends Controller {
 		$note = $this->notification->get($id);
 		if(Auth::user()->id == $note->user_id) {
 			if($this->notification->delete($id)) {
-				return Redirect::back()->with('success', 'Your forum has been deleted.');
+				return Redirect::back()->with('success', 'Your notification has been deleted.');
 			}
 		}
 
