@@ -12,6 +12,7 @@
 */
 Route::pattern('id', '[0-9]+');
 Route::pattern('username', '[-_0-9A-Za-z]+');
+Route::pattern('slug', '[-a-zA-Zo-9-]+');
 
 Route::get('/', 'MenuController@index');
 Route::get('browse', 'MenuController@browse');
@@ -22,10 +23,7 @@ Route::post('user/store/{id?}', 'UserController@store');
 Route::get('oauth/{social}', 'UserController@oauth');
 Route::post('search', 'PostController@search');
 Route::get('command/{command}/{password}/{param?}', 'MenuController@command')
-	->where('command', '[a-zA-Z]+')
-	->where('password', '[a-zA-Z0-9]+')
-	->where('param', '[a-zA-Z]+')
-;
+	->where(['command' => '[a-zA-Z]+', 'password' => '[a-zA-Z0-9]+', 'param' => '[a-zA-Z]+']);
 
 Route::get('posts/list', 'PostController@listPosts');
 Route::get('posts/tag/{id}', 'PostController@tag');
