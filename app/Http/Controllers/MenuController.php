@@ -3,6 +3,7 @@
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Tag\TagRepository;
 use App\Repositories\CRepository;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
 
 class MenuController extends Controller {
