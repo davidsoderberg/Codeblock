@@ -19,7 +19,7 @@ class Post extends Model {
 
 	protected $table = 'posts';
 
-	protected $fillable = array('name', 'category', 'description', 'code', 'user_id', 'org');
+	protected $fillable = array('name', 'category', 'description', 'code', 'user_id', 'org', 'slug');
 
 	protected $guarded = array('id');
 
@@ -28,7 +28,8 @@ class Post extends Model {
 	    'category'  => 'required|integer',
 	    'description' => 'required|min:3',
 	    'code' => 'required|min:3',
-	    'user_id' => 'integer'
+	    'user_id' => 'integer',
+		'slug' => 'required|min:3|unique:posts,slug,:id:',
 	);
 
 	public function category() {

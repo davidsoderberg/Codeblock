@@ -31,7 +31,11 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 			}
 			return $posts;
 		}else{
-			$post = Post::find($id);
+			if(is_numeric($id)) {
+				$post = Post::find($id);
+			}else{
+				$post = Post::where('slug', $id)->first();
+			}
 			if(!is_null($post)){
 				$post->category = $post->category($post->category)->first();
 				$post->posttags = $post->posttags;
@@ -168,6 +172,10 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 					$Post[$key] = htmlentities($input[$key]);
 				}
 			}
+		}
+
+		if($Post->slug == ''){
+			$Post['slug'] = $Post->getSlug($Post->name);
 		}
 
 		if($Post->save()){

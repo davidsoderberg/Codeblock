@@ -19,7 +19,7 @@
                         @if($user->id == Auth::user()->id || $user->id != Auth::user()->id && $user->posts[$i]->private == 0)
                             <div class="clearfix margin-bottom-half">
 							<span class="float-left">
-								<a href="/posts/{{ $user->posts[$i]->id }}">{{ $user->posts[$i]->name }}</a>
+								<a href="/posts/{{ $user->posts[$i]->slug }}">{{ $user->posts[$i]->name }}</a>
 							</span>
                                 @if($user->id == Auth::user()->id)
                                     <span class="float-right">
