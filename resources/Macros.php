@@ -3,6 +3,12 @@
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Str;
 
+HTML::macro('avatar', function($value, $size = 48){
+	$identicon = new \Identicon\Identicon();
+	return $identicon->getImageDataUri($value, $size, '272822');
+	//<img alt="Avatar for {{username}}" src="{{HTML::avatar(id)}}">
+});
+
 HTML::macro('version', function($path){
 	return asset($path).'?v='.filemtime(public_path().'/'.$path);
 });

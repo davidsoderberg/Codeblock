@@ -15,7 +15,8 @@
         "illuminate/html": "@dev",
         "davidsoderberg/iseed": "master",
         "firebase/php-jwt": "1.*",
-        "laravel/socialite": "2.*"
+        "laravel/socialite": "2.*",
+        "yzalis/identicon": "*"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~4.4.0@stable",
