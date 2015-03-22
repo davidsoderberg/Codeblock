@@ -6,6 +6,7 @@
 			border: 1px solid $browngray;
 			width: 50%;
 			float: left;
+			transition: all 0.25s ease;
 			a{
 				padding: 0.5em;
 				display: block;
@@ -22,11 +23,17 @@
 		}
 	}
 	ul:last-of-type{
+		margin-top: -1em;
 		li{
 			@include clearfix();
-			display: none;
+			overflow: hidden;
+			max-height: 0;
+			opacity: 0;
+			transition: all 1s ease;
 			&.open{
-				display: block;
+				overflow: auto;
+				max-height: none;
+				opacity: 1;
 			}
 		}
 	}
