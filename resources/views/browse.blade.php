@@ -6,10 +6,10 @@
 
 @section('content')
 	<h2>Browse</h2>
-	<div class="accordion">
+	<div id="accordion" class="accordion">
 		<ul>
 			<li class="open">
-				<a href="">Categories</a>
+				<a href="#">Categories</a>
 				<div class="content">
 					<a class="block" href="/posts/category/0">What is new?</a>
 					@foreach ($categories as $category)
@@ -49,25 +49,6 @@
 			</li>
 		</ul>
 	</div>
-
-	<!--
-	<h2>Categories</h2>
-	<div class="scrollList">
-		<a class="block" href="/posts/category/0">What is new?</a>
-		@foreach ($categories as $category)
-			<a class="block" href="/posts/category/{{ $category->id }}">{{ $category->name }}</a>
-		@endforeach
-		<div class="clear"></div>
-	</div>
-	<hr class="margin-bottom-half">
-	<h2>Tags</h2>
-	<div class="scrollList" id="tagList">
-		@foreach ($tags as $tag)
-			<a class="block" href="/posts/tag/{{ $tag->id }}">{{ $tag->name }}</a>
-		@endforeach
-		<div class="clear"></div>
-	</div>
-	-->
 @stop
 
 @section('script')

@@ -1,5 +1,6 @@
 var gulp = require('gulp');
 var vendor = 'public/js/vendor/';
+var components = 'public/js/components/';
 var js = [
 	vendor+'jquery.js',
 	vendor+'chosen.js',
@@ -7,6 +8,8 @@ var js = [
 	vendor+'validator.js',
 	vendor+'bootstrap-typeahead.js',
 	vendor+'mention.js',
+	components+'accordion.js',
+	components+'tabs.js',
 	'public/js/script.js'
 ];
 
