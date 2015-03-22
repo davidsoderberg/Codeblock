@@ -126,7 +126,13 @@ jQuery(document).ready(function($){
 		$('#browseTabs ul li').removeClass('open');
 		$(this).parent().addClass('open');
 		$($("#browseTabs ul:last-of-type li" ).get($(this).parent().index())).addClass('open');
-	})
+	});
+
+	$('.accordion ul li > a').click(function(event){
+		event.preventDefault();
+		$('.accordion ul li').removeClass('open');
+		$($(".accordion ul li" ).get($(this).parent().index())).addClass('open');
+	});
 
 
 });

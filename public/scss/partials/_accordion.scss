@@ -1,0 +1,38 @@
+.accordion{
+	ul{
+		margin-bottom: 1em;
+		li {
+			margin-top: .5em;
+			display: inline-block;
+			border: 1px solid $browngray;
+			width: 100%;
+			& > a{
+				padding: 0.5em;
+				display: block;
+				text-align: center;
+			}
+			.content{
+				@include clearfix();
+				overflow: hidden;
+				max-height: 0;
+				opacity: 0;
+				transition: all 1s ease;
+			}
+			&.open{
+				border: none;
+				& > a{
+					border: 1px solid $browngray;
+					background: $browngray;
+					text-decoration: none;
+					font-weight: bolder;
+					color: $white;
+				}
+				.content{
+					overflow: auto;
+					max-height: none;
+					opacity: 1;
+				}
+			}
+		}
+	}
+}

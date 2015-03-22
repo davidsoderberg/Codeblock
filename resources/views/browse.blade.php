@@ -6,6 +6,27 @@
 
 @section('content')
 	<h2>Browse</h2>
+	<div class="accordion">
+		<ul>
+			<li class="open">
+				<a href="">Categories</a>
+				<div class="content">
+					<a class="block" href="/posts/category/0">What is new?</a>
+					@foreach ($categories as $category)
+						<a class="block" href="/posts/category/{{ $category->id }}">{{ $category->name }}</a>
+					@endforeach
+				</div>
+			</li>
+			<li>
+				<a href="">Tags</a>
+				<div class="content" id="tagList">
+					@foreach ($tags as $tag)
+						<a class="block" href="/posts/tag/{{ $tag->id }}">{{ $tag->name }}</a>
+					@endforeach
+				</div>
+			</li>
+		</ul>
+	</div>
 	<div id="browseTabs" class="tabs">
 		<ul class="clearfix">
 			<li class="open"><a href="">Categories</a></li>
