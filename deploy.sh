@@ -1,5 +1,5 @@
 #!/bin/bash
-dig nyorai.oderland.com
+host nyorai.oderland.com
 
 #ssh $USER@$HOST -- "
 # set -e
