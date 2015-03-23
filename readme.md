@@ -1,23 +1,14 @@
-## Laravel PHP Framework
+codeblock
+=========
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/downloads.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+Repository for codeblock.se
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+## Saker som jag är medveten om som finns i koden
+* I vissa kontrollrar och modeller finns det kommentarer som autoskapas då jag använder kommandon för att skapa dem
+* Rättighet och roller är inte implementerat ännu då jag inte kom på någon bra lösning att kunna sätta ut vad som krävde vilken rättighet.
 
-Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+## Upplägg på koden
 
-## Official Documentation
+model.php är basmodellen som alla andra modeller äver av och säger till att allt som sparas via dessa modeller valideras enligt regler som specifiseras i varje model och de modellerna som har relationer har en metod deleting som tar bort alla relaterade rader när ägande rad tas bort.
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
-
-### License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+all hantering av databasen sköts i så kallade repon som alla implementerar ett interface för varje modell som finns. Alltså finns det nästan en klass per modell och ett interface per modell som varje repo implementerar och alla klasser ärver från en basklass som många klasser använder föräldermetoder ifrån.
