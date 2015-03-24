@@ -56,7 +56,7 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::get('rate/plus/{id}', 'RateController@plus');
 
 	Route::get('forums/{id}', 'ForumController@show');
-	Route::get('forums/list', 'ForumController@listForum');
+	Route::get('forum', 'ForumController@listForum');
 
 	Route::group(['middleware' => 'role', 'role' => '2'], function() {
 		Route::get('categories', 'CategoryController@index');

@@ -7,6 +7,7 @@
 <ul class="float-right">
 	@if(Auth::check())
 		@if(Auth::user()->role == 2)
+			<li><a href="/forum"><i class="fa fa-group"></i>Forum</a></li>
 			<li class="dropdown">
 				<a href="/users" class="hideUl">
 					<i class="fa fa-group"></i>Admin
@@ -18,6 +19,7 @@
 					<li><a href="/tags">Tags</a></li>
 					<li><a href="/categories">Categories</a></li>
 					<li><a href="/comments">Comments</a></li>
+					<li><a href="/forums">Forums</a></li>
 					<li><a href="/roles">Roles</a></li>
 					<li><a href="/permissions">Permissions</a></li>
 				</ul>
