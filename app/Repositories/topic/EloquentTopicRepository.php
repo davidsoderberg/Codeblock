@@ -5,6 +5,8 @@ use App\Repositories\CRepository;
 
 class EloquentTopicRepository extends CRepository implements TopicRepository {
 
+	public $topic;
+
 	// hämtar en eller alla kategorier.
 	public function get($id = null)
 	{
@@ -28,11 +30,12 @@ class EloquentTopicRepository extends CRepository implements TopicRepository {
 			$Topic->title = $this->stripTrim($input['title']);
 		}
 
-		if(isset($input['description'])){
-			$Topic->description = $this->stripTrim($input['description']);
+		if(isset($input['forum_id'])){
+			$Topic->forum_id = $this->stripTrim($input['forum_id']);
 		}
 
 		if($Topic->save()){
+			$this->topic = $Topic;
 			return true;
 		}else{
 			$this->errors = $Topic::$errors;

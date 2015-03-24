@@ -23,11 +23,10 @@ class TopicController extends Controller {
 	 * @return mixed
 	 */
 	public function createOrUpdate($id = null) {
-		if($this->forum->createOrUpdate(Input::all(), $id)) {
-			return Redirect::back()->with('success', 'Your forum has been saved.');
+		if($this->topic->createOrUpdate(Input::all(), $id)) {
+			return Redirect::back()->with('success', 'Your topic has been saved.');
 		}
-
-		return Redirect::back()->withErrors($this->forum->getErrors())->withInput();
+		return Redirect::back()->withErrors($this->topic->getErrors())->withInput();
 	}
 
 	/**
