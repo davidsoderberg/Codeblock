@@ -21,8 +21,15 @@ class ForumController extends Controller {
 	/**
 	 * @return mixed
 	 */
-	public function index() {
-		return View::make('forum.index')->with('title', 'Forums')->with('forums', $this->forum->get());
+	public function index($id = null)
+	{
+		$forum = null;
+
+		if(is_numeric($id)){
+			$forum = $this->forum->get($id);
+		}
+
+		return View::make('forum.index')->with('title', 'Forums')->with('forums', $this->forum->get())->with('forum', $forum);
 	}
 
 	/**
@@ -38,17 +45,6 @@ class ForumController extends Controller {
 	public function show($id) {
 		$forum = $this->forum->get($id);
 		return View::make('forum.show')->with('title', 'Forum: '.$forum->title)->with('forum', $forum);
-	}
-
-	/**
-	 * @param $id
-	 * @return mixed
-	 */
-	public function create($id) {
-		if($id){
-			return View::make('forum.create')->with('title', 'update')->with('forum', $this->forum->get($id));
-		}
-		return View::make('forum.create')->with('title', 'create')->with('forum', null);
 	}
 
 	/**
