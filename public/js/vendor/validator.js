@@ -93,9 +93,9 @@
 				$(this).find('input, textarea, select').each(function(){
 					validate($(this));
 				});
-				if($(this).find('.error:visible').length > 0){
+				if($(this).find('[data-id]:visible').length > 0){
 					event.preventDefault();
-					$(this).find('.error:visible').first().prev().focus();
+					$(this).find('[data-id]:visible').first().prev().focus();
 					$(this).trigger( "invalid" );
 				}else{
 					$(this).trigger('valid');
