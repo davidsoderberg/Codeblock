@@ -56,7 +56,6 @@ label{
 	@extend .font-bold;
 }
 input, textarea, select{
-	/* 98.7 */
 	width: 100%;
 	padding: 5px 7.5px;
 	border:1px solid $browngray;
@@ -70,6 +69,9 @@ input, textarea, select{
 	}
 	&.has-error{
 		margin-bottom: 0;
+	}
+	+ .alert{
+		margin-top: -1em;
 	}
 }
 input[type="checkbox"]{
@@ -101,6 +103,9 @@ button, .button{
 		margin-top: 1em !important;
 		text-transform: uppercase;
 		display: inline-block;
+	}
+	&:hover{
+		cursor: pointer;
 	}
 }
 h2 button{
