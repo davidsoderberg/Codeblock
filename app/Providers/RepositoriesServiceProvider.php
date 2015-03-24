@@ -14,9 +14,10 @@ class RepositoriesServiceProvider extends ServiceProvider {
 		$this->app->bind('App\Repositories\Permission\PermissionRepository', 'App\Repositories\Permission\EloquentPermissionRepository');
 		$this->app->bind('App\Repositories\Role\RoleRepository', 'App\Repositories\Role\EloquentRoleRepository');
 		$this->app->bind('App\Repositories\Rate\RateRepository', 'App\Repositories\Rate\EloquentRateRepository');
-		$this->app->bind('App\Repositories\Forum\ForumRepository', 'App\Repositories\Forum\EloquentForumRepository');
 		$this->app->bind('App\Repositories\Notification\NotificationRepository', 'App\Repositories\Notification\EloquentNotificationRepository');
+		$this->app->bind('App\Repositories\Forum\ForumRepository', 'App\Repositories\Forum\EloquentForumRepository');
 		$this->app->bind('App\Repositories\Topic\TopicRepository', 'App\Repositories\Topic\EloquentTopicRepository');
+		$this->app->bind('App\Repositories\Reply\ReplyRepository', 'App\Repositories\Reply\EloquentReplyRepository');
 	}
 
 }

@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\Repositories\Reply\ReplyRepository;
 use App\Repositories\Topic\TopicRepository;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
@@ -14,8 +15,14 @@ class TopicController extends Controller {
 	/**
 	 * @param TopicRepository $topic
 	 */
-	public function __construct(TopicRepository $topic) {
+	public function __construct(TopicRepository $topic, ReplyRepository $reply) {
 		$this->topic = $topic;
+		$this->reply = $reply;
+	}
+
+	public function show($id){
+		$topic = $this->topic->get($id);
+		return View::make('topic.show')->with('title', 'Topic: '.$topic->title)->with('topic', $topic);
 	}
 
 	/**
@@ -23,8 +30,13 @@ class TopicController extends Controller {
 	 * @return mixed
 	 */
 	public function createOrUpdate($id = null) {
+		$input = Input::all();
 		if($this->topic->createOrUpdate(Input::all(), $id)) {
-			return Redirect::back()->with('success', 'Your topic has been saved.');
+			$input['topic_id'] = $this->topic->topic->id;
+			if($this->reply->createOrUpdate($input)) {
+				return Redirect::back()->with('success', 'Your topic has been saved.');
+			}
+			return Redirect::to('topics/'.$this->topic->topic->id)->with('success', 'Your topic has been saved, but we could not save your reply, please try agian below.');
 		}
 		return Redirect::back()->withErrors($this->topic->getErrors())->withInput();
 	}
