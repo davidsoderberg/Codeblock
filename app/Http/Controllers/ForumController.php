@@ -22,14 +22,14 @@ class ForumController extends Controller {
 	 * @return mixed
 	 */
 	public function index() {
-		return View::make('post.index')->with('title', 'Forums')->with('forums', $this->forum->get());
+		return View::make('forum.index')->with('title', 'Forums')->with('forums', $this->forum->get());
 	}
 
 	/**
 	 * @return mixed
 	 */
 	public function listForum(){
-		return View::make('post.list')->with('title', 'Forum')->with('forums', $this->forum->get());
+		return View::make('forum.list')->with('title', 'Forum')->with('forums', $this->forum->get());
 	}
 
 	/**
@@ -37,7 +37,7 @@ class ForumController extends Controller {
 	 */
 	public function show($id) {
 		$forum = $this->forum->get($id);
-		return View::make('post.show')->with('title', 'Forum: '.$forum->title)->with('forum', $forum);
+		return View::make('forum.show')->with('title', 'Forum: '.$forum->title)->with('forum', $forum);
 	}
 
 	/**
@@ -46,9 +46,9 @@ class ForumController extends Controller {
 	 */
 	public function create($id) {
 		if($id){
-			return View::make('post.create')->with('title', 'update')->with('forum', $this->forum->get($id));
+			return View::make('forum.create')->with('title', 'update')->with('forum', $this->forum->get($id));
 		}
-		return View::make('post.create')->with('title', 'create')->with('forum', null);
+		return View::make('forum.create')->with('title', 'create')->with('forum', null);
 	}
 
 	/**

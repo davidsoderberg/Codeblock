@@ -62,6 +62,11 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::get('categories/delete/{id}', 'CategoryController@delete');
 		Route::post('categories/store/{id?}', 'CategoryController@createOrUpdate');
 
+		Route::get('forums', 'ForumController@index');
+		Route::get('forums/edit/{id}', 'ForumController@index');
+		Route::get('forums/delete/{id}', 'ForumController@delete');
+		Route::post('forums/store/{id?}', 'ForumController@createOrUpdate');
+
 		Route::get('tags', 'TagController@index');
 		Route::get('tags/{id}', 'TagController@show');
 		Route::get('tags/edit/{id}', 'TagController@index');
