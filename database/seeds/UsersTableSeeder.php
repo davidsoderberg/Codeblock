@@ -22,7 +22,7 @@ class UsersTableSeeder extends Seeder {
 			array (
 				'id' => 1,
 				'username' => 'david',
-				'password' => '$2y$10$eLl.Qxp9e5g5MbR9iMQmbu.yzIdEqsnWrYDg4k2LYS0ftHRMSZelO',
+				'password' => '$2y$10$WKueBYVnSYGSawRY8/Tt7.zSGnQwvDTjWQxwgGqIhih.wCGbqVDZe',
 				'email' => 'granskog_@hotmail.com',
 				'active' => 1,
 				'role' => 2,
