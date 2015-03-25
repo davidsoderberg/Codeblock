@@ -7,7 +7,7 @@
 <ul class="float-right">
 	@if(Auth::check())
 		@if(Auth::user()->role == 2)
-			<li><a href="/forum"><i class="fa fa-group"></i>Forum</a></li>
+			<li><a href="/forum"><i class="fa fa-comments"></i>Forum</a></li>
 			<li class="dropdown">
 				<a href="/users" class="hideUl">
 					<i class="fa fa-group"></i>Admin
