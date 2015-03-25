@@ -14,7 +14,7 @@ class AddSlugColumnToPosts extends Migration
     {
 		Schema::table('posts', function($table)
 		{
-			$table->string('slug');
+			$table->string('slug')->nullable();
 		});
     }
 

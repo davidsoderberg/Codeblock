@@ -19,7 +19,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	// From: https://laracasts.com/discuss/channels/general-discussion/how-to-validate-a-slug-unique-in-laravel-5
 	public function getSlug($value, $column = 'slug') {
 		$slug = Str::slug($value);
-		$slugCount = count($this->whereRaw($column." REGEXP '^{$slug}(-[0-9]+)?$' and id != '{$this->id}'")->get());
+		$slugCount = count($this->whereRaw($column." LIKE '^{$slug}(-[0-9]+)?$' and id != '{$this->id}'")->get());
 		return ($slugCount > 0) ? "{$slug}-{$slugCount}" : $slug;
 	}
 
