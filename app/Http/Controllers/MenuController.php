@@ -20,14 +20,6 @@ class MenuController extends Controller {
 		$title = '';
 		if($password == env('APP_KEY')){
 			switch ($command) {
-				case 'pull':
-					if($param == null){
-						$param = 'master';
-					}
-					$output = shell_exec('git pull origin '.$param);
-					$content = "<pre>".$output."</pre>";
-					$title = 'Git Pull';
-					break;
 				case 'seed':
 					Artisan::call('db:seed');
 					$content = "<pre>".Lang::get('app.SeedingDone')."</pre>";
