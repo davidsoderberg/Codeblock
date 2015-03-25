@@ -21,7 +21,7 @@
 			</div>
 			<div>
 				<b>{{ date('Y-m-d', strtotime($comment->created_at)) }}</b> - <a href="/user/{{ $comment->user_id }}">{{ $comment->user->username }}</a>
-				<p>{{ HTML::mention($comment->comment) }}</p>
+				<p>{{ HTML::mention(HTML::markdown($comment->comment)) }}</p>
 				<a class="reply" href="#comment-{{$comment->id}}">Reply</a>
 				@include('comment.child')
 			</div>

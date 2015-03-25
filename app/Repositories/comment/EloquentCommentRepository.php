@@ -29,7 +29,7 @@ class EloquentCommentRepository extends CRepository implements CommentRepository
 		}
 
 		if(isset($input['comment'])){
-			$Comment->comment = $this->stripTrim($input['comment']);
+			$Comment->comment = $input['comment'];
 		}
 
 		if(isset($input['status'])){
