@@ -22,4 +22,8 @@ class Reply extends Model
 	public function user(){
 		return $this->belongsTo( 'App\User', 'user_id' );
 	}
+
+	public function topic(){
+		return $this->belongsTo( 'App\Topic', 'topic_id' );
+	}
 }
