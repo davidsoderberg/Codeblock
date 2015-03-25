@@ -9,6 +9,23 @@ HTML::macro('avatar', function($value, $size = 48){
 	//<img alt="Avatar for {{username}}" src="{{HTML::avatar(id)}}">
 });
 
+HTML::macro('markdown', function($text){
+	$text = htmlentities($text);
+	// Inspirerad och hämtat delar från: https://gist.github.com/jbroadway/2836900
+	$rules = array (
+		'/\[([^\[]+)\]\(([^\)]+)\)/' => '<a href=\'\2\'>\1</a>',
+		'/(\*\*|__)(.*?)\1/' => '<strong>\2</strong>',
+		'/(\*|_)(.*?)\1/' => '<i>\2</i>',
+		'/\:\"(.*?)\"\:/' => '<q>\1</q>',
+		'/```(.*?)```/' => '<pre>\1</pre>',
+		'/`(.*?)`/' => '<code>\1</code>'
+	);
+	foreach ($rules as $regex => $replacement) {
+		$text = preg_replace($regex, $replacement, $text);
+	}
+	return $text;
+});
+
 HTML::macro('version', function($path){
 	return asset($path).'?v='.filemtime(public_path().'/'.$path);
 });
