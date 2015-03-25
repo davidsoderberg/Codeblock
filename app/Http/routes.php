@@ -55,12 +55,12 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::get('rate/minus/{id}', 'RateController@minus');
 	Route::get('rate/plus/{id}', 'RateController@plus');
 
-	Route::get('forums/{id}', 'ForumController@show');
+	Route::get('forum/{id}', 'ForumController@show');
 	Route::get('forum', 'ForumController@listForum');
 
-	Route::post('topics/store/{id?}', 'TopicController@createOrUpdate');
-	Route::get('topics/{id}', 'TopicController@show');
+	Route::get('forum/topic/{id}', 'TopicController@show');
 
+	Route::post('topics/store/{id?}', 'TopicController@createOrUpdate');
 	Route::post('reply/store/{id?}', 'ReplyController@createOrUpdate');
 
 	Route::group(['middleware' => 'role', 'role' => '2'], function() {
