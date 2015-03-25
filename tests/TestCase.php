@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Mail;
+
 class TestCase extends Illuminate\Foundation\Testing\TestCase {
 
 	public function setUp(){
@@ -41,6 +43,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase {
 	public function setUpDb($seed = true)
 	{
 		Artisan::call('migrate');
+		Mail::pretend(true);
 		if($seed){
 			Artisan::call('db:seed');
 		}
