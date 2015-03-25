@@ -17,6 +17,9 @@
 .font-bold{
 	font-weight: bolder;
 }
+.font-italic{
+	font-style: italic;
+}
 .font-normal, .font-normal > *{
 	font-weight: normal !important;
 }
@@ -56,6 +59,9 @@
 }
 .margin-bottom-half{
 	margin-bottom: 0.5em !important;
+}
+.margin-right-one{
+	margin-right: 1em;
 }
 .fa-15x{
 	font-size: 1.5em;
