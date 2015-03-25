@@ -32,7 +32,7 @@ HTML::macro('version', function($path){
 
 HTML::macro('mention', function($text){
 	// Found at: http://granades.com/2009/04/06/using-regular-expressions-to-match-twitter-users-and-hashtags/
-	return preg_replace('/(^|\s)@(\w+)/', '<a class="mention" target="_blank" href="'.action('MenuController@index').'/user/\2">@\2</a>', $text);
+	return preg_replace('/(^|\s)@(\w+)/', ' <a class="mention" target="_blank" href="'.action('MenuController@index').'/user/\2">@\2</a>', $text);
 });
 
 /**

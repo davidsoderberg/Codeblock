@@ -28,7 +28,7 @@ class EloquentReplyRepository extends CRepository implements ReplyRepository {
 		}
 
 		if(isset($input['reply'])){
-			$Reply->reply = $this->stripTrim($input['reply']);
+			$Reply->reply = $input['reply'];
 		}
 
 		if(isset($input['topic_id'])){
