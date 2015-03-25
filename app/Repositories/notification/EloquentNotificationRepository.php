@@ -177,7 +177,7 @@ class EloquentNotificationRepository extends CRepository implements Notification
 		$user = $this->user->get($notification->user_id);
 		$data = array('subject' => $notification->subject, 'body' => $notification->body);
 		$emailInfo = array('toEmail' => $user->email, 'toName' => $user->username, 'subject' => $notification->subject);
-		if($this->sendEmail('emails.notification', $emailInfo, $data) == 1) {
+		if($this->sendEmail('emails.notification', $emailInfo, $data)) {
 			return true;
 		}
 		return false;

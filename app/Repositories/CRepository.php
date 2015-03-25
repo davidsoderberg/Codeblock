@@ -14,10 +14,14 @@ Class CRepository {
 
 	// skickar alla mejl som skickas från applikationen.
 	public function sendEmail($template, $emailInfo, $data){
-		return Mail::send($template, $data, function($message) use ($emailInfo) {
+		Mail::send($template, $data, function($message) use ($emailInfo) {
 			$message->from(env('FROM_ADRESS'), env('FROM_NAME'));
 			$message->to($emailInfo['toEmail'], $emailInfo['toName'])->subject($emailInfo['subject']);
 		});
+
+		if(count(Mail::failures()) <= 0){
+			return true;
+		}
 	}
 
 	// används för att ta bort alla html elment från input från användaren.

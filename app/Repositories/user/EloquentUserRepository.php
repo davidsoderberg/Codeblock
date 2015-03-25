@@ -156,7 +156,7 @@ class EloquentUserRepository extends CRepository implements UserRepository {
 			if($user->save()){
 				$data = array('password' => $newPassword[0], 'Username' => $user->username);
 				$emailInfo = array('toEmail' => $this->stripTrim($input['email']), 'toName' => $user->username, 'subject' => 'Forgot password');
-				if($this->sendEmail('emails.forgotPassword', $emailInfo, $data) == 1){
+				if($this->sendEmail('emails.forgotPassword', $emailInfo, $data)){
 					return true;
 				}
 			}
@@ -199,7 +199,7 @@ class EloquentUserRepository extends CRepository implements UserRepository {
 		$token = $this->makeToken($user->email);
 		$data = array('token' => $token, 'id' => $user->id, 'Username' => $user->username);
 		$emailInfo = array('toEmail' => $user->email, 'toName' => $user->username, 'subject' => 'Welcome');
-		if($this->sendEmail('emails.activateUser', $emailInfo, $data) == 1){
+		if($this->sendEmail('emails.activateUser', $emailInfo, $data)){
 			return true;
 		}
 		return false;
