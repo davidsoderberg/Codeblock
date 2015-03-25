@@ -1,0 +1,41 @@
+.forum{
+	.item {
+		@include clearfix();
+		padding: 0.5em;
+		border-bottom: 1px solid $browngray;
+		&.invert {
+			color: $white;
+			background: $browngray;
+		}
+		.avatar{
+			float: left;
+			margin-right: 2em;
+		}
+		.reply{
+			float: left;
+		}
+		.content {
+			a {
+				text-decoration: none;
+				text-transform: capitalize;
+				font-weight: bolder;
+				display: block;
+			}
+			p {
+				font-size: 75%;
+				a{
+					display: inline;
+					text-transform: none;
+					font-weight: normal;
+					text-decoration: underline;
+				}
+			}
+			float: left;
+		}
+		.meta {
+			float: right;
+			width: 15%;
+			text-align: center;
+		}
+	}
+}
