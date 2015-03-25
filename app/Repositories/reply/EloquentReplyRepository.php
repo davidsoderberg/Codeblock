@@ -1,6 +1,7 @@
 <?php namespace App\Repositories\Reply;
 
 use App\Reply;
+use Illuminate\Support\Facades\Auth;
 use App\Repositories\CRepository;
 
 class EloquentReplyRepository extends CRepository implements ReplyRepository {
@@ -27,7 +28,7 @@ class EloquentReplyRepository extends CRepository implements ReplyRepository {
 		}
 
 		if(isset($input['reply'])){
-			$Reply->title = $this->stripTrim($input['reply']);
+			$Reply->reply = $this->stripTrim($input['reply']);
 		}
 
 		if(isset($input['topic_id'])){

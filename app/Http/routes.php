@@ -61,6 +61,8 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::post('topics/store/{id?}', 'TopicController@createOrUpdate');
 	Route::get('topics/{id}', 'TopicController@show');
 
+	Route::post('reply/store/{id?}', 'ReplyController@createOrUpdate');
+
 	Route::group(['middleware' => 'role', 'role' => '2'], function() {
 		Route::get('categories', 'CategoryController@index');
 		Route::get('categories/{id}', 'CategoryController@show');
