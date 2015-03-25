@@ -1,6 +1,6 @@
 <?php
 
-use Repositories\User\EloquentUserRepository;
+use App\Repositories\User\EloquentUserRepository;
 
 class UserTest extends TestCase {
 
@@ -44,7 +44,7 @@ class UserTest extends TestCase {
 	public function testLogin(){
 		$input = ['username' => 'test', 'password' => 'test', 'email' => 'test@test.com', 'active' => 1, 'role' => 1];
 		$this->assertTrue($this->repo->createOrUpdate($input));
-		$user = User::find(2);
+		$user = App\User::find(2);
 		$user->active = 1;
 		$user->save();
 		$input = ['loginUsername' => 'test', 'loginpassword' => 'test'];

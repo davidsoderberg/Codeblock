@@ -1,6 +1,6 @@
 <?php
 
-use Repositories\Tag\EloquentTagRepository;
+use App\Repositories\Tag\EloquentTagRepository;
 
 class TagTest extends TestCase {
 
