@@ -2,7 +2,7 @@
 
 use App\Repositories\User\EloquentUserRepository;
 
-class UserTest extends TestCase {
+class UserTest extends UnitCase {
 
 	public $repo;
 

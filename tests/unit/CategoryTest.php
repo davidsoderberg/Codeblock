@@ -2,7 +2,7 @@
 
 use App\Repositories\Category\EloquentCategoryRepository;
 
-class CategoryTest extends TestCase {
+class CategoryTest extends UnitCase {
 
 	public $repo;
 

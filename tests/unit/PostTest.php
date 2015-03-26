@@ -4,7 +4,7 @@ use App\Repositories\Post\EloquentPostRepository;
 use App\Repositories\Comment\EloquentCommentRepository;
 use App\User;
 
-class PostTest extends TestCase {
+class PostTest extends UnitCase {
 
 	public $repo;
 

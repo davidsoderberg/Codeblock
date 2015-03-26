@@ -2,7 +2,7 @@
 
 use App\Repositories\Rate\EloquentRateRepository;
 
-class RateTest extends TestCase {
+class RateTest extends UnitCase {
 
 	public $repo;
 

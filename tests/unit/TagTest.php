@@ -2,7 +2,7 @@
 
 use App\Repositories\Tag\EloquentTagRepository;
 
-class TagTest extends TestCase {
+class TagTest extends UnitCase {
 
 	public $repo;
 
