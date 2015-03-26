@@ -138,7 +138,7 @@ class EloquentNotificationRepository extends CRepository implements Notification
 		$notification->subject = 'New '.$notification->type;
 		switch($notification->type){
 			case NotificationType::MENTION:
-				if($notification->object_type == 'Reply' || $notification->object_type == 'Topic') {
+				if($notification->object_type == 'Topic') {
 					$type = 'reply';
 					$notification->body = 'topic.';
 				}
