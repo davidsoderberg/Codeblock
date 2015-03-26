@@ -1,12 +1,9 @@
 {
   "devDependencies": {
     "gulp": "^3.8.11",
-    "laravel-elixir": "*",
     "gulp-sass": "1.*",
     "gulp-uglifyjs": "0.*",
     "gulp-rename": "1.*",
-    "gulp-sourcemaps": "1.*",
-    "gulp-connect-php": "0.0.5",
-    "browser-sync": "^2.3.1"
+    "gulp-sourcemaps": "1.*"
   }
 }
