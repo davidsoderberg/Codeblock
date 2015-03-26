@@ -13,6 +13,14 @@
 		}
 		.reply{
 			float: left;
+			width: 92%;
+			code{
+				background: $browngray;
+				padding: 2.5px;
+				display: block;
+				margin: 2px 0;
+				color: $white;
+			}
 		}
 		.content {
 			a {

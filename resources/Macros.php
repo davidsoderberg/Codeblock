@@ -17,7 +17,7 @@ HTML::macro('markdown', function($text){
 		'/(\*\*|__)(.*?)\1/' => '<strong>\2</strong>',
 		'/(\*|_)(.*?)\1/' => '<i>\2</i>',
 		'/\:\"(.*?)\"\:/' => '<q>\1</q>',
-		'/```(.*?)```/' => '<pre>\1</pre>',
+		//'/```(.*?)```/' => '<pre>\1</pre>',
 		'/`(.*?)`/' => '<code>\1</code>'
 	);
 	foreach ($rules as $regex => $replacement) {
