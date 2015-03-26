@@ -33,13 +33,6 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase {
 		}
 	}
 
-	public function mock($class)
-	{
-		$mock = Mockery::mock($class);
-		$this->app->instance($class, $mock);
-		return $mock;
-	}
-
 	public function setUpDb($seed = true)
 	{
 		Artisan::call('migrate');
@@ -48,10 +41,4 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase {
 			Artisan::call('db:seed');
 		}
 	}
-
-	public function tearDown()
-	{
-		Mockery::close();
-	}
-
 }

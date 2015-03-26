@@ -11,7 +11,7 @@
       }
     ],
 	"require": {
-		"laravel/framework": "~5.0",
+		"laravel/framework": "5.0",
         "illuminate/html": "@dev",
         "davidsoderberg/iseed": "master",
         "firebase/php-jwt": "1.*",
@@ -19,10 +19,7 @@
         "yzalis/identicon": "*"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "~4.4.0@stable",
-		"phpspec/phpspec": "~2.1",
-        "codeception/codeception": "~2.0",
-        "mockery/mockery": "dev-master@dev"
+		"phpunit/phpunit": "~4.4.0@stable"
 	},
 	"autoload": {
 		"classmap": [
