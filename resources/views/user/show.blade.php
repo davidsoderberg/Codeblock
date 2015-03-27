@@ -52,7 +52,7 @@
                 @endif
             </div>
         </div>
-        <div class="float-right clearfix margin-top-one">
+        <div class="float-right clearfix">
             <h3>Starred codeblock</h3>
             @if($user->posts->stars > 0)
                 @foreach ($user->posts as $post)
