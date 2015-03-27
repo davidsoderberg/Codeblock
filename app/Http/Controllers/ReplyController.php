@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\View;
 use App\Repositories\Notification\NotificationRepository;
 use Illuminate\Support\Facades\Auth;
 use App\NotificationType;
+use App\Repositories\Read\ReadRepository;
 
 /**
  * Class ReplyController
@@ -25,7 +26,7 @@ class ReplyController extends Controller {
 	 * @param null $id
 	 * @return mixed
 	 */
-	public function createOrUpdate(NotificationRepository $notification, $id = null) {
+	public function createOrUpdate(ReadRepository $read, NotificationRepository $notification, $id = null) {
 		if($this->Reply->createOrUpdate(Input::all(), $id)) {
 			$reply = $this->Reply->Reply;
 			$replies = $reply->topic->replies;
@@ -33,6 +34,7 @@ class ReplyController extends Controller {
 				$notification->send($replies->first()->user_id, NotificationType::REPLY, $reply->topic);
 			}
 			$this->mentioned(Input::get('reply'), $reply->topic, $notification);
+			$read->UpdatedRead($reply->topic->id);
 			return Redirect::back()->with('success', 'Your Reply has been saved.');
 		}
 		return Redirect::back()->withErrors($this->Reply->getErrors())->withInput();

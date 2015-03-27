@@ -9,16 +9,18 @@ class EloquentReadRepository extends CRepository implements ReadRepository {
 	public function hasRead($topic_id)
 	{
 		if(Auth::check()) {
-			$Read = new Read;
-			$Read->topic_id = $topic_id;
-			$Read->user_id = Auth::user()->id;
-			$Read->save();
+			$user_id = Auth::user()->id;
+			if(is_null(Read::where('topic_id', $topic_id)->where('user_id', $user_id)->first())) {
+				$Read = new Read;
+				$Read->topic_id = $topic_id;
+				$Read->user_id = $user_id;
+				$Read->save();
+			}
 		}
 	}
 
 	public function UpdatedRead($topic_id){
-		$Reads = Read::where('topic_id', $topic_id);
-		foreach($Reads as $Read){
+		foreach(Read::where('topic_id', $topic_id)->get() as $Read){
 			$Read->delete();
 		}
 	}

@@ -31,12 +31,11 @@ class TopicController extends Controller {
 	 * @param null $id
 	 * @return mixed
 	 */
-	public function createOrUpdate(ReadRepository $read, $id = null) {
+	public function createOrUpdate($id = null) {
 		$input = Input::all();
 		if($this->topic->createOrUpdate(Input::all(), $id)) {
 			$input['topic_id'] = $this->topic->topic->id;
 			if($this->reply->createOrUpdate($input)) {
-				$read->UpdatedRead($input['topic_id']);
 				return Redirect::back()->with('success', 'Your topic has been saved.');
 			}
 			return Redirect::to('topics/'.$this->topic->topic->id)->with('success', 'Your topic has been saved, but we could not save your reply, please try agian below.');
