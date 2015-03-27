@@ -4,6 +4,15 @@ use Illuminate\Support\Facades\Auth;
 
 class Forum extends Model
 {
+	public static function boot() {
+		parent::boot();
+		static::deleting(function($object) {
+			foreach ($object->topics as $topic) {
+				$topic->delete();
+			}
+		});
+	}
+
 	/**
 	 * The database table used by the model.
 	 *

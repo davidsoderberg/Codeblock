@@ -2,6 +2,15 @@
 
 class Topic extends Model
 {
+	public static function boot() {
+		parent::boot();
+		static::deleting(function($object) {
+			foreach ($object->replies as $reply) {
+				$reply->delete();
+			}
+		});
+	}
+
 	/**
 	 * The database table used by the model.
 	 *
