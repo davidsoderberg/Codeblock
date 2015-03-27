@@ -19,7 +19,7 @@ class ReplyController extends Controller {
 	 * @param ReplyRepository $Reply
 	 */
 	public function __construct(ReplyRepository $Reply) {
-		$this->Reply = $Reply;
+		$this->reply = $Reply;
 	}
 
 	/**
@@ -27,17 +27,19 @@ class ReplyController extends Controller {
 	 * @return mixed
 	 */
 	public function createOrUpdate(ReadRepository $read, NotificationRepository $notification, $id = null) {
-		if($this->Reply->createOrUpdate(Input::all(), $id)) {
-			$reply = $this->Reply->Reply;
-			$replies = $reply->topic->replies;
-			if(Auth::user()->id != $replies->first()->user_id) {
-				$notification->send($replies->first()->user_id, NotificationType::REPLY, $reply->topic);
+		if($this->reply->createOrUpdate(Input::all(), $id)) {
+			$reply = $this->reply->Reply;
+			if(is_null($id)) {
+				$replies = $reply->topic->replies;
+				if(Auth::user()->id != $replies->first()->user_id) {
+					$notification->send($replies->first()->user_id, NotificationType::REPLY, $reply->topic);
+				}
+				$this->mentioned(Input::get('reply'), $reply->topic, $notification);
+				$read->UpdatedRead($reply->topic->id);
 			}
-			$this->mentioned(Input::get('reply'), $reply->topic, $notification);
-			$read->UpdatedRead($reply->topic->id);
-			return Redirect::back()->with('success', 'Your Reply has been saved.');
+			return Redirect::action('TopicController@show', array($reply->topic->id))->with('success', 'Your Reply has been saved.');
 		}
-		return Redirect::back()->withErrors($this->Reply->getErrors())->withInput();
+		return Redirect::back()->withErrors($this->reply->getErrors())->withInput();
 	}
 
 	/**
@@ -45,10 +47,9 @@ class ReplyController extends Controller {
 	 * @return mixed
 	 */
 	public function delete($id) {
-		if($this->forum->delete($id)) {
+		if($this->reply->delete($id)) {
 			return Redirect::back()->with('success', 'Your reply has been deleted.');
 		}
-
 		return Redirect::back();
 	}
 }

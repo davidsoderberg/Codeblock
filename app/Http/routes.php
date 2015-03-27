@@ -58,10 +58,11 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::get('forum', 'ForumController@listForums');
 	Route::get('forum/{id}', 'ForumController@show');
 	Route::get('forums/{id}', 'ForumController@forumsRedirect');
-	Route::get('forum/topic/{id}', 'TopicController@show');
+	Route::get('forum/topic/{id}/{reply?}', 'TopicController@show');
 
 	Route::post('topics/store/{id?}', 'TopicController@createOrUpdate');
 	Route::post('reply/store/{id?}', 'ReplyController@createOrUpdate');
+	Route::get('reply/delete/{id}', 'ReplyController@delete');
 
 	Route::group(['middleware' => 'role', 'role' => '2'], function() {
 		Route::get('categories', 'CategoryController@index');

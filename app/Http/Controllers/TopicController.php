@@ -21,10 +21,11 @@ class TopicController extends Controller {
 		$this->reply = $reply;
 	}
 
-	public function show(ReadRepository $read, $id){
+	public function show(ReadRepository $read, $id, $reply = 0){
 		$topic = $this->topic->get($id);
+		$reply = $this->reply->get($reply);
 		$read->hasRead($id);
-		return View::make('topic.show')->with('title', 'Topic: '.$topic->title)->with('topic', $topic);
+		return View::make('topic.show')->with('title', 'Topic: '.$topic->title)->with('topic', $topic)->with('editReply', $reply);
 	}
 
 	/**
@@ -34,11 +35,13 @@ class TopicController extends Controller {
 	public function createOrUpdate($id = null) {
 		$input = Input::all();
 		if($this->topic->createOrUpdate(Input::all(), $id)) {
-			$input['topic_id'] = $this->topic->topic->id;
-			if($this->reply->createOrUpdate($input)) {
-				return Redirect::back()->with('success', 'Your topic has been saved.');
+			if(is_null($id)) {
+				$input['topic_id'] = $this->topic->topic->id;
+				if(!$this->reply->createOrUpdate($input)) {
+					return Redirect::to('topics/'.$this->topic->topic->id)->with('success', 'Your topic has been saved, but we could not save your reply, please try agian below.');
+				}
 			}
-			return Redirect::to('topics/'.$this->topic->topic->id)->with('success', 'Your topic has been saved, but we could not save your reply, please try agian below.');
+			return Redirect::back()->with('success', 'Your topic has been saved.');
 		}
 		return Redirect::back()->withErrors($this->topic->getErrors())->withInput();
 	}
@@ -48,7 +51,7 @@ class TopicController extends Controller {
 	 * @return mixed
 	 */
 	public function delete($id) {
-		if($this->forum->delete($id)) {
+		if($this->topic->delete($id)) {
 			return Redirect::back()->with('success', 'Your forum has been deleted.');
 		}
 

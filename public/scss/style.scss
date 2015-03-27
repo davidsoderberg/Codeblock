@@ -396,6 +396,25 @@
 		text-align: center;
 	}
 }
+
+.inline-group-form{
+	label{
+		display: block;
+		text-align: center;
+	}
+	input{
+		margin-bottom: 0;
+	}
+	.alert{
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+	.button, button{
+		float: none;
+		width: 100%;
+	}
+}
+
 @import "partials/menu";
 @import "partials/tabs";
 @import "partials/accordion";
