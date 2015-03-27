@@ -61,6 +61,7 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::get('forum/topic/{id}/{reply?}', 'TopicController@show');
 
 	Route::post('topics/store/{id?}', 'TopicController@createOrUpdate');
+	Route::get('topics/delete/{id}', 'TopicController@delete');
 	Route::post('reply/store/{id?}', 'ReplyController@createOrUpdate');
 	Route::get('reply/delete/{id}', 'ReplyController@delete');
 

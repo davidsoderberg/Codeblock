@@ -32,14 +32,16 @@ class TopicController extends Controller {
 	 * @param null $id
 	 * @return mixed
 	 */
-	public function createOrUpdate($id = null) {
+	public function createOrUpdate(ReadRepository $read,$id = null) {
 		$input = Input::all();
 		if($this->topic->createOrUpdate(Input::all(), $id)) {
 			if(is_null($id)) {
 				$input['topic_id'] = $this->topic->topic->id;
 				if(!$this->reply->createOrUpdate($input)) {
-					return Redirect::to('topics/'.$this->topic->topic->id)->with('success', 'Your topic has been saved, but we could not save your reply, please try agian below.');
+					$this->delete($this->topic->topic->id);
+					return Redirect::back()->withErrors($this->reply->getErrors())->withInput();
 				}
+				$read->hasRead($this->topic->topic->id);
 			}
 			return Redirect::back()->with('success', 'Your topic has been saved.');
 		}
@@ -51,8 +53,9 @@ class TopicController extends Controller {
 	 * @return mixed
 	 */
 	public function delete($id) {
+		$forum_id = $this->topic->get($id)->forum_id;
 		if($this->topic->delete($id)) {
-			return Redirect::back()->with('success', 'Your forum has been deleted.');
+			return Redirect::action('ForumController@show', array($forum_id))->with('success', 'Your topic has been deleted.');
 		}
 
 		return Redirect::back();
