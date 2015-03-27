@@ -35,8 +35,16 @@ class ForumController extends Controller {
 	/**
 	 * @return mixed
 	 */
-	public function listForum(){
+	public function listForums(){
 		return View::make('forum.list')->with('title', 'Forum')->with('forums', $this->forum->get());
+	}
+
+	/**
+	 * @param $id
+	 * @return mixed
+	 */
+	public function forumsRedirect($id){
+		return Redirect::action('ForumController@show', array('id' => $id));
 	}
 
 	/**

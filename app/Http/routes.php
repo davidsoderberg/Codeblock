@@ -55,9 +55,9 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::get('rate/minus/{id}', 'RateController@minus');
 	Route::get('rate/plus/{id}', 'RateController@plus');
 
+	Route::get('forum', 'ForumController@listForums');
 	Route::get('forum/{id}', 'ForumController@show');
-	Route::get('forum', 'ForumController@listForum');
-
+	Route::get('forums/{id}', 'ForumController@forumsRedirect');
 	Route::get('forum/topic/{id}', 'TopicController@show');
 
 	Route::post('topics/store/{id?}', 'TopicController@createOrUpdate');
