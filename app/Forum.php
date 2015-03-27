@@ -1,5 +1,7 @@
 <?php namespace App;
 
+use Illuminate\Support\Facades\Auth;
+
 class Forum extends Model
 {
 	/**
@@ -42,5 +44,16 @@ class Forum extends Model
 			}
 		}
 		return $latestReply;
+	}
+
+	public function hasUnreadTopics(){
+		if(Auth::check()){
+			$hasread = [];
+			foreach($this->topics as $topic){
+				$hasread[] = Auth::user()->hasRead($topic->id);
+			}
+			return in_array(false, $hasread);
+		}
+		return true;
 	}
 }

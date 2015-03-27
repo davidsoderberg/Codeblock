@@ -110,6 +110,19 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return $this->hasOne('App\Role', 'id', 'role');
 	}
 
+	public function reads() {
+		return $this->hasMany('App\Read', 'user_id', 'id');
+	}
+
+	public function hasRead($topic_id){
+		foreach($this->reads as $read){
+			if($read->topic_id == $topic_id){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public function rates() {
 		return $this->hasMany('App\Rate', 'user_id', 'id');
 	}

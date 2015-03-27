@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\Repositories\Read\ReadRepository;
 use App\Repositories\Reply\ReplyRepository;
 use App\Repositories\Topic\TopicRepository;
 use Illuminate\Support\Facades\Input;
@@ -20,8 +21,9 @@ class TopicController extends Controller {
 		$this->reply = $reply;
 	}
 
-	public function show($id){
+	public function show(ReadRepository $read, $id){
 		$topic = $this->topic->get($id);
+		$read->hasRead($id);
 		return View::make('topic.show')->with('title', 'Topic: '.$topic->title)->with('topic', $topic);
 	}
 
@@ -29,11 +31,12 @@ class TopicController extends Controller {
 	 * @param null $id
 	 * @return mixed
 	 */
-	public function createOrUpdate($id = null) {
+	public function createOrUpdate(ReadRepository $read, $id = null) {
 		$input = Input::all();
 		if($this->topic->createOrUpdate(Input::all(), $id)) {
 			$input['topic_id'] = $this->topic->topic->id;
 			if($this->reply->createOrUpdate($input)) {
+				$read->UpdatedRead($input['topic_id']);
 				return Redirect::back()->with('success', 'Your topic has been saved.');
 			}
 			return Redirect::to('topics/'.$this->topic->topic->id)->with('success', 'Your topic has been saved, but we could not save your reply, please try agian below.');
