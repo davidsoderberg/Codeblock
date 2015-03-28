@@ -118,17 +118,24 @@ Route::group(['middleware' => 'guest'], function(){
 
 Route::group(['prefix' => 'api', 'middleware' => 'api'],function(){
 
-	Route::get('category', 'ApiController@Categories');
-	Route::get('tag', 'ApiController@Tags');
-	Route::get('post', 'ApiController@Posts');
-	Route::get('user', 'ApiController@Users');
+	Route::get('categories/{id?}', 'ApiController@Categories');
+	Route::get('tags/{id?}', 'ApiController@Tags');
+	Route::get('posts/{id?}', 'ApiController@Posts');
+	Route::get('users/{id?}', 'ApiController@Users');
+	Route::get('forums/{id?}', 'ApiController@forums');
+	Route::get('topics/{id?}', 'ApiController@topics');
 	Route::post('auth', 'ApiController@Auth');
+	Route::post('auth/register', 'ApiController@createOrUpdateUser');
+	Route::post('auth/forgot', 'ApiController@forgotPassword');
 
 	Route::group(['middleware' =>  'jwt'], function(){
-		Route::post('category', 'ApiController@CreateCategory');
-		Route::post('tag', 'ApiController@CreateTag');
-		Route::post('post', 'ApiController@CreatePost');
-		Route::post('comment', 'ApiController@CreateComment');
+		Route::post('user/{id?}', 'ApiController@createOrUpdateUser');
+		Route::post('category/{id?}', 'ApiController@createOrUpdateCategory');
+		Route::post('tag/{id?}', 'ApiController@createOrUpdateTag');
+		Route::post('post/{id?}', 'ApiController@createOrUpdatePost');
+		Route::post('comment/{id?}', 'ApiController@createOrUpdateComment');
+		Route::post('topics/{id?}', 'ApiController@createOrUpdateTopics');
+		Route::post('replies/{id?}', 'ApiController@createOrUpdateReply');
 		Route::post('star/{id}', 'ApiController@Star');
 		Route::post('rate/{id}', 'ApiController@Rate');
 	});

@@ -23,6 +23,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 			$posts =  Post::all();
 			foreach ($posts as $post) {
 				$post->category = $post->category($post->category)->first();
+				$post->comments = $post->comments;
 				$post->posttags = $post->posttags;
 				$post->stars = $this->getStars($post->stars);
 				//$post->category->lang = $this->jsSwitch($post->category->name);
@@ -38,6 +39,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 			}
 			if(!is_null($post)){
 				$post->category = $post->category($post->category)->first();
+				$post->comments = $post->comments;
 				$post->posttags = $post->posttags;
 				$post->stars = $this->getStars($post->stars);
 				//$post->category->name = $this->jsSwitch($post->category->name);
