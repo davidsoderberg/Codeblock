@@ -23,7 +23,9 @@ class Jwt
 			if(Auth::user()) {
 				return $next($request);
 			}
-		} catch (\Exception $e){}
+		} catch (\Exception $e){
+			dd($e);
+		}
 		return Response::json(array('message' => 'We could not authenticate you.'), 401);
     }
 }
