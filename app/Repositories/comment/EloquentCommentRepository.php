@@ -23,7 +23,9 @@ class EloquentCommentRepository extends CRepository implements CommentRepository
 		if(!is_numeric($id)) {
 			$Comment = new Comment;
 			$Comment->user_id = Auth::user()->id;
-			$Comment->post_id = $this->stripTrim($input['post_id']);
+			if(isset($input['post_id'])) {
+				$Comment->post_id = $this->stripTrim($input['post_id']);
+			}
 		} else {
 			$Comment = Comment::find($id);
 		}

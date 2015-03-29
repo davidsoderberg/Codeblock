@@ -61,8 +61,12 @@ class EloquentUserRepository extends CRepository implements UserRepository {
 	{
 		if(!is_numeric($id)) {
 			$User = new User;
-			$User->username = $this->stripTrim($input['username']);
-			$User->password = Hash::make($input['password']);
+			if(isset($input['username']) && $input['username'] != '') {
+				$User->username = $this->stripTrim($input['username']);
+			}
+			if(isset($input['password']) && $input['password'] != '') {
+				$User->password = Hash::make($input['password']);
+			}
 		} else {
 			$this->errors = new MessageBag;
 			$User = User::find($id);
@@ -95,7 +99,10 @@ class EloquentUserRepository extends CRepository implements UserRepository {
 				$checkErrors = array($checkErrors);
 			}
 			if(in_array('email', $checkErrors)){
-				$olduser = User::where('email', '=', $this->stripTrim($input['email']))->first();
+				$olduser = null;
+				if(isset($input['email'])) {
+					$olduser = User::where('email', '=', $this->stripTrim($input['email']))->first();
+				}
 				if(!is_null($olduser)){
 					if($olduser->active == 0){
 						if($olduser->delete()){
