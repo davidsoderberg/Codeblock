@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8bff840739800f0e6ee684bdb6cbe4e8",
+    "hash": "0e1ad314f101d620b4b4a67bacc5e537",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -987,12 +987,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "df47acdaefcff755cb6f15abd2e4735a2a9fad5c"
+                "reference": "bbd933abd8b9644531d4fdc6354a99363d6c160e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/df47acdaefcff755cb6f15abd2e4735a2a9fad5c",
-                "reference": "df47acdaefcff755cb6f15abd2e4735a2a9fad5c",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/bbd933abd8b9644531d4fdc6354a99363d6c160e",
+                "reference": "bbd933abd8b9644531d4fdc6354a99363d6c160e",
                 "shasum": ""
             },
             "require": {
@@ -1062,7 +1062,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2015-03-21 13:33:54"
+            "time": "2015-03-26 08:46:41"
         },
         {
             "name": "league/oauth1-client",
@@ -1133,12 +1133,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "c31a2c4e8db5da8b46c74cf275d7f109c0f249ac"
+                "reference": "df7da8a5550eb94cb885df6be7ffebe2768c10fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/c31a2c4e8db5da8b46c74cf275d7f109c0f249ac",
-                "reference": "c31a2c4e8db5da8b46c74cf275d7f109c0f249ac",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/df7da8a5550eb94cb885df6be7ffebe2768c10fd",
+                "reference": "df7da8a5550eb94cb885df6be7ffebe2768c10fd",
                 "shasum": ""
             },
             "require": {
@@ -1198,7 +1198,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2015-03-09 09:58:04"
+            "time": "2015-03-26 18:30:54"
         },
         {
             "name": "mtdowling/cron-expression",
@@ -1297,12 +1297,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "52dafafd10ceaa10c6760523bfa160f1ee3aabfe"
+                "reference": "805078e0a96a5309f05899f4a76923be6f94af60"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/52dafafd10ceaa10c6760523bfa160f1ee3aabfe",
-                "reference": "52dafafd10ceaa10c6760523bfa160f1ee3aabfe",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/805078e0a96a5309f05899f4a76923be6f94af60",
+                "reference": "805078e0a96a5309f05899f4a76923be6f94af60",
                 "shasum": ""
             },
             "require": {
@@ -1334,7 +1334,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2015-03-25 19:57:39"
+            "time": "2015-03-28 17:14:24"
         },
         {
             "name": "psr/log",
@@ -1342,12 +1342,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "1af1529b49a6e065ae6802e70192aba35d79b7d8"
+                "reference": "bf2c13de4300e227d7b2fd08027673a79c519987"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/1af1529b49a6e065ae6802e70192aba35d79b7d8",
-                "reference": "1af1529b49a6e065ae6802e70192aba35d79b7d8",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/bf2c13de4300e227d7b2fd08027673a79c519987",
+                "reference": "bf2c13de4300e227d7b2fd08027673a79c519987",
                 "shasum": ""
             },
             "type": "library",
@@ -1357,8 +1357,8 @@
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Psr\\Log\\": ""
+                "psr-4": {
+                    "Psr\\Log\\": "Psr/Log/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1377,7 +1377,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2015-02-05 09:32:11"
+            "time": "2015-03-26 14:39:45"
         },
         {
             "name": "psy/psysh",
@@ -2204,12 +2204,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "61ee6c848fd2c623e13f59df48833f8b8bad7fda"
+                "reference": "67f7c748c330aee3cfcaa3da28c997b68023c41d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/61ee6c848fd2c623e13f59df48833f8b8bad7fda",
-                "reference": "61ee6c848fd2c623e13f59df48833f8b8bad7fda",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/67f7c748c330aee3cfcaa3da28c997b68023c41d",
+                "reference": "67f7c748c330aee3cfcaa3da28c997b68023c41d",
                 "shasum": ""
             },
             "require": {
@@ -2255,7 +2255,7 @@
                 "debug",
                 "dump"
             ],
-            "time": "2015-03-06 16:45:31"
+            "time": "2015-03-26 17:20:25"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -2579,20 +2579,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laracasts/Integrated.git",
-                "reference": "19f83bd7178d71f706bb8c64ca1bc6147f598e64"
+                "reference": "86589519a9a067489032949e4ece5e147998f83f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laracasts/Integrated/zipball/19f83bd7178d71f706bb8c64ca1bc6147f598e64",
-                "reference": "19f83bd7178d71f706bb8c64ca1bc6147f598e64",
+                "url": "https://api.github.com/repos/laracasts/Integrated/zipball/86589519a9a067489032949e4ece5e147998f83f",
+                "reference": "86589519a9a067489032949e4ece5e147998f83f",
                 "shasum": ""
             },
             "require": {
                 "fabpot/goutte": "~2.0",
                 "instaclick/php-webdriver": "~1.4",
                 "laracasts/testdummy": "~2.1",
-                "symfony/css-selector": "~2.6",
-                "symfony/dom-crawler": "~2.6"
+                "symfony/css-selector": "~2.5|~2.6",
+                "symfony/dom-crawler": "~2.5|~2.6"
             },
             "type": "library",
             "autoload": {
@@ -2618,7 +2618,7 @@
                 "laravel",
                 "testing"
             ],
-            "time": "2015-03-26 05:34:07"
+            "time": "2015-03-27 15:42:55"
         },
         {
             "name": "laracasts/testdummy",
