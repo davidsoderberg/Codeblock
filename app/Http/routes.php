@@ -129,9 +129,6 @@ Route::group(['prefix' => 'api', 'middleware' => 'api'],function(){
 	Route::post('auth/forgot', 'ApiController@forgotPassword');
 
 	Route::group(['middleware' =>  'jwt'], function(){
-		Route::post('user', 'ApiController@createOrUpdateUser');
-		Route::post('category', 'ApiController@createOrUpdateCategory');
-		Route::post('tag', 'ApiController@createOrUpdateTag');
 		Route::post('post', 'ApiController@createOrUpdatePost');
 		Route::post('comment', 'ApiController@createOrUpdateComment');
 		Route::post('topics', 'ApiController@createOrUpdateTopic');
@@ -140,11 +137,17 @@ Route::group(['prefix' => 'api', 'middleware' => 'api'],function(){
 		Route::post('rate/{id}', 'ApiController@Rate');
 
 		Route::put('user/{id}', 'ApiController@createOrUpdateUser');
-		Route::put('category/{id}', 'ApiController@createOrUpdateCategory');
-		Route::put('tag/{id}', 'ApiController@createOrUpdateTag');
 		Route::put('post/{id}', 'ApiController@createOrUpdatePost');
 		Route::put('comment/{id}', 'ApiController@createOrUpdateComment');
 		Route::put('topics/{id}', 'ApiController@createOrUpdateTopics');
 		Route::put('replies/{id}', 'ApiController@createOrUpdateReply');
+
+		Route::group(['middleware' => 'role', 'role' => '2'], function() {
+			Route::post('category', 'ApiController@createOrUpdateCategory');
+			Route::post('tag', 'ApiController@createOrUpdateTag');
+
+			Route::put('category/{id}', 'ApiController@createOrUpdateCategory');
+			Route::put('tag/{id}', 'ApiController@createOrUpdateTag');
+		});
 	});
 });
