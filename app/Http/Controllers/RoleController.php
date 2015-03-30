@@ -33,16 +33,15 @@ class RoleController extends Controller {
 	 */
 	public function index()
 	{
-		return View::make('role.index')->with('title', 'Roles')->with('roles', $this->role->get());
-	}
-
-	/**
-	 * Visar vyn för att skapa en roll
-	 * @return objekt     objekt som innehåller allt som behövs i vyn
-	 */
-	public function create()
-	{
-		return View::make('role.create')->with('title', 'create role');
+		$defaultId = 0;
+		$roles = $this->role->get();
+		foreach($roles as $role){
+			if($role->default == 1){
+				$defaultId = $role->id;
+				break;
+			}
+		}
+		return View::make('role.index')->with('title', 'Roles')->with('roles', $roles)->with('selectList', $this->role->getSelectList())->with('default', $defaultId);
 	}
 
 	/**
@@ -78,6 +77,13 @@ class RoleController extends Controller {
 		}else{
 			return Redirect::back()->withErrors($this->role->getErrors())->withInput(Input::all());
 		}
+	}
+
+	public function setDefault(){
+		if($this->role->setDefault(Input::get('default'))){
+			return Redirect::back()->with('success', 'The default role has been updated.');
+		}
+		return Redirect::back()->withErrors($this->role->getErrors())->withInput();
 	}
 
 	/**

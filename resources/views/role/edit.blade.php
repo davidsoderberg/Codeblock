@@ -11,7 +11,7 @@
 		@foreach ($roles as $role)
 			{{ Form::label($role->inputname,$role->name) }}
 			{{ Form::text('name[]', $role->name, array('autofocus' => 'autofocus')) }}
-			{{ Form::selectRange('grade[]', 1, $count, $role->grade); }}
+			{{ Form::selectRange('grade[]', 1, count($roles), $role->grade); }}
 		@endforeach
 
 		{{ Form::button('Update', array('type' => 'submit')) }}

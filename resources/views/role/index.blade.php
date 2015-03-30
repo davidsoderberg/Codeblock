@@ -5,10 +5,33 @@
 @stop
 
 @section('content')
-	<h2>Roles <a href="roles/create" class="button">Create</a></h2>
-	{{ HTML::table(array('grade', 'name'), $roles, 'roles', array('Pagination' => 10, 'View' => false), 'There are no roles right now.') }}
+	<h2>Roles</h2>
+	<div class="verticalRule">
+		<div class="float-left">
+			{{ HTML::table(array('grade', 'name'), $roles, 'roles', array('Pagination' => 10, 'View' => false), 'There are no roles right now.') }}
+		</div>
+		<div class="float-right">
+			<h3>Create role</h3>
+			{{ Form::open(array('action' => array('RoleController@store'))) }}
+
+			{{ Form::label('name','Name') }}
+			{{ Form::text('name', Input::old('Name'), array('autofocus' => 'autofocus')) }}
+			{{ $errors->first('name', '<div class="alert error">:message</div>') }}
+
+			{{ Form::button('Create', array('type' => 'submit')) }}
+			{{ Form::close() }}
+			<div class="horizontalRule"><span>OR</span></div>
+			<h3>Change default role</h3>
+			{{ Form::open(array('action' => array('RoleController@setDefault'))) }}
+			{{ Form::label('default', 'Default role') }}
+			{{ Form::select('default', $selectList, $default); }}
+
+			{{ Form::button('Set default', array('type' => 'submit')) }}
+			{{ Form::close() }}
+		</div>
+	</div>
 @stop
 
 @section('script')
 
-@stop
+@stopg

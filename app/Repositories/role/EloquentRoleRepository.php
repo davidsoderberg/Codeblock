@@ -50,6 +50,26 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 		}
 	}
 
+	public function setDefault($id){
+		$current = Role::where('default', 1)->first();
+		$current->default = 0;
+		if($current->save()){
+			$new = $this->get($id);
+			$new->default = 1;
+			return $new->save();
+		}
+		return false;
+	}
+
+	public function getSelectList(){
+		$roles = $this->get();
+		$selectArray = Array();
+		foreach($roles as $role){
+			$selectArray[$role->id] = $role->name;
+		}
+		return $selectArray;
+	}
+
 	// tar bort en roll
 	public function delete($id){
 		$Role = Role::find($id);

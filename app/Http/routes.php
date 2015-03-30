@@ -97,7 +97,7 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::post('rolepermission/update', 'RoleController@updateRolePermission');
 
 		Route::get('roles', 'RoleController@index');
-		Route::get('roles/create', 'RoleController@create');
+		Route::post('role/default', 'RoleController@setDefault');
 		Route::post('roles/store', 'RoleController@store');
 		Route::get('roles/edit/{id}', 'RoleController@edit');
 		Route::post('roles/update', 'RoleController@update');
