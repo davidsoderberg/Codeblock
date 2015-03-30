@@ -21,6 +21,10 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 		}
 		$Role->grade = count(Role::all()) + 1;
 
+		if(isset($input['default']) && $input['default'] == 0 || isset($input['default']) && $input['default'] == 1){
+			$Role->default = $input['default'];
+		}
+
 		if($Role->save()){
 			return true;
 		}else{
