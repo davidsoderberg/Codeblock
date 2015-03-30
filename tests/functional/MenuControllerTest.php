@@ -1,5 +1,4 @@
 <?php
-use Illuminate\Support\Str;
 
 class MenuControllerTest extends FunctionalCase {
 
@@ -11,6 +10,7 @@ class MenuControllerTest extends FunctionalCase {
 
 	public function testIndex(){
 		$this->get('/');
+		$this->assertViewHas('title', 'Home');
 		$this->assertResponseOk();
 	}
 
