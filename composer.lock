@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a3a115bc228ab77f90d474d36aed2c67",
+    "hash": "f0d90a2f5d057b743188c6bb99eb3a82",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -475,12 +475,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/RingPHP.git",
-                "reference": "6af9751f947d7c6b4ec857ff2b5a5538c24c2596"
+                "reference": "52d868f13570a9a56e5fce6614e0ec75d0f13ac2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/RingPHP/zipball/6af9751f947d7c6b4ec857ff2b5a5538c24c2596",
-                "reference": "6af9751f947d7c6b4ec857ff2b5a5538c24c2596",
+                "url": "https://api.github.com/repos/guzzle/RingPHP/zipball/52d868f13570a9a56e5fce6614e0ec75d0f13ac2",
+                "reference": "52d868f13570a9a56e5fce6614e0ec75d0f13ac2",
                 "shasum": ""
             },
             "require": {
@@ -518,7 +518,7 @@
                 }
             ],
             "description": "Provides a simple API and specification that abstracts away the details of HTTP into a single PHP function.",
-            "time": "2015-03-23 03:26:29"
+            "time": "2015-03-30 01:43:20"
         },
         {
             "name": "guzzlehttp/streams",
