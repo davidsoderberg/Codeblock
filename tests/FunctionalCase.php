@@ -10,4 +10,15 @@ class FunctionalCase extends TestCase {
 		throw new BadMethodCallException;
 	}
 
+	public function assertHtmlHasWord($needle, $caseSensitive = false){
+		$haystack = $this->response->getContent();
+		if($caseSensitive) {
+			$needle = strtolower($needle);
+			$haystack = strtolower($haystack);
+		}
+		$condition = strpos($haystack, $needle) !== false && count(preg_match('/'.$needle.'/',$haystack)) > 0;
+		$message = 'Your html does not contain "'.$needle.'".';
+		return PHPUnit_Framework_Assert::assertTrue($condition, $message);
+	}
+
 }

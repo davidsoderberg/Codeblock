@@ -11,12 +11,14 @@ class MenuControllerTest extends FunctionalCase {
 	public function testIndex(){
 		$this->get('/');
 		$this->assertViewHas('title', 'Home');
+		$this->assertHtmlHasWord('Welcome');
 		$this->assertResponseOk();
 	}
 
 	public function testBrowse(){
 		$this->get('/browse');
 		$this->assertViewHas('title', 'Browse');
+		$this->assertHtmlHasWord('php');
 		$this->assertResponseOk();
 	}
 
