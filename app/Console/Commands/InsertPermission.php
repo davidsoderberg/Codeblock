@@ -1,9 +1,8 @@
 <?php namespace App\Console\Commands;
 
 use App\Repositories\Permission\PermissionRepository;
+use App\Services\AnnotationService;
 use Illuminate\Support\Facades\DB;
-use ReflectionClass;
-use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
@@ -60,25 +59,12 @@ class InsertPermission extends Command {
 
 		$permissions = array();
 		foreach($classes as $class) {
-			$class = new ReflectionClass('App\\Http\\Controllers\\'.$class);
-			$parent = $class->getParentClass();
-			$methods = $class->getMethods();
-			foreach($methods as $method) {
-				if(!$parent->hasMethod($method->getName())) {
-					$comment = $method->getDocComment();
-					$annotation = '@permission';
-					if(Str::contains($comment, $annotation)) {
-						$comment = explode($annotation, $comment);
-						$permissionComment = explode(' ', $comment[1]);
-						$permission = trim($permissionComment[1]);
-						if(!in_array($permission, $permissions)) {
-							$permissions[] = $permission;
-						}else{
-							$this->error($permission.'in class'.$class->getName().' does already exists.');
-						}
-					}
-				}
+			try {
+				$annotationService = new AnnotationService('App\\Http\\Controllers\\' . $class, '@permission');
+			} catch (\Exception $e){
+				$this->error($e->getMessage());
 			}
+			$permissions = array_merge($permissions, $annotationService->getValues());
 		}
 
 		foreach($permissions as $permission){
