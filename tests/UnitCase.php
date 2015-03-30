@@ -1,26 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Mail;
-
-class UnitCase extends Illuminate\Foundation\Testing\TestCase {
+class UnitCase extends TestCase {
 
 	public function setUp(){
 		parent::setUp();
 		$this->resetEvents();
-	}
-
-	/**
-	 * Creates the application.
-	 *
-	 * @return \Illuminate\Foundation\Application
-	 */
-	public function createApplication()
-	{
-		$app = require __DIR__ . '/../bootstrap/app.php';
-
-		$app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
-
-		return $app;
 	}
 
 	// Hittad på: https://github.com/laravel/framework/issues/1181
@@ -30,15 +14,6 @@ class UnitCase extends Illuminate\Foundation\Testing\TestCase {
 		foreach ($models as $model) {
 			call_user_func(array($model, 'flushEventListeners'));
 			call_user_func(array($model, 'boot'));
-		}
-	}
-
-	public function setUpDb($seed = true)
-	{
-		Artisan::call('migrate');
-		Mail::pretend(true);
-		if($seed){
-			Artisan::call('db:seed');
 		}
 	}
 }
