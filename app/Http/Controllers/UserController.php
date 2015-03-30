@@ -14,6 +14,9 @@ use Laravel\Socialite\Contracts\Factory as Socialite;
 
 class UserController extends Controller {
 
+	/**
+	 * @param UserRepository $user
+	 */
 	public function __construct(UserRepository $user)
 	{
 		$this->user = $user;
@@ -38,9 +41,9 @@ class UserController extends Controller {
 	}
 
 	/**
-	 * Skapa eller uppdaterar en användare.
-	 * @param  int $id id på användaren som skall uppdateras.
-	 * @return object     med värden dit användaren skall skickas.
+	 * @param RoleRepository $role
+	 * @param null $id
+	 * @return mixed
 	 */
 	public function store(RoleRepository $role, $id = null)
 	{
@@ -75,6 +78,10 @@ class UserController extends Controller {
 		return Redirect::action('UserController@listUserBlock', array($id));
 	}
 
+	/**
+	 * @param $username
+	 * @return objekt
+	 */
 	public function showByUsername($username){
 		return $this->show($this->user->getIdByUsername($username));
 	}
@@ -204,6 +211,11 @@ class UserController extends Controller {
 	}
 
 
+	/**
+	 * @param $social
+	 * @param Socialite $socialite
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
+	 */
 	public function oauth($social, Socialite $socialite){
 		if(Input::get('code') || Input::get('oauth_token') && Input::get('oauth_verifier')){
 			$user = $socialite->driver($social)->user();
