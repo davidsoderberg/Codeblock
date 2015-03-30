@@ -50,8 +50,12 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 		}
 	}
 
+	public function getDefault(){
+		return Role::where('default', 1)->first();
+	}
+
 	public function setDefault($id){
-		$current = Role::where('default', 1)->first();
+		$current = $this->getDefault();
 		$current->default = 0;
 		if($current->save()){
 			$new = $this->get($id);

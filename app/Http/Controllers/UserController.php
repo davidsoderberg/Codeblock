@@ -2,6 +2,7 @@
 
 use App\NotificationType;
 use App\Repositories\Notification\NotificationRepository;
+use App\Repositories\Role\RoleRepository;
 use App\Repositories\User\UserRepository;
 use App\Social;
 use Illuminate\Support\Facades\View;
@@ -41,9 +42,13 @@ class UserController extends Controller {
 	 * @param  int $id id på användaren som skall uppdateras.
 	 * @return object     med värden dit användaren skall skickas.
 	 */
-	public function store($id = null)
+	public function store(RoleRepository $role, $id = null)
 	{
-		if($this->user->createOrUpdate(Input::all(), $id)){
+		$input = Input::all();
+		if(is_null($id)){
+			$input['role'] = $role->getDefault()->id;
+		}
+		if($this->user->createOrUpdate($input, $id)){
 			if(is_null($id)){
 				return Redirect::back()->with('success', 'Your user has been created, use the link in the mail to activate your user.');
 			}else{

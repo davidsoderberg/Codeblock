@@ -83,6 +83,10 @@ class EloquentUserRepository extends CRepository implements UserRepository {
 			$User->email = $this->stripTrim($input['email']);
 		}
 
+		if(isset($input['role'])){
+			$User->role = $this->stripTrim($input['role']);
+		}
+
 		if($User->save()){
 			if(!is_null($this->errors) && $this->errors->first('oldpassword') != ''){
 				return false;

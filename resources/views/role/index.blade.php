@@ -34,4 +34,4 @@
 
 @section('script')
 
-@stopg
+@stop
