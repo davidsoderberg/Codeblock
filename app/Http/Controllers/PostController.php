@@ -6,6 +6,7 @@ use App\Repositories\Post\PostRepository;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Tag\TagRepository;
 use App\Repositories\Rate\RateRepository;
+use App\Services\Github;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
@@ -230,47 +231,30 @@ class PostController extends Controller {
 		return View::make('post.list')->with('title', 'Forked codeblock from: '.$post->name)->with('posts', $this->post->getForked($id));
 	}
 
-	public function forkGist($id){
-		if(is_numeric($id)) {
-			$data = $this->getGist($id);
-			if($data) {
-				$category = strtolower($data['language']);
-				$category_Id = 1;
+	public function forkGist(Github $github, $id){
+		if($github->hasRequestLeft()) {
+			if(is_numeric($id)) {
+				$data = $github->getGist($id);
+				if($data) {
+					$category = strtolower($data['language']);
+					$category_Id = 1;
 
-				foreach($this->selectCategories() as $key => $value) {
-					if($category == strtolower($value)) {
-						$category_Id = $key;
-						break;
+					foreach($this->selectCategories() as $key => $value) {
+						if($category == strtolower($value)) {
+							$category_Id = $key;
+							break;
+						}
+					}
+
+					$data = array('name' => $data['filename'], 'description' => 'A forked <a href="https://api.github.com/gists/' . $id . '" target="_blank">gist</a>', 'category' => $category_Id, 'code' => $data['content']);
+
+					if($this->post->createOrUpdate($data)) {
+						return Redirect::to('/posts/' . $this->post->getId())->with('success', 'The requested <a href="https://gist.github.com/' . $id . '" target="_blank">gist</a> have been forked.');
 					}
 				}
-
-				$data = array(
-					'name' => $data['filename'],
-					'description' => 'A forked <a href="https://api.github.com/gists/' . $id.'" target="_blank">gist</a>',
-					'category' => $category_Id,
-					'code' => $data['content']
-				);
-
-				if($this->post->createOrUpdate($data)) {
-					return Redirect::to('/posts/' . $this->post->getId())->with('success', 'The requested <a href="https://gist.github.com/' . $id . '" target="_blank">gist</a> have been forked.');
-				}
 			}
+			return Redirect::back()->with('error', 'The requested <a href="https://gist.github.com/' . $id . '" target="_blank">gist</a> could not be forked.');
 		}
-		return Redirect::back()->with('error', 'The requested <a href="https://gist.github.com/' . $id . '" target="_blank">gist</a> could not be forked.');
-	}
-
-	private function getGist($id){
-		$ch = curl_init();
-		curl_setopt($ch,CURLOPT_USERAGENT, 'davidsoderberg');
-		curl_setopt($ch, CURLOPT_URL, 'https://api.github.com/gists/'. $id.'?access_token='.env('GITHUB_TOKEN', null));
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-		$data = json_decode(curl_exec($ch), true);
-		curl_close($ch);
-		if($data) {
-			return reset($data['files']);
-		}
-		return false;
+		return Redirect::back()->with('error', 'Sorry right now we not have any api request left please try agian later.');
 	}
 }

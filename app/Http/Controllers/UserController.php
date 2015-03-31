@@ -202,6 +202,9 @@ class UserController extends Controller {
 	public function oauth($social, Socialite $socialite){
 		if(Input::get('code') || Input::get('oauth_token') && Input::get('oauth_verifier')){
 			$user = $socialite->driver($social)->user();
+			if($social == 'github') {
+				Session::put('github_access_token', $user->token);
+			}
 			if(Auth::check()) {
 				$authedUser = Auth::user();
 				$socials = $authedUser->socials;
