@@ -15,6 +15,8 @@ Route::pattern('username', '[-_0-9A-Za-z]+');
 Route::pattern('slug', '[-a-zA-Z0-9-]+');
 
 Route::get('/', 'MenuController@index');
+Route::get('/install', 'InstallController@install');
+Route::post('/install', 'InstallController@store');
 Route::get('browse', 'MenuController@browse');
 Route::get('license', 'MenuController@license');
 Route::get('contact', 'MenuController@contact');
