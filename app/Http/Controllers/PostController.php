@@ -73,9 +73,9 @@ class PostController extends Controller {
 	 * Visar vyn för att skapa block.
 	 * @return objekt objekt med allt som skall skickas till create vyn
 	 */
-	public function create()
+	public function create(Github $github)
 	{
-		return View::make('post.create')->with('title', 'create')->with('post', null)->with('tags', $this->selectTags())->with('categories', $this->selectCategories());
+		return View::make('post.create')->with('title', 'create')->with('post', null)->with('tags', $this->selectTags())->with('categories', $this->selectCategories())->with('hasRequest', $github->hasRequestLeft());
 	}
 	/**
 	 * Är vyn skapa och redigera anropa för att lägga till/ uppdatera blocket i databasen.
@@ -231,8 +231,9 @@ class PostController extends Controller {
 		return View::make('post.list')->with('title', 'Forked codeblock from: '.$post->name)->with('posts', $this->post->getForked($id));
 	}
 
-	public function forkGist(Github $github, $id){
+	public function forkGist(Github $github){
 		if($github->hasRequestLeft()) {
+			$id = Input::get('id');
 			if(is_numeric($id)) {
 				$data = $github->getGist($id);
 				if($data) {

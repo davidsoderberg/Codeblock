@@ -42,7 +42,7 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::post('posts/store/{id?}', 'PostController@createOrUpdate');
 	Route::get('posts/fork/{id}', 'PostController@fork');
 	Route::get('posts/forked/{id}', 'PostController@forked');
-	Route::get('posts/gist/{id}', 'PostController@forkGist');
+	Route::post('posts/gist', 'PostController@forkGist');
 
 	Route::get('notifications/', 'NotificationController@listNotification');
 	Route::get('notifications/delete/{id}', 'NotificationController@delete');

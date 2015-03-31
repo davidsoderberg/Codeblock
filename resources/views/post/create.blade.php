@@ -4,8 +4,16 @@
 @stop
 
 @section('content')
+	<h2>Create Codeblock</h2>
+	@if($hasRequest)
+		{{ Form::model(null, array('action' => 'PostController@forkGist')) }}
+			{{ Form::label('gistId', 'Id of gist:') }}
+			{{ Form::text('id', Input::old('id'), array('id' => 'gistId', 'placeholder' => 'Id of gist', 'data-validator' => 'required')) }}
+			{{ Form::button('Fork gist', array('type' => 'submit')) }}
+		{{ Form::close() }}
+		<div class="horizontalRule"><span>OR</span></div>
+	@endif
 	{{ Form::model($post, array('action' => 'PostController@createOrUpdate')) }}
-		<h2>Create Codeblock</h2>
 		{{ Form::label('blockName', 'Name:') }}
 		{{ Form::text('name', Input::old('name'), array('id' => 'blockName', 'placeholder' => 'Name of codeblock', 'data-validator' => 'required|min:3')) }}
 		{{ $errors->first('name', '<div class="alert error">:message</div>') }}
