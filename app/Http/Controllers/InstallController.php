@@ -1,5 +1,8 @@
 <?php namespace App\Http\Controllers;
 
+use App\Repositories\CRepository;
+use App\Services\Github;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Mail;
@@ -33,8 +36,48 @@ class InstallController extends Controller {
 	 * @return mixed
 	 */
 	public function store(){
-		$this->saveEnvArray(array_merge($this->getEnvArray(), Input::except('_token')));
-		return Redirect::to('/')->with('success', 'You have now installed codeblock.');
+		$options = array_merge($this->getEnvArray(), Input::except('_token'));
+		foreach($options as $key => $value){
+			if($options[$key] == ''){
+				$options[$key] = null;
+			}
+			putenv($key, $value);
+		}
+
+		$done = '';
+		try{
+			$mail = New CRepository();
+			if(!$mail->sendEmail('', array(), array())){
+				throw new \Exception('The email is not configured correctly.');
+			}
+			$done = 'Mail';
+			$github = new Github();
+			if(!$github->isToken(env('GITHUB_TOKEN', null))){
+				throw new \Exception('The github token is not valid.');
+			}
+			$done = 'github';
+			DB::connection()->getDatabaseName();
+			$done = 'database';
+			Artisan::call('migrate');
+			$done = 'migration';
+			Artisan::call('db:seed');
+			$done = 'seed';
+			Artisan::call('InsertPermissions');
+			$done = 'permissions';
+			$done = true;
+		} catch(\Exception $e){
+
+		}
+
+		if($this->saveEnvArray($options) && $done == true) {
+			return Redirect::to('/')->with('success', 'You have now installed codeblock.');
+		}else{
+			return $this->installtionsError(array('Installation' => 'We could not install codeblock for some reason, please try agian.'));
+		}
+	}
+
+	private function installtionsError($errors){
+		return Redirect::back()->with('installtion_errors', $errors);
 	}
 
 	/**
