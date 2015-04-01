@@ -54,8 +54,12 @@ class InstallController extends Controller {
 				$options[$key] = asset('/').$value;
 			}
 			putenv($key.'='.$value);
+			\Dotenv::setEnvironmentVariable($key, $value);
 		}
-		$options['APP_DEBUG'] = false;
+		$options['APP_DEBUG'] = "false";
+
+		$this->saveEnvArray($options);
+		\Dotenv::load(base_path());
 
 		Session::put('installationStep', '');
 		try {
@@ -133,7 +137,7 @@ class InstallController extends Controller {
 		}
 	}
 
-	private function installtionsError($errors, $input = array()){
+	private function installtionsError($errors){
 		return Redirect::back()->with('installtion_errors', $errors)->withInput(Input::all());
 	}
 
@@ -170,6 +174,6 @@ class InstallController extends Controller {
 		foreach($array as $key => $value){
 			$file .= $key.'='.$value.PHP_EOL;
 		}
-		return file_put_contents(base_path().'/.env', $file);
+		return file_put_contents(base_path().'/.env', $file) > 0;
 	}
 }
