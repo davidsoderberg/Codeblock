@@ -397,21 +397,33 @@
 	}
 }
 
-.inline-group-form{
-	label{
-		display: block;
-		text-align: center;
-	}
-	input{
-		margin-bottom: 0;
-	}
-	.alert{
+.inline-form{
+	.alert {
 		margin-top: 0;
 		margin-bottom: 0;
 	}
-	.button, button{
-		float: none;
+}
+.input-group {
+	display: table;
+	width: 100%;
+	input {
+		margin-bottom: 0;
+		display: table-cell;
+		position: relative;
 		width: 100%;
+	}
+	.button, button {
+		float: none;
+		display: inline;
+		white-space: nowrap;
+		border: 1px solid $browngray;
+		border-top: none;
+		padding-top: 3.5px;
+		padding-bottom: 3.5px;
+	}
+	.button-group {
+		width: 1%;
+		display: table-cell;
 	}
 }
 
