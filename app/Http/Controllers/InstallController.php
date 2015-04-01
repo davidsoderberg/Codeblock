@@ -39,9 +39,19 @@ class InstallController extends Controller {
 	 */
 	public function store(RoleRepository $roleRepository, PermissionRepository $permissionRepository){
 		$options = array_merge($this->getEnvArray(), Input::except('_token'));
+		if(Str::contains(asset('/'), 'localhost')){
+			$options['APP_ENV'] = 'local';
+		}else{
+			$options['APP_ENV'] = 'production';
+		}
+		$options['APP_DEBUG'] = false;
+		$options['APP_KEY'] = Str::random(12).Str::random(12);
 		foreach($options as $key => $value){
 			if($options[$key] == ''){
 				$options[$key] = null;
+			}
+			if(Str::contains($key, 'REDIRECT')){
+				$options[$key] = asset('/').$value;
 			}
 			putenv($key, $value);
 		}
