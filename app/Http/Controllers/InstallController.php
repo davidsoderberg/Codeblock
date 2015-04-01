@@ -5,6 +5,7 @@ use App\Repositories\Permission\PermissionRepository;
 use App\Repositories\Role\RoleRepository;
 use App\Services\Github;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +45,6 @@ class InstallController extends Controller {
 		}else{
 			$options['APP_ENV'] = 'production';
 		}
-		$options['APP_DEBUG'] = false;
 		$options['APP_KEY'] = Str::random(12).Str::random(12);
 		foreach($options as $key => $value){
 			if($options[$key] == ''){
@@ -53,8 +53,9 @@ class InstallController extends Controller {
 			if(Str::contains($key, 'REDIRECT')){
 				$options[$key] = asset('/').$value;
 			}
-			putenv($key, $value);
+			putenv($key.'='.$value);
 		}
+		$options['APP_DEBUG'] = false;
 
 		Session::put('installationStep', '');
 		try {
@@ -169,6 +170,6 @@ class InstallController extends Controller {
 		foreach($array as $key => $value){
 			$file .= $key.'='.$value.PHP_EOL;
 		}
-		return file_put_contents(base_path().'/.env.test', $file);
+		return file_put_contents(base_path().'/.env', $file);
 	}
 }

@@ -16,11 +16,12 @@ class Installed
 	 */
 	public function handle($request, Closure $next)
 	{
-
-		try{
+		try {
 			DB::connection()->getDatabaseName();
-		} catch (\Exception $e){
-			return Redirect::to('/install');
+		} catch(\Exception $e) {
+			if($request->server('PATH_INFO') != '/install') {
+				return Redirect::to('/install');
+			}
 		}
 		return $next($request);
 	}
