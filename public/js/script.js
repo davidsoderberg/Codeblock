@@ -112,7 +112,7 @@ jQuery(document).ready(function($){
 
 	var mentionarea = $('.mentionarea');
 	if(mentionarea.length > 0) {
-		$.get("/api/user", function (data) {
+		$.get("/api/users", function (data) {
 			mentionarea.mention({
 				delimiter: '@',
 				queryBy: ['username'],
