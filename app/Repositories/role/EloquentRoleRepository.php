@@ -5,6 +5,8 @@ use App\Repositories\CRepository;
 
 class EloquentRoleRepository extends CRepository implements RoleRepository {
 
+	public $role;
+
 	// hämtar alla roller.
 	public function get($id = null)
 	{
@@ -26,6 +28,7 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 		}
 
 		if($Role->save()){
+			$this->role = $Role;
 			return true;
 		}else{
 			$this->errors = Role::$errors;
@@ -123,18 +126,17 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 		foreach ($this->get() as $role) {
 			$roleName = str_replace(' ', '', $role->name);
 			if(array_key_exists($roleName, $input)){
-				$permission_array = $this->stripTrim($input[$roleName]);
-				if(!is_array($permission_array)){
-					$permission_array = array();
-				}
-				if(!$role->permissions()->sync($permission_array)){
-					return false;
-				}
+				return $this->syncPermissions($role, $this->stripTrim($input[$roleName]));
 			}
 		}
 		return true;
 	}
 
-
+	public function syncPermissions($role, $ids){
+		if(!is_array($ids)){
+			$ids = array();
+		}
+		return $role->permissions()->sync($ids);
+	}
 
 }
