@@ -7,9 +7,13 @@
 	<h2>Create Codeblock</h2>
 	@if($hasRequest)
 		{{ Form::model(null, array('action' => 'PostController@forkGist')) }}
-			{{ Form::label('gistId', 'Id of gist:') }}
-			{{ Form::text('id', Input::old('id'), array('id' => 'gistId', 'placeholder' => 'Id of gist', 'data-validator' => 'required')) }}
-			{{ Form::button('Fork gist', array('type' => 'submit')) }}
+			{{ Form::label('title','Id of gist:') }}
+			<div class="input-group">
+				{{ Form::text('id', Input::old('id'), array('id' => 'gistId', 'placeholder' => 'Id of gist', 'data-validator' => 'required')) }}
+				<span class="button-group">
+					{{ Form::button('Fork gist', array('type' => 'submit')) }}
+				</span>
+			</div>
 		{{ Form::close() }}
 		<div class="horizontalRule"><span>OR</span></div>
 	@endif
