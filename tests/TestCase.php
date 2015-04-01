@@ -22,6 +22,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase {
 		Mail::pretend(true);
 		if($seed) {
 			$this->seed();
+			Artisan::call('db:seed', ['--class' => 'UsersTableSeeder']);
 		}
 	}
 }
