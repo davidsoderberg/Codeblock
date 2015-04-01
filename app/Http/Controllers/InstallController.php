@@ -5,7 +5,6 @@ use App\Repositories\Permission\PermissionRepository;
 use App\Repositories\Role\RoleRepository;
 use App\Services\Github;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +27,7 @@ class InstallController extends Controller {
 			if($value == 'null'){
 				$envArray[$key] = '';
 			}
-			if(Str::contains($key, 'REDIRECT') || Str::contains($key, 'APP')){
+			if(Str::contains($key, 'REDIRECT') || Str::contains($key, 'APP') || Str::contains($key, 'DRIVER')){
 				unset($envArray[$key]);
 			}
 		}
@@ -126,19 +125,19 @@ class InstallController extends Controller {
 				Session::put('installationStep', 'Role');
 			}
 		} catch(\Exception $e){
-			return $this->installtionsError(array(Session::get('installationStep') => $e->getMessage()));
+			return $this->installtionsError($e->getMessage());
 		}
 
 		if($this->saveEnvArray($options) && Session::get('installationStep') == 'Role') {
 			Session::put('installationStep', '');
 			return Redirect::to('/')->with('success', 'You have now installed codeblock.');
 		}else{
-			return $this->installtionsError(array('Installation' => 'We could not install codeblock for some reason, please try agian.'));
+			return $this->installtionsError('We could not install codeblock for some reason, please try agian.');
 		}
 	}
 
 	private function installtionsError($errors){
-		return Redirect::back()->with('installtion_errors', $errors)->withInput(Input::all());
+		return Redirect::to('/install')->with('error', $errors)->withInput(Input::all());
 	}
 
 	/**
