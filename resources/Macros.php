@@ -48,6 +48,40 @@ HTML::macro('flash', function()
 	}
 });
 
+HTML::macro('link', function($url = array('action' => '', 'params' => array()), $content, $attributes = array('target' =>'_self', 'class' => '', 'id' => ''), $before = '', $after = ''){
+	$action = explode('@', $url['action']);
+	$permission = null;
+	$annotationService = new AnnotationService($action[0], '@permission');
+	$permissions = $annotationService->getValues();
+	if(count($permissions) > 0 && array_key_exists($action[1], $permissions)) {
+		$permission = $permissions[$action[1]];
+	}
+
+	if($permission){
+		if (Auth::check() == false || Auth::check() && !Auth::user()->hasPermission($permission)){
+			return '';
+		}
+	}
+
+	$link = $before;
+	$link .= '<a href="'.URL::action($url['action'], $url['params']).'"';
+	if(isset($attributes['target'])) {
+		$link .= ' target="'.$attributes['target'].'"';
+	}
+	if(isset($attributes['id'])){
+		$link .= ' id="'.$attributes['id'].'"';
+	}
+	if(isset($attributes['class'])){
+		$link .= ' class="'.$attributes['class'].'"';
+	}
+	$link .= '>';
+	$link .= $content;
+	$link .= '</a>';
+	$link .= $after;
+
+	return $link;
+});
+
 // hämtat från laravels forum.
 // Visar länka i vyerna
 HTML::macro('nav_link', function($url, $text) {

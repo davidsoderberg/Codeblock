@@ -1,5 +1,6 @@
 <?php namespace App\Console\Commands;
 
+use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Permission\PermissionRepository;
 use App\Repositories\Role\RoleRepository;
 use Illuminate\Support\Facades\DB;
@@ -41,7 +42,7 @@ class Install extends Command {
 	 *
 	 * @return mixed
 	 */
-	public function fire(RoleRepository $roleRepository, PermissionRepository $permissionRepository)
+	public function fire(RoleRepository $roleRepository, PermissionRepository $permissionRepository, CategoryRepository $categoryRepository)
 	{
 		$startat = $this->option('startat');
 		if(is_null($startat)){
@@ -76,23 +77,23 @@ class Install extends Command {
 			}
 			$startat = 'Seed';
 		}
-		if($startat == 'Seed') {
-			try{
+		if($startat == 'Seed' && count($categoryRepository->get()) == 0) {
+			try {
 				Artisan::call('db:seed');
-			} catch (\Exception $e){
-				$this->error('The seed of databe could not be done for some reason, please try agian and use option startat with "Seed" as value.');
+			} catch(\Exception $e) {
+				$this->error('The seed of database could not be done for some reason, please try agian and use option startat with "Seed" as value.');
 			}
 			$startat = 'Permissions';
 		}
-		if($startat == 'Permissions') {
-			try{
+		if($startat == 'Permissions' && count($permissionRepository->get()) == 0 || count($permissionRepository->get()) == 0 ) {
+			try {
 				Artisan::call('InsertPermissions');
-			} catch (\Exception $e){
+			} catch(\Exception $e) {
 				$this->error('The permissions colud not be created for some reason, please try agian and use option startat with "Permissions" as value.');
 			}
 			$startat = 'Role';
 		}
-		if($startat == 'Role') {
+		if($startat == 'Role' && count($roleRepository->get()) == 0 || count($roleRepository->get()) == 0) {
 			$ids = array();
 			foreach($permissionRepository->get() as $permission) {
 				$ids[] = $permission->id;
