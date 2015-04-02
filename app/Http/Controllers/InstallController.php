@@ -1,13 +1,8 @@
 <?php namespace App\Http\Controllers;
 
-use App\Repositories\CRepository;
-use App\Repositories\Permission\PermissionRepository;
-use App\Repositories\Role\RoleRepository;
-use App\Services\Github;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
@@ -22,6 +17,11 @@ class InstallController extends Controller {
 	 * @return mixed
 	 */
 	public function install(){
+		$startat = null;
+		if(Session::has('error')){
+			$error = explode(' ', Session::get('error'));
+			$startat = $error[2];
+		}
 		$envArray = $this->getEnvArray(true);
 		foreach($envArray as $key => $value){
 			if($value == 'null'){
@@ -31,113 +31,57 @@ class InstallController extends Controller {
 				unset($envArray[$key]);
 			}
 		}
-		return View::make('install')->with('title', 'Install')->with('options', $envArray);
+		return View::make('install')->with('title', 'Install')->with('options', $envArray)->with('startat', $startat);
 	}
 
 	/**
 	 * @return mixed
 	 */
-	public function store(RoleRepository $roleRepository, PermissionRepository $permissionRepository){
-		$options = array_merge($this->getEnvArray(), Input::except('_token'));
-		if(Str::contains(asset('/'), 'localhost')){
-			$options['APP_ENV'] = 'local';
+	public function store(){
+
+		$this->setEnv();
+
+		$error = null;
+		try {
+			Artisan::call('install');
+		} catch(\Exception $e){
+			$error = $e->getMessage();
+		}
+
+		if(is_null($error)) {
+			return Redirect::to('/')->with('success', 'You have now installed codeblock.');
 		}else{
+			if(is_null($error)){
+				$error = 'We could not install codeblock for some reason, please try agian.';
+			}
+			return Redirect::back()->with('error', $error)->withInput(Input::all());
+		}
+	}
+
+	public function setEnv(){
+		$input = Input::except('_token');
+		$options = array_merge($this->getEnvArray(), $input);
+		unset($options['startat']);
+		if(Str::contains(asset('/'), 'localhost')) {
+			$options['APP_ENV'] = 'local';
+		} else {
 			$options['APP_ENV'] = 'production';
 		}
-		$options['APP_KEY'] = Str::random(12).Str::random(12);
-		foreach($options as $key => $value){
-			if($options[$key] == ''){
+		$options['APP_KEY'] = Str::random(12) . Str::random(12);
+		foreach($options as $key => $value) {
+			if($options[$key] == '') {
 				$options[$key] = null;
 			}
-			if(Str::contains($key, 'REDIRECT')){
-				$options[$key] = asset('/').$value;
+			if(Str::contains($key, 'REDIRECT')) {
+				$options[$key] = asset('/') . $value;
 			}
-			putenv($key.'='.$value);
+			putenv($key . '=' . $value);
 			\Dotenv::setEnvironmentVariable($key, $value);
 		}
 		$options['APP_DEBUG'] = "false";
 
 		$this->saveEnvArray($options);
 		\Dotenv::load(base_path());
-
-		Session::put('installationStep', '');
-		try {
-			if(Session::get('installationStep') == ''){
-				$mail = New CRepository();
-				$data = array('subject' => 'Test mail', 'body' => 'This is a mail to test mail configuration.');
-				$emailInfo = array('toEmail' => env('FROM_ADRESS'), 'toName' => env('FROM_NAME'), 'subject' => 'Test mail');
-				if(!$mail->sendEmail('emails.notification', $emailInfo, $data)) {
-					throw new \Exception('The email is not configured correctly.');
-				}
-				Session::put('installationStep', 'Mail');
-			}
-			if(Session::get('installationStep') == 'Mail') {
-				$github = new Github();
-				if(!$github->isToken(env('GITHUB_TOKEN', null))) {
-					throw new \Exception('The github token is not valid.');
-				}
-				Session::put('installationStep', 'Github');
-			}
-			if(Session::get('installationStep') == 'Github') {
-				try {
-					DB::connection()->getDatabaseName();
-				} catch (\Exception $e){
-					throw new \Exception('The database is not configured correctly.');
-				}
-				Session::put('installationStep', 'Database');
-			}
-			if(Session::get('installationStep') == 'Database') {
-				try{
-				Artisan::call('migrate');
-				} catch (\Exception $e){
-					throw new \Exception('The migration could not be done for some reason, please try agian.');
-				}
-				Session::put('installationStep', 'Migration');
-			}
-			if(Session::get('installationStep') == 'Migration') {
-				try{
-					Artisan::call('db:seed');
-				} catch (\Exception $e){
-					throw new \Exception('The seed of databe could not be done for some reason, please try agian.');
-				}
-				Session::put('installationStep', 'Seed');
-			}
-			if(Session::get('installationStep') == 'Seed') {
-				try{
-					Artisan::call('InsertPermissions');
-				} catch (\Exception $e){
-					throw new \Exception('The permissions colud not be created for some reason, please try agian.');
-				}
-				Session::put('installationStep', 'Permissions');
-			}
-			if(Session::get('installationStep') == 'Permissions') {
-				$ids = array();
-				foreach($permissionRepository->get() as $permission) {
-					$ids[] = $permission->id;
-				}
-				if(!$roleRepository->createOrUpdate(array('name' => 'Super admin', 'default' => 1))) {
-					throw new \Exception('The first role could not be created.');
-				}
-				if(!$roleRepository->syncPermissions($roleRepository->role, $ids)) {
-					$roleRepository->delete($roleRepository->role->id);
-					throw new \Exception('The first role could get any permissions please try agian.');
-				}
-				Session::put('installationStep', 'Role');
-			}
-		} catch(\Exception $e){
-			return $this->installtionsError($e->getMessage());
-		}
-
-		if($this->saveEnvArray($options) && Session::get('installationStep') == 'Role') {
-			Session::put('installationStep', '');
-			return Redirect::to('/')->with('success', 'You have now installed codeblock.');
-		}else{
-			return $this->installtionsError('We could not install codeblock for some reason, please try agian.');
-		}
-	}
-
-	private function installtionsError($errors){
-		return Redirect::to('/install')->with('error', $errors)->withInput(Input::all());
 	}
 
 	/**

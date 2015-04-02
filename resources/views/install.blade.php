@@ -18,6 +18,7 @@
 			@endif
 		@endif
 	@endforeach
+	{{ Form::hidden('startat', $startat) }}
 	{{ Form::button('Install', array('type' => 'submit')) }}
 	{{ Form::close() }}
 @stop
