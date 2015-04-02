@@ -48,10 +48,10 @@ HTML::macro('flash', function()
 	}
 });
 
-HTML::macro('link', function($url = array('action' => '', 'params' => array()), $content, $attributes = array('target' =>'_self', 'class' => '', 'id' => ''), $before = '', $after = ''){
+HTML::macro('actionlink', function($url = array('action' => '', 'params' => array()), $content, $attributes = array('target' =>'_self', 'class' => '', 'id' => ''), $before = '', $after = ''){
 	$action = explode('@', $url['action']);
 	$permission = null;
-	$annotationService = new AnnotationService($action[0], '@permission');
+	$annotationService = new \App\Services\AnnotationService('App\\Http\\Controllers\\' .$action[0], '@permission');
 	$permissions = $annotationService->getValues();
 	if(count($permissions) > 0 && array_key_exists($action[1], $permissions)) {
 		$permission = $permissions[$action[1]];
@@ -61,6 +61,10 @@ HTML::macro('link', function($url = array('action' => '', 'params' => array()), 
 		if (Auth::check() == false || Auth::check() && !Auth::user()->hasPermission($permission)){
 			return '';
 		}
+	}
+
+	if(!isset($url['params'])){
+		$url['params'] = array();
 	}
 
 	$link = $before;
