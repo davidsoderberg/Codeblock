@@ -1,8 +1,8 @@
 <ul class="float-left">
 	<li class="divider"></li>
-	<li><a href="/"><i class="fa fa-home"></i>Home</a></li>
-	<li><a href="/browse"><i class="fa fa-folder-open"></i>Browse</a></li>
-	<li><a href="/contact"><i class="fa fa-phone"></i>Contact</a></li>
+	{{HTML::actionlink($url = array('action' => 'MenuController@index'), '<i class="fa fa-home"></i>Home', array(), $before = '<li>', $after = '</li>')}}
+	{{HTML::actionlink($url = array('action' => 'MenuController@browse'), '<i class="fa fa-folder-open"></i>Browse', array(), $before = '<li>', $after = '</li>')}}
+	{{HTML::actionlink($url = array('action' => 'MenuController@contact'), '<i class="fa fa-phone"></i>Contact', array(), $before = '<li>', $after = '</li>')}}
 </ul>
 <ul class="float-right">
 	@if(Auth::check())
@@ -39,7 +39,7 @@
 		<li><a href="/user"><i class="fa fa-user"></i>Profile</a></li>
 		<li><a href="/logout"><i class="fa fa-sign-out"></i>Logout</a></li>
 	@else
-		<li><a href="/login"><i class="fa fa-sign-in"></i>Login / Sign Up</a></li>
+		{{HTML::actionlink($url = array('action' => 'UserController@login'), '<i class="fa fa-sign-in"></i>Login / Sign Up', array(), $before = '<li>', $after = '</li>')}}
 	@endif
 	<li class="divider"></li>
 	<li class="form">

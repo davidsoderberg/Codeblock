@@ -6,21 +6,22 @@
 				@if(Auth::check() && Auth::user()->id != $comment->user_id)
 					@if ($rate->check($comment->id) == '+')
 						{{ $rate->calc($comment->id) }}
-						<a href="/rate/minus/{{$comment->id}}"><i class="fa fa-caret-down"></i></a>
+						{{HTML::actionlink($url = array('action' => 'RateController@minus', 'params' => array($comment->id)), '<i class="fa fa-caret-down"></i>')}}
 					@elseif($rate->check($comment->id) == '-')
-						<a href="/rate/plus/{{$comment->id}}"><i class="fa fa-caret-up"></i></a>
+						{{HTML::actionlink($url = array('action' => 'RateController@plus', 'params' => array($comment->id)), '<i class="fa fa-caret-up"></i>')}}
 						{{ $rate->calc($comment->id) }}
 					@else
-						<a href="/rate/plus/{{$comment->id}}"><i class="fa fa-caret-up"></i></a>
+						{{HTML::actionlink($url = array('action' => 'RateController@plus', 'params' => array($comment->id)), '<i class="fa fa-caret-up"></i>')}}
+
 						{{ $rate->calc($comment->id) }}
-						<a href="/rate/minus/{{$comment->id}}"><i class="fa fa-caret-down"></i></a>
+						{{HTML::actionlink($url = array('action' => 'RateController@minus', 'params' => array($comment->id)), '<i class="fa fa-caret-down"></i>')}}
 					@endif
 				@else
 					{{ $rate->calc($comment->id) }}
 				@endif
 			</div>
 			<div>
-				<b>{{ date('Y-m-d', strtotime($comment->created_at)) }}</b> - <a href="/user/{{ $comment->user_id }}">{{ $comment->user->username }}</a>
+				<b>{{ date('Y-m-d', strtotime($comment->created_at)) }}</b> - {{HTML::actionlink($url = array('action' => 'UserController@show', 'params' => array($comment->user_id)), $comment->user->username)}}
 				<p>{{ HTML::mention(HTML::markdown($comment->comment)) }}</p>
 				<a class="reply" href="#comment-{{$comment->id}}">Reply</a>
 				@include('comment.child')

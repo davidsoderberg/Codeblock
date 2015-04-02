@@ -15,7 +15,7 @@
 	&lt;/strong&gt;
 &lt;/p&gt;</textarea>
 <div class="text-center">
-	<a href="/browse" class="button big">START BROWSING CODE</a>
+	{{HTML::actionlink($url = array('action' => 'MenuController@browse'), 'START BROWSING CODE', array('class' => 'button big'))}}
 </div>
 @stop
 

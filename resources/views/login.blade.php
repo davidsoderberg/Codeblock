@@ -17,11 +17,11 @@
                 {{ Form::button('Login', array('type' => 'submit')) }}
 	            <p class="pull-left">
 		            Login with:
-		            <a href="/oauth/facebook"><i class="fa fa-facebook-square facebook-blue"></i></a>
-		            <a href="/oauth/twitter"><i class="fa fa-twitter-square twitter-blue"></i></a>
-		            <a href="/oauth/google"><i class="fa fa-google-plus-square google-plus-red"></i></a>
-		            <a href="/oauth/bitbucket"><i class="fa fa-bitbucket-square bitbucket-blue"></i></a>
-		            <a href="/oauth/github"><i class="fa fa-github-square github-black"></i></a>
+		            {{HTML::actionlink($url = array('action' => 'UserController@oauth', 'params' => array('facebook')), '<i class="fa fa-facebook-square facebook-blue"></i>')}}
+		            {{HTML::actionlink($url = array('action' => 'UserController@oauth', 'params' => array('twitter')), '<i class="fa fa-twitter-square twitter-blue"></i>')}}
+		            {{HTML::actionlink($url = array('action' => 'UserController@oauth', 'params' => array('google')), '<i class="fa fa-google-plus-square google-plus-red"></i>')}}
+		            {{HTML::actionlink($url = array('action' => 'UserController@oauth', 'params' => array('bitbucket')), '<i class="fa fa-bitbucket-square bitbucket-blue"></i>')}}
+		            {{HTML::actionlink($url = array('action' => 'UserController@oauth', 'params' => array('github')), '<i class="fa fa-github-square github-black"></i>')}}
 	            </p>
             </div>
             {{ Form::close() }}
