@@ -49,8 +49,19 @@ HTML::macro('flash', function()
 	}
 });
 
-HTML::macro('menulink', function($url = array('action' => '', 'params' => array()), $content, $attributes = array('target' =>'_self', 'class' => '', 'id' => '')){
-	$link = HTML::actionlink($url, $content, $attributes);
+HTML::macro('adminmenu', function($content, $items){
+	$list = '';
+	foreach($items as $item){
+		$list .= HTML::menulink($item[0], $item[1], false);
+	}
+	if($list == ''){
+		return $list;
+	}
+	return '<li class="dropdown"><a class="hideUl" href="">'.$content.'</a><ul>'.$list.'</ul></li>';
+});
+
+HTML::macro('menulink', function($url = array('action' => '', 'params' => array()), $content, $attributes = array('target' =>'_self', 'class' => '', 'id' => ''), $optional = true){
+	$link = HTML::actionlink($url, $content, $attributes, $optional);
 	if($link !== ''){
 		$link = '<li>'.$link.'</li>';
 	}
