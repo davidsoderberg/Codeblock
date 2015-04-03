@@ -1,6 +1,6 @@
 <?php namespace App\Http\Middleware;
 
-use App\Services\AnnotationService;
+use App\Services\PermissionAnnotation;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -31,15 +31,8 @@ class Permission
 			$response = $next($request);
 			$Routeaction = $request->route()->getAction()['uses'];
 			$action = explode('@', $Routeaction);
-			$annotationService = new AnnotationService($action[0], '@permission');
-			$permission = $annotationService->getValues($action[1]);
-			if($permission != '') {
-				$permission = explode(':', $permission);
-				$permission = $permission[0];
-				if(isset($permission[1]) && strtolower($permission[1]) == 'optional') {
-					$permission = '';
-				}
-			}
+			$permissionAnnotation = New PermissionAnnotation($action[0], $action[1]);
+			$permission = $permissionAnnotation->getPermission(true);
 		}
 
 		if (Auth::check() == false || Auth::check() && !Auth::user()->hasPermission($permission)){
