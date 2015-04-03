@@ -6,6 +6,7 @@ use Illuminate\Foundation\Bus\DispatchesCommands;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Log;
+use App\Services\AnnotationService;
 
 abstract class Controller extends BaseController {
 
@@ -27,6 +28,13 @@ abstract class Controller extends BaseController {
 				}
 			}
 		}
+	}
+
+	protected function getPermission($method){
+		$method = explode('::', $method);
+		$annotation = new AnnotationService($method[0],'@permission');
+		$permission = explode(':', $annotation->getValues($method[1]));
+		return $permission[0];
 	}
 
 }

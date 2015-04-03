@@ -68,7 +68,8 @@ class InsertPermission extends Command {
 		}
 
 		foreach($permissions as $permission){
-			$permission = str_replace('_', ' ', $permission);
+			$permission = explode(':', $permission);
+			$permission = str_replace('_', ' ', $permission[0]);
 			$permissionRepository->createOrUpdate(['name' => $permission]);
 		}
 		$this->info('All permissions has been inserted');

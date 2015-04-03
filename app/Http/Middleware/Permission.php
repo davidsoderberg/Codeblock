@@ -32,11 +32,13 @@ class Permission
 			$Routeaction = $request->route()->getAction()['uses'];
 			$action = explode('@', $Routeaction);
 			$annotationService = new AnnotationService($action[0], '@permission');
-			$permissions = $annotationService->getValues();
-			if(count($permissions) > 0 && array_key_exists($action[1], $permissions)) {
-				$permission = $permissions[$action[1]];
-			}else{
-				return $response;
+			$permission = $annotationService->getValues($action[1]);
+			if($permission != '') {
+				$permission = explode(':', $permission);
+				$permission = $permission[0];
+				if(isset($permission[1]) && strtolower($permission[1]) == 'optional') {
+					$permission = '';
+				}
 			}
 		}
 

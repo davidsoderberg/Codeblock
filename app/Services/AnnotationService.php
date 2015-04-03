@@ -21,7 +21,10 @@ class AnnotationService{
 		if(is_null($method)) {
 			return $this->values;
 		}
-		return $this->values[$method];
+		if(isset($this->values[$method])) {
+			return $this->values[$method];
+		}
+		return '';
 	}
 
 	private function fetchValues($annotation){

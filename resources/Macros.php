@@ -50,17 +50,19 @@ HTML::macro('flash', function()
 
 HTML::macro('actionlink', function($url = array('action' => '', 'params' => array()), $content, $attributes = array('target' =>'_self', 'class' => '', 'id' => ''), $before = '', $after = ''){
 	$action = explode('@', $url['action']);
-	$permission = null;
 	$annotationService = new \App\Services\AnnotationService('App\\Http\\Controllers\\' .$action[0], '@permission');
-	$permissions = $annotationService->getValues();
-	if(count($permissions) > 0 && array_key_exists($action[1], $permissions)) {
-		$permission = $permissions[$action[1]];
+	$permission = $annotationService->getValues($action[1]);
+	if($permission != '') {
+		$permission = explode(':', $permission);
+		if(isset($permission[1]) && strtolower($permission[1]) == 'optional') {
+			$permission = '';
+		}else {
+			$permission = $permission[0];
+		}
 	}
 
-	if($permission){
-		if (Auth::check() == false || Auth::check() && !Auth::user()->hasPermission($permission)){
-			return '';
-		}
+	if (Auth::check() == false || Auth::check() && !Auth::user()->hasPermission($permission)){
+		return '';
 	}
 
 	if(!isset($url['params'])){
