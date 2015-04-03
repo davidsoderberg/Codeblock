@@ -47,8 +47,9 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::get('notifications/', 'NotificationController@listNotification');
 	Route::get('notifications/delete/{id}', 'NotificationController@delete');
 
-	Route::post('comments/{id?}', 'CommentController@createOrUpdate');
 	Route::get('comments/', 'CommentController@index');
+	Route::get('comments/list', 'CommentController@listComments');
+	Route::post('comments/{id?}', 'CommentController@createOrUpdate');
 	Route::get('comments/edit/{id}', 'CommentController@edit');
 	Route::get('comments/delete/{id}', 'CommentController@delete');
 

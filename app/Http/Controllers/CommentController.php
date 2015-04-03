@@ -24,6 +24,9 @@ class CommentController extends Controller {
 	|
 	*/
 
+	/**
+	 * @param CommentRepository $comment
+	 */
 	public function __construct(CommentRepository $comment)
 	{
 		$this->comment = $comment;
@@ -35,18 +38,20 @@ class CommentController extends Controller {
 	 */
 	public function index()
 	{
-		if(Auth::user()->role == 2){
-			$comments = $this->comment->get();
-		}else{
-			$posts = Auth::user()->posts;
-			$commentsArray = array();
+		return View::make('comment.index')->with('title', 'Comments')->with('comments', $this->comment->get());
+	}
 
-			foreach ($posts as $post) {
-				foreach ($post->comments as $comment) {
-					$commentsArray[] = $comment;
-				}
+	/**
+	 * @return mixed
+	 */
+	public function listComments(){
+		$posts = Auth::user()->posts;
+		$comments = array();
+
+		foreach ($posts as $post) {
+			foreach ($post->comments as $comment) {
+				$comments[] = $comment;
 			}
-			$comments = $commentsArray;
 		}
 
 		return View::make('comment.index')->with('title', 'Comments')->with('comments', $comments);

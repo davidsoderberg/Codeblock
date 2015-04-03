@@ -27,7 +27,7 @@
 			<ul>
 				{{HTML::actionlink($url = array('action' => 'UserController@listUserBlock'), 'List', array(), $before = '<li>', $after = '</li>')}}
 				{{HTML::actionlink($url = array('action' => 'PostController@create'), 'Create', array(), $before = '<li>', $after = '</li>')}}
-				<!-- <li><a href="/comments">Comments</a></li> -->
+				<!--{{HTML::actionlink($url = array('action' => 'CommentController@listComments'), 'Comments', array(), $before = '<li>', $after = '</li>')}}-->
 			</ul>
 		</li>
 		{{HTML::actionlink($url = array('action' => 'UserController@show'), '<i class="fa fa-user"></i>Profile', array(), $before = '<li>', $after = '</li>')}}
