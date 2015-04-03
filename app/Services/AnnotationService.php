@@ -17,8 +17,11 @@ class AnnotationService{
 		$this->fetchValues($annotation);
 	}
 
-	public function getValues(){
-		return $this->values;
+	public function getValues($method = null){
+		if(is_null($method)) {
+			return $this->values;
+		}
+		return $this->values[$method];
 	}
 
 	private function fetchValues($annotation){

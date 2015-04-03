@@ -126,7 +126,7 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 		foreach ($this->get() as $role) {
 			$roleName = str_replace(' ', '', $role->name);
 			if(array_key_exists($roleName, $input)){
-				return $this->syncPermissions($role, $this->stripTrim($input[$roleName]));
+				return $this->syncPermissions($role, $input[$roleName]);
 			}
 		}
 		return true;
