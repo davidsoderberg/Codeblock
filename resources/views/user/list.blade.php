@@ -27,7 +27,7 @@
 		@endif
 	@else
 		<h2>Your Codeblocks {{HTML::actionlink($url = array('action' => 'PostController@create'), 'Create')}}</h2>
-		{{ HTML::table(array('name', 'category', 'description'), $user->posts, 'posts', array('Pagination' => 10), 'There are no code blocks right now.') }}
+		{{ HTML::table(array('name', 'category', 'description'), $user->posts, array('Pagination' => 10, 'Edit' => 'PostController@edit', 'Delete' => 'PostController@delete', 'View' => 'PostController@show'), 'There are no codeblocks right now.') }}
 	@endif
 @stop
 

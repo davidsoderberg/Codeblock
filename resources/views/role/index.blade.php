@@ -8,7 +8,7 @@
 	<h2>Roles</h2>
 	<div class="verticalRule">
 		<div class="float-left">
-			{{ HTML::table(array('grade', 'name'), $roles, 'roles', array('Pagination' => 10, 'View' => false), 'There are no roles right now.') }}
+			{{ HTML::table(array('grade', 'name'), $roles, array('Pagination' => 10, 'Edit' => 'RoleController@edit', 'Delete' => 'RoleController@delete'), 'There are no roles right now.') }}
 		</div>
 		<div class="float-right">
 			<h3>Create role</h3>

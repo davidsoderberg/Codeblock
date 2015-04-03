@@ -9,7 +9,7 @@
     <div class="verticalRule">
         <div class="float-left">
             <h3>List of categories</h3>
-            {{ HTML::table(array('name'), $categories, 'categories', array('View' => false, 'Pagination' => 10), 'There are no categories right now.') }}
+            {{ HTML::table(array('name'), $categories, array('Edit' => 'CategoryController@index', 'Delete' => 'CategoryController@delete', 'Pagination' => 10), 'There are no categories right now.') }}
         </div>
         <div class="float-right">
             @if(isset($category->id))

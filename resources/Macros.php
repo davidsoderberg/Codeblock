@@ -2,6 +2,7 @@
 
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Str;
+use App\Services\PermissionAnnotation;
 
 HTML::macro('avatar', function($value, $size = 48){
 	$identicon = new \Identicon\Identicon();
@@ -48,18 +49,18 @@ HTML::macro('flash', function()
 	}
 });
 
-HTML::macro('actionlink', function($url = array('action' => '', 'params' => array()), $content, $attributes = array('target' =>'_self', 'class' => '', 'id' => ''), $before = '', $after = ''){
-	$action = explode('@', $url['action']);
-	$annotationService = new \App\Services\AnnotationService('App\\Http\\Controllers\\' .$action[0], '@permission');
-	$permission = $annotationService->getValues($action[1]);
-	if($permission != '') {
-		$permission = explode(':', $permission);
-		if(isset($permission[1]) && strtolower($permission[1]) == 'optional') {
-			$permission = '';
-		}else {
-			$permission = $permission[0];
-		}
+HTML::macro('menulink', function($url = array('action' => '', 'params' => array()), $content, $attributes = array('target' =>'_self', 'class' => '', 'id' => '')){
+	$link = HTML::actionlink($url, $content, $attributes);
+	if($link !== ''){
+		$link = '<li>'.$link.'</li>';
 	}
+	return $link;
+});
+
+HTML::macro('actionlink', function($url = array('action' => '', 'params' => array()), $content, $attributes = array('target' =>'_self', 'class' => '', 'id' => ''), $optional = true){
+	$action = explode('@', $url['action']);
+	$permissionAnnotation = New PermissionAnnotation('App\\Http\\Controllers\\'.$action[0], $action[1]);
+	$permission = $permissionAnnotation->getPermission($optional);
 
 	if (Auth::check() == false || Auth::check() && !Auth::user()->hasPermission($permission)){
 		return '';
@@ -69,8 +70,7 @@ HTML::macro('actionlink', function($url = array('action' => '', 'params' => arra
 		$url['params'] = array();
 	}
 
-	$link = $before;
-	$link .= '<a href="'.URL::action($url['action'], $url['params']).'"';
+	$link = '<a href="'.URL::action($url['action'], $url['params']).'"';
 	if(isset($attributes['target'])) {
 		$link .= ' target="'.$attributes['target'].'"';
 	}
@@ -83,7 +83,6 @@ HTML::macro('actionlink', function($url = array('action' => '', 'params' => arra
 	$link .= '>';
 	$link .= $content;
 	$link .= '</a>';
-	$link .= $after;
 
 	return $link;
 });
@@ -98,10 +97,10 @@ HTML::macro('nav_link', function($url, $text) {
 
 // hämtat från ett kodsnuttsbibliotek för laravel.
 // Visar tabeller i vyerna
-HTML::macro('table', function($fields = array(), $data = array(), $resource, $show = array(), $info){
+HTML::macro('table', function($fields = array(), $data = array(), $show = array(), $info){
 
 	if(count($data) > 0){
-		$show = array_merge(array('Edit' => true, 'Delete' => true, 'View' => true, 'Pagination' => 0), $show);
+		$show = array_merge(array('Edit' => false, 'Delete' => false, 'View' => false, 'Pagination' => 0), $show);
 
 		if(!is_array($data)){
 			$data = $data->toArray();
@@ -127,7 +126,7 @@ HTML::macro('table', function($fields = array(), $data = array(), $resource, $sh
 		{
 			$table .= '<th>' . str_replace('_',' ', Str::title($field)) . '</th>';
 		}
-		if ($show['Edit'] || $show['Delete'] || $show['View'] || $d['actions'] ){
+		if ($show['Edit'] || $show['Delete'] || $show['View']){
 			$table .= '<th>Actions</th>';
 		}
 		$table .= '</tr></thead>';
@@ -146,20 +145,17 @@ HTML::macro('table', function($fields = array(), $data = array(), $resource, $sh
 					$table .= '<td data-title="'.str_replace('_',' ', Str::title($key)).'">' . $value . '</td>';
 				}
 			}
-			if ($show['Edit'] || $show['Delete'] || $show['View'] || $d['actions'] )
+			if ($show['Edit'] || $show['Delete'] || $show['View'])
 			{
 				$table .= '<td data-title="Actions">';
 				if ($show['Edit']){
-					$table .= '<a href="/' . $resource . '/edit'. '/' . $d['id'] . '"><i class="fa fa-pencil"></i>Edit</a> ';
+					$table .= HTML::actionlink(array('action' => $show['Edit'] , 'params' => array($d['id'])), '<i class="fa fa-pencil"></i>Edit', array(), false).' ';
 				}
 				if ($show['View']){
-					$table .= '<a href="/' . $resource . '/' . $d['id'] . '"><i class="fa fa-eye"></i>View</a> ';
+					$table .= HTML::actionlink(array('action' => $show['View'], 'params' => array($d['id'])), '<i class="fa fa-eye"></i>View', array(), false).' ';
 				}
 				if ($show['Delete']){
-					$table .= '<a href="/' . $resource . '/' . 'delete'. '/' . $d['id'] . '"><i class="fa fa-trash-o"></i>Delete</a> ';
-				}
-				if(isset($d['actions']) && $d['actions'] != ''){
-					$table .= $d['actions'];
+					$table .= HTML::actionlink(array('action' => $show['Delete'], 'params' => array($d['id'])), '<i class="fa fa-trash-o"></i>Delete', array(), false).' ';
 				}
 				$table .= '</td>';
 			}
