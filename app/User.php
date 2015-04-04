@@ -154,7 +154,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return in_array(strtolower(Auth::user()->role), $roles);
 	}
 
-	public function hasPermission($permission) {
+	public function hasPermission($permission, $empty = true) {
 		if($permission != '') {
 			$permissions_array = array();
 			foreach(Auth::user()->roles->permissions as $user_permission) {
@@ -164,7 +164,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 			$permission = explode(':', $permission);
 			return in_array(strtolower($permission[0]), $permissions_array);
 		}
-		return true;
+		return $empty;
 	}
 
 }

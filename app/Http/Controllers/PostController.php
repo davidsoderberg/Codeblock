@@ -60,7 +60,7 @@ class PostController extends Controller {
 				if(!empty($post->comments[0])){
 					$post->comments = usort($post->comments->toArray(), function($a, $b) { return strcmp($this->rate->calc($a->id),$this->rate->calc($b->id)); });
 				}
-				if(Auth::user()->id == $post->user_id || Auth::user()->hasPermission($this->getPermission(__METHOD__))){
+				if(Auth::user()->id == $post->user_id || Auth::user()->hasPermission($this->getPermission(__METHOD__), false)){
 					return View::make('post.show')->with('title', 'show')->with('post', $post)->with('lang', $lang);
 				}else{
 					return Redirect::back()->with('error', 'You have no access to that codeblock.');
@@ -101,7 +101,7 @@ class PostController extends Controller {
 	public function edit($id)
 	{
 		$post = $this->post->get($id);
-		if(Auth::user()->id != $post->user_id && !Auth::user()->hasPermission($this->getPermission(__METHOD__))){
+		if(Auth::user()->id != $post->user_id && !Auth::user()->hasPermission($this->getPermission(__METHOD__), false)){
 			return Redirect::back()->with('error', 'That codeblock is not yours.');
 		}
 		$tagsarray = array();
