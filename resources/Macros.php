@@ -52,7 +52,7 @@ HTML::macro('flash', function()
 HTML::macro('adminmenu', function($content, $items){
 	$list = '';
 	foreach($items as $item){
-		$list .= HTML::menulink($item[0], $item[1], false);
+		$list .= HTML::menulink($item[0], $item[1], array(), false);
 	}
 	if($list == ''){
 		return $list;
@@ -73,7 +73,7 @@ HTML::macro('actionlink', function($url = array('action' => '', 'params' => arra
 	$permissionAnnotation = New PermissionAnnotation('App\\Http\\Controllers\\'.$action[0], $action[1]);
 	$permission = $permissionAnnotation->getPermission($optional);
 
-	if (Auth::check() == false || Auth::check() && !Auth::user()->hasPermission($permission)){
+	if (Auth::check() && !Auth::user()->hasPermission($permission)){
 		return '';
 	}
 

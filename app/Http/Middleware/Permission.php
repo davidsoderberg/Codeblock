@@ -35,7 +35,7 @@ class Permission
 			$permission = $permissionAnnotation->getPermission(true);
 		}
 
-		if (Auth::check() == false || Auth::check() && !Auth::user()->hasPermission($permission)){
+		if (Auth::check() && !Auth::user()->hasPermission($permission)){
 			return Redirect::to('/');
 		}
 
