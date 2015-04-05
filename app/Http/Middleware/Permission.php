@@ -4,6 +4,7 @@ use App\Services\PermissionAnnotation;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
 
 class Permission
 {
@@ -17,7 +18,7 @@ class Permission
      */
     public function handle($request, Closure $next)
     {
-		$permission = null;
+		$permission = '';
 		$route = $request->route();
 
 		if($route) {
@@ -28,11 +29,13 @@ class Permission
 				Throw new \Exception('You have not specified a permission');
 			}
 		}else{
-			$response = $next($request);
-			$Routeaction = $request->route()->getAction()['uses'];
-			$action = explode('@', $Routeaction);
-			$permissionAnnotation = New PermissionAnnotation($action[0], $action[1]);
-			$permission = $permissionAnnotation->getPermission(true);
+			if(!Str::contains($request->server('PHP_SELF'), 'oauth')){
+				$response = $next($request);
+				$Routeaction = $request->route()->getAction()['uses'];
+				$action = explode('@', $Routeaction);
+				$permissionAnnotation = New PermissionAnnotation($action[0], $action[1]);
+				$permission = $permissionAnnotation->getPermission(true);
+			}
 		}
 
 		if (Auth::check() && !Auth::user()->hasPermission($permission)){
