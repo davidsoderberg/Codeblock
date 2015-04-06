@@ -17,11 +17,6 @@ class InstallController extends Controller {
 	 * @return mixed
 	 */
 	public function install(){
-		$startat = null;
-		if(Session::has('error')){
-			$error = explode(' ', Session::get('error'));
-			$startat = $error[2];
-		}
 		$envArray = $this->getEnvArray(true);
 		foreach($envArray as $key => $value){
 			if($value == 'null'){
@@ -31,7 +26,7 @@ class InstallController extends Controller {
 				unset($envArray[$key]);
 			}
 		}
-		return View::make('install')->with('title', 'Install')->with('options', $envArray)->with('startat', $startat);
+		return View::make('install')->with('title', 'Install')->with('options', $envArray);
 	}
 
 	/**
@@ -61,7 +56,6 @@ class InstallController extends Controller {
 	public function setEnv(){
 		$input = Input::except('_token');
 		$options = array_merge($this->getEnvArray(), $input);
-		unset($options['startat']);
 		if(Str::contains(asset('/'), 'localhost')) {
 			$options['APP_ENV'] = 'local';
 		} else {

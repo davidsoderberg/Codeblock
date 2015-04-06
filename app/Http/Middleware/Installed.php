@@ -3,6 +3,7 @@
 use Closure;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
 
 class Installed
 {
@@ -16,13 +17,14 @@ class Installed
 	 */
 	public function handle($request, Closure $next)
 	{
+		$response = $next($request);
 		try {
 			DB::connection()->getDatabaseName();
 		} catch(\Exception $e) {
-			if($request->server('PATH_INFO') != '/install') {
-				return Redirect::to('/install');
+			if(!Str::contains($request->route()->getAction()['uses'], 'InstallController')) {
+				return Redirect::action('InstallController@install');
 			}
 		}
-		return $next($request);
+		return $response;
 	}
 }
