@@ -18,30 +18,20 @@ class Permission
      */
     public function handle($request, Closure $next)
     {
-		$permission = '';
-		$route = $request->route();
-
-		if($route) {
-			$actions = $route->getAction();
-			if(array_key_exists('permission', $actions)) {
-				$permission = $actions['permission'];
-			}else{
-				Throw new \Exception('You have not specified a permission');
-			}
+		$response = $next($request);
+		$actions = $request->route()->getAction();
+		if(array_key_exists('permission', $actions)) {
+			$permission = $actions['permission'];
 		}else{
-			if(!Str::contains($request->server('PHP_SELF'), 'oauth')){
-				$response = $next($request);
-				$Routeaction = $request->route()->getAction()['uses'];
-				$action = explode('@', $Routeaction);
-				$permissionAnnotation = New PermissionAnnotation($action[0], $action[1]);
-				$permission = $permissionAnnotation->getPermission(true);
-			}
+			$action = explode('@', $actions['uses']);
+			$permissionAnnotation = New PermissionAnnotation($action[0], $action[1]);
+			$permission = $permissionAnnotation->getPermission(true);
 		}
 
 		if (Auth::check() && !Auth::user()->hasPermission($permission)){
 			return Redirect::to('/');
 		}
 
-		return $next($request);
+		return $response;
     }
 }
