@@ -4,7 +4,6 @@ use App\Services\PermissionAnnotation;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Str;
 
 class Permission
 {
@@ -24,8 +23,8 @@ class Permission
 			$permission = $actions['permission'];
 		}else{
 			$action = explode('@', $actions['uses']);
-			$permissionAnnotation = New PermissionAnnotation($action[0], $action[1]);
-			$permission = $permissionAnnotation->getPermission(true);
+			$permissionAnnotation = New PermissionAnnotation($action[0]);
+			$permission = $permissionAnnotation->getPermission($action[1], true);
 		}
 
 		if (Auth::check() && !Auth::user()->hasPermission($permission)){

@@ -1,7 +1,7 @@
 <?php namespace App\Console\Commands;
 
 use App\Repositories\Permission\PermissionRepository;
-use App\Services\AnnotationService;
+use App\Services\PermissionAnnotation;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
@@ -60,11 +60,13 @@ class InsertPermission extends Command {
 		$permissions = array();
 		foreach($classes as $class) {
 			try {
-				$annotationService = new AnnotationService('App\\Http\\Controllers\\' . $class, '@permission');
+				$annotationService = new PermissionAnnotation('App\\Http\\Controllers\\' . $class);
 			} catch (\Exception $e){
 				$this->error($e->getMessage());
 			}
-			$permissions = array_merge($permissions, $annotationService->getValues());
+			foreach($annotationService->getPermissions() as $permission){
+				$permissions[] = $permission;
+			}
 		}
 
 		foreach($permissions as $permission){

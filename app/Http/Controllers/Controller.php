@@ -32,8 +32,8 @@ abstract class Controller extends BaseController {
 
 	protected function getPermission($method){
 		$method = explode('::', $method);
-		$permissionAnnotation = New PermissionAnnotation($method[0], $method[1]);
-		return $permissionAnnotation->getPermission();
+		$permissionAnnotation = New PermissionAnnotation($method[0]);
+		return $permissionAnnotation->getPermission($method[1]);
 	}
 
 }

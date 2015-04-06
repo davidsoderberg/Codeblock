@@ -1,28 +1,26 @@
 <?php namespace App\Services;
 
-class PermissionAnnotation{
+class PermissionAnnotation extends AnnotationService{
 
-	private $annotationService;
-	private $permission;
-	private $annotation = '@permission';
+	protected $annotation = '@permission';
 
-	public function __construct($class, $method){
-		$this->annotationService = new AnnotationService($class, $this->annotation);
-		$this->permission = $this->annotationService->getValues($method);
-	}
-
-	public function  getPermission($optional = false) {
-		$permission = $this->permission;
+	public function  getPermission($method, $optional = false) {
+		$permission = $this->getValues($method);
 		if($permission != '') {
 			$permission = explode(':', $permission);
-			$permission = $permission[0];
 			if($optional) {
 				if(isset($permission[1]) && strtolower($permission[1]) == 'optional') {
 					$permission = '';
 				}
+			}else{
+				$permission = $permission[0];
 			}
 		}
 		return $permission;
+	}
+
+	public function getPermissions(){
+		return $this->getValues();
 	}
 
 }

@@ -70,8 +70,8 @@ HTML::macro('menulink', function($url = array('action' => '', 'params' => array(
 
 HTML::macro('actionlink', function($url = array('action' => '', 'params' => array()), $content, $attributes = array('target' =>'_self', 'class' => '', 'id' => ''), $optional = true){
 	$action = explode('@', $url['action']);
-	$permissionAnnotation = New PermissionAnnotation('App\\Http\\Controllers\\'.$action[0], $action[1]);
-	$permission = $permissionAnnotation->getPermission($optional);
+	$permissionAnnotation = New PermissionAnnotation('App\\Http\\Controllers\\'.$action[0]);
+	$permission = $permissionAnnotation->getPermission($action[1], $optional);
 
 	if (Auth::check() && !Auth::user()->hasPermission($permission)){
 		return '';

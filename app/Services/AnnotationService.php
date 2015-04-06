@@ -7,17 +7,16 @@ use Illuminate\Support\Str;
 class AnnotationService{
 
 	private $class;
-	private $annotation;
 	private $values;
+	protected $annotation;
 
-	public function __construct($class, $annotation){
+	public function __construct($class){
 		$this->values = array();
 		$this->class = new ReflectionClass($class);
-		$this->annotation = $annotation;
-		$this->fetchValues($annotation);
+		$this->fetchValues();
 	}
 
-	public function getValues($method = null){
+	protected function getValues($method = null){
 		if(is_null($method)) {
 			return $this->values;
 		}
@@ -27,13 +26,13 @@ class AnnotationService{
 		return '';
 	}
 
-	private function fetchValues($annotation){
+	private function fetchValues(){
 		$parent = $this->class->getParentClass();
 		foreach($this->class->getMethods() as $method) {
 			if(!$parent->hasMethod($method->getName())) {
 				$comment = $method->getDocComment();
-				if(Str::contains($comment, $annotation)) {
-					$comment = explode($annotation, $comment);
+				if(Str::contains($comment, $this->annotation)) {
+					$comment = explode($this->annotation, $comment);
 					$AnnotationComment = explode(' ', $comment[1]);
 					$AnnotationValue = trim($AnnotationComment[1]);
 					if(!in_array($AnnotationValue, $this->values)) {
