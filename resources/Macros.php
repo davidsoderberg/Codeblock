@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
 use App\Services\PermissionAnnotation;
 
@@ -123,14 +123,9 @@ HTML::macro('table', function($fields = array(), $data = array(), $show = array(
 			$_GET['page'] = 1;
 		}
 
-		$numberOfItems = count($data);
-
+		$paginator = new LengthAwarePaginator($data, count($data), $show['Pagination'], $_GET['page'], array('path' => Request::path()));
 		if($show['Pagination'] > 0){
-			if($_GET['page'] != 1) {
-				$data = array_slice($data, ($_GET['page'] * $show['Pagination']) - $show['Pagination'], $show['Pagination']);
-			}
-			$paginator = new Paginator($data, $show['Pagination'], $_GET['page']);
-			$paginator->setPath(Request::path());
+			$data = array_slice($data, ($_GET['page'] * $show['Pagination']) - $show['Pagination'], $show['Pagination']);
 		}
 
 		$table = '<table>';
@@ -161,14 +156,25 @@ HTML::macro('table', function($fields = array(), $data = array(), $show = array(
 			if ($show['Edit'] || $show['Delete'] || $show['View'])
 			{
 				$table .= '<td data-title="Actions">';
+				$showLink = false;
+				if(isset($d['private'])){
+					if($d['private'] == true) {
+						$showLink = false;
+					}else{
+						$showLink = true;
+					}
+				}
+				if(Auth::check() && isset($d['user_id'])){
+					$showLink = Auth::user()->id == $d['user_id'];
+				}
 				if ($show['Edit']){
-					$table .= HTML::actionlink(array('action' => $show['Edit'] , 'params' => array($d['id'])), '<i class="fa fa-pencil"></i>Edit', array(), false).' ';
+					$table .= HTML::actionlink(array('action' => $show['Edit'] , 'params' => array($d['id'])), '<i class="fa fa-pencil"></i>Edit', array(), $showLink).' ';
 				}
 				if ($show['View']){
-					$table .= HTML::actionlink(array('action' => $show['View'], 'params' => array($d['id'])), '<i class="fa fa-eye"></i>View', array(), false).' ';
+					$table .= HTML::actionlink(array('action' => $show['View'], 'params' => array($d['id'])), '<i class="fa fa-eye"></i>View', array(), $showLink).' ';
 				}
 				if ($show['Delete']){
-					$table .= HTML::actionlink(array('action' => $show['Delete'], 'params' => array($d['id'])), '<i class="fa fa-trash-o"></i>Delete', array(), false).' ';
+					$table .= HTML::actionlink(array('action' => $show['Delete'], 'params' => array($d['id'])), '<i class="fa fa-trash-o"></i>Delete', array(), $showLink).' ';
 				}
 				$table .= '</td>';
 			}
@@ -176,24 +182,7 @@ HTML::macro('table', function($fields = array(), $data = array(), $show = array(
 		}
 		$table .= '</table>';
 
-		if($paginator->hasPages()){
-			$table .= $paginator->render();
-			/*
-			$table .= '<ul>';
-			for($i = 1; $i <= ceil($numberOfItems / $show['Pagination']); $i++){
-				if($_GET['page'] == $i){
-					$table .= '<li>'.$i.'</li>';
-				}else{
-					if($i == 1){
-					$table .= '<li><a href="' . Request::path() . '">' . $i . '</a></li>';
-					}else {
-						$table .= '<li><a href="' . Request::path() . '?page=' . $i . '">' . $i . '</a></li>';
-					}
-				}
-			}
-			$table .= '</ul>';
-			*/
-		}
+		$table .= $paginator->render();
 		return $table;
 	}else{
 		return '<div class="text-center alert info">'.$info.'</div>';
