@@ -7,7 +7,7 @@
 <ul class="float-right">
 	@if(Auth::check())
 		{{HTML::menulink($url = array('action' => 'ForumController@listForums'), '<i class="fa fa-comments"></i>Forum')}}
-		{{HTML::adminmenu(
+		{{HTML::submenu(
 			'<i class="fa fa-group"></i>Admin <i class="fa fa-bars only-small display-inline"></i>',
 			array(
 				array(array('action' => 'UserController@index'), 'Users'),

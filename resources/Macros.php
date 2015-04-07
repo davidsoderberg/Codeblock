@@ -49,7 +49,7 @@ HTML::macro('flash', function()
 	}
 });
 
-HTML::macro('adminmenu', function($content, $items){
+HTML::macro('submenu', function($content, $items){
 	$list = '';
 	foreach($items as $item){
 		$list .= HTML::menulink($item[0], $item[1], array(), false);
