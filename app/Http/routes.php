@@ -67,7 +67,6 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::get('reply/delete/{id}', 'ReplyController@delete');
 
 	Route::group(['middleware' => 'role', 'role' => '2'], function() {
-		Route::get('categories/{id}', 'CategoryController@show');
 		Route::get('categories/edit/{id}', 'CategoryController@index');
 		Route::get('categories/delete/{id}', 'CategoryController@delete');
 		Route::post('categories/store/{id?}', 'CategoryController@createOrUpdate');
@@ -78,7 +77,6 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::post('forums/store/{id?}', 'ForumController@createOrUpdate');
 		Route::get('forums', 'ForumController@index');
 
-		Route::get('tags/{id}', 'TagController@show');
 		Route::get('tags/edit/{id}', 'TagController@index');
 		Route::get('tags/delete/{id}', 'TagController@delete');
 		Route::post('tags/store/{id?}', 'TagController@createOrUpdate');
