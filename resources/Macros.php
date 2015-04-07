@@ -60,6 +60,16 @@ HTML::macro('submenu', function($content, $items){
 	return '<li class="dropdown"><a class="hideUl" href="">'.$content.'</a><ul>'.$list.'</ul></li>';
 });
 
+HTML::macro('hasPermission', function($action, $optional = false){
+	$action = explode('@', $action);
+	$permissionAnnotation = New PermissionAnnotation('App\\Http\\Controllers\\'.$action[0]);
+
+	if (Auth::check() && !Auth::user()->hasPermission($permissionAnnotation->getPermission($action[1], $optional))) {
+		return false;
+	}
+	return true;
+});
+
 HTML::macro('menulink', function($url = array('action' => '', 'params' => array()), $content, $attributes = array('target' =>'_self', 'class' => '', 'id' => ''), $optional = true){
 	$link = HTML::actionlink($url, $content, $attributes, $optional);
 	if($link !== ''){
@@ -69,11 +79,7 @@ HTML::macro('menulink', function($url = array('action' => '', 'params' => array(
 });
 
 HTML::macro('actionlink', function($url = array('action' => '', 'params' => array()), $content, $attributes = array('target' =>'_self', 'class' => '', 'id' => ''), $optional = true){
-	$action = explode('@', $url['action']);
-	$permissionAnnotation = New PermissionAnnotation('App\\Http\\Controllers\\'.$action[0]);
-	$permission = $permissionAnnotation->getPermission($action[1], $optional);
-
-	if (Auth::check() && !Auth::user()->hasPermission($permission)){
+	if (!HTML::hasPermission($url['action'], $optional)){
 		return '';
 	}
 
@@ -82,14 +88,10 @@ HTML::macro('actionlink', function($url = array('action' => '', 'params' => arra
 	}
 
 	$link = '<a href="'.URL::action($url['action'], $url['params']).'"';
-	if(isset($attributes['target'])) {
-		$link .= ' target="'.$attributes['target'].'"';
-	}
-	if(isset($attributes['id'])){
-		$link .= ' id="'.$attributes['id'].'"';
-	}
-	if(isset($attributes['class'])){
-		$link .= ' class="'.$attributes['class'].'"';
+	foreach($attributes as $key => $value){
+		if($value != '') {
+			$link .= ' ' . $key . '="' . $value . '"';
+		}
 	}
 	$link .= '>';
 	$link .= $content;

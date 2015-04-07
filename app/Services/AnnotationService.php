@@ -37,8 +37,6 @@ class AnnotationService{
 					$AnnotationValue = trim($AnnotationComment[1]);
 					if(!in_array($AnnotationValue, $this->values)) {
 						$this->values[$method->getName()] = $AnnotationValue;
-					}else{
-						Throw new Exception($AnnotationValue.'in class'.$this->class->getName().' does already exists.');
 					}
 				}
 			}
