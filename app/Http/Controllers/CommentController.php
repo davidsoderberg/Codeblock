@@ -29,6 +29,7 @@ class CommentController extends Controller {
 	 */
 	public function __construct(CommentRepository $comment)
 	{
+		parent::__construct();
 		$this->comment = $comment;
 	}
 

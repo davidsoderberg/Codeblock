@@ -4,11 +4,11 @@
 		<meta name="google-site-verification" content="3M7wk4STJBxWp1JZHRFZ-LNG7N8kZkYIRDqX4uRJsLk" />
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Codeblock.se @if(isset($title) && $title != '') - {{ $title }} @endif</title>
+		<title>{{$siteName}} @if(isset($title) && $title != '') - {{ $title }} @endif</title>
 
-		<meta property="og:title" content="{{$title or 'Codeblock.se'}}" />
+		<meta property="og:title" content="{{$title or $siteName}}" />
 		<meta property="og:type" content="website" />
-		<meta property="og:site_name" content="Codeblock.se"/>
+		<meta property="og:site_name" content="{{$siteName}}"/>
 		<meta property="og:url" content="{{ Request::url() }}" />
 		<meta property="og:image" content="{{ HTML::version('img/favicon.png') }}" />
 		<meta property="og:description" content="Share your commonly used codeblocks and use the community contributions for fast web development. Syntax support for commonly used web development languages.">

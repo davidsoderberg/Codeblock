@@ -22,6 +22,7 @@ class TagController extends Controller {
 
 	public function __construct(TagRepository $tag)
 	{
+		parent::__construct();
 		$this->tag = $tag;
 	}
 

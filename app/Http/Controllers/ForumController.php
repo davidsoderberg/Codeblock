@@ -15,6 +15,7 @@ class ForumController extends Controller {
 	 * @param ForumRepository $forum
 	 */
 	public function __construct(ForumRepository $forum) {
+		parent::__construct();
 		$this->forum = $forum;
 	}
 

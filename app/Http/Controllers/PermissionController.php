@@ -22,6 +22,7 @@ class PermissionController extends Controller {
 
 	public function __construct(PermissionRepository $permission)
 	{
+		parent::__construct();
 		$this->permission = $permission;
 	}
 

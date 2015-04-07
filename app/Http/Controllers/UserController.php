@@ -19,6 +19,7 @@ class UserController extends Controller {
 	 */
 	public function __construct(UserRepository $user)
 	{
+		parent::__construct();
 		$this->user = $user;
 	}
 

@@ -19,6 +19,7 @@ class NotificationController extends Controller {
 	 * @param NotificationRepository $notification
 	 */
 	public function __construct(NotificationRepository $notification) {
+		parent::__construct();
 		$this->notification = $notification;
 	}
 

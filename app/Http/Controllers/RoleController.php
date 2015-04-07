@@ -23,6 +23,7 @@ class RoleController extends Controller {
 
 	public function __construct(RoleRepository $role, PermissionRepository $permission)
 	{
+		parent::__construct();
 		$this->role = $role;
 		$this->permission = $permission;
 	}

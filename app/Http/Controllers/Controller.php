@@ -7,10 +7,16 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Log;
 use App\Services\PermissionAnnotation;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\URL;
 
 abstract class Controller extends BaseController {
 
 	use DispatchesCommands, ValidatesRequests;
+
+	public function __construct(){
+		View::share('siteName', ucfirst(str_replace('http://', '', URL::to('/'))));
+	}
 
 	protected function mentioned($text, $object, NotificationRepository $notification){
 		$users = array();

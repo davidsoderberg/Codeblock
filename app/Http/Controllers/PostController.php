@@ -29,6 +29,7 @@ class PostController extends Controller {
 
 	public function __construct(PostRepository $post, CategoryRepository $category, TagRepository $tag, RateRepository $rate)
 	{
+		parent::__construct();
 		$this->post = $post;
 		$this->category = $category;
 		$this->tag = $tag;
