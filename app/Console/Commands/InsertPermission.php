@@ -63,7 +63,7 @@ class InsertPermission extends Command {
 			} catch (\Exception $e){
 				$this->error($e->getMessage());
 			}
-			foreach(array_keys($permissionAnnotation->getMethods()) as $method){
+			foreach($permissionAnnotation->getMethods() as $method){
 				$permission = str_replace('_', ' ', $permissionAnnotation->getPermission($method));
 				$permissionRepository->createOrUpdate(['name' => $permission]);
 			}
