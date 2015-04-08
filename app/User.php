@@ -160,6 +160,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 			foreach(Auth::user()->roles->permissions as $user_permission) {
 				$permissions_array[] = strtolower($user_permission->permission);
 			}
+			if(is_array($permission)){
+				$permission = $permission[0];
+			}
 
 			$permission = explode(':', $permission);
 			return in_array(strtolower($permission[0]), $permissions_array);
