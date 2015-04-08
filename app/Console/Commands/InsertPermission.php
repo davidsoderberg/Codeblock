@@ -57,23 +57,18 @@ class InsertPermission extends Command {
 			}
 		}
 
-		$permissions = array();
 		foreach($classes as $class) {
 			try {
-				$annotationService = new PermissionAnnotation('App\\Http\\Controllers\\' . $class);
+				$permissionAnnotation = new PermissionAnnotation('App\\Http\\Controllers\\' . $class);
 			} catch (\Exception $e){
 				$this->error($e->getMessage());
 			}
-			foreach($annotationService->getPermissions() as $permission){
-				$permissions[] = $permission;
+			foreach(array_keys($permissionAnnotation->getMethods()) as $method){
+				$permission = str_replace('_', ' ', $permissionAnnotation->getPermission($method));
+				$permissionRepository->createOrUpdate(['name' => $permission]);
 			}
 		}
 
-		foreach($permissions as $permission){
-			$permission = explode(':', $permission);
-			$permission = str_replace('_', ' ', $permission[0]);
-			$permissionRepository->createOrUpdate(['name' => $permission]);
-		}
 		$this->info('All permissions has been inserted');
 	}
 

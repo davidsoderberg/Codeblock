@@ -4,7 +4,7 @@ class PermissionAnnotation extends AnnotationService{
 
 	protected $annotation = '@permission';
 
-	public function  getPermission($method, $optional = false) {
+	public function getPermission($method, $optional = false) {
 		$permission = $this->getValues($method);
 		if($permission != '') {
 			$permission = explode(':', $permission);
@@ -23,4 +23,7 @@ class PermissionAnnotation extends AnnotationService{
 		return $this->getValues();
 	}
 
+	public function getMethods(){
+		return array_keys($this->getValues());
+	}
 }
