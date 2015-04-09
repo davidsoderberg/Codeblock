@@ -40,7 +40,7 @@ class InsertPermission extends Command {
 	 */
 	public function fire(PermissionRepository $permissionRepository)
 	{
-		if(is_null($this->argument('insert'))) {
+		if(is_null($this->argument('onlyInsert'))) {
 			$permissions = $permissionRepository->get();
 			foreach($permissions as $permission){
 				$permissionRepository->delete($permission->id);
@@ -80,7 +80,7 @@ class InsertPermission extends Command {
 	protected function getArguments()
 	{
 		return [
-			['insert', InputArgument::OPTIONAL, 'If only inserts should be done'],
+			['onlyInsert', InputArgument::OPTIONAL, 'If only inserts should be done'],
 		];
 	}
 
