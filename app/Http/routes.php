@@ -34,7 +34,6 @@ Route::get('user/{id?}', 'UserController@show');
 Route::get('user/{username?}', 'UserController@showByUsername');
 Route::group(['middleware' => 'auth'], function() {
 
-	Route::get('posts', 'PostController@index');
 	Route::get('posts/create', 'PostController@create');
 	Route::get('posts/edit/{id}', 'PostController@edit');
 	Route::get('posts/delete/{id}', 'PostController@delete');
@@ -47,7 +46,6 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::get('notifications/', 'NotificationController@listNotification');
 	Route::get('notifications/delete/{id}', 'NotificationController@delete');
 
-	Route::get('comments/', 'CommentController@index');
 	Route::get('comments/list', 'CommentController@listComments');
 	Route::post('comments/{id?}', 'CommentController@createOrUpdate');
 	Route::get('comments/edit/{id}', 'CommentController@edit');
@@ -71,10 +69,12 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::post('categories/store/{id?}', 'CategoryController@createOrUpdate');
 		Route::get('categories/{id?}', 'CategoryController@index');
 
-		Route::get('forums/edit/{id}', 'ForumController@index');
+		Route::get('posts', 'PostController@index');
+		Route::get('comments/', 'CommentController@index');
+
 		Route::get('forums/delete/{id}', 'ForumController@delete');
 		Route::post('forums/store/{id?}', 'ForumController@createOrUpdate');
-		Route::get('forums', 'ForumController@index');
+		Route::get('forums/{id?}', 'ForumController@index');
 
 		Route::get('tags/delete/{id}', 'TagController@delete');
 		Route::post('tags/store/{id?}', 'TagController@createOrUpdate');
