@@ -29,8 +29,12 @@
                     <td data-title="Comment">{{ $comment->comment}}</td>
                     <td data-title="Status">@if($comment->status == 0 ) Hidden @else Shown @endif</td>
                     <td data-title="Actions">
-	                    {{HTML::actionlink($url = array('action' => 'CommentController@delete', 'params' => array($comment->id)), '<i class="fa fa-trash-o"></i>Delete')}}
-	                    {{HTML::actionlink($url = array('action' => 'CommentController@edit', 'params' => array($comment->id)), '<i class="fa fa-pencil"></i>Edit')}}
+	                    @if(HTML::hasPermission('CommentController@delete') || Auth::user()->id == $comment->user_id)
+	                        {{HTML::actionlink($url = array('action' => 'CommentController@delete', 'params' => array($comment->id)), '<i class="fa fa-trash-o"></i>Delete')}}
+	                    @endif
+	                    @if(HTML::hasPermission('CommentController@edit') || Auth::user()->id == $comment->user_id)
+	                        {{HTML::actionlink($url = array('action' => 'CommentController@edit', 'params' => array($comment->id)), '<i class="fa fa-pencil"></i>Edit')}}
+						@endif
                     </td>
                 </tr>
             @endforeach
