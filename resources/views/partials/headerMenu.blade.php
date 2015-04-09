@@ -17,7 +17,7 @@
 				array(array('action' => 'CommentController@index'), 'Comments'),
 				array(array('action' => 'ForumController@index'), 'Forums'),
 				array(array('action' => 'RoleController@index'), 'Roles'),
-				array(array('action' => 'PermissionController@index'), 'Permissions')
+				array(array('action' => 'RoleController@editRolePermission'), 'Permissions')
 			)
 		)}}
 		<li class="dropdown">

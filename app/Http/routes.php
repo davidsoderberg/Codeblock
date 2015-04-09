@@ -84,13 +84,13 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::get('user/edit/{id}', 'UserController@edit');
 		Route::post('user/update/{id}', 'UserController@update');
 		Route::get('users', 'UserController@index');
-
+		/*
 		Route::post('permissions/store/{id?}', 'PermissionController@createOrUpdate');
 		Route::get('permissions/delete/{id}', 'PermissionController@delete');
 		Route::get('permissions/{id?}', 'PermissionController@index');
-
-		Route::get('rolepermission/edit', 'RoleController@editRolePermission');
-		Route::post('rolepermission/update', 'RoleController@updateRolePermission');
+		*/
+		Route::get('permissions', 'RoleController@editRolePermission');
+		Route::post('permissions/update', 'RoleController@updateRolePermission');
 
 		Route::post('role/default', 'RoleController@setDefault');
 		Route::post('roles/store', 'RoleController@store');
