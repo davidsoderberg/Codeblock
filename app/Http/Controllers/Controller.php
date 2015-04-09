@@ -36,10 +36,10 @@ abstract class Controller extends BaseController {
 		}
 	}
 
-	protected function getPermission($method){
-		$method = explode('::', $method);
-		$permissionAnnotation = New Permission($method[0]);
-		return $permissionAnnotation->getPermission($method[1]);
+	protected function getPermission(){
+		$action = debug_backtrace()[1];
+		$permissionAnnotation = New Permission($action['class']);
+		return $permissionAnnotation->getPermission($action['function']);
 	}
 
 }
