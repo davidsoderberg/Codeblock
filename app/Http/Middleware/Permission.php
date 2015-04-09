@@ -27,7 +27,7 @@ class Permission
 		}
 
 		if (Auth::check() && !Auth::user()->hasPermission($permission)){
-			return Redirect::to('/');
+			return Redirect::to('/')->with('error', 'You do not have the correct permission for that url.');
 		}
 
 		return $response;
