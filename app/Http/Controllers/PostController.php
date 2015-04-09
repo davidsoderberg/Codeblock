@@ -142,6 +142,7 @@ class PostController extends Controller {
 
 	/**
 	 * Ta bort ett block.
+	 * @permission delete_post:optional
 	 * @param  int $id Id för blocket som skall tas bort.
 	 * @return array     Typ av medelande och meddelande
 	 */
