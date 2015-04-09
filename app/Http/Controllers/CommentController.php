@@ -35,6 +35,7 @@ class CommentController extends Controller {
 
 	/**
 	 * Visar index vyn för kommentarerna
+	 * @permission view_comments
 	 * @return objekt     objekt som innehåller allt som behövs i vyn
 	 */
 	public function index()
@@ -82,6 +83,7 @@ class CommentController extends Controller {
 
 	/**
 	 * vissar vyn för att uppdatera en kommentar.
+	 * @permission edit_comments:optional
 	 * @param  int $id id för kommentaren som skall uppdateras
 	 * @return object     med värden dit användaren skall skickas.
 	 */
@@ -92,6 +94,7 @@ class CommentController extends Controller {
 
 	/**
 	 * Ta bort en kommentar
+	 * @permission delete_comments:optional
 	 * @param  int $id id för kommentaren som skall tas bort.
 	 * @return object     med värden dit användaren skall skickas.
 	 */

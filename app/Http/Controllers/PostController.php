@@ -39,6 +39,7 @@ class PostController extends Controller {
 	}
 	/**
 	 * vissar index vyn.
+	 * @permission view_posts
 	 * @return objekt objekt med allt som skall skickas till index vyn
 	 */
 	public function index()

@@ -13,32 +13,72 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
+/**
+ * Class ApiController
+ * @package App\Http\Controllers
+ */
 class ApiController extends Controller {
 
+	/**
+	 * @param CategoryRepository $category
+	 * @param null $id
+	 * @return mixed
+	 */
 	public function Categories(CategoryRepository $category, $id = null) {
 		return Response::json(array('data' => $category->get($id)), 200);
 	}
 
+	/**
+	 * @param TagRepository $tag
+	 * @param null $id
+	 * @return mixed
+	 */
 	public function Tags(TagRepository $tag, $id = null){
 		return Response::json(array('data' => $tag->get($id)), 200);
 	}
 
+	/**
+	 * @param PostRepository $post
+	 * @param null $id
+	 * @return mixed
+	 */
 	public function Posts(PostRepository $post, $id = null){
 		return Response::json(array('data' => $post->get($id)), 200);
 	}
 
+	/**
+	 * @param UserRepository $user
+	 * @param null $id
+	 * @return mixed
+	 */
 	public function Users(UserRepository $user, $id = null){
 		return Response::json(array('data' => $user->get($id)), 200);
 	}
 
+	/**
+	 * @param ForumRepository $forum
+	 * @param null $id
+	 * @return mixed
+	 */
 	public function forums(ForumRepository $forum, $id = null){
 		return Response::json(array('data' => $forum->get($id)), 200);
 	}
 
+	/**
+	 * @param TopicRepository $topic
+	 * @param null $id
+	 * @return mixed
+	 */
 	public function topics(TopicRepository $topic, $id = null){
 		return Response::json(array('data' => $topic->get($id)), 200);
 	}
 
+	/**
+	 * @permission create_update_categories
+	 * @param CategoryRepository $category
+	 * @param null $id
+	 * @return mixed
+	 */
 	public function createOrUpdateCategory(CategoryRepository $category, $id = null){
 		if($category->createOrUpdate(Input::all(), $id)){
 			return Response::json(array('message' => 'Your category has been saved'), 201);
@@ -46,6 +86,12 @@ class ApiController extends Controller {
 		return Response::json(array('errors' => $category->getErrors()), 400);
 	}
 
+	/**
+	 * @permission create_update_tags
+	 * @param TagRepository $tag
+	 * @param null $id
+	 * @return mixed
+	 */
 	public function createOrUpdateTag(TagRepository $tag, $id = null){
 		if($tag->createOrUpdate(Input::all(), $id)){
 			return Response::json(array('message' => 'Your tag has been saved'), 201);
@@ -53,6 +99,11 @@ class ApiController extends Controller {
 		return Response::json(array('errors' => $tag->getErrors()), 400);
 	}
 
+	/**
+	 * @param PostRepository $post
+	 * @param null $id
+	 * @return mixed
+	 */
 	public function createOrUpdatePost(PostRepository $post, $id = null){
 		if($post->createOrUpdate(Input::all(), $id)){
 			return Response::json(array('message' => 'Your block has been saved'), 201);
@@ -60,6 +111,11 @@ class ApiController extends Controller {
 		return Response::json(array('errors' => $post->getErrors()), 400);
 	}
 
+	/**
+	 * @param CommentRepository $comment
+	 * @param null $id
+	 * @return mixed
+	 */
 	public function createOrUpdateComment(CommentRepository $comment, $id = null){
 		if($comment->createOrUpdate(Input::all(), $id)){
 			return Response::json(array('message' => 'Your comment has been saved'), 201);
@@ -67,6 +123,11 @@ class ApiController extends Controller {
 		return Response::json(array('errors' => $comment->getErrors()), 400);
 	}
 
+	/**
+	 * @param UserRepository $user
+	 * @param null $id
+	 * @return mixed
+	 */
 	public function createOrUpdateUser(UserRepository $user, $id = null){
 		if($user->createOrUpdate(Input::all(), $id)){
 			if(is_null($id)){
@@ -78,6 +139,11 @@ class ApiController extends Controller {
 		return Response::json(array('errors' => $user->getErrors()), 400);
 	}
 
+	/**
+	 * @param ReplyRepository $reply
+	 * @param null $id
+	 * @return mixed
+	 */
 	public function createOrUpdateReply(ReplyRepository $reply, $id = null){
 		if($reply->createOrUpdate(Input::all(), $id)){
 			return Response::json(array('message' => 'Your reply has been saved'), 201);
@@ -85,6 +151,12 @@ class ApiController extends Controller {
 		return Response::json(array('errors' => $reply->getErrors()), 400);
 	}
 
+	/**
+	 * @param TopicRepository $topic
+	 * @param ReplyRepository $reply
+	 * @param null $id
+	 * @return mixed
+	 */
 	public function createOrUpdateTopic(TopicRepository $topic, ReplyRepository $reply, $id = null){
 		$input = Input::all();
 		if($topic->createOrUpdate(Input::all(), $id)){
@@ -98,6 +170,10 @@ class ApiController extends Controller {
 		return Response::json(array('errors' => $topic->getErrors()), 400);
 	}
 
+	/**
+	 * @param UserRepository $user
+	 * @return mixed
+	 */
 	public function forgotPassword(UserRepository $user){
 		if($user->forgotPassword(Input::all())){
 			return Response::json(array('message' => 'A new password have been sent to you.'), 200);
@@ -105,6 +181,11 @@ class ApiController extends Controller {
 		return Response::json(array('message' => "Your email don't exists in our database."), 400);
 	}
 
+	/**
+	 * @param PostRepository $post
+	 * @param $id
+	 * @return mixed
+	 */
 	public function Star(PostRepository $post, $id){
 		$star = $post->createOrDeleteStar($id);
 		if($star[0]){
@@ -116,6 +197,11 @@ class ApiController extends Controller {
 		return Response::json(array('message', 'Something went wrong, please try again.'), 400);
 	}
 
+	/**
+	 * @param RateRepository $rate
+	 * @param $id
+	 * @return mixed
+	 */
 	public function Rate(RateRepository $rate, $id){
 		if($rate->rate($id, '+')){
 			return Response::json(array('message' => 'Your up rated a comment.'), 200);
@@ -127,6 +213,9 @@ class ApiController extends Controller {
 		return Response::json(array('message', 'You could not rate that comment, please try agian'), 400);
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function Auth(){
 		if (Auth::attempt(array('username' => trim(strip_tags(Input::get('username'))), 'password' => trim(strip_tags(Input::get('password')))))) {
 			return Response::json(array('token' => \JWT::encode(array('id' => Auth::user()->id), env('APP_KEY'))), 200);

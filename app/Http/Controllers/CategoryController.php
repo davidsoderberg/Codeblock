@@ -28,6 +28,7 @@ class CategoryController extends Controller {
 
 	/**
 	 * Visar index vyn för kategorier
+	 * @permission view_categories
 	 * @param  int $id id för kategorin som skall redigera
 	 * @return objekt     objekt som innehåller allt som behövs i vyn
 	 */
@@ -44,6 +45,7 @@ class CategoryController extends Controller {
 
 	/**
 	 * Skapa och uppdatera en kategorin.
+	 * @permission create_update_categories
 	 * @param  int $id id för kategorin som skall uppdateras
 	 * @return object     med värden dit användaren skall skickas.
 	 */
@@ -58,6 +60,7 @@ class CategoryController extends Controller {
 
 	/**
 	 * Ta bort en kategori
+	 * @permission delete_categories
 	 * @param  int $id id för kategori som skall tas bort.
 	 * @return object     med värden dit användaren skall skickas.
 	 */

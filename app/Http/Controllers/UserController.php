@@ -25,6 +25,7 @@ class UserController extends Controller {
 
 	/**
 	 * Visar index vyn för användare
+	 * @permission view_users
 	 * @return objekt     objekt som innehåller allt som behövs i vyn
 	 */
 	public function index()
@@ -108,6 +109,7 @@ class UserController extends Controller {
 
 	/**
 	 * Visar vyn för att redigera en användare.
+	 * @permission update_users
 	 * @param  int $id id för användaren som skall redigeras.
 	 * @return objekt     objekt som innehåller allt som behövs i vyn
 	 */
@@ -119,6 +121,7 @@ class UserController extends Controller {
 
 	/**
 	 * Uppdaterar användaren
+	 * @permission update_users
 	 * @param  int $id id på användaren som skall uppdateras.
 	 * @return object     med värden dit användaren skall skickas.
 	 */
@@ -140,6 +143,7 @@ class UserController extends Controller {
 
 	/**
 	 * ta bort användaren
+	 * @permission delete_users
 	 * @param  int $id id på användaren som skall tas bort.
 	 * @return object     med värden dit användaren skall skickas.
 	 */
