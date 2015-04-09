@@ -6,7 +6,7 @@ use Illuminate\Foundation\Bus\DispatchesCommands;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Log;
-use App\Services\PermissionAnnotation;
+use App\Services\Annotation\Permission;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\URL;
 
@@ -38,7 +38,7 @@ abstract class Controller extends BaseController {
 
 	protected function getPermission($method){
 		$method = explode('::', $method);
-		$permissionAnnotation = New PermissionAnnotation($method[0]);
+		$permissionAnnotation = New Permission($method[0]);
 		return $permissionAnnotation->getPermission($method[1]);
 	}
 

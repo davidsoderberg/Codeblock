@@ -1,6 +1,6 @@
-<?php namespace App\Services;
+<?php namespace App\Services\Annotation;
 
-class PermissionAnnotation extends AnnotationService{
+class Permission extends Annotation{
 
 	protected $annotation = '@permission';
 

@@ -1,10 +1,10 @@
-<?php namespace App\Services;
+<?php namespace App\Services\Annotation;
 
 use Exception;
 use ReflectionClass;
 use Illuminate\Support\Str;
 
-class AnnotationService{
+class Annotation{
 
 	private $class;
 	private $values;

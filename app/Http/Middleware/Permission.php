@@ -1,6 +1,5 @@
 <?php namespace App\Http\Middleware;
 
-use App\Services\PermissionAnnotation;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -23,7 +22,7 @@ class Permission
 			$permission = $actions['permission'];
 		}else{
 			$action = explode('@', $actions['uses']);
-			$permissionAnnotation = New PermissionAnnotation($action[0]);
+			$permissionAnnotation = New \App\Services\Annotation\Permission($action[0]);
 			$permission = $permissionAnnotation->getPermission($action[1], true);
 		}
 

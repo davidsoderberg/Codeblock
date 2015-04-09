@@ -1,5 +1,6 @@
 <?php namespace App\Services;
 
+use App\Services\Annotation\Permission;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -97,7 +98,7 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 	 */
 	public function hasPermission($action, $optional = false){
 		$action = explode('@', $action);
-		$permissionAnnotation = New PermissionAnnotation('App\\Http\\Controllers\\'.$action[0]);
+		$permissionAnnotation = New Permission('App\\Http\\Controllers\\'.$action[0]);
 
 		if (Auth::check() && !Auth::user()->hasPermission($permissionAnnotation->getPermission($action[1], $optional))) {
 			return false;
