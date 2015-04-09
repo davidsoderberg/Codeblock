@@ -7,14 +7,27 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Request;
 
+/**
+ * Class HtmlBuilder
+ * @package App\Services
+ */
 class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 
+	/**
+	 * @param $value
+	 * @param int $size
+	 * @return string
+	 */
 	public function avatar($value, $size = 48){
 		$identicon = new \Identicon\Identicon();
 		return $identicon->getImageDataUri($value, $size, '272822');
 		//<img alt="Avatar for {{username}}" src="{{HTML::avatar(id)}}">
 	}
 
+	/**
+	 * @param $text
+	 * @return mixed|string
+	 */
 	public function markdown($text){
 		$text = htmlentities($text);
 		// Inspirerad och hämtat delar från: https://gist.github.com/jbroadway/2836900
@@ -32,15 +45,26 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 		return $text;
 	}
 
+	/**
+	 * @param $path
+	 * @return string
+	 */
 	public function version($path){
 		return asset($path).'?v='.filemtime(public_path().'/'.$path);
 	}
 
+	/**
+	 * @param $text
+	 * @return mixed
+	 */
 	public function mention($text){
 		// Found at: http://granades.com/2009/04/06/using-regular-expressions-to-match-twitter-users-and-hashtags/
 		return preg_replace('/(^|\s)@(\w+)/', ' <a class="mention" target="_blank" href="'.action('MenuController@index').'/user/\2">@\2</a>', $text);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function flash(){
 		$flash = array('success','error', 'warning', 'info');
 		foreach ($flash as $value) {
@@ -50,6 +74,11 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 		}
 	}
 
+	/**
+	 * @param $content
+	 * @param $items
+	 * @return string
+	 */
 	public function submenu($content, $items){
 		$list = '';
 		foreach($items as $item){
@@ -61,6 +90,11 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 		return '<li class="dropdown"><a class="hideUl" href="">'.$content.'</a><ul>'.$list.'</ul></li>';
 	}
 
+	/**
+	 * @param $action
+	 * @param bool $optional
+	 * @return bool
+	 */
 	public function hasPermission($action, $optional = false){
 		$action = explode('@', $action);
 		$permissionAnnotation = New PermissionAnnotation('App\\Http\\Controllers\\'.$action[0]);
@@ -71,7 +105,14 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 		return true;
 	}
 
-	public function menulink($url = array('action' => '', 'params' => array()), $content, $attributes = array(), $optional = true){
+	/**
+	 * @param $url
+	 * @param $content
+	 * @param array $attributes
+	 * @param bool $optional
+	 * @return string
+	 */
+	public function menulink($url, $content, $attributes = array(), $optional = true){
 		$link = $this->actionlink($url, $content, $attributes, $optional);
 		if($link !== ''){
 			$link = '<li>'.$link.'</li>';
@@ -79,14 +120,19 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 		return $link;
 	}
 
-	public function actionlink($url = array('action' => '', 'params' => array()), $content, $attributes = array(), $optional = true){
+	/**
+	 * @param $url
+	 * @param $content
+	 * @param array $attributes
+	 * @param bool $optional
+	 * @return string
+	 */
+	public function actionlink($url, $content, $attributes = array(), $optional = true){
 		if (!$this->hasPermission($url['action'], $optional)){
 			return '';
 		}
 
-		if(!isset($url['params'])){
-			$url['params'] = array();
-		}
+		$url = array_merge(array('action' => '', 'params' => array()), $url);
 
 		$attributes['href'] = URL::action($url['action'], $url['params']);
 		if(Str::contains($attributes['href'],Request::path()) ) {
@@ -97,19 +143,16 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 			}
 		}
 
-		$link = '<a';
-		foreach($attributes as $key => $value){
-			if($value != '') {
-				$link .= ' ' . $key . '="' . $value . '"';
-			}
-		}
-		$link .= '>';
-		$link .= $content;
-		$link .= '</a>';
-
-		return $link;
+		return '<a'.$this->attributes($attributes).'>'.$content.'</a>';
 	}
 
+	/**
+	 * @param array $fields
+	 * @param array $data
+	 * @param array $show
+	 * @param $info
+	 * @return string
+	 */
 	public function table($fields = array(), $data = array(), $show = array(), $info){
 
 		if(count($data) > 0){
