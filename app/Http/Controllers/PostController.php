@@ -148,11 +148,17 @@ class PostController extends Controller {
 	 */
 	public function delete($id)
 	{
-		if($this->post->delete($id)){
-			return Redirect::back()->with('success', 'Your codeblock has been deleted.');
+		$post = $this->post->get($id);
+		if(!is_null($post)) {
+			if(Auth::check() && Auth::user()->id == $post->user_id || Auth::user()->hasPermission($this->getPermission(), false)) {
+				if($this->post->delete($id)) {
+					return Redirect::back()->with('success', 'Your codeblock has been deleted.');
+				}
+			}else{
+				return Redirect::back()->with('error', 'You do not have permission to delete that codeblock.');
+			}
 		}
-
-		return Redirect::back();
+		return Redirect::back()->with('error', 'We could not delete that codeblock.');
 	}
 
 	/**

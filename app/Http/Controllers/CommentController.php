@@ -89,7 +89,11 @@ class CommentController extends Controller {
 	 */
 	public function edit($id){
 		$comment = $this->comment->get($id);
-		return View::make('comment.edit')->with('title', 'Edit comments')->with('comment', $comment);
+		if(Auth::check() && Auth::user()->id == $comment->user_id || Auth::user()->hasPermission($this->getPermission(), false)) {
+			return View::make('comment.edit')->with('title', 'Edit comments')->with('comment', $comment);
+		}else{
+			return Redirect::back()->with('error', 'You do not have permission to edit that comment.');
+		}
 	}
 
 	/**
@@ -99,11 +103,16 @@ class CommentController extends Controller {
 	 * @return object     med värden dit användaren skall skickas.
 	 */
 	public function delete($id){
-		if($this->comment->delete($id)){
-			return Redirect::back();
+		$comment = $this->comment->get($id);
+		if(Auth::check() && Auth::user()->id == $comment->user_id || Auth::user()->hasPermission($this->getPermission(), false)) {
+			if($this->comment->delete($id)) {
+				return Redirect::back();
+			}
+		}else{
+			return Redirect::back()->with('error', 'You do not have permission to delete that comment.');
 		}
 
-		return Redirect::back();
+		return Redirect::back()->with('error', 'We could not delete that comment.');
 	}
 
 }
