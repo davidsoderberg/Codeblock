@@ -4,7 +4,7 @@ use Exception;
 use ReflectionClass;
 use Illuminate\Support\Str;
 
-class Annotation{
+abstract class Annotation{
 
 	private $class;
 	private $values;
@@ -41,6 +41,10 @@ class Annotation{
 				}
 			}
 		}
+	}
+
+	public function getMethods(){
+		return array_keys($this->values);
 	}
 
 }

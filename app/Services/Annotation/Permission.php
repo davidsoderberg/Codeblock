@@ -22,8 +22,4 @@ class Permission extends Annotation{
 	public function getPermissions(){
 		return $this->getValues();
 	}
-
-	public function getMethods(){
-		return array_keys($this->getValues());
-	}
 }
