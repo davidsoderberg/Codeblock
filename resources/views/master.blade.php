@@ -50,6 +50,7 @@
             @include('partials.modal')
 			{{ HTML::flash() }}
 			@yield('content')
+			<div id="toast-container"></div>
 		</div>
 		<div id="footer">
 			<div class="wrapper">

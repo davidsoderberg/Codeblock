@@ -121,6 +121,18 @@ jQuery(document).ready(function($){
 		});
 	}
 
+	function createToast(text){
+		var toast = $('<div></div>').addClass('toast animated lightSpeedIn');
+		toast.text(text);
+		$('#toast-container').prepend(toast);
+		setTimeout(function() {
+			toast.addClass('lightSpeedOut');
+			setTimeout(function(){
+				toast.remove();
+			}, 3000);
+		}, 5000);
+	}
+
 	if($.fn.tabs){
 		$('#browseTabs').tabs();
 	}
