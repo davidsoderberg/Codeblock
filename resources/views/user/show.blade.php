@@ -19,13 +19,13 @@
                         @if($user->id == Auth::user()->id || $user->id != Auth::user()->id && $user->posts[$i]->private == 0)
                             <div class="clearfix margin-bottom-half">
 							<span class="float-left">
-								<a href="/posts/{{ $user->posts[$i]->slug }}">{{ $user->posts[$i]->name }}</a>
+								{{HTML::actionlink($url = array('action' => 'PostController@show', 'params' => array($user->posts[$i]->slug)), $user->posts[$i]->name)}}
 							</span>
                                 @if($user->id == Auth::user()->id)
-                                    <span class="float-right">
-									<a href="/posts/edit/{{ $user->posts[$i]->id }}"><i class="fa fa-pencil"></i></a>
-									<a href="/posts/delete/{{ $user->posts[$i]->id }}"><i class="fa fa-trash-o"></i></a>
-								</span>
+	                                <span class="float-right">
+		                                {{HTML::actionlink($url = array('action' => 'PostController@edit', 'params' => array($user->posts[$i]->id)), '<i class="fa fa-pencil"></i>')}}
+	                                    {{HTML::actionlink($url = array('action' => 'PostController@delete', 'params' => array($user->posts[$i]->id)), '<i class="fa fa-trash-o"></i>')}}
+									</span>
                                 @endif
                             </div>
                         @endif
@@ -37,17 +37,16 @@
             <div class="text-center margin-top-one">
                 @if(count($user->posts) > 10)
                     @if($user->id == Auth::user()->id)
-                        <a href="/user/list/{{ $user->id }}" class="button float-left">List all</a>
+			            {{HTML::actionlink($url = array('action' => 'UserController@listUserBlock', 'params' => array($user->id)), 'List all', array('class' => 'button float-left'))}}
                     @else
-                        <a href="/user/list/{{ $user->id }}" class="button float-left">List all {{ $user->username }}s
-                            codeblock</a>
+			            {{HTML::actionlink($url = array('action' => 'UserController@listUserBlock', 'params' => array($user->id)), 'List all '.$user->username.'s codeblock', array('class' => 'button float-left'))}}
                     @endif
                     @if($user->id == Auth::user()->id)
-                        <a href="/posts/create" class="button">Create Codeblock</a>
+	                    {{HTML::actionlink($url = array('action' => 'PostController@create'), 'Create Codeblock', array('class' => 'button'))}}
                     @endif
                 @else
                     @if($user->id == Auth::user()->id)
-                        <a href="/posts/create" class="button float-left">Create Codeblock</a>
+			            {{HTML::actionlink($url = array('action' => 'PostController@create'), 'Create Codeblock', array('class' => 'button float-left'))}}
                     @endif
                 @endif
             </div>
@@ -59,7 +58,7 @@
                     @if($post->stars > 0)
                         <div class="clearfix margin-bottom-half">
 					<span class="float-left">
-						<a href="/posts/{{ $post->id }}">{{ $post->name }}, {{ $post->category->name }}</a>
+						{{HTML::actionlink($url = array('action' => 'PostController@show', 'params' => array($post->id)), $post->name.', '.$post->category->name)}}
 					</span>
 					<span class="float-right">
 						<i class="fa fa-star"></i> {{ $post->stars }}
@@ -79,19 +78,19 @@
             <p class="font-bold">Connect:</p>
             <p class="margin-bottom-one">
                 @if(!Auth::user()->hasSocial('facebook'))
-                    <a href="/oauth/facebook"><i class="fa fa-15x fa-facebook-square facebook-blue"></i></a>
+		            {{HTML::actionlink($url = array('action' => 'UserController@oauth', 'params' => array('facebook')), '<i class="fa fa-15x fa-facebook-square facebook-blue"></i>')}}
                 @endif
                 @if(!Auth::user()->hasSocial('twitter'))
-                    <a href="/oauth/twitter"><i class="fa fa-15x fa-twitter-square twitter-blue"></i></a>
+		            {{HTML::actionlink($url = array('action' => 'UserController@oauth', 'params' => array('twitter')), '<i class="fa fa-15x fa-twitter-square twitter-blue"></i>')}}
                 @endif
                 @if(!Auth::user()->hasSocial('google'))
-                    <a href="/oauth/google"><i class="fa fa-15x fa-google-plus-square google-plus-red"></i></a>
+		            {{HTML::actionlink($url = array('action' => 'UserController@oauth', 'params' => array('google')), '<i class="fa fa-15x fa-google-plus-square google-plus-red"></i>')}}
                 @endif
                 @if(!Auth::user()->hasSocial('bitbucket'))
-                    <a href="/oauth/bitbucket"><i class="fa fa-15x fa-bitbucket-square bitbucket-blue"></i></a>
+		            {{HTML::actionlink($url = array('action' => 'UserController@oauth', 'params' => array('bitbucket')), '<i class="fa fa-15x fa-bitbucket-square bitbucket-blue"></i>')}}
                 @endif
                 @if(!Auth::user()->hasSocial('github'))
-                    <a href="/oauth/github"><i class="fa fa-15x fa-github-square github-black"></i></a>
+		                {{HTML::actionlink($url = array('action' => 'UserController@oauth', 'params' => array('github')), '<i class="fa fa-15x fa-github-square github-black"></i>')}}
                 @endif
             </p>
         @endif

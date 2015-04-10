@@ -19,6 +19,7 @@ class ReplyController extends Controller {
 	 * @param ReplyRepository $Reply
 	 */
 	public function __construct(ReplyRepository $Reply) {
+		parent::__construct();
 		$this->reply = $Reply;
 	}
 

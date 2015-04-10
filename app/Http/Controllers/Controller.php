@@ -6,10 +6,17 @@ use Illuminate\Foundation\Bus\DispatchesCommands;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Log;
+use App\Services\Annotation\Permission;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\URL;
 
 abstract class Controller extends BaseController {
 
 	use DispatchesCommands, ValidatesRequests;
+
+	public function __construct(){
+		View::share('siteName', ucfirst(str_replace('http://', '', URL::to('/'))));
+	}
 
 	protected function mentioned($text, $object, NotificationRepository $notification){
 		$users = array();
@@ -27,6 +34,12 @@ abstract class Controller extends BaseController {
 				}
 			}
 		}
+	}
+
+	protected function getPermission(){
+		$action = debug_backtrace()[1];
+		$permissionAnnotation = New Permission($action['class']);
+		return $permissionAnnotation->getPermission($action['function']);
 	}
 
 }

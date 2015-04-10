@@ -10,10 +10,10 @@
 		@if(count($posts) > 0)
 			@foreach ($posts as $post)
 				@if($post->private != 1 || Auth::check() && Auth::user()->id == $post->user_id)
-					<h3><a href="/posts/{{ $post->id }}">{{ $post->name }}</a></h3>
+					<h3>{{HTML::actionlink($url = array('action' => 'PostController@show', 'params' => array($post->id)), $post->name)}}</h3>
 					<div class="margin-bottom-half">
 						<p>
-							<i class="fa fa-user"></i> <a href="/user/{{ $post->user->id }}">{{ $post->user->username }}</a>
+							<i class="fa fa-user"></i> {{HTML::actionlink($url = array('action' => 'UserController@show', 'params' => array($post->user->id)), $post->user->username)}}
 							<i class="fa fa-minus"></i>
 							<i class="fa fa-calendar"></i> {{ date('Y-m-d',strtotime($post->created_at)) }}
 						</p>
@@ -26,8 +26,8 @@
 			<div class="text-center alert info">{{ $user->username }} have no blocks yet.</div>
 		@endif
 	@else
-		<h2>Your Codeblocks <a href="/posts/create" class="button">Create</a></h2>
-		{{ HTML::table(array('name', 'category', 'description'), $user->posts, 'posts', array('Pagination' => 10), 'There are no code blocks right now.') }}
+		<h2>Your Codeblocks {{HTML::actionlink($url = array('action' => 'PostController@create'), 'Create')}}</h2>
+		{{ HTML::table(array('name', 'category', 'description'), $user->posts, array('Pagination' => 10, 'Edit' => 'PostController@edit', 'Delete' => 'PostController@delete', 'View' => 'PostController@show'), 'There are no codeblocks right now.') }}
 	@endif
 @stop
 

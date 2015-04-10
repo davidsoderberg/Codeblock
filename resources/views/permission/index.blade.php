@@ -9,7 +9,7 @@
 	<div class="verticalRule">
 		<div class="float-left">
 			<h3>List of permissions</h3>
-			{{ HTML::table(array('name', 'permission'), $permissions, 'permissions', array('Pagination' => 10, 'View' => false), 'There are no permissions right now.') }}
+			{{ HTML::table(array('name', 'permission'), $permissions, array('Pagination' => 10, 'Edit' => 'PermissionController@index', 'Delete' => 'PermissionController@delete'), 'There are no permissions right now.') }}
 		</div>
 		<div class="float-right">
 			@if(isset($permission->id))

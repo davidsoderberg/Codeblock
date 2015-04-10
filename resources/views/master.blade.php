@@ -4,11 +4,11 @@
 		<meta name="google-site-verification" content="3M7wk4STJBxWp1JZHRFZ-LNG7N8kZkYIRDqX4uRJsLk" />
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Codeblock.se @if(isset($title) && $title != '') - {{ $title }} @endif</title>
+		<title>{{$siteName}} @if(isset($title) && $title != '') - {{ $title }} @endif</title>
 
-		<meta property="og:title" content="{{$title or 'Codeblock.se'}}" />
+		<meta property="og:title" content="{{$title or $siteName}}" />
 		<meta property="og:type" content="website" />
-		<meta property="og:site_name" content="Codeblock.se"/>
+		<meta property="og:site_name" content="{{$siteName}}"/>
 		<meta property="og:url" content="{{ Request::url() }}" />
 		<meta property="og:image" content="{{ HTML::version('img/favicon.png') }}" />
 		<meta property="og:description" content="Share your commonly used codeblocks and use the community contributions for fast web development. Syntax support for commonly used web development languages.">
@@ -29,13 +29,11 @@
 				<div class="menu-button">
 				<a href=""><i class="fa fa-3x fa-bars"></i></a>
 				@if(Auth::check() && Auth::user()->unread->count() > 0)
-					<a href="/notifications" id="notficationNumber" class="tag">{{Auth::user()->unread->count()}}</a>
+					{{HTML::actionlink($url = array('action' => 'NotificationController@listNotification', 'params' => array($notification->sender->username)), Auth::user()->unread->count(), array('id' => 'notficationNumber', 'class' => 'tag'))}}
 				@endif
 				</div>
 				<h1 id="loggo">
-					<a href="/">
-						<span class="color-red">C</span><span class="color-green">o</span><span class="color-orange">d</span><span class="color-blue">e</span>block<img src="{{ HTML::version('img/favicon.png') }}" width="32" height="32" alt="">
-					</a>
+					{{HTML::actionlink($url = array('action' => 'MenuController@index'), '<span class="color-red">C</span><span class="color-green">o</span><span class="color-orange">d</span><span class="color-blue">e</span>block<img src="'.HTML::version('img/favicon.png').'" width="32" height="32" alt="">')}}
 				</h1>
 				<div class="display-none">
 					<a href="#" id="menubutton" class="hideUl"><i class="fa fa-bars"></i>Menu</a>

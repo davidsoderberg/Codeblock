@@ -2,6 +2,7 @@
 
 use App\NotificationType;
 use App\Repositories\Notification\NotificationRepository;
+use App\Repositories\Role\RoleRepository;
 use App\Repositories\User\UserRepository;
 use App\Social;
 use Illuminate\Support\Facades\View;
@@ -13,13 +14,18 @@ use Laravel\Socialite\Contracts\Factory as Socialite;
 
 class UserController extends Controller {
 
+	/**
+	 * @param UserRepository $user
+	 */
 	public function __construct(UserRepository $user)
 	{
+		parent::__construct();
 		$this->user = $user;
 	}
 
 	/**
 	 * Visar index vyn för användare
+	 * @permission view_users
 	 * @return objekt     objekt som innehåller allt som behövs i vyn
 	 */
 	public function index()
@@ -37,13 +43,17 @@ class UserController extends Controller {
 	}
 
 	/**
-	 * Skapa eller uppdaterar en användare.
-	 * @param  int $id id på användaren som skall uppdateras.
-	 * @return object     med värden dit användaren skall skickas.
+	 * @param RoleRepository $role
+	 * @param null $id
+	 * @return mixed
 	 */
-	public function store($id = null)
+	public function store(RoleRepository $role, $id = null)
 	{
-		if($this->user->createOrUpdate(Input::all(), $id)){
+		$input = Input::all();
+		if(is_null($id)){
+			$input['role'] = $role->getDefault()->id;
+		}
+		if($this->user->createOrUpdate($input, $id)){
 			if(is_null($id)){
 				return Redirect::back()->with('success', 'Your user has been created, use the link in the mail to activate your user.');
 			}else{
@@ -70,6 +80,10 @@ class UserController extends Controller {
 		return Redirect::action('UserController@listUserBlock', array($id));
 	}
 
+	/**
+	 * @param $username
+	 * @return objekt
+	 */
 	public function showByUsername($username){
 		return $this->show($this->user->getIdByUsername($username));
 	}
@@ -95,6 +109,7 @@ class UserController extends Controller {
 
 	/**
 	 * Visar vyn för att redigera en användare.
+	 * @permission update_users
 	 * @param  int $id id för användaren som skall redigeras.
 	 * @return objekt     objekt som innehåller allt som behövs i vyn
 	 */
@@ -106,6 +121,7 @@ class UserController extends Controller {
 
 	/**
 	 * Uppdaterar användaren
+	 * @permission update_users
 	 * @param  int $id id på användaren som skall uppdateras.
 	 * @return object     med värden dit användaren skall skickas.
 	 */
@@ -127,6 +143,7 @@ class UserController extends Controller {
 
 	/**
 	 * ta bort användaren
+	 * @permission delete_users
 	 * @param  int $id id på användaren som skall tas bort.
 	 * @return object     med värden dit användaren skall skickas.
 	 */
@@ -199,6 +216,11 @@ class UserController extends Controller {
 	}
 
 
+	/**
+	 * @param $social
+	 * @param Socialite $socialite
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
+	 */
 	public function oauth($social, Socialite $socialite){
 		if(Input::get('code') || Input::get('oauth_token') && Input::get('oauth_verifier')){
 			$user = $socialite->driver($social)->user();

@@ -20,14 +20,21 @@
             <tbody>
             @foreach ($comments as $comment)
                 <tr>
-                    <td data-title="Made by"><a href="/user/{{ $comment->user_id }}">{{ $comment->user->username }}</a>
+                    <td data-title="Made by">
+	                    {{HTML::actionlink($url = array('action' => 'UserController@show', 'params' => array($comment->user_id)), $comment->user->username)}}
                     </td>
-                    <td data-title="On"><a href="/posts/{{ $comment->post_id }}">{{ $comment->post->name }}</a></td>
+                    <td data-title="On">
+	                    {{HTML::actionlink($url = array('action' => 'PostController@show', 'params' => array($comment->post_id)), $comment->post->name)}}
+                    </td>
                     <td data-title="Comment">{{ $comment->comment}}</td>
                     <td data-title="Status">@if($comment->status == 0 ) Hidden @else Shown @endif</td>
                     <td data-title="Actions">
-                        <a href="/comments/delete/{{ $comment->id }}"><i class="fa fa-trash-o"></i>Delete</a>
-                        <a href="/comments/edit/{{ $comment->id }}"><i class="fa fa-pencil"></i>Edit</a>
+	                    @if(HTML::hasPermission('CommentController@delete') || Auth::user()->id == $comment->user_id)
+	                        {{HTML::actionlink($url = array('action' => 'CommentController@delete', 'params' => array($comment->id)), '<i class="fa fa-trash-o"></i>Delete')}}
+	                    @endif
+	                    @if(HTML::hasPermission('CommentController@edit') || Auth::user()->id == $comment->user_id)
+	                        {{HTML::actionlink($url = array('action' => 'CommentController@edit', 'params' => array($comment->id)), '<i class="fa fa-pencil"></i>Edit')}}
+						@endif
                     </td>
                 </tr>
             @endforeach

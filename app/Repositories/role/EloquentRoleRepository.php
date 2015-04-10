@@ -5,6 +5,8 @@ use App\Repositories\CRepository;
 
 class EloquentRoleRepository extends CRepository implements RoleRepository {
 
+	public $role;
+
 	// hämtar alla roller.
 	public function get($id = null)
 	{
@@ -21,7 +23,12 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 		}
 		$Role->grade = count(Role::all()) + 1;
 
+		if(isset($input['default']) && $input['default'] == 0 || isset($input['default']) && $input['default'] == 1){
+			$Role->default = $input['default'];
+		}
+
 		if($Role->save()){
+			$this->role = $Role;
 			return true;
 		}else{
 			$this->errors = Role::$errors;
@@ -48,6 +55,30 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 		}else{
 			return false;
 		}
+	}
+
+	public function getDefault(){
+		return Role::where('default', 1)->first();
+	}
+
+	public function setDefault($id){
+		$current = $this->getDefault();
+		$current->default = 0;
+		if($current->save()){
+			$new = $this->get($id);
+			$new->default = 1;
+			return $new->save();
+		}
+		return false;
+	}
+
+	public function getSelectList(){
+		$roles = $this->get();
+		$selectArray = Array();
+		foreach($roles as $role){
+			$selectArray[$role->id] = $role->name;
+		}
+		return $selectArray;
 	}
 
 	// tar bort en roll
@@ -94,19 +125,21 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 	{
 		foreach ($this->get() as $role) {
 			$roleName = str_replace(' ', '', $role->name);
-			if(array_key_exists($roleName, $input)){
-				$permission_array = $this->stripTrim($input[$roleName]);
-				if(!is_array($permission_array)){
-					$permission_array = array();
-				}
-				if(!$role->permissions()->sync($permission_array)){
-					return false;
-				}
+			if(!array_key_exists($roleName, $input)){
+				$input[$roleName] = array();
+			}
+			if(!$this->syncPermissions($role, $input[$roleName])){
+				return false;
 			}
 		}
 		return true;
 	}
 
-
+	public function syncPermissions($role, $ids){
+		if(!is_array($ids)){
+			$ids = array();
+		}
+		return $role->permissions()->sync($ids);
+	}
 
 }

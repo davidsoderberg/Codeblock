@@ -15,10 +15,12 @@ class ForumController extends Controller {
 	 * @param ForumRepository $forum
 	 */
 	public function __construct(ForumRepository $forum) {
+		parent::__construct();
 		$this->forum = $forum;
 	}
 
 	/**
+	 * @permission view_forums
 	 * @return mixed
 	 */
 	public function index($id = null)
@@ -56,6 +58,7 @@ class ForumController extends Controller {
 	}
 
 	/**
+	 * @permission create_update_forums
 	 * @param null $id
 	 * @return mixed
 	 */
@@ -68,6 +71,7 @@ class ForumController extends Controller {
 	}
 
 	/**
+	 * @permission delete_forums
 	 * @param $id
 	 * @return mixed
 	 */

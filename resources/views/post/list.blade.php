@@ -16,10 +16,10 @@
 	@if(count($posts) > 0)
 		@foreach ($posts as $post)
 			@if($post['private'] != 1)
-				<h3><a href="/posts/{{ $post['id'] }}">{{ $post['name'] }}</a></h3>
+				<h3>{{HTML::actionlink($url = array('action' => 'PostController@show', 'params' => array($post['id'])), $post['name'])}}</h3>
 				<div class="margin-bottom-half">
 					<p>
-						<i class="fa fa-user"></i> <a href="/user/{{ $post['user']['id'] }}">{{ $post['user']['username'] }}</a>
+						<i class="fa fa-user"></i> {{HTML::actionlink($url = array('action' => 'UserController@show', 'params' => array($post['user']['id'])), $post['user']['username'])}}
 						<i class="fa fa-minus"></i>
 						<i class="fa fa-calendar"></i> {{ date('Y-m-d',strtotime($post['created_at'])) }}
 					</p>
@@ -29,10 +29,10 @@
 			@else
 				@if(Auth::check())
 					@if(Auth::user()->id == $post->user_id)
-						<h3><a href="/posts/{{ $post['id'] }}">{{ $post['name'] }}</a></h3>
+						<h3>{{HTML::actionlink($url = array('action' => 'PostController@show', 'params' => array($post['id'])), $post['name'])}}</h3>
 						<div class="margin-bottom-half">
 							<p>
-								<i class="fa fa-user"></i> <a href="/user/{{ $post['user']['id'] }}">{{ $post['user']['username'] }}</a>
+								<i class="fa fa-user"></i> {{HTML::actionlink($url = array('action' => 'UserController@show', 'params' => array($post['user']['id'])), $post['user']['username'])}}
 								<i class="fa fa-minus"></i>
 								<i class="fa fa-calendar"></i> {{ date('Y-m-d',strtotime($post['created_at'])) }}
 							</p>

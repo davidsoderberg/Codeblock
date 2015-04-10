@@ -4,6 +4,7 @@
     "gulp-sass": "1.*",
     "gulp-uglifyjs": "0.*",
     "gulp-rename": "1.*",
-    "gulp-sourcemaps": "1.*"
+    "gulp-sourcemaps": "1.*",
+    "browser-sync": "^2.3.1"
   }
 }
