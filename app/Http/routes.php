@@ -64,41 +64,39 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::post('reply/store/{id?}', 'ReplyController@createOrUpdate');
 	Route::get('reply/delete/{id}', 'ReplyController@delete');
 
-	Route::group(['middleware' => 'role', 'role' => '2'], function() {
-		Route::get('categories/delete/{id}', 'CategoryController@delete');
-		Route::post('categories/store/{id?}', 'CategoryController@createOrUpdate');
-		Route::get('categories/{id?}', 'CategoryController@index');
+	Route::get('categories/delete/{id}', 'CategoryController@delete');
+	Route::post('categories/store/{id?}', 'CategoryController@createOrUpdate');
+	Route::get('categories/{id?}', 'CategoryController@index');
 
-		Route::get('posts', 'PostController@index');
-		Route::get('comments/', 'CommentController@index');
+	Route::get('posts', 'PostController@index');
+	Route::get('comments/', 'CommentController@index');
 
-		Route::get('forums/delete/{id}', 'ForumController@delete');
-		Route::post('forums/store/{id?}', 'ForumController@createOrUpdate');
-		Route::get('forums/{id?}', 'ForumController@index');
+	Route::get('forums/delete/{id}', 'ForumController@delete');
+	Route::post('forums/store/{id?}', 'ForumController@createOrUpdate');
+	Route::get('forums/{id?}', 'ForumController@index');
 
-		Route::get('tags/delete/{id}', 'TagController@delete');
-		Route::post('tags/store/{id?}', 'TagController@createOrUpdate');
-		Route::get('tags/{id?}', 'TagController@index');
+	Route::get('tags/delete/{id}', 'TagController@delete');
+	Route::post('tags/store/{id?}', 'TagController@createOrUpdate');
+	Route::get('tags/{id?}', 'TagController@index');
 
-		Route::get('user/delete/{id}', 'UserController@delete');
-		Route::get('user/edit/{id}', 'UserController@edit');
-		Route::post('user/update/{id}', 'UserController@update');
-		Route::get('users', 'UserController@index');
-		/*
-		Route::post('permissions/store/{id?}', 'PermissionController@createOrUpdate');
-		Route::get('permissions/delete/{id}', 'PermissionController@delete');
-		Route::get('permissions/{id?}', 'PermissionController@index');
-		*/
-		Route::get('permissions', 'RoleController@editRolePermission');
-		Route::post('permissions/update', 'RoleController@updateRolePermission');
+	Route::get('user/delete/{id}', 'UserController@delete');
+	Route::get('user/edit/{id}', 'UserController@edit');
+	Route::post('user/update/{id}', 'UserController@update');
+	Route::get('users', 'UserController@index');
+	/*
+	Route::post('permissions/store/{id?}', 'PermissionController@createOrUpdate');
+	Route::get('permissions/delete/{id}', 'PermissionController@delete');
+	Route::get('permissions/{id?}', 'PermissionController@index');
+	*/
+	Route::get('permissions', 'RoleController@editRolePermission');
+	Route::post('permissions/update', 'RoleController@updateRolePermission');
 
-		Route::post('role/default', 'RoleController@setDefault');
-		Route::post('roles/store', 'RoleController@store');
-		Route::get('roles/edit/{id}', 'RoleController@edit');
-		Route::post('roles/update', 'RoleController@update');
-		Route::get('roles/delete/{id}', 'RoleController@delete');
-		Route::get('roles', 'RoleController@index');
-	});
+	Route::post('role/default', 'RoleController@setDefault');
+	Route::post('roles/store', 'RoleController@store');
+	Route::get('roles/edit/{id}', 'RoleController@edit');
+	Route::post('roles/update', 'RoleController@update');
+	Route::get('roles/delete/{id}', 'RoleController@delete');
+	Route::get('roles', 'RoleController@index');
 
 	Route::get('logout', 'UserController@logout');
 });
@@ -138,12 +136,10 @@ Route::group(['prefix' => 'api', 'middleware' => 'api'],function(){
 		Route::put('topics/{id}', 'ApiController@createOrUpdateTopics');
 		Route::put('replies/{id}', 'ApiController@createOrUpdateReply');
 
-		Route::group(['middleware' => 'role', 'role' => '2'], function() {
-			Route::post('category', 'ApiController@createOrUpdateCategory');
-			Route::post('tag', 'ApiController@createOrUpdateTag');
+		Route::post('category', 'ApiController@createOrUpdateCategory');
+		Route::post('tag', 'ApiController@createOrUpdateTag');
 
-			Route::put('category/{id}', 'ApiController@createOrUpdateCategory');
-			Route::put('tag/{id}', 'ApiController@createOrUpdateTag');
-		});
+		Route::put('category/{id}', 'ApiController@createOrUpdateCategory');
+		Route::put('tag/{id}', 'ApiController@createOrUpdateTag');
 	});
 });
