@@ -22,11 +22,13 @@ class TagController extends Controller {
 
 	public function __construct(TagRepository $tag)
 	{
+		parent::__construct();
 		$this->tag = $tag;
 	}
 
 	/**
 	 * Visar index vyn för ettiketer
+	 * @permission view_tags
 	 * @param  int $id id för ettiketen som skall redigera
 	 * @return objekt     objekt som innehåller allt som behövs i vyn
 	 */
@@ -43,6 +45,7 @@ class TagController extends Controller {
 
 	/**
 	 * Skapa och uppdatera en ettiket.
+	 * @permission create_update_tags
 	 * @param  int $id id för ettiketen som skall uppdateras
 	 * @return object     med värden dit användaren skall skickas.
 	 */
@@ -57,6 +60,7 @@ class TagController extends Controller {
 
 	/**
 	 * Ta bort en ettiket
+	 * @permission delete_tags
 	 * @param  int $id id för ettiketen som skall tas bort.
 	 * @return object     med värden dit användaren skall skickas.
 	 */

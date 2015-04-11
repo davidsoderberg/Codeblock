@@ -9,7 +9,7 @@ class Role extends Model {
 	 */
 	protected $table = 'roles';
 
-	protected $fillable = array('name', 'grade');
+	protected $fillable = array('name', 'grade', 'default');
 
 	protected $guarded = array('id');
 

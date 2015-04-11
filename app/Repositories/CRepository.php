@@ -29,4 +29,12 @@ Class CRepository {
 		return trim(strip_tags($input));
 	}
 
+	public function is_assoc($array) {
+		foreach(array_keys($array) as $key) {
+			if(!is_int($key)) {
+				return TRUE;
+			}
+		}
+		return FALSE;
+	}
 }

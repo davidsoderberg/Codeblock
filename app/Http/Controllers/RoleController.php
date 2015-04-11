@@ -6,6 +6,10 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 
+/**
+ * Class RoleController
+ * @package App\Http\Controllers
+ */
 class RoleController extends Controller {
 
 	/*
@@ -21,32 +25,38 @@ class RoleController extends Controller {
 	|
 	*/
 
+	/**
+	 * @param RoleRepository $role
+	 * @param PermissionRepository $permission
+	 */
 	public function __construct(RoleRepository $role, PermissionRepository $permission)
 	{
+		parent::__construct();
 		$this->role = $role;
 		$this->permission = $permission;
 	}
 
 	/**
 	 * Visar index vyn för roller
+	 * @permission view_role
 	 * @return objekt     objekt som innehåller allt som behövs i vyn
 	 */
 	public function index()
 	{
-		return View::make('role.index')->with('title', 'Roles')->with('roles', $this->role->get());
-	}
-
-	/**
-	 * Visar vyn för att skapa en roll
-	 * @return objekt     objekt som innehåller allt som behövs i vyn
-	 */
-	public function create()
-	{
-		return View::make('role.create')->with('title', 'create role');
+		$defaultId = 0;
+		$roles = $this->role->get();
+		foreach($roles as $role){
+			if($role->default == 1){
+				$defaultId = $role->id;
+				break;
+			}
+		}
+		return View::make('role.index')->with('title', 'Roles')->with('roles', $roles)->with('selectList', $this->role->getSelectList())->with('default', $defaultId);
 	}
 
 	/**
 	 * Skapar en roll
+	 * @permission create_role
 	 * @return object     med värden dit användaren skall skickas.
 	 */
 	public function store(){
@@ -59,6 +69,7 @@ class RoleController extends Controller {
 
 	/**
 	 * Visar vyn för att redigera en roll
+	 * @permission update_role
 	 * @param  int $id id på rollen som skall redigeras
 	 * @return objekt     objekt som innehåller allt som behövs i vyn
 	 */
@@ -69,7 +80,7 @@ class RoleController extends Controller {
 
 	/**
 	 * Uppdatera en roll.
-	 * @param  int $id id för rollen som skall uppdateras
+	 * @permission update_role
 	 * @return object     med värden dit användaren skall skickas.
 	 */
 	public function update(){
@@ -81,7 +92,19 @@ class RoleController extends Controller {
 	}
 
 	/**
+	 * @permission set_default_role
+	 * @return mixed
+	 */
+	public function setDefault(){
+		if($this->role->setDefault(Input::get('default'))){
+			return Redirect::back()->with('success', 'The default role has been updated.');
+		}
+		return Redirect::back()->withErrors($this->role->getErrors())->withInput();
+	}
+
+	/**
 	 * Ta bort en roll
+	 * @permission delete_role
 	 * @param  int $id id för roll som skall tas bort.
 	 * @return object     med värden dit användaren skall skickas.
 	 */
@@ -96,6 +119,7 @@ class RoleController extends Controller {
 
 	/**
 	 * Vissar vyn där användaren kombinerar roll med rättighet.
+	 * @permission edit_permission
 	 * @return objekt     objekt som innehåller allt som behövs i vyn
 	 */
 	public function editRolePermission() {
@@ -105,6 +129,7 @@ class RoleController extends Controller {
 
 	/**
 	 * Kombinerar roll med rättighet.
+	 * @permission edit_permission
 	 * @return object     med värden dit användaren skall skickas.
 	 */
 	public function updateRolePermission() {

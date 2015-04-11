@@ -154,26 +154,20 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return in_array(strtolower(Auth::user()->role), $roles);
 	}
 
-	public function hasPermission($permissions) {
-		$allowed = false;
-
-		if(!is_array($permissions)){
-			$permissions = array($permissions);
-		}
-
-		$user_permissions = Auth::user()->roles()->permissions;
-		$permissions_array = array();
-
-		foreach ($user_permissions as $user_permission) {
-			$permissions_array[] = strtolower($user_permission->permission);
-		}
-
-		foreach ($permissions as $permission) {
-			if(!$allowed){
-				$allowed = in_array(strtolower($permission), $permissions_array);
+	public function hasPermission($permission, $empty = true) {
+		if($permission != '') {
+			$permissions_array = array();
+			foreach(Auth::user()->roles->permissions as $user_permission) {
+				$permissions_array[] = strtolower($user_permission->permission);
 			}
+			if(is_array($permission)){
+				$permission = $permission[0];
+			}
+
+			$permission = explode(':', $permission);
+			return in_array(strtolower($permission[0]), $permissions_array);
 		}
-		return $allowed;
+		return $empty;
 	}
 
 }

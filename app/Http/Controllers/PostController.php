@@ -29,6 +29,7 @@ class PostController extends Controller {
 
 	public function __construct(PostRepository $post, CategoryRepository $category, TagRepository $tag, RateRepository $rate)
 	{
+		parent::__construct();
 		$this->post = $post;
 		$this->category = $category;
 		$this->tag = $tag;
@@ -38,6 +39,7 @@ class PostController extends Controller {
 	}
 	/**
 	 * vissar index vyn.
+	 * @permission view_posts
 	 * @return objekt objekt med allt som skall skickas till index vyn
 	 */
 	public function index()
@@ -47,6 +49,7 @@ class PostController extends Controller {
 	/**
 	 * Visar enstaka blocks vy
 	 * @param  int $id id på blocket som skall vissas
+	 * @permission view_private_post:optional
 	 * @return array     Typ av medelande och meddelande
 	 */
 	public function show($id){
@@ -59,13 +62,13 @@ class PostController extends Controller {
 				if(!empty($post->comments[0])){
 					$post->comments = usort($post->comments->toArray(), function($a, $b) { return strcmp($this->rate->calc($a->id),$this->rate->calc($b->id)); });
 				}
-				if(Auth::user()->id == $post->user_id || Auth::user()->role == 2){
+				if(Auth::user()->id == $post->user_id || Auth::user()->hasPermission($this->getPermission(), false)){
 					return View::make('post.show')->with('title', 'show')->with('post', $post)->with('lang', $lang);
 				}else{
-					return Redirect::back()->with('errors', 'You have no access to that codeblock.');
+					return Redirect::back()->with('error', 'You have no access to that codeblock.');
 				}
 			}else{
-				return Redirect::back()->with('errors', 'You have no access to that codeblock.');
+				return Redirect::back()->with('error', 'You have no access to that codeblock.');
 			}
 		}
 	}
@@ -93,14 +96,15 @@ class PostController extends Controller {
 
 	/**
 	 * Visar vyn för det blocket som skall redigeras
+	 * @permission admin_edit_post:optional
 	 * @param  int $id Id på det blocket som skall redigeras
 	 * @return objekt objekt med allt som skall skickas till edit vyn
 	 */
 	public function edit($id)
 	{
 		$post = $this->post->get($id);
-		if(Auth::user()->id != $post->user_id && Auth::user()->role != 2){
-			return Redirect::back()->with('errors', 'That codeblock is not yours.');
+		if(Auth::user()->id != $post->user_id && !Auth::user()->hasPermission($this->getPermission(), false)){
+			return Redirect::back()->with('error', 'That codeblock is not yours.');
 		}
 		$tagsarray = array();
 		foreach ($post->posttags as $tag) {
@@ -138,16 +142,23 @@ class PostController extends Controller {
 
 	/**
 	 * Ta bort ett block.
+	 * @permission delete_post:optional
 	 * @param  int $id Id för blocket som skall tas bort.
 	 * @return array     Typ av medelande och meddelande
 	 */
 	public function delete($id)
 	{
-		if($this->post->delete($id)){
-			return Redirect::back()->with('success', 'Your codeblock has been deleted.');
+		$post = $this->post->get($id);
+		if(!is_null($post)) {
+			if(Auth::check() && Auth::user()->id == $post->user_id || Auth::user()->hasPermission($this->getPermission(), false)) {
+				if($this->post->delete($id)) {
+					return Redirect::back()->with('success', 'Your codeblock has been deleted.');
+				}
+			}else{
+				return Redirect::back()->with('error', 'You do not have permission to delete that codeblock.');
+			}
 		}
-
-		return Redirect::back();
+		return Redirect::back()->with('error', 'We could not delete that codeblock.');
 	}
 
 	/**

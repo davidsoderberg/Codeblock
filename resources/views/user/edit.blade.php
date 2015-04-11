@@ -29,7 +29,7 @@
 			{{ Form::close() }}
 		</div>
 	</div>
-	<a href="/users"><i class="fa fa-arrow-left"></i></a>
+	{{HTML::actionlink($url = array('action' => 'UserController@index'), '<i class="fa fa-arrow-left"></i>')}}
 @stop
 
 @section('script')

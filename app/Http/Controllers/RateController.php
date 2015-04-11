@@ -21,6 +21,7 @@ class RateController extends Controller {
 
 	public function __construct(RateRepository $rate)
 	{
+		parent::__construct();
 		$this->rate = $rate;
 	}
 

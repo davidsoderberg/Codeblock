@@ -24,29 +24,36 @@ class CommentController extends Controller {
 	|
 	*/
 
+	/**
+	 * @param CommentRepository $comment
+	 */
 	public function __construct(CommentRepository $comment)
 	{
+		parent::__construct();
 		$this->comment = $comment;
 	}
 
 	/**
 	 * Visar index vyn för kommentarerna
+	 * @permission view_comments
 	 * @return objekt     objekt som innehåller allt som behövs i vyn
 	 */
 	public function index()
 	{
-		if(Auth::user()->role == 2){
-			$comments = $this->comment->get();
-		}else{
-			$posts = Auth::user()->posts;
-			$commentsArray = array();
+		return View::make('comment.index')->with('title', 'Comments')->with('comments', $this->comment->get());
+	}
 
-			foreach ($posts as $post) {
-				foreach ($post->comments as $comment) {
-					$commentsArray[] = $comment;
-				}
+	/**
+	 * @return mixed
+	 */
+	public function listComments(){
+		$posts = Auth::user()->posts;
+		$comments = array();
+
+		foreach ($posts as $post) {
+			foreach ($post->comments as $comment) {
+				$comments[] = $comment;
 			}
-			$comments = $commentsArray;
 		}
 
 		return View::make('comment.index')->with('title', 'Comments')->with('comments', $comments);
@@ -76,25 +83,36 @@ class CommentController extends Controller {
 
 	/**
 	 * vissar vyn för att uppdatera en kommentar.
+	 * @permission edit_comments:optional
 	 * @param  int $id id för kommentaren som skall uppdateras
 	 * @return object     med värden dit användaren skall skickas.
 	 */
 	public function edit($id){
 		$comment = $this->comment->get($id);
-		return View::make('comment.edit')->with('title', 'Edit comments')->with('comment', $comment);
+		if(Auth::check() && Auth::user()->id == $comment->user_id || Auth::user()->hasPermission($this->getPermission(), false)) {
+			return View::make('comment.edit')->with('title', 'Edit comments')->with('comment', $comment);
+		}else{
+			return Redirect::back()->with('error', 'You do not have permission to edit that comment.');
+		}
 	}
 
 	/**
 	 * Ta bort en kommentar
+	 * @permission delete_comments:optional
 	 * @param  int $id id för kommentaren som skall tas bort.
 	 * @return object     med värden dit användaren skall skickas.
 	 */
 	public function delete($id){
-		if($this->comment->delete($id)){
-			return Redirect::back();
+		$comment = $this->comment->get($id);
+		if(Auth::check() && Auth::user()->id == $comment->user_id || Auth::user()->hasPermission($this->getPermission(), false)) {
+			if($this->comment->delete($id)) {
+				return Redirect::back();
+			}
+		}else{
+			return Redirect::back()->with('error', 'You do not have permission to delete that comment.');
 		}
 
-		return Redirect::back();
+		return Redirect::back()->with('error', 'We could not delete that comment.');
 	}
 
 }

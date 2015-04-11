@@ -83,6 +83,10 @@ class EloquentUserRepository extends CRepository implements UserRepository {
 			$User->email = $this->stripTrim($input['email']);
 		}
 
+		if(isset($input['role'])){
+			$User->role = $this->stripTrim($input['role']);
+		}
+
 		if($User->save()){
 			if(!is_null($this->errors) && $this->errors->first('oldpassword') != ''){
 				return false;
@@ -132,11 +136,9 @@ class EloquentUserRepository extends CRepository implements UserRepository {
 
 	// tar bort en användare
 	public function delete($id){
-		if(Auth::check() && Auth::user()->role == 2){
-			$user = User::find($id);
-			if(!is_null($user)){
-				return $user->delete();
-			}
+		$user = User::find($id);
+		if(!is_null($user)){
+			return $user->delete();
 		}
 		return false;
 	}

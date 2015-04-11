@@ -41,7 +41,11 @@ class Github{
 
 	private function curl($url){
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_USERAGENT, Auth::user()->username);
+		$username = 'Codeblock';
+		if(Auth::check()){
+			$username = Auth::user()->username;
+		}
+		curl_setopt($ch, CURLOPT_USERAGENT, $username);
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);

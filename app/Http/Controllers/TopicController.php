@@ -17,6 +17,7 @@ class TopicController extends Controller {
 	 * @param TopicRepository $topic
 	 */
 	public function __construct(TopicRepository $topic, ReplyRepository $reply) {
+		parent::__construct();
 		$this->topic = $topic;
 		$this->reply = $reply;
 	}

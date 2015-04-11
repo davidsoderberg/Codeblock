@@ -195,12 +195,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	// tar bort ett block.
 	public function delete($id){
 		$Post = Post::find($id);
-		if($Post != null && Auth::check()){
-			if($Post->user_id == Auth::user()->id){
-				return $Post->delete();
-			}
-		}
-		return false;
+		return $Post->delete();
 	}
 
 	// räknar ut antalet stjärnor och vilka som har stjärnmärkt ett block.

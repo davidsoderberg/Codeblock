@@ -8,7 +8,7 @@
 	<h2>Forums</h2>
 	<div class="verticalRule">
 		<div class="float-left">
-			{{ HTML::table(array('title', 'description'), $forums, 'forums', array('Pagination' => 10), 'There are no forums right now.') }}
+			{{ HTML::table(array('title', 'description'), $forums, array('Edit' => 'ForumController@index', 'Delete' => 'ForumController@delete', 'View' => 'ForumController@show', 'Pagination' => 10), 'There are no forums right now.') }}
 		</div>
 		<div class="float-right">
 			<h3>Create/edit forum</h3>
