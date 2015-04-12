@@ -16,6 +16,16 @@
 		<link rel="icon" type="image/png" href="{{ HTML::version('img/favicon.png') }}">
 		@yield('css')
 		<link rel="stylesheet" href="{{HTML::version('css/style.css')}}">
+		<script>
+			var conn = new WebSocket('ws://localhost:8080');
+			conn.onopen = function(e) {
+				console.log("Connection established!");
+			};
+
+			conn.onmessage = function(e) {
+				console.log(e.data);
+			};
+		</script>
 	</head>
 	<body>
 		<div class="menu-wrap full-width">
