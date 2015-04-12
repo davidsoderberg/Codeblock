@@ -46,9 +46,8 @@
 		</div>
 		<div class="wrapper">
             @include('partials.modal')
-			{{ HTML::flash() }}
 			@yield('content')
-			<div id="toast-container"></div>
+			<div id="toast-container">{{HTML::toast()}}</div>
 		</div>
 		<div id="footer">
 			<div class="wrapper">

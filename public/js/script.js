@@ -121,6 +121,14 @@ jQuery(document).ready(function($){
 		});
 	}
 
+	$('.close-toast').click(function(event){
+		event.preventDefault();
+		$(this).parent().addClass('lightSpeedOut');
+		setTimeout(function(){
+			$(this).parent().remove();
+		}, 3000);
+	});
+
 	function createToast(text){
 		var toast = $('<div></div>').addClass('toast animated lightSpeedIn');
 		toast.text(text);
