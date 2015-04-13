@@ -30,7 +30,7 @@ class Client {
 				$message .= 'comment in post: '. $html->actionlink($url = array('action' => 'PostController@show', 'params' => array($object->id)), $object->name);
 				break;
 			case 'Topic':
-				$message .= 'reply in topic: '. $html->actionlink($url = array('action' => 'TopicController@show', 'params' => array($object->id)), $object->name);
+				$message .= 'reply in topic: '. $html->actionlink($url = array('action' => 'TopicController@show', 'params' => array($object->id)), $object->title);
 				break;
 		}
 		return $message;
