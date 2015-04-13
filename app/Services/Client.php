@@ -1,6 +1,7 @@
 <?php namespace App\Services;
 
 use WebSocket\ConnectionException;
+use App\Services\HtmlBuilder;
 
 class Client {
 	private $client;
@@ -20,15 +21,16 @@ class Client {
 
 	private function getMessage($object){
 		$message = 'You have a new ';
+		$html = new HtmlBuilder();
 		switch($this->getObjectName($object)){
 			case 'Notification':
-				$message += HTML::actionlink($url = array('action' => 'NotificationController@listNotification'), 'notification');
+				$message .= $html->actionlink($url = array('action' => 'NotificationController@listNotification'), 'notification');
 				break;
 			case 'Post':
-				$message += 'comment in post: '+ HTML::actionlink($url = array('action' => 'PostController@show', 'params' => array($object->id)), $object->name);
+				$message .= 'comment in post: '. $html->actionlink($url = array('action' => 'PostController@show', 'params' => array($object->id)), $object->name);
 				break;
 			case 'Topic':
-				$message += 'reply in topic: '+ HTML::actionlink($url = array('action' => 'TopicController@show', 'params' => array($object->id)), $object->name);
+				$message .= 'reply in topic: '. $html->actionlink($url = array('action' => 'TopicController@show', 'params' => array($object->id)), $object->name);
 				break;
 		}
 		return $message;
