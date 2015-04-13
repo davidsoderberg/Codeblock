@@ -5,7 +5,6 @@ use App\Repositories\Tag\TagRepository;
 use App\Repositories\CRepository;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
-use WebSocket\Client;
 
 class MenuController extends Controller {
 
@@ -69,9 +68,6 @@ class MenuController extends Controller {
 	 */
 	public function index()
 	{
-		$client = new Client("ws://localhost:8080");
-		//$client->send(json_encode(array("channel" => "welcome", 'id' => 3)));
-
 		return View::make('index')->with('title', 'Home');
 	}
 
