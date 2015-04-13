@@ -172,18 +172,17 @@ jQuery(document).ready(function($){
 
 	function websocket(){
 		var storage = JSON.parse(localStorage.getItem('token'));
-		var token = storage.token;
 		if(storage.date > Date.now()) {
 			request = 0;
 			var conn = new WebSocket('ws://localhost:8080');
 			conn.onopen = function (e) {
-				conn.send(JSON.stringify({'channel': 'auth', 'token': token}));
+				conn.send(JSON.stringify({'channel': 'auth', 'token': storage.token}));
 			};
 
 			conn.onmessage = function (e) {
 				data = JSON.parse(e.data);
 				switch (data.channel){
-					case 'welcome':
+					case 'toast':
 						createToast(data.message);
 						break;
 				}

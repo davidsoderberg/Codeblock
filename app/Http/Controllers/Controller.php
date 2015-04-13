@@ -12,13 +12,17 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
+use App\Services\Client;
 
 abstract class Controller extends BaseController {
+
+	protected $client;
 
 	use DispatchesCommands, ValidatesRequests;
 
 	public function __construct(){
 		View::share('siteName', ucfirst(str_replace('http://', '', URL::to('/'))));
+		$this->client = new Client();
 	}
 
 	protected function mentioned($text, $object, NotificationRepository $notification){

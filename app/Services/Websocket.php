@@ -23,8 +23,10 @@ class Websocket implements MessageComponentInterface {
 					$this->clients[$user->id] = $from;
 				}
 				break;
-			case 'welcome':
-				$this->clients[$msg['id']]->send(json_encode(array('channel' => 'welcome', 'message' => 'Welcome')));
+			case 'toast':
+				if(array_key_exists($msg['id'], $this->clients)) {
+					$this->clients[$msg['id']]->send(json_encode(array('channel' => 'toast', 'message' => $msg['message'])));
+				}
 				break;
 		}
 	}
