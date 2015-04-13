@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Log;
 use App\Services\Annotation\Permission;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 
 abstract class Controller extends BaseController {
 
@@ -42,4 +44,10 @@ abstract class Controller extends BaseController {
 		return $permissionAnnotation->getPermission($action['function']);
 	}
 
+	public function getJwt(){
+		if(Auth::check()) {
+			return Response::json(array('token' => \JWT::encode(array('id' => Auth::user()->id), env('APP_KEY'))), 200);
+		}
+		return Response::json(array('message', 'You could not get your auth token, please try agian'), 400);
+	}
 }

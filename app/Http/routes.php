@@ -119,6 +119,7 @@ Route::group(['prefix' => 'api', 'middleware' => 'api'],function(){
 	Route::get('forums/{id?}', 'ApiController@forums');
 	Route::get('topics/{id?}', 'ApiController@topics');
 	Route::post('auth', 'ApiController@Auth');
+	Route::get('jwt', 'ApiController@getJwt');
 	Route::post('auth/register', 'ApiController@createOrUpdateUser');
 	Route::post('auth/forgot', 'ApiController@forgotPassword');
 
