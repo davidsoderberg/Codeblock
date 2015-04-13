@@ -6,39 +6,43 @@ class Websocket implements MessageComponentInterface {
 	protected $clients;
 
 	public function __construct() {
-		$this->clients = new \SplObjectStorage;
+		$this->clients = array();
 	}
 
 	public function onOpen(ConnectionInterface $conn) {
-		// Store the new connection to send messages to later
-		$this->clients->attach($conn);
-
 		echo "New connection! ({$conn->resourceId})\n";
 	}
 
 	public function onMessage(ConnectionInterface $from, $msg) {
-		$numRecv = count($this->clients) - 1;
-		echo sprintf('Connection %d sending message "%s" to %d other connection%s' . "\n"
-			, $from->resourceId, $msg, $numRecv, $numRecv == 1 ? '' : 's');
+		$msg = json_decode($msg, true);
 
-		foreach ($this->clients as $client) {
-			if ($from !== $client) {
-				// The sender is not the receiver, send to each client connected
-				$client->send($msg);
-			}
+		switch($msg['channel']){
+			case 'auth':
+				$user = \JWT::decode($msg['token'], env('APP_KEY'));
+				if(!array_key_exists($user->id, $this->clients)) {
+					$this->clients[$user->id] = $from;
+				}
+				break;
+			case 'welcome':
+				$this->clients[$msg['id']]->send(json_encode(array('channel' => 'welcome', 'message' => 'Welcome')));
+				break;
 		}
 	}
 
 	public function onClose(ConnectionInterface $conn) {
-		// The connection is closed, remove it, as we can no longer send it messages
-		$this->clients->detach($conn);
-
+		$this->removeConn($conn);
 		echo "Connection {$conn->resourceId} has disconnected\n";
 	}
 
 	public function onError(ConnectionInterface $conn, \Exception $e) {
 		echo "An error has occurred: {$e->getMessage()}\n";
-
+		$this->removeConn($conn);
 		$conn->close();
+	}
+
+	private function removeConn(ConnectionInterface $conn){
+		if(false !== $key = array_search($conn, $this->clients)){
+			unset($this->clients[$key]);
+		}
 	}
 }

@@ -70,7 +70,7 @@ class MenuController extends Controller {
 	public function index()
 	{
 		$client = new Client("ws://localhost:8080");
-		$client->send(json_encode(array("test" => "Hello WebSocket.org!")));
+		//$client->send(json_encode(array("channel" => "welcome", 'id' => 3)));
 
 		return View::make('index')->with('title', 'Home');
 	}
