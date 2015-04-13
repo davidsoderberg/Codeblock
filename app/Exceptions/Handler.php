@@ -2,6 +2,8 @@
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\URL;
 
 class Handler extends ExceptionHandler {
 
@@ -35,6 +37,7 @@ class Handler extends ExceptionHandler {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function render($request, Exception $e) {
+		View::share('siteName', ucfirst(str_replace('http://', '', URL::to('/'))));
 		if(env('APP_ENV') == 'local') {
 			if($this->isHttpException($e)) {
 				return $this->renderHttpException($e);
