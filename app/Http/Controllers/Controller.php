@@ -2,6 +2,7 @@
 
 use App\NotificationType;
 use App\Repositories\Notification\NotificationRepository;
+use App\Services\Jwt;
 use Illuminate\Foundation\Bus\DispatchesCommands;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -46,7 +47,7 @@ abstract class Controller extends BaseController {
 
 	public function getJwt(){
 		if(Auth::check()) {
-			return Response::json(array('token' => \JWT::encode(array('id' => Auth::user()->id), env('APP_KEY'))), 200);
+			return Response::json(array('token' => Jwt::encode(array('id' => Auth::user()->id))), 200);
 		}
 		return Response::json(array('message', 'You could not get your auth token, please try agian'), 400);
 	}

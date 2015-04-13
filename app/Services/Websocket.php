@@ -18,7 +18,7 @@ class Websocket implements MessageComponentInterface {
 
 		switch($msg['channel']){
 			case 'auth':
-				$user = \JWT::decode($msg['token'], env('APP_KEY'));
+				$user = Jwt::decode($msg['token']);
 				if(!array_key_exists($user->id, $this->clients)) {
 					$this->clients[$user->id] = $from;
 				}
