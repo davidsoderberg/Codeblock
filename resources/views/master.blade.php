@@ -29,7 +29,7 @@
 				<div class="menu-button">
 				<a href=""><i class="fa fa-3x fa-bars"></i></a>
 				@if(Auth::check() && Auth::user()->unread->count() > 0)
-					{{HTML::actionlink($url = array('action' => 'NotificationController@listNotification', 'params' => array($notification->sender->username)), Auth::user()->unread->count(), array('id' => 'notficationNumber', 'class' => 'tag'))}}
+					{{HTML::actionlink($url = array('action' => 'NotificationController@listNotification'), Auth::user()->unread->count(), array('id' => 'notficationNumber', 'class' => 'tag'))}}
 				@endif
 				</div>
 				<h1 id="loggo">
