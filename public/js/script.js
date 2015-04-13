@@ -131,7 +131,8 @@ jQuery(document).ready(function($){
 
 	function createToast(text){
 		var toast = $('<div></div>').addClass('toast animated lightSpeedIn');
-		toast.text(text);
+		toast.html(text);
+
 		$('#toast-container').prepend(toast);
 		setTimeout(function() {
 			toast.addClass('lightSpeedOut');
