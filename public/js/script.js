@@ -175,7 +175,7 @@ jQuery(document).ready(function($){
 		var storage = JSON.parse(localStorage.getItem('token'));
 		if(storage.date > Date.now()) {
 			request = 0;
-			var conn = new WebSocket('ws://localhost:8080');
+			var conn = new WebSocket('ws://'+appConfig.SOCKET_ADRESS+':'+appConfig.SOCKET_PORT);
 			conn.onopen = function (e) {
 				conn.send(JSON.stringify({'channel': 'auth', 'token': storage.token}));
 			};

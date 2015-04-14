@@ -46,7 +46,7 @@ class Websocket extends Command {
 					new \App\Services\Websocket()
 				)
 			),
-			8080
+			env('SOCKET_PORT')
 		);
 
 		$server->run();

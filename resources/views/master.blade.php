@@ -69,6 +69,12 @@
 				</div>
 			</div>
 		</div>
+		<script>
+			var appConfig = {
+				SOCKET_PORT: '{{env('SOCKET_PORT')}}',
+				SOCKET_ADRESS: '{{env('SOCKET_ADRESS')}}'
+			};
+		</script>
 		<script src="{{ HTML::version('js/script.min.js') }}"></script>
         @yield('script')
 		<script>

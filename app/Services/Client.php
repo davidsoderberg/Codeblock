@@ -7,7 +7,7 @@ class Client {
 	private $client;
 
 	public function __construct() {
-		$this->client = new \WebSocket\Client("ws://localhost:8080");
+		$this->client = new \WebSocket\Client("ws://".env('SOCKET_ADRESS').":".env('SOCKET_PORT'));
 	}
 
 	public function send($object, $user_id = 0){
