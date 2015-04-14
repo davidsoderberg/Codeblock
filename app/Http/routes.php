@@ -68,6 +68,12 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::post('categories/store/{id?}', 'CategoryController@createOrUpdate');
 	Route::get('categories/{id?}', 'CategoryController@index');
 
+
+	Route::get('articles/delete/{id}', 'ArticleController@delete');
+	Route::post('articles/store/', 'ArticleController@create');
+	Route::post('articles/store/{id}', 'ArticleController@update');
+	Route::get('articles/{id?}', 'ArticleController@index');
+
 	Route::get('posts', 'PostController@index');
 	Route::get('comments/', 'CommentController@index');
 
