@@ -34,6 +34,7 @@ class ReplyController extends Controller {
 				$replies = $reply->topic->replies;
 				if(Auth::user()->id != $replies->first()->user_id) {
 					$notification->send($replies->first()->user_id, NotificationType::REPLY, $reply->topic);
+					$this->client->send($reply->topic, $replies->first()->user_id);
 				}
 				$this->mentioned(Input::get('reply'), $reply->topic, $notification);
 				$read->UpdatedRead($reply->topic->id);

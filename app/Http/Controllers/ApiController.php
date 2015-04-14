@@ -217,9 +217,9 @@ class ApiController extends Controller {
 	 * @return mixed
 	 */
 	public function Auth(){
-		if (Auth::attempt(array('username' => trim(strip_tags(Input::get('username'))), 'password' => trim(strip_tags(Input::get('password')))))) {
-			return Response::json(array('token' => \JWT::encode(array('id' => Auth::user()->id), env('APP_KEY'))), 200);
-		}
-		return Response::json(array('message', 'You could not rate that comment, please try agian'), 400);
+		try{
+			Auth::attempt(array('username' => trim(strip_tags(Input::get('username'))), 'password' => trim(strip_tags(Input::get('password')))));
+		} catch (\Exception $e){}
+		return $this->getJwt();
 	}
 }

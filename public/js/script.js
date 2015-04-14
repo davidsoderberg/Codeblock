@@ -121,11 +121,78 @@ jQuery(document).ready(function($){
 		});
 	}
 
+	$('.close-toast').click(function(event){
+		event.preventDefault();
+		$(this).parent().addClass('lightSpeedOut');
+		setTimeout(function(){
+			$(this).parent().remove();
+		}, 3000);
+	});
+
+	function createToast(text){
+		var toast = $('<div></div>').addClass('toast animated lightSpeedIn');
+		toast.html(text);
+
+		$('#toast-container').prepend(toast);
+		setTimeout(function() {
+			toast.addClass('lightSpeedOut');
+			setTimeout(function(){
+				toast.remove();
+			}, 3000);
+		}, 5000);
+	}
+
 	if($.fn.tabs){
 		$('#browseTabs').tabs();
 	}
 
 	if($.fn.accordion){
 		$('#accordion').accordion();
+	}
+
+	var request = 0;
+
+	if(localStorage.getItem('token') == null){
+		getJWT();
+	}else{
+		websocket();
+	}
+
+	function getJWT() {
+		$.get("/api/jwt", function (data) {
+			var date = new Date;
+			date.setHours(date.getHours() + 2);
+			date = date.getTime();
+
+			if (data.token) {
+				localStorage.setItem('token', JSON.stringify({date: date, token: data.token}));
+				websocket();
+			}
+		});
+	}
+
+	function websocket(){
+		var storage = JSON.parse(localStorage.getItem('token'));
+		if(storage.date > Date.now()) {
+			request = 0;
+			var conn = new WebSocket('ws://localhost:8080');
+			conn.onopen = function (e) {
+				conn.send(JSON.stringify({'channel': 'auth', 'token': storage.token}));
+			};
+
+			conn.onmessage = function (e) {
+				data = JSON.parse(e.data);
+				switch (data.channel){
+					case 'toast':
+						createToast(data.message);
+						break;
+				}
+			};
+		}else{
+			request++;
+			if(request < 4) {
+				getJWT();
+			}
+		}
 	}
 });

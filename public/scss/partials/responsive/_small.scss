@@ -163,4 +163,11 @@
 		margin-top: 0;
 		margin-bottom: 1em;
 	}
+	#toast-container{
+		bottom: 0;
+	}
+	.toast{
+		width: 100%;
+		border-left: none;
+	}
 }

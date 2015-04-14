@@ -6,6 +6,7 @@ use App\Repositories\CRepository;
 use App\Repositories\User\UserRepository;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
+use App\Services\HtmlBuilder;
 
 class EloquentNotificationRepository extends CRepository implements NotificationRepository {
 
@@ -136,34 +137,35 @@ class EloquentNotificationRepository extends CRepository implements Notification
 		$object = $notification->object;
 		$from = $this->user->get($notification->from_id);
 		$notification->subject = 'New '.$notification->type;
+		$html = new HtmlBuilder();
 		switch($notification->type){
 			case NotificationType::MENTION:
 				if($notification->object_type == 'Topic') {
 					$type = 'reply';
-					$notification->body = 'topic.';
+					$notification->body = $html->actionlink($url = array('action' => 'TopicController@show', 'params' => array($object->id)), 'topic').'.';
 				}
 				if($notification->object_type == 'Post') {
 					$type = 'comment';
-					$notification->body = 'codeblock.';
+					$notification->body = $html->actionlink($url = array('action' => 'PostController@show', 'params' => array($object->id)), 'codeblock').'.';
 				}
 				$notification->body = 'You have been mention by '.$from->username. ' in a '.$type.' on this '.$notification->body;
 				break;
 			case NotificationType::COMMENT:
-				$notification->body = 'You have a new comment on this codeblock.';
+				$notification->body = 'You have a new comment on this '.$html->actionlink($url = array('action' => 'PostController@show', 'params' => array($object->id)), 'codeblock').'.';
 				break;
 			case NotificationType::FAVOURITE:
 				$notification->subject = 'Your codeblock has been '.$notification->type.'d';
-				$notification->body = $from->username.' has favourited your codeblock.';
+				$notification->body = $from->username.' has favourited your topic.';
 				break;
 			case NotificationType::REPLY:
-				$notification->body = 'You have a new reply on this topic.';
+				$notification->body = 'You have a new reply on this '.$html->actionlink($url = array('action' => 'TopicController@show', 'params' => array($object->id)), 'topic').'.';
 				break;
 			case NotificationType::ROLE:
 				$user = $this->user->get($notification->user_id);
 				$notification->body = $from->role->name.' have given you a role as: '.$user->role->name;
 				break;
 			case NotificationType::STAR:
-				$notification->body = $from->username.' has added a star to your codeblock.';
+				$notification->body = $from->username.' has added a star to your '.$html->actionlink($url = array('action' => 'PostController@show', 'params' => array($object->id)), 'codeblock').'.';
 				break;
 			case NotificationType::BANNED:
 				$notification->subject = 'You have been '.$notification->type;

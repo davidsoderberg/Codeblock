@@ -2,6 +2,7 @@
 
 use App\NotificationType;
 use App\Repositories\Notification\NotificationRepository;
+use App\Services\Jwt;
 use Illuminate\Foundation\Bus\DispatchesCommands;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -9,13 +10,19 @@ use Illuminate\Support\Facades\Log;
 use App\Services\Annotation\Permission;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
+use App\Services\Client;
 
 abstract class Controller extends BaseController {
+
+	protected $client;
 
 	use DispatchesCommands, ValidatesRequests;
 
 	public function __construct(){
 		View::share('siteName', ucfirst(str_replace('http://', '', URL::to('/'))));
+		$this->client = new Client();
 	}
 
 	protected function mentioned($text, $object, NotificationRepository $notification){
@@ -42,4 +49,10 @@ abstract class Controller extends BaseController {
 		return $permissionAnnotation->getPermission($action['function']);
 	}
 
+	public function getJwt(){
+		if(Auth::check()) {
+			return Response::json(array('token' => Jwt::encode(array('id' => Auth::user()->id))), 200);
+		}
+		return Response::json(array('message', 'You could not get your auth token, please try agian'), 400);
+	}
 }

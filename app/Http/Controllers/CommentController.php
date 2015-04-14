@@ -73,6 +73,7 @@ class CommentController extends Controller {
 			$post = $post->get(Input::get('post_id'));
 			if(Auth::user()->id != $post->user_id) {
 				$notification->send($post->user_id, NotificationType::COMMENT, $post);
+				$this->client->send($post, $post->user_id);
 			}
 			$this->mentioned(Input::get('comment'), $post, $notification);
 			return Redirect::back();

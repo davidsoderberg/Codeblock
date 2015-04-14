@@ -18,7 +18,7 @@ class Jwt
     public function handle($request, Closure $next)
     {
 		try {
-			$user = \JWT::decode(Input::get('token'), env('APP_KEY'));
+			$user = \App\Services\Jwt::decode(Input::get('token'));
 			Auth::loginUsingId($user->id);
 			if(Auth::user()) {
 				return $next($request);

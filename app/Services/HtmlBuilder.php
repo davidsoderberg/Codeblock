@@ -75,6 +75,15 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 		}
 	}
 
+	public function toast(){
+		$flash = array('success','error', 'warning', 'info');
+		foreach ($flash as $value) {
+			if(Session::has($value)) {
+				return '<div class="toast animated lightSpeedIn '.$value.'"><a href="#" class="close-toast">X</a> ' . Session::get($value) . '</div>';
+			}
+		}
+	}
+
 	/**
 	 * @param $content
 	 * @param $items
