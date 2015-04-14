@@ -19,6 +19,7 @@ class RepositoriesServiceProvider extends ServiceProvider {
 		$this->app->bind('App\Repositories\Topic\TopicRepository', 'App\Repositories\Topic\EloquentTopicRepository');
 		$this->app->bind('App\Repositories\Reply\ReplyRepository', 'App\Repositories\Reply\EloquentReplyRepository');
 		$this->app->bind('App\Repositories\Read\ReadRepository', 'App\Repositories\Read\EloquentReadRepository');
+		$this->app->bind('App\Repositories\Article\ArticleRepository', 'App\Repositories\Article\EloquentArticleRepository');
 	}
 
 }
