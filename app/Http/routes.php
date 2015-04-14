@@ -69,10 +69,10 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::get('categories/{id?}', 'CategoryController@index');
 
 
-	Route::get('articles/delete/{id}', 'ArticleController@delete');
-	Route::post('articles/store/', 'ArticleController@create');
-	Route::post('articles/store/{id}', 'ArticleController@update');
-	Route::get('articles/{id?}', 'ArticleController@index');
+	Route::get('news/delete/{id}', 'ArticleController@delete');
+	Route::post('news/store/', 'ArticleController@create');
+	Route::post('news/store/{id}', 'ArticleController@update');
+	Route::get('news/{id?}', 'ArticleController@index');
 
 	Route::get('posts', 'PostController@index');
 	Route::get('comments/', 'CommentController@index');
