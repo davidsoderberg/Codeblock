@@ -16,6 +16,7 @@ Route::pattern('slug', '[-a-zA-Z0-9-]+');
 
 Route::get('/', 'MenuController@index');
 Route::get('browse', 'MenuController@browse');
+Route::get('news/{id?}', 'ArticleController@index');
 Route::get('license', 'MenuController@license');
 Route::get('contact', 'MenuController@contact');
 Route::post('contact/send', 'MenuController@sendContact');
@@ -72,7 +73,6 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::get('news/delete/{id}', 'ArticleController@delete');
 	Route::post('news/store/', 'ArticleController@create');
 	Route::post('news/store/{id}', 'ArticleController@update');
-	Route::get('news/{id?}', 'ArticleController@index');
 
 	Route::get('posts', 'PostController@index');
 	Route::get('comments/', 'CommentController@index');
