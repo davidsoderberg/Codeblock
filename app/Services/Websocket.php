@@ -36,13 +36,14 @@ class Websocket implements MessageComponentInterface {
 				}
 				break;
 			case 'subscribe':
-				$this->onSubscribe($from, $msg['topic']);
+				$this->onSubscribe($msg['id'], $msg['topic']);
 				break;
 			case 'unsubscribe':
 				$this->onUnSubscribe($from, $msg['topic']);
 				break;
 			case 'publish':
-				foreach($this->topics[$msg['topic']] as $conn){
+				foreach($this->topics[$msg['topic']] as $id){
+					$conn = $this->clients[$id];
 					if($conn != $from) {
 						$conn->send(json_encode(array('channel' => $msg['topic'], 'message' => $msg['message'])));
 					}
@@ -51,26 +52,32 @@ class Websocket implements MessageComponentInterface {
 		}
 	}
 
-	private function onSubscribe(ConnectionInterface $conn, $topic){
+	private function onSubscribe($id, $topic){
 		if(!is_array($this->topics[$topic])){
 			$this->topics[$topic] = array();
 		}
-		$this->topics[$topic][] = $conn;
+		$this->topics[$topic][] = $id;
 	}
 
 	private function onUnSubscribe(ConnectionInterface $conn, $topic = ''){
-		if($topic != ''){
-			if(false !== $key = array_search($conn, $this->topics[$topic])){
-				unset($this->topics[$topic][$key]);
-			}
-		}else{
-			foreach($this->topics as $topic => $array){
-				if(false !== $key = array_search($conn, $array)){
-					unset($this->topics[$topic][$key]);
+		if(false !== $id = array_search($conn, $this->clients)) {
+			if($topic != '') {
+				$this->removeFromTopic($topic, $id, $this->topics[$topic]);
+			} else {
+				foreach($this->topics as $topic => $array) {
+					$this->removeFromTopic($topic, $id, $array);
 				}
 			}
 		}
+	}
 
+	private function removeFromTopic($topic, $id, $array){
+		if(false !== $key = array_search($id, $array)) {
+			unset($this->topics[$topic][$key]);
+			if(empty($this->topics[$topic])){
+				unset($this->topics[$topic]);
+			}
+		}
 	}
 
 	public function onClose(ConnectionInterface $conn) {
