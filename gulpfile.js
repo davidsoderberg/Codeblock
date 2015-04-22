@@ -10,6 +10,9 @@ var js = [
 	vendor+'mention.js',
 	components+'accordion.js',
 	components+'tabs.js',
+	components+'page.js',
+	components+'post.js',
+	components+'async.js',
 	'public/js/script.js'
 ];
 
