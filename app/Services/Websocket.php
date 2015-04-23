@@ -42,11 +42,13 @@ class Websocket extends PubSub implements MessageComponentInterface {
 				$this->onUnSubscribe($from, $msg['topic']);
 				break;
 			case 'publish':
-				foreach($this->topics[$msg['topic']] as $id){
-					$conn = $this->clients[$id];
-					$msg = $this->getPublish($msg, $id);
-					if($conn != $from) {
-						$conn->send(json_encode(array('channel' => $msg['topic'], 'message' => $msg['message'])));
+				if(isset($this->topics[$msg['topic']])) {
+					foreach($this->topics[$msg['topic']] as $id) {
+						$conn = $this->clients[$id];
+						$msg = $this->getPublish($msg, $id);
+						if($conn != $from) {
+							$conn->send(json_encode(array('channel' => $msg['topic'], 'message' => $msg['html'])));
+						}
 					}
 				}
 				break;
@@ -57,9 +59,7 @@ class Websocket extends PubSub implements MessageComponentInterface {
 		$msg['topic'] = explode('.',$msg['topic'])[0];
 		switch($msg['topic']){
 			case self::TOPIC:
-				// $msg['message'] should be a reply object.
-				$msg['message'] = $this->topic($msg['message'], $user_id);
-				// $msg['message'] should be an html string.
+				$msg['html'] = $this->topic($msg['message'], $user_id);
 				break;
 		}
 		return $msg;

@@ -36,6 +36,7 @@ class ReplyController extends Controller {
 					$notification->send($replies->first()->user_id, NotificationType::REPLY, $reply->topic);
 					$this->client->send($reply->topic, $replies->first()->user_id);
 				}
+				$this->client->send($reply, Auth::user()->id, 'publish', $this->client->getTopic($reply->topic->id));
 				$this->mentioned(Input::get('reply'), $reply->topic, $notification);
 				$read->UpdatedRead($reply->topic->id);
 			}
