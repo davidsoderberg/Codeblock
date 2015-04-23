@@ -3,6 +3,7 @@
 use App\Repositories\Read\ReadRepository;
 use App\Repositories\Reply\ReplyRepository;
 use App\Repositories\Topic\TopicRepository;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
@@ -24,6 +25,9 @@ class TopicController extends Controller {
 
 	public function show(ReadRepository $read, $id, $reply = 0){
 		$topic = $this->topic->get($id);
+		if(Auth::check() && !is_null($topic)) {
+			$this->client->send($topic, Auth::user()->id, 'subscribe', $this->client->getTopic($topic->id));
+		}
 		$reply = $this->reply->get($reply);
 		$read->hasRead($id);
 		return View::make('topic.show')->with('title', 'Topic: '.$topic->title)->with('topic', $topic)->with('editReply', $reply);
