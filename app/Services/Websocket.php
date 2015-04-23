@@ -66,7 +66,7 @@ class Websocket extends PubSub implements MessageComponentInterface {
 	}
 
 	private function onSubscribe($id, $topic){
-		if(!is_array($this->topics[$topic])){
+		if(!isset($this->topics[$topic])){
 			$this->topics[$topic] = array();
 		}
 		$this->topics[$topic][] = $id;

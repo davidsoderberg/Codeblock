@@ -1,5 +1,6 @@
 <?php namespace App\Services;
 
+use InvalidArgumentException;
 use WebSocket\ConnectionException;
 use App\Services\HtmlBuilder;
 
@@ -10,13 +11,29 @@ class Client extends PubSub {
 		$this->client = new \WebSocket\Client("ws://".env('SOCKET_ADRESS').":".env('SOCKET_PORT'));
 	}
 
-	public function send($object, $user_id = 0){
-		if($user_id == 0){
+	public function send($object, $user_id = 0, $channel = 'toast', $topic = ''){
+		if($user_id == 0 || !is_numeric($user_id)){
+			if(!isset($object->user_id)) {
+				Throw new \InvalidArgumentException('The user id is not valid');
+			}
 			$user_id = $object->user_id;
 		}
 		try {
-			$this->client->send(json_encode(array("channel" => "toast", 'id' => $user_id, 'message' => $this->getMessage($object))));
+			$this->client->send(json_encode(array("channel" => $channel, 'topic' => $topic, 'id' => $user_id, 'message' => $this->checkToast($channel, $topic, $object))));
 		} catch (ConnectionException $e){}
+	}
+
+	private function checkToast($channel, $topic, $object){
+		if($channel != 'toast' ){
+			if($topic == ''){
+				Throw new \InvalidArgumentException('Topic is not set');
+			}
+			if($channel != 'subscribe' && $channel != 'publish'){
+				Throw new \InvalidArgumentException('Channel has wrong value, value should be subscribe or publish.');
+			}
+			return $object;
+		}
+		return $this->getMessage($object);
 	}
 
 	private function getMessage($object){
