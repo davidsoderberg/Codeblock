@@ -3,7 +3,7 @@
 use WebSocket\ConnectionException;
 use App\Services\HtmlBuilder;
 
-class Client {
+class Client extends PubSub {
 	private $client;
 
 	public function __construct() {

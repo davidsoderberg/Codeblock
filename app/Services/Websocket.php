@@ -2,7 +2,7 @@
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
 
-class Websocket implements MessageComponentInterface {
+class Websocket extends PubSub implements MessageComponentInterface {
 
 	private $clients = array();
 	private $connections = array();
@@ -44,12 +44,25 @@ class Websocket implements MessageComponentInterface {
 			case 'publish':
 				foreach($this->topics[$msg['topic']] as $id){
 					$conn = $this->clients[$id];
+					$msg = $this->getPublish($msg, $id);
 					if($conn != $from) {
 						$conn->send(json_encode(array('channel' => $msg['topic'], 'message' => $msg['message'])));
 					}
 				}
 				break;
 		}
+	}
+
+	private function getPublish($msg, $user_id){
+		$msg['topic'] = explode('.',$msg['topic'])[0];
+		switch($msg['topic']){
+			case self::TOPIC:
+				// $msg['message'] should be a reply object.
+				$msg['message'] = $this->topic($msg['message'], $user_id);
+				// $msg['message'] should be an html string.
+				break;
+		}
+		return $msg;
 	}
 
 	private function onSubscribe($id, $topic){
