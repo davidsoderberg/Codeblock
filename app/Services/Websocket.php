@@ -46,9 +46,7 @@ class Websocket extends PubSub implements MessageComponentInterface {
 					foreach($this->topics[$msg['topic']] as $id) {
 						$conn = $this->clients[$id];
 						$msg = $this->getPublish($msg, $id);
-						if($conn != $from) {
-							$conn->send(json_encode(array('channel' => $msg['topic'], 'message' => $msg['html'])));
-						}
+						$conn->send(json_encode(array('channel' => $msg['topic'], 'message' => $msg['html'])));
 					}
 				}
 				break;
