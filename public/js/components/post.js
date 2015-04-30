@@ -32,19 +32,21 @@ var	post = {
 	reply: function() {
 		var commentForm = jQuery('#comment').html();
 		var id = jQuery(this).parent().parent().attr('id');
-		splitId = id.split('-');
-		jQuery('#comment').html('');
-		jQuery(this).after(commentForm);
-		jQuery(jQuery(this).next()).find('input[name="parent"]').val(splitId[1]);
-		jQuery('.close-reply').show();
-		jQuery(this).hide();
-
-		jQuery('.close-reply').on('click', function(event){
+		if(id) {
+			splitId = id.split('-');
+			jQuery('#comment').html('');
+			jQuery(this).after(commentForm);
+			jQuery(jQuery(this).next()).find('input[name="parent"]').val(splitId[1]);
+			jQuery('.close-reply').show();
 			jQuery(this).hide();
-			jQuery(this).parent().parent().parent().find('.reply').show();
-			jQuery(this).parent().parent().remove();
-			jQuery('#comment').html(commentForm);
-		});
+
+			jQuery('.close-reply').on('click', function (event) {
+				jQuery(this).hide();
+				jQuery(this).parent().parent().parent().find('.reply').show();
+				jQuery(this).parent().parent().remove();
+				jQuery('#comment').html(commentForm);
+			});
+		}
 	},
 
 	codeEditor: function(){
