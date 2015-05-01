@@ -20,8 +20,6 @@ class UserTest extends UnitCase {
 		$this->assertTrue(is_object($this->repo->getErrors()));
 		$this->assertTrue($this->repo->createOrUpdate(['email' => 'hej@hej.com', 'oldpassword' => 'test', 'password' => 'hej'],2));
 		$this->repo->createOrUpdate(['email' => 'test@test.com'],2);
-		$this->setExpectedException('Illuminate\Database\QueryException');
-		$this->assertFalse($this->repo->createOrUpdate($input));
 	}
 
 	public function testGet(){

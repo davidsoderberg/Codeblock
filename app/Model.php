@@ -34,9 +34,11 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 			}
 		}
 
+		$rules = static::$rules;
+
 		if(is_numeric($id)){
 			// found on: http://forumsarchive.laravel.io/viewtopic.php?pid=46571
-			array_walk(static::$rules, function(&$item) use ($id)
+			array_walk($rules, function(&$item) use ($id)
 			{
 				if(stripos($item, ':id:') !== false){
 					$item = str_ireplace(':id:', $id, $item);
@@ -44,7 +46,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 			});
 		}
 
-		$v = Validator::make($data, static::$rules);
+		$v = Validator::make($data, $rules);
 		if ($v->passes()) {
 			return true;
 		}else{
