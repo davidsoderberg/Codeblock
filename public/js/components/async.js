@@ -59,6 +59,7 @@ var	async = {
 
 	websocket: function(){
 		var self = async;
+		var oldHtml = '';
 		var storage = JSON.parse(localStorage.getItem('token'));
 		if(storage.date > Date.now()) {
 			self.request = 0;
@@ -72,6 +73,12 @@ var	async = {
 				switch (data.channel){
 					case 'toast':
 						self.createToast(data.message);
+						break;
+					case 'Topic':
+						if(data.message != oldHtml) {
+							jQuery('.forum').append(data.message);
+						}
+						oldHtml = data.message;
 						break;
 				}
 			};
