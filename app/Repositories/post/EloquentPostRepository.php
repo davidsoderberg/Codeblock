@@ -166,8 +166,10 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 			$Post = Post::find($id);
 		}
 
+		$except = array('tags', '_token', '_url');
+
 		foreach ($input as $key => $value) {
-			if($key != 'tags' && $key != '_token'){
+			if(!in_array($key, $except)){
 				if($key != 'code'){
 					$Post[$key] = $this->stripTrim($input[$key]);
 				}else{
