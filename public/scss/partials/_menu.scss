@@ -55,11 +55,12 @@ $width: 20%;
 	ul{
 		list-style: none;
 		li{
-			ul{
+			.hideUl + ul{
 				display: none;
 			}
-			&:hover ul{
+			ul{
 				display: block;
+
 			}
 		}
 	}
@@ -132,12 +133,6 @@ body{
 			input {
 				width: 50% !important;
 				margin: 0 auto;
-			}
-			li ul {
-				display: block;
-			}
-			.hideUl + ul {
-				display: none;
 			}
 		}
 	}

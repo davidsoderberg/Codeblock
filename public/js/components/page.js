@@ -20,10 +20,8 @@ var	page = {
 	},
 
 	dropdownLink: function(event){
-		if(jQuery(document).width() < 801){
-			event.preventDefault();
-			jQuery(this).toggleClass('hideUl');
-		}
+		event.preventDefault();
+		jQuery(this).toggleClass('hideUl');
 	},
 
 	toggleModal: function (event) {
