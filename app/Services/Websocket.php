@@ -106,5 +106,8 @@ class Websocket extends PubSub implements MessageComponentInterface {
 		if(false !== $key = array_search($conn, $this->clients)){
 			unset($this->clients[$key]);
 		}
+		if(false !== $key = array_search($conn, $this->connections)){
+			unset($this->connections[$key]);
+		}
 	}
 }
