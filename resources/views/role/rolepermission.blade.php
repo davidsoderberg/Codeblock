@@ -22,7 +22,7 @@
 						<tr>
 							<td>{{ ucfirst($permission->name)}}</td>
 							@foreach ($roles as $role => $value)
-								<td>
+								<td data-title="{{$role}}">
 									{{ Form::checkbox(str_replace(' ', '', $role).'[]', $permission->id, $value[$permission->permission]) }}
 								</td>
 							@endforeach
@@ -34,14 +34,6 @@
 					</tr>
 				@endif
 			</tbody>
-			<tfoot>
-				<tr>
-					<th>Permission</th>
-					@foreach ($roles as  $role => $value)
-						<th>{{ $role }}</th>
-					@endforeach
-				</tr>
-			</tfoot>
 		</table>
 		<div class="clear"></div>
 		{{ Form::button('Save', array('type' => 'submit')) }}
