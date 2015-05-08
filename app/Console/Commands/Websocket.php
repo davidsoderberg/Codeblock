@@ -50,7 +50,6 @@ class Websocket extends Command {
 		);
 
 		$server->run();
-		$this->info('Websocket is running on port 8080');
 	}
 
 	/**
