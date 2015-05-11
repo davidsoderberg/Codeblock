@@ -111,6 +111,7 @@
 
 				if(errorElement.length == 0){
 					self.after('<div data-id="'+self.attr("id")+'" class="'+settings.errorclass.join(' ')+'"></div>');
+					errorElement = $('[data-id='+self.attr("id")+']');
 				}
 
 				var label = self.prev().text().slice(0,-1).toLowerCase();

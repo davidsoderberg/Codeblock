@@ -69,11 +69,16 @@ input, textarea, select{
 	}
 	&.has-error{
 		margin-bottom: 0;
+		+ .alert{
+			margin-top: 0em;
+		}
 	}
+
 	+ .alert{
 		margin-top: -1em;
 	}
 }
+
 input[type="checkbox"]{
 	width: auto;
 	padding: 0;
