@@ -11,10 +11,14 @@
 		<h3 class="margin-top-one">{{$art->title}}</h3>
 		<p class="no-margin font-bold">
 			{{$art->created_at->diffForHumans()}}
+			@if(Auth::check())
 			<span class="float-right">
 				{{HTML::actionlink($url = array('action' => 'ArticleController@delete', 'params' => array($art->id)), '<i class="fa fa-trash-o"></i>')}}
-				{{HTML::actionlink($url = array('action' => 'ArticleController@index', 'params' => array($art->id)), '<i class="fa fa-pencil"></i>')}}
+				@if(HTML::hasPermission('ArticleController@create'))
+					{{HTML::actionlink($url = array('action' => 'ArticleController@index', 'params' => array($art->id)), '<i class="fa fa-pencil"></i>')}}
+				@endif
 			</span>
+			@endif
 		</p>
 		<p>{{$art->body}}</p>
 	@endforeach
