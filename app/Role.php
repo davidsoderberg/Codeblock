@@ -14,8 +14,8 @@ class Role extends Model {
 	protected $guarded = array('id');
 
 	public static $rules = array(
-		'name' => 'required|min:3|unique:roles,name',
-		'grade' => 'integer|unique:roles,grade',
+		'name' => 'required|min:3|unique:roles,name,:id:',
+		'grade' => 'integer|unique:roles,grade,:id:',
 	);
 
 	public function permissions()

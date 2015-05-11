@@ -10,7 +10,10 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 	// hämtar alla roller.
 	public function get($id = null)
 	{
-		return Role::orderBy('grade')->get();
+		if(is_null($id)) {
+			return Role::orderBy('grade')->get();
+		}
+		return Role::find($id);
 	}
 
 	// skapar en roll.
@@ -38,7 +41,7 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 
 	// uppdaterar en roll.
 	public function update($input){
-		$roles = Role::orderBy('grade')->get();
+		$roles = $this->get();
 		$grade = $this->stripTrim($input['grade']);
 		$i = 0;
 
@@ -83,7 +86,7 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 
 	// tar bort en roll
 	public function delete($id){
-		$Role = Role::find($id);
+		$Role = $this->get($id);
 		if($Role == null){
 			return false;
 		}
