@@ -1,4 +1,4 @@
-Codeblock
+Codeblock [![Build Status](https://snap-ci.com/davidsoderberg/codeblock/branch/master/build_image)](https://snap-ci.com/davidsoderberg/codeblock/branch/master)
 =========
 Repository for codeblock.se
 
