@@ -37,6 +37,7 @@
 
 		{{ Form::label('blockCode', 'Code:') }}
 		{{ Form::textarea('code', Input::old('code'), array('class'=> 'code-editor', 'data-lang' => 'php' ,'id' => 'blockCode', 'placeholder' => 'Code goes here...', 'data-validator' => 'required|min:3')) }}
+		{{ $errors->first('code', '<div class="alert error">:message</div>') }}
 
 		{{ Form::label('blockDescription', 'Description:', array('class' =>'margin-top-one display-block')) }}
 		{{ Form::textarea('description', Input::old('description'), array('id' => 'blockDescription', 'rows' => '2', 'placeholder' => 'Description of codeblock', 'data-validator' => 'required|min:3')) }}
