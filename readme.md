@@ -3,11 +3,13 @@ Codeblock [![Build Status](https://snap-ci.com/davidsoderberg/codeblock/branch/m
 Repository for codeblock.se
 
 ## Installation instructions
-1. Create database and database user with all permissions.
-2. create an .env from .env.example and add all your config values in there.
-3. Run `php artisan Install`.
-4. Create user on the website.
-5. Change the default role for a standard user on `/roles`. 
+1. Install [composer](https://getcomposer.org/) and run `composer install` in this directory.
+2. Create database and database user with all permissions.
+3. create an .env from .env.example and add all your config values in there.
+4. Run `php artisan Install`.
+5. Create user on the website.
+6. Create a role and change so it is the default role on `/roles`. 
+7. Run `php artisan websocket` with [supervisor](http://supervisord.org/).
 
 ## Saker som jag är medveten om som finns i koden
 * I vissa kontrollrar och modeller finns det kommentarer som autoskapas då jag använder kommandon för att skapa dem
