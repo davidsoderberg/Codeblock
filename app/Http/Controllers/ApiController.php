@@ -105,6 +105,12 @@ class ApiController extends Controller {
 	 * @return mixed
 	 */
 	public function createOrUpdatePost(PostRepository $post, $id = null){
+		if(!is_null($id)){
+			$user_id = $post->get($id)->user_id;
+			if($user_id != Auth::user()->id){
+				return Response::json(array('errors' => array('user' => 'You have not that created that codeblock')), 400);
+			}
+		}
 		if($post->createOrUpdate(Input::all(), $id)){
 			return Response::json(array('message' => 'Your block has been saved'), 201);
 		}
@@ -117,6 +123,12 @@ class ApiController extends Controller {
 	 * @return mixed
 	 */
 	public function createOrUpdateComment(CommentRepository $comment, $id = null){
+		if(!is_null($id)){
+			$user_id = $comment->get($id)->user_id;
+			if($user_id != Auth::user()->id){
+				return Response::json(array('errors' => array('user' => 'You have not that created that comment')), 400);
+			}
+		}
 		if($comment->createOrUpdate(Input::all(), $id)){
 			return Response::json(array('message' => 'Your comment has been saved'), 201);
 		}
@@ -129,6 +141,11 @@ class ApiController extends Controller {
 	 * @return mixed
 	 */
 	public function createOrUpdateUser(UserRepository $user, $id = null){
+		if(!is_null($id)){
+			if($id != Auth::user()->id){
+				return Response::json(array('errors' => array('user' => 'You are not that user')), 400);
+			}
+		}
 		if($user->createOrUpdate(Input::all(), $id)){
 			if(is_null($id)){
 				return Response::json(array('message' => 'Your user has been created, use the link in the mail to activate your user.'), 201);
@@ -145,6 +162,12 @@ class ApiController extends Controller {
 	 * @return mixed
 	 */
 	public function createOrUpdateReply(ReplyRepository $reply, $id = null){
+		if(!is_null($id)){
+			$user_id = $reply->get($id)->user_id;
+			if($user_id != Auth::user()->id){
+				return Response::json(array('errors' => array('user' => 'You have not that created that reply')), 400);
+			}
+		}
 		if($reply->createOrUpdate(Input::all(), $id)){
 			return Response::json(array('message' => 'Your reply has been saved'), 201);
 		}
@@ -158,10 +181,18 @@ class ApiController extends Controller {
 	 * @return mixed
 	 */
 	public function createOrUpdateTopic(TopicRepository $topic, ReplyRepository $reply, $id = null){
+		if(!is_null($id)){
+			$currentTopic = $topic->get($id);
+			$replies = $currentTopic->replies;
+			$user_id = $replies[0]->user_id;
+			if($user_id != Auth::user()->id){
+				return Response::json(array('errors' => array('user' => 'You have not that created that topic')), 400);
+			}
+		}
 		$input = Input::all();
 		if($topic->createOrUpdate(Input::all(), $id)){
 			$input['topic_id'] = $topic->topic->id;
-			if(!$this->reply->createOrUpdate($input)) {
+			if(is_null($id) && !$reply->createOrUpdate($input)) {
 				$topic->delete($topic->topic->id);
 				return Response::json(array('errors' => $reply->getErrors()), 400);
 			}

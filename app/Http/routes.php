@@ -130,17 +130,17 @@ Route::group(['prefix' => 'api', 'middleware' => 'api'],function(){
 	Route::post('auth/forgot', 'ApiController@forgotPassword');
 
 	Route::group(['middleware' =>  'jwt'], function(){
-		Route::post('post', 'ApiController@createOrUpdatePost');
 		Route::post('comment', 'ApiController@createOrUpdateComment');
 		Route::post('topics', 'ApiController@createOrUpdateTopic');
 		Route::post('replies', 'ApiController@createOrUpdateReply');
+		Route::post('post', 'ApiController@createOrUpdatePost');
 		Route::post('star/{id}', 'ApiController@Star');
 		Route::post('rate/{id}', 'ApiController@Rate');
 
-		Route::put('user/{id}', 'ApiController@createOrUpdateUser');
 		Route::put('post/{id}', 'ApiController@createOrUpdatePost');
 		Route::put('comment/{id}', 'ApiController@createOrUpdateComment');
-		Route::put('topics/{id}', 'ApiController@createOrUpdateTopics');
+		Route::put('user/{id}', 'ApiController@createOrUpdateUser');
+		Route::put('topics/{id}', 'ApiController@createOrUpdateTopic');
 		Route::put('replies/{id}', 'ApiController@createOrUpdateReply');
 
 		Route::post('category', 'ApiController@createOrUpdateCategory');
