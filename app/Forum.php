@@ -48,8 +48,10 @@ class Forum extends Model
 		$latestReply = null;
 		foreach($topics as $topic){
 			$reply = $topic->replies->last();
-			if(is_null($latestReply) || strtotime($latestReply->created_at) < strtotime($reply->created_at) ){
-				$latestReply = $reply;
+			if(!is_null($reply)) {
+				if(is_null($latestReply) || strtotime($latestReply->created_at) < strtotime($reply->created_at)) {
+					$latestReply = $reply;
+				}
 			}
 		}
 		return $latestReply;
@@ -57,9 +59,10 @@ class Forum extends Model
 
 	public function hasUnreadTopics(){
 		if(Auth::check()){
-			$hasread = [];
 			foreach($this->topics as $topic){
-				$hasread[] = Auth::user()->hasRead($topic->id);
+				if(count($topic->replies) > 0) {
+					$hasread[] = Auth::user()->hasRead($topic->id);
+				}
 			}
 			return in_array(false, $hasread);
 		}
