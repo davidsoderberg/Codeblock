@@ -49,11 +49,11 @@ class UserController extends Controller {
 	 */
 	public function store(RoleRepository $role, $id = null)
 	{
-		$input = array(
+		$input = array_merge(array(
 			'email' => Input::get('email'),
 			'username' => Input::get('username'),
 			'password' => Input::get('password'),
-		);
+		), Input::all());
 		if(is_null($id)){
 			try {
 				$input['role'] = $role->getDefault()->id;
@@ -72,7 +72,6 @@ class UserController extends Controller {
 				return Redirect::back()->with('success', 'Your user has been saved.');
 			}
 		}
-		dd($this->user->getErrors());
 		return Redirect::back()->withInput(Input::except('password'))->withErrors($this->user->getErrors());
 	}
 
