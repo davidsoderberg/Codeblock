@@ -16,6 +16,9 @@
         <testsuite name="functional">
             <directory>./tests/functional</directory>
         </testsuite>
+        <testsuite name="integration">
+            <directory>./tests/integration</directory>
+        </testsuite>
     </testsuites>
     <php>
         <env name="APP_ENV" value="testing"/>

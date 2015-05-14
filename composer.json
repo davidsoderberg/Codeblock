@@ -21,7 +21,8 @@
         "cboden/ratchet": "0.3.*"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "~4.4.0@stable"
+		"phpunit/phpunit": "~4.4.0@stable",
+		"laracasts/integrated": "dev-master"
 	},
 	"autoload": {
 		"classmap": [
@@ -35,6 +36,7 @@
 		"classmap": [
             "tests/TestCase.php",
 			"tests/UnitCase.php",
+            "tests/IntegrationCase.php",
             "tests/FunctionalCase.php"
 		]
 	},
