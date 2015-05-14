@@ -85,7 +85,7 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::post('tags/store/{id?}', 'TagController@createOrUpdate');
 	Route::get('tags/{id?}', 'TagController@index');
 
-	Route::get('user/delete/{id}', 'UserController@delete');
+	Route::post('user/delete/{id}', 'UserController@delete');
 	Route::get('user/edit/{id}', 'UserController@edit');
 	Route::post('user/update/{id}', 'UserController@update');
 	Route::get('users', 'UserController@index');

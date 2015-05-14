@@ -52,6 +52,10 @@ class UserController extends Controller {
 		$input = Input::all();
 		if(is_null($id)){
 			$input['role'] = $role->getDefault()->id;
+		}else{
+			if($id != Auth::user()->id){
+				Redirect::back()->with('error', 'You can not change other users information.');
+			}
 		}
 		if($this->user->createOrUpdate($input, $id)){
 			if(is_null($id)){
@@ -147,10 +151,10 @@ class UserController extends Controller {
 	 * @param  int $id id på användaren som skall tas bort.
 	 * @return object     med värden dit användaren skall skickas.
 	 */
-	public function destroy($id)
+	public function delete($id)
 	{
 		if($this->user->delete($id)){
-			return Redirect::to('user/index')->with('success', 'The user has been deleted.');
+			return Redirect::to('users')->with('success', 'The user has been deleted.');
 		}
 
 		return Redirect::back()->with('error', 'The user could not be deleted.');
