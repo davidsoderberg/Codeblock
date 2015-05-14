@@ -49,9 +49,17 @@ class UserController extends Controller {
 	 */
 	public function store(RoleRepository $role, $id = null)
 	{
-		$input = Input::all();
+		$input = array(
+			'email' => Input::get('email'),
+			'username' => Input::get('username'),
+			'password' => Input::get('password'),
+		);
 		if(is_null($id)){
-			$input['role'] = $role->getDefault()->id;
+			try {
+				$input['role'] = $role->getDefault()->id;
+			} catch (\Exception $e){
+				$input['role'] = 1;
+			}
 		}else{
 			if($id != Auth::user()->id){
 				Redirect::back()->with('error', 'You can not change other users information.');
@@ -64,6 +72,7 @@ class UserController extends Controller {
 				return Redirect::back()->with('success', 'Your user has been saved.');
 			}
 		}
+		dd($this->user->getErrors());
 		return Redirect::back()->withInput(Input::except('password'))->withErrors($this->user->getErrors());
 	}
 
