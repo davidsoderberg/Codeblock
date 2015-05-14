@@ -29,6 +29,9 @@ class TopicController extends Controller {
 			$this->client->send($topic, Auth::user()->id, 'subscribe', $this->client->getTopic($topic->id));
 		}
 		$reply = $this->reply->get($reply);
+		if(isset($reply->user_id) && $reply->user_id != Auth::user()->id){
+			return Redirect::back()->with('error', 'You can´t edit other users replies.');
+		}
 		$read->hasRead($id);
 		return View::make('topic.show')->with('title', 'Topic: '.$topic->title)->with('topic', $topic)->with('editReply', $reply);
 	}
@@ -38,6 +41,13 @@ class TopicController extends Controller {
 	 * @return mixed
 	 */
 	public function createOrUpdate(ReadRepository $read,$id = null) {
+		if(!is_null($id)){
+			$topic = $this->topic->get($id);
+			$reply = $topic->replies()->first();
+			if(Auth::user()->id != $reply->user_id){
+				return Redirect::back()->with('error', 'You can´t edit other users topics.');
+			}
+		}
 		$input = Input::all();
 		if($this->topic->createOrUpdate(Input::all(), $id)) {
 			if(is_null($id)) {

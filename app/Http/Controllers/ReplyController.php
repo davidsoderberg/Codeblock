@@ -28,6 +28,12 @@ class ReplyController extends Controller {
 	 * @return mixed
 	 */
 	public function createOrUpdate(ReadRepository $read, NotificationRepository $notification, $id = null) {
+		if(!is_null($id)){
+			$reply = $this->reply->get($id);
+			if(Auth::user()->id != $reply->user_id){
+				return Redirect::back()->with('error', 'You can´t edit other users replies.');
+			}
+		}
 		if($this->reply->createOrUpdate(Input::all(), $id)) {
 			$reply = $this->reply->Reply;
 			if(is_null($id)) {

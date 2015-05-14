@@ -3,6 +3,7 @@
 use App\Reply;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\CRepository;
+use Illuminate\Support\MessageBag;
 
 class EloquentReplyRepository extends CRepository implements ReplyRepository {
 
@@ -35,6 +36,13 @@ class EloquentReplyRepository extends CRepository implements ReplyRepository {
 			$Reply->topic_id = $this->stripTrim($input['topic_id']);
 		}
 
+		if(isset($Reply->user_id)){
+			if($Reply->user_id != Auth::user()->id){
+				$this->errors = new MessageBag;
+				$this->errors->add('reply', 'You can´t change others replies.');
+				return false;
+			}
+		}
 		$Reply->user_id = Auth::user()->id;
 
 		if($Reply->save()){

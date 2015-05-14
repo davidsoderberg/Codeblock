@@ -1,7 +1,8 @@
 <?php namespace App\Http\Controllers;
 
+use App\Repositories\Comment\CommentRepository;
 use App\Repositories\Rate\RateRepository;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
 class RateController extends Controller {
@@ -30,9 +31,12 @@ class RateController extends Controller {
 	 * @param  int $id id på kommentaren som skall få +.
 	 * @return object     med värden dit användaren skall skickas.
 	 */
-	public function plus($id){
-		if($this->rate->rate($id, '+')){
-			return Redirect::back();
+	public function plus(CommentRepository $comment, $id){
+		$user_id = $comment->get($id)->user_id;
+		if($user_id != Auth::user()->id) {
+			if($this->rate->rate($id, '+')) {
+				return Redirect::back();
+			}
 		}
 		return Redirect::back()->with('error', 'You could not rate that comment, please try agian');
 	}
@@ -42,9 +46,12 @@ class RateController extends Controller {
 	 * @param  [type] $id id på kommentaren som skall få -.
 	 * @return object     med värden dit användaren skall skickas.
 	 */
-	public function minus($id){
-		if($this->rate->rate($id, '-')){
-			return Redirect::back();
+	public function minus(CommentRepository $comment,$id){
+		$user_id = $comment->get($id)->user_id;
+		if($user_id != Auth::user()->id) {
+			if($this->rate->rate($id, '-')) {
+				return Redirect::back();
+			}
 		}
 		return Redirect::back()->with('error', 'You could not rate that comment, please try agian');
 	}
