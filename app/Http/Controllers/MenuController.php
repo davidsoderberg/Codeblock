@@ -3,6 +3,7 @@
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Tag\TagRepository;
 use App\Repositories\CRepository;
+use Orangehill\Iseed\Facades\Iseed;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
 
@@ -41,7 +42,7 @@ class MenuController extends Controller {
 						$param = 'users';
 					}
 					try {
-						\Iseed::generateSeed($param);
+						Iseed::generateSeed($param);
 						$content = "<pre>".Lang::get('app.ISeedingDone', array('table' => $param))."</pre>";
 						$content .= "<a href='/command/seed/".$password."'>".Lang::get('app.SeedNow')."<a>";
 					} catch (Exception $e) {
