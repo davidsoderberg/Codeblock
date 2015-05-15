@@ -34,10 +34,10 @@
 	},
 	"autoload-dev": {
 		"classmap": [
-            "tests/TestCase.php",
-			"tests/UnitCase.php",
-            "tests/IntegrationCase.php",
-            "tests/FunctionalCase.php"
+          "tests/TestTrait.php",
+          "tests/UnitCase.php",
+          "tests/IntegrationCase.php",
+          "tests/FunctionalCase.php"
 		]
 	},
 	"scripts": {

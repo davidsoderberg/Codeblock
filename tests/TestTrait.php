@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Artisan;
 
-class TestCase extends Illuminate\Foundation\Testing\TestCase {
-
+trait TestTrait{
 	/**
 	 * Creates the application.
 	 *
