@@ -4,6 +4,8 @@ use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Tag\TagRepository;
 use App\Repositories\CRepository;
 use Orangehill\Iseed\Facades\Iseed;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
 

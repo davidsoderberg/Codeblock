@@ -7,6 +7,8 @@ class IntegrationCase extends IntegrationTest {
 
 	use TestTrait, DatabaseTransactions;
 
+	protected $user = ['loginUsername' => 'david', 'loginpassword' => 'test'];
+
 	public function removeField(array $data, $fields){
 		if(!is_array($fields)){
 			$fields = array($fields);
@@ -16,6 +18,13 @@ class IntegrationCase extends IntegrationTest {
 			unset($data[$field]);
 		}
 		return $data;
+	}
+
+	protected function sign_in(){
+		$this->visit('login')
+			->submitForm('Login', $this->user)
+			->see('You have logged in.')
+			->onPage('/user');
 	}
 
 }
