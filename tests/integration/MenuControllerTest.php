@@ -1,6 +1,6 @@
-<?php
+<?php namespace integration;
 
-class MenuControllerTest extends IntegrationCase {
+class MenuControllerTest extends \IntegrationCase {
 
 	public function setUp()
 	{

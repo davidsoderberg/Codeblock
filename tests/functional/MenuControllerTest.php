@@ -1,6 +1,6 @@
-<?php
+<?php namespace functional;
 
-class MenuControllerTest extends FunctionalCase {
+class MenuControllerTest extends \FunctionalCase {
 
 	public function setUp()
 	{
