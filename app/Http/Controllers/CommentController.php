@@ -5,7 +5,6 @@ use App\Repositories\Comment\CommentRepository;
 use App\Repositories\Notification\NotificationRepository;
 use App\Repositories\Post\PostRepository;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 
@@ -66,16 +65,16 @@ class CommentController extends Controller {
 	 */
 	public function createOrUpdate(NotificationRepository $notification, PostRepository $post, $id = null)
 	{
-		if($this->comment->createOrUpdate(Input::all(), $id)){
+		if($this->comment->createOrUpdate($this->request->all(), $id)){
 			if(!is_null($id)){
 				return Redirect::back()->with('success', 'This comment have been saved.');
 			}
-			$post = $post->get(Input::get('post_id'));
+			$post = $post->get($this->request->get('post_id'));
 			if(Auth::user()->id != $post->user_id) {
 				$notification->send($post->user_id, NotificationType::COMMENT, $post);
 				$this->client->send($post, $post->user_id);
 			}
-			$this->mentioned(Input::get('comment'), $post, $notification);
+			$this->mentioned($this->request->get('comment'), $post, $notification);
 			return Redirect::back();
 		}
 

@@ -13,14 +13,17 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use App\Services\Client;
+use Illuminate\Http\Request;
 
 abstract class Controller extends BaseController {
 
 	protected $client;
+	protected $request;
 
 	use DispatchesCommands, ValidatesRequests;
 
 	public function __construct(){
+		$this->request = app('Illuminate\Http\Request');
 		View::share('siteName', ucfirst(str_replace('http://', '', URL::to('/'))));
 		$this->client = new Client();
 	}

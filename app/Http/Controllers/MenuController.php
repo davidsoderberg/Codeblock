@@ -103,7 +103,7 @@ class MenuController extends Controller {
 	 */
 	public function sendContact(CRepository $ClassRepo){
 		$rules = array('name' => 'required|min:3', 'email' => 'required|email', 'subject' => 'required|min:3', 'message' => 'required|min:3');
-		$input = Input::all();
+		$input = $this->request->all();
 
 		foreach ($input as $key => $value) {
 			$input[$key] = trim(strip_tags($value));

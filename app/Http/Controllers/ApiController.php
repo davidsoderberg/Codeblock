@@ -9,7 +9,6 @@ use App\Repositories\Tag\TagRepository;
 use App\Repositories\Rate\RateRepository;
 use App\Repositories\Topic\TopicRepository;
 use App\Repositories\User\UserRepository;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
@@ -80,7 +79,7 @@ class ApiController extends Controller {
 	 * @return mixed
 	 */
 	public function createOrUpdateCategory(CategoryRepository $category, $id = null){
-		if($category->createOrUpdate(Input::all(), $id)){
+		if($category->createOrUpdate($this->request->all(), $id)){
 			return Response::json(array('message' => 'Your category has been saved'), 201);
 		}
 		return Response::json(array('errors' => $category->getErrors()), 400);
@@ -93,7 +92,7 @@ class ApiController extends Controller {
 	 * @return mixed
 	 */
 	public function createOrUpdateTag(TagRepository $tag, $id = null){
-		if($tag->createOrUpdate(Input::all(), $id)){
+		if($tag->createOrUpdate($this->request->all(), $id)){
 			return Response::json(array('message' => 'Your tag has been saved'), 201);
 		}
 		return Response::json(array('errors' => $tag->getErrors()), 400);
@@ -111,7 +110,7 @@ class ApiController extends Controller {
 				return Response::json(array('errors' => array('user' => 'You have not that created that codeblock')), 400);
 			}
 		}
-		if($post->createOrUpdate(Input::all(), $id)){
+		if($post->createOrUpdate($this->request->all(), $id)){
 			return Response::json(array('message' => 'Your block has been saved'), 201);
 		}
 		return Response::json(array('errors' => $post->getErrors()), 400);
@@ -129,7 +128,7 @@ class ApiController extends Controller {
 				return Response::json(array('errors' => array('user' => 'You have not that created that comment')), 400);
 			}
 		}
-		if($comment->createOrUpdate(Input::all(), $id)){
+		if($comment->createOrUpdate($this->request->all(), $id)){
 			return Response::json(array('message' => 'Your comment has been saved'), 201);
 		}
 		return Response::json(array('errors' => $comment->getErrors()), 400);
@@ -146,7 +145,7 @@ class ApiController extends Controller {
 				return Response::json(array('errors' => array('user' => 'You are not that user')), 400);
 			}
 		}
-		if($user->createOrUpdate(Input::all(), $id)){
+		if($user->createOrUpdate($this->request->all(), $id)){
 			if(is_null($id)){
 				return Response::json(array('message' => 'Your user has been created, use the link in the mail to activate your user.'), 201);
 			}else{
@@ -168,7 +167,7 @@ class ApiController extends Controller {
 				return Response::json(array('errors' => array('user' => 'You have not that created that reply')), 400);
 			}
 		}
-		if($reply->createOrUpdate(Input::all(), $id)){
+		if($reply->createOrUpdate($this->request->all(), $id)){
 			return Response::json(array('message' => 'Your reply has been saved'), 201);
 		}
 		return Response::json(array('errors' => $reply->getErrors()), 400);
@@ -189,8 +188,8 @@ class ApiController extends Controller {
 				return Response::json(array('errors' => array('user' => 'You have not that created that topic')), 400);
 			}
 		}
-		$input = Input::all();
-		if($topic->createOrUpdate(Input::all(), $id)){
+		$input = $this->request->all();
+		if($topic->createOrUpdate($this->request->all(), $id)){
 			$input['topic_id'] = $topic->topic->id;
 			if(is_null($id) && !$reply->createOrUpdate($input)) {
 				$topic->delete($topic->topic->id);
@@ -206,7 +205,7 @@ class ApiController extends Controller {
 	 * @return mixed
 	 */
 	public function forgotPassword(UserRepository $user){
-		if($user->forgotPassword(Input::all())){
+		if($user->forgotPassword($this->request->all())){
 			return Response::json(array('message' => 'A new password have been sent to you.'), 200);
 		}
 		return Response::json(array('message' => "Your email don't exists in our database."), 400);
@@ -249,7 +248,7 @@ class ApiController extends Controller {
 	 */
 	public function Auth(){
 		try{
-			Auth::attempt(array('username' => trim(strip_tags(Input::get('username'))), 'password' => trim(strip_tags(Input::get('password')))));
+			Auth::attempt(array('username' => trim(strip_tags($this->request->get('username'))), 'password' => trim(strip_tags($this->request->get('password')))));
 		} catch (\Exception $e){}
 		return $this->getJwt();
 	}

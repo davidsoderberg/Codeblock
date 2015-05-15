@@ -49,7 +49,7 @@ class ArticleController extends Controller {
 	 */
 	public function create()
 	{
-		if($this->Article->createOrUpdate(Input::all())){
+		if($this->Article->createOrUpdate($this->request->all())){
 			return Redirect::to('articles')->with('success', 'Your article has been created.');
 		}
 
@@ -64,7 +64,7 @@ class ArticleController extends Controller {
 	 */
 	public function update($id)
 	{
-		if($this->Article->createOrUpdate(Input::all(), $id)){
+		if($this->Article->createOrUpdate($this->request->all(), $id)){
 			return Redirect::to('articles')->with('success', 'Your article has been updated.');
 		}
 

@@ -48,8 +48,8 @@ class TopicController extends Controller {
 				return Redirect::back()->with('error', 'You can´t edit other users topics.');
 			}
 		}
-		$input = Input::all();
-		if($this->topic->createOrUpdate(Input::all(), $id)) {
+		$input = $this->request->all();
+		if($this->topic->createOrUpdate($this->request->all(), $id)) {
 			if(is_null($id)) {
 				$input['topic_id'] = $this->topic->topic->id;
 				if(!$this->reply->createOrUpdate($input)) {

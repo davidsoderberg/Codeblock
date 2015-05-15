@@ -8,7 +8,6 @@ use App\Repositories\Tag\TagRepository;
 use App\Repositories\Rate\RateRepository;
 use App\Services\Github;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 
@@ -87,7 +86,7 @@ class PostController extends Controller {
 	 */
 	public function createOrUpdate($id = null)
 	{
-		if($this->post->createOrUpdate(Input::all(), $id)){
+		if($this->post->createOrUpdate($this->request->all(), $id)){
 			return Redirect::back()->with('success', 'Your block has been saved, You can see your new codeblock <a href="/posts/'.$this->post->getId().'">here</a>.');
 		}
 
@@ -174,7 +173,7 @@ class PostController extends Controller {
 	 * @return objekt med vyn som skall vissas med alla variabler som behövs.
 	 */
 	public function search(){
-		return View::make('post.list')->with('title', 'Search on: '.trim(strip_tags(Input::get('term'))))->with('posts', $this->post->search(Input::get('term')));
+		return View::make('post.list')->with('title', 'Search on: '.trim(strip_tags($this->request->get('term'))))->with('posts', $this->post->search($this->request->get('term')));
 	}
 
 	/**
@@ -244,7 +243,7 @@ class PostController extends Controller {
 
 	public function forkGist(Github $github){
 		if($github->hasRequestLeft()) {
-			$id = Input::get('id');
+			$id = $this->request->get('id');
 			if(is_numeric($id)) {
 				$data = $github->getGist($id);
 				if($data) {

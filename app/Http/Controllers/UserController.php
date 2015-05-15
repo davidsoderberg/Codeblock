@@ -6,7 +6,6 @@ use App\Repositories\Role\RoleRepository;
 use App\Repositories\User\UserRepository;
 use App\Social;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -49,11 +48,7 @@ class UserController extends Controller {
 	 */
 	public function store(RoleRepository $role, $id = null)
 	{
-		$input = array_merge(array(
-			'email' => Input::get('email'),
-			'username' => Input::get('username'),
-			'password' => Input::get('password'),
-		), Input::all());
+		$input = $this->request->all();
 		if(is_null($id)){
 			try {
 				$input['role'] = $role->getDefault()->id;
@@ -72,7 +67,7 @@ class UserController extends Controller {
 				return Redirect::back()->with('success', 'Your user has been saved.');
 			}
 		}
-		return Redirect::back()->withInput(Input::except('password'))->withErrors($this->user->getErrors());
+		return Redirect::back()->withInput($this->request->except('password'))->withErrors($this->user->getErrors());
 	}
 
 	/**
@@ -139,12 +134,12 @@ class UserController extends Controller {
 	 */
 	public function update(NotificationRepository $notification, $id)
 	{
-		if($this->user->update(Input::all(), $id)){
+		if($this->user->update($this->request->all(), $id)){
 			$newUser = $this->user->get($id);
 			if($newUser->active < 0){
 				$notification->send($newUser->id, NotificationType::BANNED, $newUser);
 			}
-			if($newUser->role != Input::get('role') && Auth::user()->id != $newUser->id){
+			if($newUser->role != $this->request->get('role') && Auth::user()->id != $newUser->id){
 				$notification->send($newUser->id, NotificationType::ROLE, $newUser);
 			}
 			return Redirect::back()->with('success','You have change users rights.');
@@ -182,10 +177,10 @@ class UserController extends Controller {
 	 */
 	public function Usersession()
 	{
-		if($this->user->login(Input::all())) {
+		if($this->user->login($this->request->all())) {
 			return Redirect::intended('/user')->with('success','You have logged in.');
 		}
-		return Redirect::to('/login')->with('error',"Your username or password is wrong, Don't forget to activate your user.")->withInput(array('loginUsername' => Input::get('loginUsername')));
+		return Redirect::to('/login')->with('error',"Your username or password is wrong, Don't forget to activate your user.")->withInput(array('loginUsername' => $this->request->get('loginUsername')));
 	}
 
 	/**
@@ -203,7 +198,7 @@ class UserController extends Controller {
 	 * @return object     med värden dit användaren skall skickas.
 	 */
 	public function forgotPassword(){
-		if($this->user->forgotPassword(Input::all())){
+		if($this->user->forgotPassword($this->request->all())){
 			return Redirect::back()->with('success', 'A new password have been sent to you.');
 		}else{
 			return Redirect::back()->with('error', "Your email don't exists in our database.");
@@ -234,7 +229,7 @@ class UserController extends Controller {
 	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
 	 */
 	public function oauth($social, Socialite $socialite){
-		if(Input::get('code') || Input::get('oauth_token') && Input::get('oauth_verifier')){
+		if($this->request->get('code') || $this->request->get('oauth_token') && $this->request->get('oauth_verifier')){
 			$user = $socialite->driver($social)->user();
 			if($social == 'github') {
 				Session::put('github_access_token', $user->token);
