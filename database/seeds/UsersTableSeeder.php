@@ -16,13 +16,13 @@ class UsersTableSeeder extends Seeder {
 		Model::unguard();
 
 		DB::table('users')->truncate();
-        
+
 		DB::table('users')->insert(array (
 
 			array (
 				'id' => 1,
 				'username' => 'david',
-				'password' => '$2y$10$WKueBYVnSYGSawRY8/Tt7.zSGnQwvDTjWQxwgGqIhih.wCGbqVDZe',
+				'password' => \Illuminate\Support\Facades\Hash::make('test'),
 				'email' => 'granskog_@hotmail.com',
 				'active' => 1,
 				'role' => 2,

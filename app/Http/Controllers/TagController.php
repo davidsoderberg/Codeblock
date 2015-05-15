@@ -51,11 +51,11 @@ class TagController extends Controller {
 	 */
 	public function createOrUpdate($id = null)
 	{
-		if($this->tag->createOrUpdate(Input::all(), $id)){
+		if($this->tag->createOrUpdate($this->request->all(), $id)){
 			return Redirect::to('tags');
 		}
 
-		return Redirect::back()->withErrors($this->tag->getErrors())->withInput(Input::all());
+		return Redirect::back()->withErrors($this->tag->getErrors())->withInput($this->request->all());
 	}
 
 	/**

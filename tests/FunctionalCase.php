@@ -1,6 +1,8 @@
 <?php
 
-class FunctionalCase extends TestCase {
+class FunctionalCase extends Illuminate\Foundation\Testing\TestCase {
+
+	use TestTrait;
 
 	public function __call($method, $args) {
 		if(in_array($method, ['get', 'post', 'put', 'patch', 'delete'])) {

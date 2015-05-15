@@ -2,8 +2,6 @@
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 
@@ -49,12 +47,12 @@ class InstallController extends Controller {
 			if(is_null($error)){
 				$error = 'We could not install codeblock for some reason, please try agian.';
 			}
-			return Redirect::back()->with('error', $error)->withInput(Input::all());
+			return Redirect::back()->with('error', $error)->withInput($this->request->all());
 		}
 	}
 
 	public function setEnv(){
-		$input = Input::except('_token');
+		$input = $this->request->except('_token');
 		$options = array_merge($this->getEnvArray(), $input);
 		if(Str::contains(asset('/'), 'localhost')) {
 			$options['APP_ENV'] = 'local';

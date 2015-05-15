@@ -1,9 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App\Repositories\Reply\ReplyRepository;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\View;
 use App\Repositories\Notification\NotificationRepository;
 use Illuminate\Support\Facades\Auth;
 use App\NotificationType;
@@ -34,7 +32,7 @@ class ReplyController extends Controller {
 				return Redirect::back()->with('error', 'You can´t edit other users replies.');
 			}
 		}
-		if($this->reply->createOrUpdate(Input::all(), $id)) {
+		if($this->reply->createOrUpdate($this->request->all(), $id)) {
 			$reply = $this->reply->Reply;
 			if(is_null($id)) {
 				$replies = $reply->topic->replies;
@@ -43,7 +41,7 @@ class ReplyController extends Controller {
 					$this->client->send($reply->topic, $replies->first()->user_id);
 				}
 				$this->client->send($reply, Auth::user()->id, 'publish', $this->client->getTopic($reply->topic->id));
-				$this->mentioned(Input::get('reply'), $reply->topic, $notification);
+				$this->mentioned($this->request->get('reply'), $reply->topic, $notification);
 				$read->UpdatedRead($reply->topic->id);
 			}
 			return Redirect::action('TopicController@show', array($reply->topic->id))->with('success', 'Your Reply has been saved.');

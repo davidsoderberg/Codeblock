@@ -24,7 +24,7 @@ Route::post('user/store/{id?}', 'UserController@store');
 Route::get('oauth/{social}', 'UserController@oauth');
 Route::post('search', 'PostController@search');
 Route::get('command/{command}/{password}/{param?}', 'MenuController@command')
-	->where(['command' => '[a-zA-Z]+', 'password' => '[a-zA-Z0-9]+', 'param' => '[a-zA-Z]+']);
+	->where(['command' => '[a-zA-Z]+', 'password' => '[a-zA-Z0-9]+', 'param' => '[a-zA-Z_]+']);
 
 Route::get('posts/list', 'PostController@listPosts');
 Route::get('posts/tag/{id}', 'PostController@tag');

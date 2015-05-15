@@ -63,7 +63,7 @@ class ForumController extends Controller {
 	 * @return mixed
 	 */
 	public function createOrUpdate($id = null) {
-		if($this->forum->createOrUpdate(Input::all(), $id)) {
+		if($this->forum->createOrUpdate($this->request->all(), $id)) {
 			return Redirect::back()->with('success', 'Your forum has been saved.');
 		}
 

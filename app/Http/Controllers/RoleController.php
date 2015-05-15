@@ -3,7 +3,6 @@
 use App\Repositories\Role\RoleRepository;
 use App\Repositories\Permission\PermissionRepository;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 
 /**
@@ -60,10 +59,10 @@ class RoleController extends Controller {
 	 * @return object     med värden dit användaren skall skickas.
 	 */
 	public function store(){
-		if($this->role->createOrUpdate(Input::all())){
+		if($this->role->createOrUpdate($this->request->all())){
 			return Redirect::back()->with('success', 'The role has been saved.');
 		}
-		return Redirect::back()->withErrors($this->role->getErrors())->withInput(Input::all());
+		return Redirect::back()->withErrors($this->role->getErrors())->withInput($this->request->all());
 
 	}
 
@@ -84,10 +83,10 @@ class RoleController extends Controller {
 	 * @return object     med värden dit användaren skall skickas.
 	 */
 	public function update(){
-		if($this->role->update(Input::all())){
+		if($this->role->update($this->request->all())){
 			return Redirect::back()->with('success', 'The role has been saved.');
 		}else{
-			return Redirect::back()->withErrors($this->role->getErrors())->withInput(Input::all());
+			return Redirect::back()->withErrors($this->role->getErrors())->withInput($this->request->all());
 		}
 	}
 
@@ -96,7 +95,7 @@ class RoleController extends Controller {
 	 * @return mixed
 	 */
 	public function setDefault(){
-		if($this->role->setDefault(Input::get('default'))){
+		if($this->role->setDefault($this->request->get('default'))){
 			return Redirect::back()->with('success', 'The default role has been updated.');
 		}
 		return Redirect::back()->withErrors($this->role->getErrors())->withInput();
@@ -133,7 +132,7 @@ class RoleController extends Controller {
 	 * @return object     med värden dit användaren skall skickas.
 	 */
 	public function updateRolePermission() {
-		if($this->role->updateRolePermission(Input::all())){
+		if($this->role->updateRolePermission($this->request->all())){
 			return Redirect::back()->with('success', 'The role has now the permission you selected.');
 		}else{
 			return Redirect::back()->with('error', 'The role could not get the permissions you seleted.');

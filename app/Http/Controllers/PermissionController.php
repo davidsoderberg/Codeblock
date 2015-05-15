@@ -42,11 +42,11 @@ class PermissionController extends Controller {
 	 * @return object     med värden dit användaren skall skickas.
 	 */
 	public function createOrUpdate($id = null){
-		if($this->permission->createOrUpdate(Input::all(), $id)){
+		if($this->permission->createOrUpdate($this->request->all(), $id)){
 			return Redirect::back()->with('success', 'The permission has been saved.');
 		}
 
-		return Redirect::back()->withErrors($this->permission->getErrors())->withInput(Input::all());
+		return Redirect::back()->withErrors($this->permission->getErrors())->withInput($this->request->all());
 	}
 
 	/**

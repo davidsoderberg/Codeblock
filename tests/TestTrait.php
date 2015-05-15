@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Artisan;
 
-class TestCase extends Illuminate\Foundation\Testing\TestCase {
-
+trait TestTrait{
 	/**
 	 * Creates the application.
 	 *
@@ -23,6 +23,9 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase {
 		if($seed) {
 			$this->seed();
 			Artisan::call('db:seed', ['--class' => 'UsersTableSeeder']);
+			Artisan::call('db:seed', ['--class' => 'PermissionsTableSeeder']);
+			Artisan::call('db:seed', ['--class' => 'RolesTableSeeder']);
+			Artisan::call('db:seed', ['--class' => 'PermissionRoleTableSeeder']);
 		}
 	}
 }
