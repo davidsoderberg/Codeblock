@@ -23,6 +23,9 @@ trait TestTrait{
 		if($seed) {
 			$this->seed();
 			Artisan::call('db:seed', ['--class' => 'UsersTableSeeder']);
+			Artisan::call('db:seed', ['--class' => 'PermissionsTableSeeder']);
+			Artisan::call('db:seed', ['--class' => 'RolesTableSeeder']);
+			Artisan::call('db:seed', ['--class' => 'PermissionRoleTableSeeder']);
 		}
 	}
 }
