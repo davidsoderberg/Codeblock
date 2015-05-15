@@ -1,7 +1,6 @@
 <?php
 
-class RegisterTest extends IntegrationCase
-{
+class RegisterTest extends IntegrationCase {
 
 	public function setUp()
 	{
@@ -9,8 +8,7 @@ class RegisterTest extends IntegrationCase
 		$this->setUpDb(false);
 	}
 
-	/** @test */
-	public function it_submits_forms()
+	public function test_sign_up()
 	{
 		$this->visit('login')
 			->submitForm('Sign up', ['username' => 'test' ,'email' => 'test@test.test', 'password' => 'testtest'])
