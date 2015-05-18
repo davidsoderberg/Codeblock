@@ -50,7 +50,7 @@ class ArticleController extends Controller {
 	public function create()
 	{
 		if($this->Article->createOrUpdate($this->request->all())){
-			return Redirect::to('articles')->with('success', 'Your article has been created.');
+			return Redirect::action('ArticleController@index')->with('success', 'Your article has been created.');
 		}
 
 		return Redirect::back()->withErrors($this->Article->getErrors())->withInput();
@@ -65,7 +65,7 @@ class ArticleController extends Controller {
 	public function update($id)
 	{
 		if($this->Article->createOrUpdate($this->request->all(), $id)){
-			return Redirect::to('articles')->with('success', 'Your article has been updated.');
+			return Redirect::action('ArticleController@index')->with('success', 'Your article has been updated.');
 		}
 
 		return Redirect::back()->withErrors($this->Article->getErrors())->withInput();
