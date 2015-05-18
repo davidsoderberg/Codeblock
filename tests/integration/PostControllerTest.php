@@ -51,6 +51,27 @@ class PostControllerTest extends \IntegrationCase {
 			->onPage('posts/1');
 	}
 
+	public function test_star_post(){
+		$this->create('App\Post', ['user_id' => 2]);
+		$this->visit('posts/star/1')
+			->see('You have now add a star to this codblock.')
+			->visit('posts/star/1')
+			->see('You have now removed a star from this codblock.');
+	}
+
+	public function test_fork_post(){
+		$this->create('App\Post', ['user_id' => 2]);
+		$this->visit('posts/fork/1')
+			->see('Your have forked a block and can now edit.')
+			->onPage('/posts/edit/2');
+	}
+
+	public function test_view_forked(){
+		$this->test_fork_post();
+		$this->visit('posts/forked/1')
+			->see('Forked codeblock from:');
+	}
+
 	public function test_fork_from_github(){
 		$id = 11315085;
 		$this->visit('posts/create')

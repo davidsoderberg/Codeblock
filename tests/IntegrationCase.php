@@ -2,6 +2,7 @@
 
 use Laracasts\Integrated\Extensions\Laravel as IntegrationTest;
 use Laracasts\Integrated\Services\Laravel\DatabaseTransactions;
+use Laracasts\TestDummy\Factory;
 use \Illuminate\Support\Facades\Auth;
 
 class IntegrationCase extends IntegrationTest {
@@ -25,6 +26,18 @@ class IntegrationCase extends IntegrationTest {
 			unset($data[$field]);
 		}
 		return $data;
+	}
+
+	public function create($model, array $overrides = [], $numbers = 1){
+		Factory::times($numbers)->create($model, $overrides);
+	}
+
+	public function getAttributes($model){
+		return Factory::attributesFor($model);
+	}
+
+	public function Build($model, array $override = []){
+		Factory::build($model, $override);
 	}
 
 	protected function sign_in(){

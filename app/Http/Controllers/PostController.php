@@ -59,7 +59,11 @@ class PostController extends Controller {
 		}else{
 			if(Auth::check()){
 				if(!empty($post->comments[0])){
-					$post->comments = usort($post->comments->toArray(), function($a, $b) { return strcmp($this->rate->calc($a->id),$this->rate->calc($b->id)); });
+					if($post->private != 1) {
+						$post->comments = usort($post->comments->toArray(), function ($a, $b) {
+							return strcmp($this->rate->calc($a['id']), $this->rate->calc($b['id']));
+						});
+					}
 				}
 				if(Auth::user()->id == $post->user_id || Auth::user()->hasPermission($this->getPermission(), false)){
 					return View::make('post.show')->with('title', 'show')->with('post', $post)->with('lang', $lang);
