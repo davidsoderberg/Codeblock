@@ -87,7 +87,11 @@ class PostController extends Controller {
 	public function createOrUpdate($id = null)
 	{
 		if($this->post->createOrUpdate($this->request->all(), $id)){
-			return Redirect::back()->with('success', 'Your block has been saved, You can see your new codeblock <a href="/posts/'.$this->post->getId().'">here</a>.');
+			if(!is_null($id)){
+				return Redirect::to('posts/'.$id)->with('success', 'Your block has been saved.');
+			}else{
+				return Redirect::to('posts/'.$this->post->getId())->with('success', 'Your block has been created.');
+			}
 		}
 
 		return Redirect::back()->withErrors($this->post->getErrors())->withInput();

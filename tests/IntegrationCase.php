@@ -2,10 +2,17 @@
 
 use Laracasts\Integrated\Extensions\Laravel as IntegrationTest;
 use Laracasts\Integrated\Services\Laravel\DatabaseTransactions;
+use \Illuminate\Support\Facades\Auth;
 
 class IntegrationCase extends IntegrationTest {
 
 	use TestTrait, DatabaseTransactions;
+
+	public function tearDown(){
+		if(Auth::check()){
+			Auth::logout();
+		}
+	}
 
 	protected $user = ['loginUsername' => 'david', 'loginpassword' => 'test'];
 
