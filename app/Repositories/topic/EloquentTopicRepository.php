@@ -7,7 +7,7 @@ class EloquentTopicRepository extends CRepository implements TopicRepository {
 
 	public $topic;
 
-	// hämtar en eller alla kategorier.
+	// hämtar en eller alla trådar.
 	public function get($id = null)
 	{
 		if(is_null($id)){
@@ -17,7 +17,7 @@ class EloquentTopicRepository extends CRepository implements TopicRepository {
 		}
 	}
 
-	// skapar och uppdaterar en kategori.
+	// skapar och uppdaterar en tråd.
 	public function createOrUpdate($input, $id = null)
 	{
 		if(!is_numeric($id)) {
@@ -43,7 +43,7 @@ class EloquentTopicRepository extends CRepository implements TopicRepository {
 		}
 	}
 
-	// tar bort en kategori.
+	// tar bort en tråd.
 	public function delete($id){
 		$Topic = Topic::find($id);
 		if($Topic == null){

@@ -9,7 +9,7 @@ class EloquentReplyRepository extends CRepository implements ReplyRepository {
 
 	public $Reply;
 
-	// hämtar en eller alla kategorier.
+	// hämtar en eller alla svar.
 	public function get($id = null)
 	{
 		if(is_null($id)){
@@ -19,7 +19,7 @@ class EloquentReplyRepository extends CRepository implements ReplyRepository {
 		}
 	}
 
-	// skapar och uppdaterar en kategori.
+	// skapar och uppdaterar ett svar.
 	public function createOrUpdate($input, $id = null)
 	{
 		if(!is_numeric($id)) {
@@ -54,7 +54,7 @@ class EloquentReplyRepository extends CRepository implements ReplyRepository {
 		}
 	}
 
-	// tar bort en kategori.
+	// tar bort ett svar.
 	public function delete($id){
 		$Reply = Reply::find($id);
 		if($Reply == null){

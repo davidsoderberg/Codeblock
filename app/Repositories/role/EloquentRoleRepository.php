@@ -60,10 +60,12 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 		}
 	}
 
+	// Hämtar rollen som alla nya användare får.
 	public function getDefault(){
 		return Role::where('default', 1)->first();
 	}
 
+	// Sätter rollen som alla nya användare får.
 	public function setDefault($id){
 		$current = $this->getDefault();
 		$current->default = 0;
@@ -75,6 +77,7 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 		return false;
 	}
 
+	// Skapar en lista med id och roll.
 	public function getSelectList(){
 		$roles = $this->get();
 		$selectArray = Array();
@@ -138,6 +141,7 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 		return true;
 	}
 
+	// synkar alla rättigheter med en roll.
 	public function syncPermissions($role, $ids){
 		if(!is_array($ids)){
 			$ids = array();

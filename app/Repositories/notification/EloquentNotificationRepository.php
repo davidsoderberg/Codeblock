@@ -16,6 +16,7 @@ class EloquentNotificationRepository extends CRepository implements Notification
 		$this->user = $user;
 	}
 
+	// hämtar en eller alla notifikationer.
 	public function get($id = 0){
 		if(is_numeric($id) && $id > 0){
 			return Notification::find($id);
@@ -23,6 +24,7 @@ class EloquentNotificationRepository extends CRepository implements Notification
 		return Notification::all();
 	}
 
+	// Sätter id på den användare som notifikationen ska till.
 	public function setUserId($user_id, $note){
 		if(!is_numeric($user_id)){
 			$user_id = $this->user->getIdByUsername($this->stripTrim($user_id));
@@ -36,6 +38,7 @@ class EloquentNotificationRepository extends CRepository implements Notification
 		return $note;
 	}
 
+	// Sätter vilken typ av notifikationen är.
 	public function setType($type, $note){
 		if(isset($type) && NotificationType::isType($type)){
 			$note->type = $type;
@@ -44,6 +47,7 @@ class EloquentNotificationRepository extends CRepository implements Notification
 		return $note;
 	}
 
+	// Sätter vilken model notifikationen tillhör.
 	public function setObject($object, $note){
 		if(is_object($object)){
 			$namespaces = explode('\\', get_class($object));
@@ -56,6 +60,7 @@ class EloquentNotificationRepository extends CRepository implements Notification
 		return $note;
 	}
 
+	// Sätter notifikationens innehåll.
 	public function setcontent($subject, $body, $type, $note){
 		if(!is_null($subject) && !is_null($body)){
 			$note->subject = $this->stripTrim($subject);
@@ -68,6 +73,7 @@ class EloquentNotificationRepository extends CRepository implements Notification
 		return $note;
 	}
 
+	// Sätter vilket id notifikationen kommer ifrån.
 	public function setFromId($from_id, $note){
 		if(!is_null($this->user->get($from_id))){
 			$note->from_id = $from_id;
@@ -78,6 +84,7 @@ class EloquentNotificationRepository extends CRepository implements Notification
 		return $note;
 	}
 
+	// Skapar en notifikation.
 	public function send($user_id, $type, $object, $subject = null, $body = null) {
 
 		$note = new Notification();
@@ -108,6 +115,7 @@ class EloquentNotificationRepository extends CRepository implements Notification
 		}
 	}
 
+	// Hämtar ämne och meddelande för en notifikation.
 	public function getSubjectAndBody(Notification $notification){
 
 		try{
@@ -133,6 +141,7 @@ class EloquentNotificationRepository extends CRepository implements Notification
 		return $notification;
 	}
 
+	// Sätter ämne och meddelande för en notifikation.
 	private function setSubjectAndBody(Notification $notification){
 		$object = $notification->object;
 		$from = $this->user->get($notification->from_id);
@@ -175,6 +184,7 @@ class EloquentNotificationRepository extends CRepository implements Notification
 		return $notification;
 	}
 
+	// Skickar notifikationen via mejl.
 	private function sendNotification(Notification $notification){
 		$user = $this->user->get($notification->user_id);
 		$data = array('subject' => $notification->subject, 'body' => $notification->body);
@@ -185,6 +195,7 @@ class EloquentNotificationRepository extends CRepository implements Notification
 		return false;
 	}
 
+	// Tar bort en notifikation.
 	public function delete($id){
 		$Notification = Notification::find($id);
 		if($Notification == null){

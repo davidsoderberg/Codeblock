@@ -5,7 +5,7 @@ use App\Repositories\CRepository;
 
 class EloquentForumRepository extends CRepository implements ForumRepository {
 
-	// hämtar en eller alla kategorier.
+	// hämtar en eller alla forum.
 	public function get($id = null)
 	{
 		if(is_null($id)){
@@ -15,7 +15,7 @@ class EloquentForumRepository extends CRepository implements ForumRepository {
 		}
 	}
 
-	// skapar och uppdaterar en kategori.
+	// skapar och uppdaterar en forum.
 	public function createOrUpdate($input, $id = null)
 	{
 		if(!is_numeric($id)) {
@@ -40,7 +40,7 @@ class EloquentForumRepository extends CRepository implements ForumRepository {
 		}
 	}
 
-	// tar bort en kategori.
+	// tar bort en forum.
 	public function delete($id){
 		$Forum = Forum::find($id);
 		if($Forum == null){

@@ -29,6 +29,7 @@ Class CRepository {
 		return trim(strip_tags($input));
 	}
 
+	// kollar om arrayen är en assosiativ array.
 	public function is_assoc($array) {
 		foreach(array_keys($array) as $key) {
 			if(!is_int($key)) {
