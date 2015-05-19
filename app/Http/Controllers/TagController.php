@@ -52,7 +52,10 @@ class TagController extends Controller {
 	public function createOrUpdate($id = null)
 	{
 		if($this->tag->createOrUpdate($this->request->all(), $id)){
-			return Redirect::to('tags');
+			if(is_null($id)){
+				return Redirect::to('tags')->with('success', 'Your tag has been created.');
+			}
+			return Redirect::to('tags')->with('success', 'Your tag has been updated.');
 		}
 
 		return Redirect::back()->withErrors($this->tag->getErrors())->withInput($this->request->all());
