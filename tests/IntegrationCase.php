@@ -29,7 +29,7 @@ class IntegrationCase extends IntegrationTest {
 	}
 
 	public function create($model, array $overrides = [], $numbers = 1){
-		Factory::times($numbers)->create($model, $overrides);
+		return Factory::times($numbers)->create($model, $overrides);
 	}
 
 	public function getAttributes($model){
@@ -37,7 +37,7 @@ class IntegrationCase extends IntegrationTest {
 	}
 
 	public function Build($model, array $override = []){
-		Factory::build($model, $override);
+		return Factory::build($model, $override);
 	}
 
 	protected function sign_in(){

@@ -8,3 +8,16 @@ $factory('App\Post', [
 	'user_id' => $faker->numberBetween(0,10),
 	'slug' => $faker->sentence(3)
 ]);
+
+$factory('App\Forum', [
+	'title' => $faker->sentence(3),
+	'description' => $faker->sentence()
+]);
+
+$factory('App\Topic', [
+	'title' => $faker->sentence(3)
+]);
+
+$factory('App\Reply', [
+	'reply' => $faker->sentence()
+]);
