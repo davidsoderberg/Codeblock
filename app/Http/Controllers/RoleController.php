@@ -60,7 +60,7 @@ class RoleController extends Controller {
 	 */
 	public function store(){
 		if($this->role->createOrUpdate($this->request->all())){
-			return Redirect::back()->with('success', 'The role has been saved.');
+			return Redirect::back()->with('success', 'The role has been created.');
 		}
 		return Redirect::back()->withErrors($this->role->getErrors())->withInput($this->request->all());
 
@@ -84,7 +84,7 @@ class RoleController extends Controller {
 	 */
 	public function update(){
 		if($this->role->update($this->request->all())){
-			return Redirect::back()->with('success', 'The role has been saved.');
+			return Redirect::back()->with('success', 'The role has been updated.');
 		}else{
 			return Redirect::back()->withErrors($this->role->getErrors())->withInput($this->request->all());
 		}
