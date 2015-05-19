@@ -4,6 +4,11 @@ use Closure;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
+/**
+ * Class Role
+ * Checks if user has correct role.
+ * @package App\Http\Middleware
+ */
 class Role
 {
 

@@ -4,6 +4,11 @@ use Closure;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
+/**
+ * Class Permission
+ * Checks if current user has permission for current page.
+ * @package App\Http\Middleware
+ */
 class Permission
 {
 
@@ -18,6 +23,8 @@ class Permission
     {
 		$response = $next($request);
 		$actions = $request->route()->getAction();
+
+		// Fetch permission for current controller method.
 		if(array_key_exists('permission', $actions)) {
 			$permission = $actions['permission'];
 		}else{
@@ -26,6 +33,7 @@ class Permission
 			$permission = $permissionAnnotation->getPermission($action[1], true);
 		}
 
+		// Checks if user has that permission.
 		if (Auth::check() && !Auth::user()->hasPermission($permission)){
 			return Redirect::to('/')->with('error', 'You do not have the correct permission for that url.');
 		}

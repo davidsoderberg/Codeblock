@@ -4,6 +4,11 @@ use Closure;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
+/**
+ * Class Jwt
+ * Checks if the json web token is valid.
+ * @package App\Http\Middleware
+ */
 class Jwt
 {
 

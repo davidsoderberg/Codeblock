@@ -5,6 +5,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 
+/**
+ * Class Installed
+ * Checks if codeblock is installed.
+ * @package App\Http\Middleware
+ */
 class Installed
 {
 

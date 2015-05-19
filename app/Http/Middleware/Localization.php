@@ -3,6 +3,11 @@
 use Closure;
 use Illuminate\Support\Facades\App;
 
+/**
+ * Class Localization
+ * Check what lang should be used on the website.
+ * @package App\Http\Middleware
+ */
 class Localization {
 
 	/**
