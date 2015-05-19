@@ -57,7 +57,7 @@ Route::group(['middleware' => 'auth'], function() {
 
 	Route::get('forum', 'ForumController@listForums');
 	Route::get('forum/{id}', 'ForumController@show');
-	Route::get('forums/{id}', 'ForumController@forumsRedirect');
+	//Route::get('forums/{id}', 'ForumController@forumsRedirect');
 	Route::get('forum/topic/{id}/{reply?}', 'TopicController@show');
 
 	Route::post('topics/store/{id?}', 'TopicController@createOrUpdate');
