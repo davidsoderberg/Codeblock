@@ -1,9 +1,22 @@
 <?php namespace App\Services\Annotation;
 
+/**
+ * Class Permission
+ * @package App\Services\Annotation
+ */
 class Permission extends Annotation{
 
+	/**
+	 * @var string
+	 */
 	protected $annotation = '@permission';
 
+	/**
+	 * Gets permission from method.
+	 * @param $method
+	 * @param bool $optional
+	 * @return array|string
+	 */
 	public function getPermission($method, $optional = false) {
 		$permission = $this->getValues($method);
 		if($permission != '') {
@@ -19,6 +32,10 @@ class Permission extends Annotation{
 		return $permission;
 	}
 
+	/**
+	 * Returns current permissions.
+	 * @return array|string
+	 */
 	public function getPermissions(){
 		return $this->getValues();
 	}

@@ -22,6 +22,7 @@ abstract class PubSub{
 	const COMMENT = 'Comment';
 
 	/**
+	 * Adding id to Topic constant.
 	 * @param $id
 	 * @return string
 	 */
@@ -30,6 +31,7 @@ abstract class PubSub{
 	}
 
 	/**
+	 * Adding id to Comment constant.
 	 * @param $id
 	 * @return string
 	 */
@@ -38,6 +40,7 @@ abstract class PubSub{
 	}
 
 	/**
+	 * Format topic reply for websocket.
 	 * @param Reply $reply
 	 * @param $user_id
 	 */

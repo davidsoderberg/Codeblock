@@ -8,11 +8,13 @@ class Websocket extends PubSub implements MessageComponentInterface {
 	private $connections = array();
 	private $topics = array();
 
+	// Adding connection on connect.
 	public function onOpen(ConnectionInterface $conn) {
 		$this->connections[] = $conn;
 		echo "New connection! ({$conn->resourceId})\n";
 	}
 
+	// Sending a message to a specific connection.
 	public function onMessage(ConnectionInterface $from, $msg) {
 		$msg = json_decode($msg, true);
 
@@ -53,6 +55,7 @@ class Websocket extends PubSub implements MessageComponentInterface {
 		}
 	}
 
+	// Sending a mass message to all in a specific topic.
 	private function getPublish($msg, $user_id){
 		$msg['topic'] = explode('.',$msg['topic'])[0];
 		switch($msg['topic']){
@@ -63,6 +66,7 @@ class Websocket extends PubSub implements MessageComponentInterface {
 		return $msg;
 	}
 
+	// Adding connection if a connection subscribes to a topic.
 	private function onSubscribe($id, $topic){
 		if(!isset($this->topics[$topic])){
 			$this->topics[$topic] = array();
@@ -70,6 +74,7 @@ class Websocket extends PubSub implements MessageComponentInterface {
 		$this->topics[$topic][] = $id;
 	}
 
+	// Removes a connection from a topic on Unsubscribe.
 	private function onUnSubscribe(ConnectionInterface $conn, $topic = ''){
 		if(false !== $id = array_search($conn, $this->clients)) {
 			if($topic != '') {
@@ -82,6 +87,7 @@ class Websocket extends PubSub implements MessageComponentInterface {
 		}
 	}
 
+	// Removes connection from a topic.
 	private function removeFromTopic($topic, $id, $array){
 		if(false !== $key = array_search($id, $array)) {
 			unset($this->topics[$topic][$key]);
@@ -91,17 +97,20 @@ class Websocket extends PubSub implements MessageComponentInterface {
 		}
 	}
 
+	// If the connection is closed.
 	public function onClose(ConnectionInterface $conn) {
 		$this->onUnSubscribe($conn);
 		$this->removeConn($conn);
 		echo "Connection {$conn->resourceId} has disconnected\n";
 	}
 
+	// echo out an message in console if an error occurre.
 	public function onError(ConnectionInterface $conn, \Exception $e) {
 		echo "An error has occurred: {$e->getMessage()}\n";
 		$conn->close();
 	}
 
+	// Removes connection from connection arrays.
 	private function removeConn(ConnectionInterface $conn){
 		if(false !== $key = array_search($conn, $this->clients)){
 			unset($this->clients[$key]);

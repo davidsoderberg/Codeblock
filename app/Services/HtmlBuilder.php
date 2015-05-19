@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Request;
 class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 
 	/**
+	 * Creating user avatar for forum.
 	 * @param $value
 	 * @param int $size
 	 * @return string
@@ -26,6 +27,7 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 	}
 
 	/**
+	 * Replace markdown with html.
 	 * @param $text
 	 * @return mixed|string
 	 */
@@ -47,6 +49,7 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 	}
 
 	/**
+	 * Adding version for assets files.
 	 * @param $path
 	 * @return string
 	 */
@@ -55,6 +58,7 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 	}
 
 	/**
+	 * Adding link to mentioned user.
 	 * @param $text
 	 * @return mixed
 	 */
@@ -64,6 +68,7 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 	}
 
 	/**
+	 * Creating flash message.
 	 * @return string
 	 */
 	public function flash(){
@@ -75,6 +80,10 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 		}
 	}
 
+	/**
+	 * Creating toast message.
+	 * @return string
+	 */
 	public function toast(){
 		$flash = array('success','error', 'warning', 'info');
 		foreach ($flash as $value) {
@@ -85,6 +94,7 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 	}
 
 	/**
+	 * Creating submenu.
 	 * @param $content
 	 * @param $items
 	 * @return string
@@ -101,6 +111,7 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 	}
 
 	/**
+	 * Checks if user has permission in view.
 	 * @param $action
 	 * @param bool $optional
 	 * @return bool
@@ -116,6 +127,7 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 	}
 
 	/**
+	 * Creating menulink.
 	 * @param $url
 	 * @param $content
 	 * @param array $attributes
@@ -131,6 +143,7 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 	}
 
 	/**
+	 * Creating link.
 	 * @param $url
 	 * @param $content
 	 * @param array $attributes
@@ -157,6 +170,7 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 	}
 
 	/**
+	 * Creating table.
 	 * @param array $fields
 	 * @param array $data
 	 * @param array $show

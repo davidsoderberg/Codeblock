@@ -11,6 +11,7 @@ class Client extends PubSub {
 		$this->client = new \WebSocket\Client("ws://".env('SOCKET_ADRESS').":".env('SOCKET_PORT'));
 	}
 
+	// Sending message to websocket server from the application.
 	public function send($object, $user_id = 0, $channel = 'toast', $topic = ''){
 		if($user_id == 0 || !is_numeric($user_id)){
 			if(!isset($object->user_id)) {
@@ -23,6 +24,7 @@ class Client extends PubSub {
 		} catch (ConnectionException $e){}
 	}
 
+	// check if message is toast.
 	private function checkToast($channel, $topic, $object){
 		if($channel != 'toast' ){
 			if($topic == ''){
@@ -36,6 +38,7 @@ class Client extends PubSub {
 		return $this->getMessage($object);
 	}
 
+	// Get toast message.
 	private function getMessage($object){
 		$message = 'You have a new ';
 		$html = new HtmlBuilder();
@@ -53,6 +56,7 @@ class Client extends PubSub {
 		return $message;
 	}
 
+	// Return objects name.
 	private function getObjectName($object){
 		if(is_object($object)){
 			$namespaces = explode('\\', get_class($object));

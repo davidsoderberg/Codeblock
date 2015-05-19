@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 
 class Github{
+
+	// checks if current user has requests to github left.
 	public function hasRequestLeft() {
 		$data = $this->githubCurl('rate_limit');
 		if(is_array($data)) {
@@ -12,6 +14,7 @@ class Github{
 		return false;
 	}
 
+	// Fetch gist.
 	public function getGist($id){
 		$data = $this->githubCurl('gists/'. $id);
 		if($data) {
@@ -20,6 +23,7 @@ class Github{
 		return false;
 	}
 
+	// checks if token is a github token.
 	public function isToken($token){
 		$data = $this->curl('https://api.github.com/?access_token=' . $token);
 		if(isset($data['message'])) {
@@ -28,6 +32,7 @@ class Github{
 		return true;
 	}
 
+	// Method to curl to github.
 	private function githubCurl($url){
 		$access_token = env('GITHUB_TOKEN', null);
 		if(Session::has('github_access_token')) {
@@ -39,6 +44,7 @@ class Github{
 		return false;
 	}
 
+	// Method to curl to an url.
 	private function curl($url){
 		$ch = curl_init();
 		$username = 'Codeblock';

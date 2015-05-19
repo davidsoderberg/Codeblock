@@ -4,18 +4,39 @@ use Exception;
 use ReflectionClass;
 use Illuminate\Support\Str;
 
+/**
+ * Class Annotation
+ * @package App\Services\Annotation
+ */
 abstract class Annotation{
 
+	/**
+	 * @var ReflectionClass
+	 */
 	private $class;
+	/**
+	 * @var array
+	 */
 	private $values;
+	/**
+	 * @var
+	 */
 	protected $annotation;
 
+	/**
+	 * @param $class
+	 */
 	public function __construct($class){
 		$this->values = array();
 		$this->class = new ReflectionClass($class);
 		$this->fetchValues();
 	}
 
+	/**
+	 * Get values from method.
+	 * @param null $method
+	 * @return array|string
+	 */
 	protected function getValues($method = null){
 		if(is_null($method)) {
 			return $this->values;
@@ -26,6 +47,9 @@ abstract class Annotation{
 		return '';
 	}
 
+	/**
+	 * Fetch values from all method from a class.
+	 */
 	private function fetchValues(){
 		$parent = $this->class->getParentClass();
 		foreach($this->class->getMethods() as $method) {
@@ -43,6 +67,10 @@ abstract class Annotation{
 		}
 	}
 
+	/**
+	 * Fetches all method names.
+	 * @return array
+	 */
 	public function getMethods(){
 		return array_keys($this->values);
 	}
