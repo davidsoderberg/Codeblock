@@ -65,8 +65,9 @@ class TopicController extends Controller {
 					return Redirect::back()->withErrors($this->reply->getErrors())->withInput();
 				}
 				$read->hasRead($this->topic->topic->id);
+				return Redirect::back()->with('success', 'Your topic has been created.');
 			}
-			return Redirect::back()->with('success', 'Your topic has been saved.');
+			return Redirect::back()->with('success', 'Your topic has been updated.');
 		}
 		return Redirect::back()->withErrors($this->topic->getErrors())->withInput();
 	}
@@ -77,11 +78,13 @@ class TopicController extends Controller {
 	 * @return mixed
 	 */
 	public function delete($id) {
-		$forum_id = $this->topic->get($id)->forum_id;
-		if($this->topic->delete($id)) {
-			return Redirect::action('ForumController@show', array($forum_id))->with('success', 'Your topic has been deleted.');
-		}
+		try {
+			$forum_id = $this->topic->get($id)->forum_id;
+			if($this->topic->delete($id)) {
+				return Redirect::action('ForumController@show', array($forum_id))->with('success', 'Your topic has been deleted.');
+			}
 
-		return Redirect::back();
+		} catch(\Exception $e){}
+		return Redirect::back()->with('error', 'That topic could not be deleted.');
 	}
 }

@@ -15,7 +15,7 @@ class TopicControllerTest extends \IntegrationCase {
 
 		$this->visit('forum/1')
 			->submitForm('Create', ['title' => 'test', 'reply' => 'test'])
-			->see('Your topic has been saved.');
+			->see('Your topic has been created.');
 		return $this;
 	}
 
@@ -30,7 +30,7 @@ class TopicControllerTest extends \IntegrationCase {
 			->fill('hej', 'title')
 			->press('Update topic title')
 			->see('hej')
-			->see('Your topic has been saved.');
+			->see('Your topic has been updated.');
 	}
 
 	public function test_delete_topic(){
@@ -38,5 +38,10 @@ class TopicControllerTest extends \IntegrationCase {
 
 		$this->visit('topics/delete/1')
 			->see('Your topic has been deleted.');
+	}
+
+	public function test_delete_none_topic(){
+		$this->visit('topics/delete/1')
+			->see('That topic could not be deleted.');
 	}
 }
