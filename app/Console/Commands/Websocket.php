@@ -40,6 +40,7 @@ class Websocket extends Command {
 	 */
 	public function fire()
 	{
+		// Creating an websocket server.
 		$server = IoServer::factory(
 			new HttpServer(
 				new WsServer(
@@ -48,7 +49,7 @@ class Websocket extends Command {
 			),
 			env('SOCKET_PORT')
 		);
-
+		// Starting the websocket server.
 		$server->run();
 	}
 

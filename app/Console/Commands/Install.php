@@ -45,6 +45,7 @@ class Install extends Command {
 	public function fire(RoleRepository $roleRepository, PermissionRepository $permissionRepository, CategoryRepository $categoryRepository)
 	{
 		$startat = $this->option('startat');
+		// tests the smtp configs.
 		if(is_null($startat)){
 			$mail = New CRepository();
 			$data = array('subject' => 'Test mail', 'body' => 'This is a mail to test mail configuration.');
@@ -54,6 +55,7 @@ class Install extends Command {
 			}
 			$startat = 'Github';
 		}
+		// tests the github configs.
 		if($startat == 'Github') {
 			$github = new Github();
 			if(!$github->isToken(env('GITHUB_TOKEN', null))) {
@@ -61,6 +63,7 @@ class Install extends Command {
 			}
 			$startat = 'Database';
 		}
+		// tests the database configs.
 		if($startat == 'Database') {
 			try {
 				DB::connection()->getDatabaseName();
@@ -69,6 +72,7 @@ class Install extends Command {
 			}
 			$startat = 'Migration';
 		}
+		// migrates all migrations.
 		if($startat == 'Migration') {
 			try{
 				Artisan::call('migrate');
@@ -77,6 +81,7 @@ class Install extends Command {
 			}
 			$startat = 'Seed';
 		}
+		// Seeds the database.
 		if($startat == 'Seed' && count($categoryRepository->get()) == 0) {
 			try {
 				Artisan::call('db:seed');
@@ -85,6 +90,7 @@ class Install extends Command {
 			}
 			$startat = 'Permissions';
 		}
+		// insert all permissions.
 		if($startat == 'Permissions' && count($permissionRepository->get()) == 0 || count($permissionRepository->get()) == 0 ) {
 			try {
 				Artisan::call('InsertPermissions');
@@ -93,6 +99,7 @@ class Install extends Command {
 			}
 			$startat = 'Role';
 		}
+		// creating the default role.
 		if($startat == 'Role' && count($roleRepository->get()) == 0 || count($roleRepository->get()) == 0) {
 			$ids = array();
 			foreach($permissionRepository->get() as $permission) {

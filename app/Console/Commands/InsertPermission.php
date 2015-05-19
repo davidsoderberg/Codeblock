@@ -40,6 +40,7 @@ class InsertPermission extends Command {
 	 */
 	public function fire(PermissionRepository $permissionRepository)
 	{
+		// Checks if all old permissions should be deleted.
 		if(is_null($this->argument('onlyInsert'))) {
 			$permissions = $permissionRepository->get();
 			foreach($permissions as $permission){
@@ -48,6 +49,7 @@ class InsertPermission extends Command {
 			DB::table('permissions')->truncate();
 		}
 
+		// Get all controllers.
 		$handle = opendir(app_path().'/Http/Controllers');
 		$classes = array();
 		while (false !== ($entry = readdir($handle))) {
@@ -57,6 +59,7 @@ class InsertPermission extends Command {
 			}
 		}
 
+		// Inserts all permission.
 		foreach($classes as $class) {
 			try {
 				$permissionAnnotation = new Permission('App\\Http\\Controllers\\' . $class);
