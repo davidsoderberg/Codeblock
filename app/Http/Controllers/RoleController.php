@@ -91,6 +91,7 @@ class RoleController extends Controller {
 	}
 
 	/**
+	 * Sätter rollen som alla nya användare får.
 	 * @permission set_default_role
 	 * @return mixed
 	 */

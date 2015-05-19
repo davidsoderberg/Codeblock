@@ -20,6 +20,7 @@ class ForumController extends Controller {
 	}
 
 	/**
+	 * Listar alla forum i en tabel.
 	 * @permission view_forums
 	 * @return mixed
 	 */
@@ -35,6 +36,7 @@ class ForumController extends Controller {
 	}
 
 	/**
+	 * Vissar alla forum.
 	 * @return mixed
 	 */
 	public function listForums(){
@@ -42,6 +44,7 @@ class ForumController extends Controller {
 	}
 
 	/**
+	 * Omdirigerar ett forum.
 	 * @param $id
 	 * @return mixed
 	 */
@@ -50,6 +53,7 @@ class ForumController extends Controller {
 	}
 
 	/**
+	 * Visar ett forum.
 	 * @param $id
 	 */
 	public function show($id) {
@@ -58,6 +62,7 @@ class ForumController extends Controller {
 	}
 
 	/**
+	 * Skapar eller uppdaterar ett forum.
 	 * @permission create_update_forums
 	 * @param null $id
 	 * @return mixed
@@ -71,6 +76,7 @@ class ForumController extends Controller {
 	}
 
 	/**
+	 * Tar bort ett forum.
 	 * @permission delete_forums
 	 * @param $id
 	 * @return mixed

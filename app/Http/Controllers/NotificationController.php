@@ -24,6 +24,7 @@ class NotificationController extends Controller {
 	}
 
 	/**
+	 * Listar alla notifikationer.
 	 * @return mixed
 	 */
 	public function index() {
@@ -31,6 +32,7 @@ class NotificationController extends Controller {
 	}
 
 	/**
+	 * Listar alla notifikationer för en specifik användare.
 	 * @return mixed
 	 */
 	public function listNotification(){
@@ -38,6 +40,7 @@ class NotificationController extends Controller {
 	}
 
 	/**
+	 * Visar en specifik notifikation.
 	 * @param $id
 	 * @return mixed
 	 */
@@ -47,6 +50,7 @@ class NotificationController extends Controller {
 	}
 
 	/**
+	 * Tar bort en notifikation.
 	 * @param $id
 	 * @return mixed
 	 */

@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Response;
 class ApiController extends Controller {
 
 	/**
+	 * Shows a category.
 	 * @param CategoryRepository $category
 	 * @param null $id
 	 * @return mixed
@@ -28,6 +29,7 @@ class ApiController extends Controller {
 	}
 
 	/**
+	 * Shows a tag.
 	 * @param TagRepository $tag
 	 * @param null $id
 	 * @return mixed
@@ -37,6 +39,7 @@ class ApiController extends Controller {
 	}
 
 	/**
+	 * Shows a post.
 	 * @param PostRepository $post
 	 * @param null $id
 	 * @return mixed
@@ -46,6 +49,7 @@ class ApiController extends Controller {
 	}
 
 	/**
+	 * Shows a user.
 	 * @param UserRepository $user
 	 * @param null $id
 	 * @return mixed
@@ -55,6 +59,7 @@ class ApiController extends Controller {
 	}
 
 	/**
+	 * Shows a forum.
 	 * @param ForumRepository $forum
 	 * @param null $id
 	 * @return mixed
@@ -64,6 +69,7 @@ class ApiController extends Controller {
 	}
 
 	/**
+	 * Shows a topic.
 	 * @param TopicRepository $topic
 	 * @param null $id
 	 * @return mixed
@@ -73,6 +79,7 @@ class ApiController extends Controller {
 	}
 
 	/**
+	 * Creating or updating a category.
 	 * @permission create_update_categories
 	 * @param CategoryRepository $category
 	 * @param null $id
@@ -86,6 +93,7 @@ class ApiController extends Controller {
 	}
 
 	/**
+	 * Creating or updating a tag.
 	 * @permission create_update_tags
 	 * @param TagRepository $tag
 	 * @param null $id
@@ -99,6 +107,7 @@ class ApiController extends Controller {
 	}
 
 	/**
+	 * Creating or updating a post.
 	 * @param PostRepository $post
 	 * @param null $id
 	 * @return mixed
@@ -117,6 +126,7 @@ class ApiController extends Controller {
 	}
 
 	/**
+	 * Creating or updating a comment.
 	 * @param CommentRepository $comment
 	 * @param null $id
 	 * @return mixed
@@ -135,6 +145,7 @@ class ApiController extends Controller {
 	}
 
 	/**
+	 * Creating or updating a user.
 	 * @param UserRepository $user
 	 * @param null $id
 	 * @return mixed
@@ -156,6 +167,7 @@ class ApiController extends Controller {
 	}
 
 	/**
+	 * Creating or updating a reply.
 	 * @param ReplyRepository $reply
 	 * @param null $id
 	 * @return mixed
@@ -174,6 +186,7 @@ class ApiController extends Controller {
 	}
 
 	/**
+	 * Creating or update a topic.
 	 * @param TopicRepository $topic
 	 * @param ReplyRepository $reply
 	 * @param null $id
@@ -201,6 +214,7 @@ class ApiController extends Controller {
 	}
 
 	/**
+	 * Sending a new password to user.
 	 * @param UserRepository $user
 	 * @return mixed
 	 */
@@ -212,6 +226,7 @@ class ApiController extends Controller {
 	}
 
 	/**
+	 * Star a post.
 	 * @param PostRepository $post
 	 * @param $id
 	 * @return mixed
@@ -228,6 +243,7 @@ class ApiController extends Controller {
 	}
 
 	/**
+	 * Create a rate.
 	 * @param RateRepository $rate
 	 * @param $id
 	 * @return mixed
@@ -244,6 +260,7 @@ class ApiController extends Controller {
 	}
 
 	/**
+	 * Authenticate the api user.
 	 * @return mixed
 	 */
 	public function Auth(){

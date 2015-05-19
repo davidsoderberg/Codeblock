@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 
 /**
+ * Den här klassen användes inte då det inte gick att lägga in miljövariabler i run time.
  * Class InstallController
  * @package App\Http\Controllers
  */

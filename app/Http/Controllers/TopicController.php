@@ -23,6 +23,13 @@ class TopicController extends Controller {
 		$this->reply = $reply;
 	}
 
+	/**
+	 * Visar en tråd.
+	 * @param ReadRepository $read
+	 * @param $id
+	 * @param int $reply
+	 * @return mixed
+	 */
 	public function show(ReadRepository $read, $id, $reply = 0){
 		$topic = $this->topic->get($id);
 		if(Auth::check() && !is_null($topic)) {
@@ -37,6 +44,7 @@ class TopicController extends Controller {
 	}
 
 	/**
+	 * Skapar eller uppdaterar en tråd.
 	 * @param null $id
 	 * @return mixed
 	 */
@@ -64,6 +72,7 @@ class TopicController extends Controller {
 	}
 
 	/**
+	 * Tar bort en tråd.
 	 * @param $id
 	 * @return mixed
 	 */

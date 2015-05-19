@@ -15,19 +15,38 @@ use Illuminate\Support\Facades\Response;
 use App\Services\Client;
 use Illuminate\Http\Request;
 
+/**
+ * Class Controller
+ * @package App\Http\Controllers
+ */
 abstract class Controller extends BaseController {
 
+	/**
+	 * @var Client
+	 */
 	protected $client;
+	/**
+	 * @var mixed
+	 */
 	protected $request;
 
 	use DispatchesCommands, ValidatesRequests;
 
+	/**
+	 *
+	 */
 	public function __construct(){
 		$this->request = app('Illuminate\Http\Request');
 		View::share('siteName', ucfirst(str_replace('http://', '', URL::to('/'))));
 		$this->client = new Client();
 	}
 
+	/**
+	 * Skickar notifikation till nämnd användare.
+	 * @param $text
+	 * @param $object
+	 * @param NotificationRepository $notification
+	 */
 	protected function mentioned($text, $object, NotificationRepository $notification){
 		$users = array();
 		preg_match_all('/(^|\s)@(\w+)/', $text, $users);
@@ -46,12 +65,20 @@ abstract class Controller extends BaseController {
 		}
 	}
 
+	/**
+	 * Hämtar rättigheten från en viss metod.
+	 * @return array|string
+	 */
 	protected function getPermission(){
 		$action = debug_backtrace()[1];
 		$permissionAnnotation = New Permission($action['class']);
 		return $permissionAnnotation->getPermission($action['function']);
 	}
 
+	/**
+	 * Skapar json web token.
+	 * @return mixed
+	 */
 	public function getJwt(){
 		if(Auth::check()) {
 			return Response::json(array('token' => Jwt::encode(array('id' => Auth::user()->id))), 200);

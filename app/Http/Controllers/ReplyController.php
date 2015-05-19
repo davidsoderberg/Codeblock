@@ -22,6 +22,7 @@ class ReplyController extends Controller {
 	}
 
 	/**
+	 * Skapar eller uppdaterar ett svar.
 	 * @param null $id
 	 * @return mixed
 	 */
@@ -50,6 +51,7 @@ class ReplyController extends Controller {
 	}
 
 	/**
+	 * Tar bort ett svar.
 	 * @param $id
 	 * @return mixed
 	 */

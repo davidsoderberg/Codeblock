@@ -224,6 +224,7 @@ class UserController extends Controller {
 
 
 	/**
+	 * Loggar in användaren via sociala medier.
 	 * @param $social
 	 * @param Socialite $socialite
 	 * @return \Symfony\Component\HttpFoundation\RedirectResponse

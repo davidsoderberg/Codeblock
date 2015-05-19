@@ -5,6 +5,11 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 
+/**
+ * Klassen användes inte just nu.
+ * Class PermissionController
+ * @package App\Http\Controllers
+ */
 class PermissionController extends Controller {
 
 	/*
@@ -20,6 +25,9 @@ class PermissionController extends Controller {
 	|
 	*/
 
+	/**
+	 * @param PermissionRepository $permission
+	 */
 	public function __construct(PermissionRepository $permission)
 	{
 		parent::__construct();
