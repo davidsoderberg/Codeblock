@@ -59,6 +59,7 @@ class Forum extends Model
 
 	public function hasUnreadTopics(){
 		if(Auth::check()){
+			$hasread = array();
 			foreach($this->topics as $topic){
 				if(count($topic->replies) > 0) {
 					$hasread[] = Auth::user()->hasRead($topic->id);
