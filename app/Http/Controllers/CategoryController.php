@@ -52,7 +52,10 @@ class CategoryController extends Controller {
 	public function createOrUpdate($id = null)
 	{
 		if($this->category->createOrUpdate($this->request->all(), $id)){
-			return Redirect::to('categories');
+			if(is_null($id)){
+				return Redirect::to('categories')->with('success', 'Your category has been created.');
+			}
+			return Redirect::to('categories')->with('success', 'Your category has been updated.');
 		}
 
 		return Redirect::back()->withErrors($this->category->getErrors())->withInput();
