@@ -13,6 +13,7 @@
 			<div class="float-left">
 				{{ Form::label('blockCategory', 'Category:') }}
 				{{ Form::select('cat_id', $categories, $post->cat_id, array('id' => 'blockCategory', 'data-validator' => 'required')) }}
+				{{ $errors->first('cat_id', '<div class="alert error">:message</div>') }}
 			</div>
 			<div class="float-right">
 				{{ Form::label('private', 'Private codeblock:') }}<br />
