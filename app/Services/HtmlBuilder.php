@@ -197,10 +197,15 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 
 			$table = '<table>';
 			$table .='<thead><tr>';
-			foreach ($fields as $field)
+			foreach ($fields as $key => $field)
 			{
-				$table .= '<th>' . str_replace('_',' ', Str::title($field)) . '</th>';
-			}
+				if(is_array($field)){
+					$array_key = array_keys($field)[0];
+					$fields[$key] = $field[$array_key];
+					$field = $array_key;
+				}
+ 				$table .= '<th>' . str_replace('_',' ', Str::title($field)) . '</th>';
+ 			}
 			if ($show['Edit'] || $show['Delete'] || $show['View']){
 				$table .= '<th>Actions</th>';
 			}

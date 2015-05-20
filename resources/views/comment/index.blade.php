@@ -21,7 +21,7 @@
             @foreach ($comments as $comment)
                 <tr>
                     <td data-title="Made by">
-	                    {{HTML::actionlink($url = array('action' => 'UserController@show', 'params' => array($comment->user_id)), $comment->user->username)}}
+	                    {{HTML::actionlink($url = array('action' => 'UserController@show', 'params' => array($comment->user_id)), $comment->user['username'])}}
                     </td>
                     <td data-title="On">
 	                    {{HTML::actionlink($url = array('action' => 'PostController@show', 'params' => array($comment->post_id)), $comment->post->name)}}

@@ -54,4 +54,11 @@ class Post extends Model {
 		return $this->hasMany('App\Comment', 'post_id', 'id');
 	}
 
+	public function getcategorynameAttribute()
+	{
+	return $this->category->name;
+	}
+
+	protected $appends = array('categoryname');
+
 }

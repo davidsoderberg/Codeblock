@@ -131,6 +131,20 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return $this->hasMany('App\Social', 'user_id', 'id');
 	}
 
+	public function getrolenameAttribute()
+	{
+		return $this->roles->name;
+	}
+
+	public function getisactiveAttribute(){
+		if($this->active == 1){
+			return 'yes';
+		}
+		return 'no';
+	}
+
+	protected $appends = array('rolename', 'isactive');
+
 	public function hasSocial($social) {
 		$socials = $this->socials;
 		foreach($socials as $soc){
