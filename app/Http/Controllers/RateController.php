@@ -32,13 +32,15 @@ class RateController extends Controller {
 	 * @return object     med värden dit användaren skall skickas.
 	 */
 	public function plus(CommentRepository $comment, $id){
-		$user_id = $comment->get($id)->user_id;
-		if($user_id != Auth::user()->id) {
-			if($this->rate->rate($id, '+')) {
-				return Redirect::back();
+		try {
+			$user_id = $comment->get($id)->user_id;
+			if($user_id != Auth::user()->id) {
+				if($this->rate->rate($id, '+')) {
+					return Redirect::back()->with('success', 'You have now + rated a comment.');
+				}
 			}
-		}
-		return Redirect::back()->with('error', 'You could not rate that comment, please try agian');
+		} catch (\Exception $e){}
+		return Redirect::back()->with('error', 'You could not rate that comment, please try agian.');
 	}
 
 	/**
@@ -47,13 +49,15 @@ class RateController extends Controller {
 	 * @return object     med värden dit användaren skall skickas.
 	 */
 	public function minus(CommentRepository $comment,$id){
-		$user_id = $comment->get($id)->user_id;
-		if($user_id != Auth::user()->id) {
-			if($this->rate->rate($id, '-')) {
-				return Redirect::back();
+		try {
+			$user_id = $comment->get($id)->user_id;
+			if($user_id != Auth::user()->id) {
+				if($this->rate->rate($id, '-')) {
+					return Redirect::back()->with('success', 'You have now - rated a comment.');
+				}
 			}
-		}
-		return Redirect::back()->with('error', 'You could not rate that comment, please try agian');
+		} catch (\Exception $e){}
+		return Redirect::back()->with('error', 'You could not rate that comment, please try agian.');
 	}
 
 }

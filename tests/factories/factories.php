@@ -9,6 +9,10 @@ $factory('App\Post', [
 	'slug' => $faker->sentence(3)
 ]);
 
+$factory('App\Comment', [
+	'comment' => $faker->sentence()
+]);
+
 $factory('App\Forum', [
 	'title' => $faker->sentence(3),
 	'description' => $faker->sentence()
