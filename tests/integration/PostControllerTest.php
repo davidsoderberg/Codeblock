@@ -11,6 +11,10 @@ class PostControllerTest extends \IntegrationCase {
 		Auth::loginUsingId(1);
 	}
 
+	public function test_view_posts(){
+		$this->visit('posts')->statusCode(200);
+	}
+
 	public function create_post(){
 		$this->visit('posts/create')
 			->submitForm('Create', ["description" => 'test codeblock', "code" => '<?php echo "hej";', 'cat_id' => 2, "name" => 'test codeblock', 'tags' => [1,2]])
