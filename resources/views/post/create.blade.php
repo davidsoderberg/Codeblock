@@ -24,8 +24,8 @@
 		<div class="verticalRule">
 			<div class="float-left">
 				{{ Form::label('blockCategory', 'Category:') }}
-				{{ Form::select('category', $categories, '', array('id' => 'blockCategory', 'data-validator' => 'required')) }}
-				{{ $errors->first('category', '<div class="alert error">:message</div>') }}
+				{{ Form::select('cat_id', $categories, '', array('id' => 'blockCategory', 'data-validator' => 'required')) }}
+				{{ $errors->first('cat_id', '<div class="alert error">:message</div>') }}
 			</div>
 			<div class="float-right">
 				{{ Form::label('private', 'Private codeblock:') }}<br />

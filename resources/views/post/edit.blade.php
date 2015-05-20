@@ -12,7 +12,7 @@
 		<div class="verticalRule">
 			<div class="float-left">
 				{{ Form::label('blockCategory', 'Category:') }}
-				{{ Form::select('category', $categories, $post->category->id, array('id' => 'blockCategory', 'data-validator' => 'required')) }}
+				{{ Form::select('cat_id', $categories, $post->cat_id, array('id' => 'blockCategory', 'data-validator' => 'required')) }}
 			</div>
 			<div class="float-right">
 				{{ Form::label('private', 'Private codeblock:') }}<br />

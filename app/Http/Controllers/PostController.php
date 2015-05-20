@@ -265,7 +265,7 @@ class PostController extends Controller {
 						}
 					}
 
-					$data = array('name' => $data['filename'], 'description' => 'A forked <a href="https://api.github.com/gists/' . $id . '" target="_blank">gist</a>', 'category' => $category_Id, 'code' => $data['content']);
+					$data = array('name' => $data['filename'], 'description' => 'A forked <a href="https://api.github.com/gists/' . $id . '" target="_blank">gist</a>', 'cat_id' => $category_Id, 'code' => $data['content']);
 
 					if($this->post->createOrUpdate($data)) {
 						return Redirect::to('/posts/' . $this->post->getId())->with('success', 'The requested <a href="https://gist.github.com/' . $id . '" target="_blank">gist</a> have been forked.');

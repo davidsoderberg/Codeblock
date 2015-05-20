@@ -16,7 +16,7 @@ class CreatePostsTable extends Migration {
 		{
 			$table->increments('id');
 			$table->string('name')->unique();
-			$table->integer('category');
+			$table->integer('cat_id');
 			$table->text('description');
 			$table->text('code');
 			$table->integer('user_id');

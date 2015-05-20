@@ -22,7 +22,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 		if(is_null($id)){
 			$posts =  Post::all();
 			foreach ($posts as $post) {
-				$post->category = $post->category($post->category)->first();
+				$post->category = $post->category;
 				$post->comments = $post->comments;
 				$post->posttags = $post->posttags;
 				$post->stars = $this->getStars($post->stars);
@@ -38,7 +38,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 				$post = Post::where('slug', $id)->first();
 			}
 			if(!is_null($post)){
-				$post->category = $post->category($post->category)->first();
+				$post->category = $post->category;
 				$post->comments = $post->comments;
 				$post->posttags = $post->posttags;
 				$post->stars = $this->getStars($post->stars);
@@ -115,7 +115,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 		$existingPost = $this->where(array('name', '=', $post->name.' '.Auth::user()->id));
 		if(count($existingPost) < 1){
 			$input['name'] = $post->name.' '.Auth::user()->id;
-			$input['category'] = $post->category->id;
+			$input['cat_id'] = $post->cat_id;
 			$input['description'] = $post->description;
 			$input['code'] = html_entity_decode($post->code);
 			$input['private'] = 1;
@@ -129,7 +129,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	public function getForked($id){
 		$posts = $this->where(array('org', '=', $id));
 		foreach ($posts as $post) {
-				$post->category = $post->category($post->category)->first();
+				$post->category = $post->category;
 				$post->posttags = $post->posttags;
 				$post->stars = $this->getStars($post->stars);
 				//$post->category->lang = $this->jsSwitch($post->category->name);

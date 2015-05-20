@@ -17,7 +17,7 @@ class PostTest extends UnitCase {
 	}
 
 	public function testCreateOrUpdate(){
-		$input = ['name' => 'test', 'category' => 2, 'description' => 'test', 'code' => 'test'];
+		$input = ['name' => 'test', 'cat_id' => 2, 'description' => 'test', 'code' => 'test'];
 		$this->be(User::find(1));
 		$this->assertTrue($this->repo->createOrUpdate($input));
 		$this->assertfalse($this->repo->createOrUpdate(['name' => ''],1));
@@ -30,35 +30,35 @@ class PostTest extends UnitCase {
 		$this->assertTrue(is_object($this->repo->get()));
 		$this->assertFalse(is_object($this->repo->get(1)));
 
-		$input = ['name' => 'test', 'category' => 2, 'description' => 'test', 'code' => 'test'];
+		$input = ['name' => 'test', 'cat_id' => 2, 'description' => 'test', 'code' => 'test'];
 		$this->be(User::find(1));
 		$this->assertTrue($this->repo->createOrUpdate($input));
 		$this->assertTrue(is_object($this->repo->get(1)));
 	}
 
 	public function testGetByCategory(){
-		$input = ['name' => 'test', 'category' => 2, 'description' => 'test', 'code' => 'test'];
+		$input = ['name' => 'test', 'cat_id' => 2, 'description' => 'test', 'code' => 'test'];
 		$this->be(User::find(1));
 		$this->repo->createOrUpdate($input);
 		$this->assertEquals(count($this->repo->getByCategory(2)),1);
 	}
 
 	public function testGetByNew(){
-		$input = ['name' => 'test', 'category' => 2, 'description' => 'test', 'code' => 'test'];
+		$input = ['name' => 'test', 'cat_id' => 2, 'description' => 'test', 'code' => 'test'];
 		$this->be(User::find(1));
 		$this->repo->createOrUpdate($input);
 		$this->assertEquals(count($this->repo->getByCategory(0)),1);
 	}
 
 	public function testGetByTag(){
-		$input = ['name' => 'test', 'category' => 2, 'description' => 'test', 'code' => 'test', 'tags' => [1]];
+		$input = ['name' => 'test', 'cat_id' => 2, 'description' => 'test', 'code' => 'test', 'tags' => [1]];
 		$this->be(User::find(1));
 		$this->repo->createOrUpdate($input);
 		$this->assertEquals(count($this->repo->getByTag(1)),1);
 	}
 
 	public function testFork(){
-		$input = ['name' => 'test', 'category' => 2, 'description' => 'test', 'code' => 'test'];
+		$input = ['name' => 'test', 'cat_id' => 2, 'description' => 'test', 'code' => 'test'];
 		$this->be(User::find(1));
 		$this->assertTrue($this->repo->createOrUpdate($input));
 		$this->assertTrue($this->repo->duplicate(1));
@@ -66,7 +66,7 @@ class PostTest extends UnitCase {
 
 	public function testGetForked()
 	{
-		$input = ['name' => 'test', 'category' => 2, 'description' => 'test', 'code' => 'test'];
+		$input = ['name' => 'test', 'cat_id' => 2, 'description' => 'test', 'code' => 'test'];
 		$this->be(User::find(1));
 		$this->assertTrue($this->repo->createOrUpdate($input));
 		$this->assertTrue($this->repo->duplicate(1));
@@ -75,14 +75,14 @@ class PostTest extends UnitCase {
 
 	public function testDelete(){
 		$this->assertFalse($this->repo->delete(1));
-		$input = ['name' => 'test', 'category' => 2, 'description' => 'test', 'code' => 'test'];
+		$input = ['name' => 'test', 'cat_id' => 2, 'description' => 'test', 'code' => 'test'];
 		$this->be(User::find(1));
 		$this->assertTrue($this->repo->createOrUpdate($input));
 		$this->assertTrue($this->repo->delete(1));
 	}
 
 	public function testStaring(){
-		$input = ['name' => 'test', 'category' => 2, 'description' => 'test', 'code' => 'test'];
+		$input = ['name' => 'test', 'cat_id' => 2, 'description' => 'test', 'code' => 'test'];
 		$this->be(User::find(1));
 		$this->assertTrue($this->repo->createOrUpdate($input));
 		$post = $this->repo->get(1);
@@ -97,7 +97,7 @@ class PostTest extends UnitCase {
 	}
 
 	public function testComment(){
-		$input = ['name' => 'test', 'category' => 2, 'description' => 'test', 'code' => 'test'];
+		$input = ['name' => 'test', 'cat_id' => 2, 'description' => 'test', 'code' => 'test'];
 		$this->be(User::find(1));
 		$this->assertTrue($this->repo->createOrUpdate($input));
 		$input = ['post_id' => 1, 'comment' => 'hej'];
@@ -108,7 +108,7 @@ class PostTest extends UnitCase {
 	}
 
 	public function testDelteComment(){
-		$input = ['name' => 'test', 'category' => 2, 'description' => 'test', 'code' => 'test'];
+		$input = ['name' => 'test', 'cat_id' => 2, 'description' => 'test', 'code' => 'test'];
 		$this->be(User::find(1));
 		$this->assertTrue($this->repo->createOrUpdate($input));
 		$this->assertFalse($this->repoComment->delete(1));

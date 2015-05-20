@@ -19,13 +19,13 @@ class Post extends Model {
 
 	protected $table = 'posts';
 
-	protected $fillable = array('name', 'category', 'description', 'code', 'user_id', 'org', 'slug');
+	protected $fillable = array('name', 'cat_id', 'description', 'code', 'user_id', 'org', 'slug');
 
 	protected $guarded = array('id');
 
 	public static $rules = array(
 	    'name' => 'required|min:3|unique:posts,name,:id:',
-	    'category'  => 'required|integer',
+	    'cat_id'  => 'required|integer',
 	    'description' => 'required|min:3',
 	    'code' => 'required|min:3',
 	    'user_id' => 'integer',
@@ -33,7 +33,7 @@ class Post extends Model {
 	);
 
 	public function category() {
-		return $this->belongsTo( 'App\Category', 'category' );
+		return $this->belongsTo( 'App\Category', 'cat_id' );
 	}
 
 	public function posttags() {

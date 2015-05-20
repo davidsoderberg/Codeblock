@@ -13,7 +13,7 @@ class PostControllerTest extends \IntegrationCase {
 
 	public function create_post(){
 		$this->visit('posts/create')
-			->submitForm('Create', ["description" => 'test codeblock', "code" => '<?php echo "hej";', 'category' => 2, "name" => 'test codeblock', 'tags' => [1,2]])
+			->submitForm('Create', ["description" => 'test codeblock', "code" => '<?php echo "hej";', 'cat_id' => 2, "name" => 'test codeblock', 'tags' => [1,2]])
 			->see('Your block has been created.');
 		return $this;
 	}
