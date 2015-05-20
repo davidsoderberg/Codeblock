@@ -55,14 +55,16 @@ class NotificationController extends Controller {
 	 * @return mixed
 	 */
 	public function delete($id) {
-		$note = $this->notification->get($id);
-		if(Auth::user()->id == $note->user_id) {
-			if($this->notification->delete($id)) {
-				return Redirect::back()->with('success', 'Your notification has been deleted.');
+		try {
+			$note = $this->notification->get($id);
+			if(Auth::user()->id == $note->user_id) {
+				if($this->notification->delete($id)) {
+					return Redirect::back()->with('success', 'Your notification has been deleted.');
+				}
 			}
-		}
+		} catch(\Exception $e){}
 
-		return Redirect::back();
+		return Redirect::back()->with('error', 'You can not delete that notification.');
 	}
 
 }

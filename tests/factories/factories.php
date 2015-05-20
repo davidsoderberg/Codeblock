@@ -9,6 +9,17 @@ $factory('App\Post', [
 	'slug' => $faker->sentence(3)
 ]);
 
+$factory('App\Notification', [
+	'user_id' => $faker->numberBetween(0,10),
+	'type' => $faker->sentence(1),
+	'subject' => $faker->sentence(),
+	'body' => $faker->sentence(),
+	'object_id' => $faker->numberBetween(0,10),
+	'object_type' => $faker->sentence(1),
+	'sent_at' => $faker->date() ,
+	'from_id' => 1
+]);
+
 $factory('App\Comment', [
 	'comment' => $faker->sentence()
 ]);
