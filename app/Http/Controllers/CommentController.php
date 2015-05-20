@@ -67,7 +67,7 @@ class CommentController extends Controller {
 	{
 		if($this->comment->createOrUpdate($this->request->all(), $id)){
 			if(!is_null($id)){
-				return Redirect::back()->with('success', 'This comment have been saved.');
+				return Redirect::back()->with('success', 'This comment have been updated.');
 			}
 			$post = $post->get($this->request->get('post_id'));
 			if(Auth::user()->id != $post->user_id) {
@@ -75,7 +75,7 @@ class CommentController extends Controller {
 				$this->client->send($post, $post->user_id);
 			}
 			$this->mentioned($this->request->get('comment'), $post, $notification);
-			return Redirect::back();
+			return Redirect::back()->with('success', 'Your comment have been created.');
 		}
 
 		return Redirect::back()->withErrors($this->comment->getErrors())->withInput();
@@ -103,14 +103,16 @@ class CommentController extends Controller {
 	 * @return object     med värden dit användaren skall skickas.
 	 */
 	public function delete($id){
-		$comment = $this->comment->get($id);
-		if(Auth::check() && Auth::user()->id == $comment->user_id || Auth::user()->hasPermission($this->getPermission(), false)) {
-			if($this->comment->delete($id)) {
-				return Redirect::back();
+		try {
+			$comment = $this->comment->get($id);
+			if(Auth::check() && Auth::user()->id == $comment->user_id || Auth::user()->hasPermission($this->getPermission(), false)) {
+				if($this->comment->delete($id)) {
+					return Redirect::back()->with('success', 'That comment has now been deleted.');
+				}
+			} else {
+				return Redirect::back()->with('error', 'You do not have permission to delete that comment.');
 			}
-		}else{
-			return Redirect::back()->with('error', 'You do not have permission to delete that comment.');
-		}
+		} catch(\Exception $e){}
 
 		return Redirect::back()->with('error', 'We could not delete that comment.');
 	}
