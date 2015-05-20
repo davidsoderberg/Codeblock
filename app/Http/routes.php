@@ -31,6 +31,7 @@ Route::get('posts/tag/{id}', 'PostController@tag');
 Route::get('posts/category/{id}', 'PostController@category');
 Route::get('user/list/{id?}', 'UserController@listUserBlock');
 Route::get('posts/{id}', 'PostController@show');
+Route::get('posts/{id}/{comment}', 'PostController@show');
 Route::get('user/{id?}', 'UserController@show');
 Route::get('user/{username?}', 'UserController@showByUsername');
 Route::group(['middleware' => 'auth'], function() {

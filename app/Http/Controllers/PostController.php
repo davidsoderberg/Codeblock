@@ -51,11 +51,22 @@ class PostController extends Controller {
 	 * @permission view_private_post:optional
 	 * @return array     Typ av medelande och meddelande
 	 */
-	public function show($id){
+	public function show($id, $comment_id = null){
 		$post = $this->post->get($id);
 		$lang = $this->post->jsSwitch($post->category->name);
 		if($post->private != 1){
-			return View::make('post.show')->with('title', 'show')->with('post', $post)->with('rate', $this->rate)->with('lang', $lang);
+			$comment = null;
+			foreach($post->comments as $CurrentComment){
+				if($CurrentComment->id == $comment_id){
+					$comment = $CurrentComment;
+				}
+			}
+			return View::make('post.show')
+				->with('title', 'show')
+				->with('post', $post)
+				->with('rate', $this->rate)
+				->with('lang', $lang)
+				->with('commentToEdit', $comment);
 		}else{
 			if(Auth::check()){
 				if(!empty($post->comments[0])){

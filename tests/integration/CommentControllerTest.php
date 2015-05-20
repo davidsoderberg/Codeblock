@@ -52,4 +52,13 @@ class CommentControllerTest extends \IntegrationCase {
 			->see('This comment have been updated.');
 	}
 
+	public function test_edit_comment_as_user(){
+		$this->create_comment();
+
+		$this->visit('posts/1/1')
+			->fill('hej','comment')
+			->press('Comment')
+			->see('This comment have been updated.');
+	}
+
 }

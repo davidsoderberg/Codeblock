@@ -7,6 +7,8 @@ use App\Repositories\Post\PostRepository;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 
 class CommentController extends Controller {
 
@@ -67,7 +69,11 @@ class CommentController extends Controller {
 	{
 		if($this->comment->createOrUpdate($this->request->all(), $id)){
 			if(!is_null($id)){
-				return Redirect::back()->with('success', 'This comment have been updated.');
+				if(Str::contains(URL::previous(), 'posts')){
+					return Redirect::action('PostController@show', $this->comment->get($id)->post_id)->with('success', 'This comment have been updated.');
+				}else {
+					return Redirect::back()->with('success', 'This comment have been updated.');
+				}
 			}
 			$post = $post->get($this->request->get('post_id'));
 			if(Auth::user()->id != $post->user_id) {
