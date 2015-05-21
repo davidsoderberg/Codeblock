@@ -11,51 +11,29 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 	public function get($id = null)
 	{
 		if(is_null($id)) {
-			return Role::orderBy('grade')->get();
+			return Role::all();
 		}
 		return Role::find($id);
 	}
 
 	// skapar en roll.
-	public function createOrUpdate($input, $id = null)
-	{
-		$Role = new Role;
-
-		if(isset($input['name'])){
+	public function createOrUpdate($input, $id = null) {
+		if(is_null($id)){
+			$Role = new Role;
+			if(isset($input['default']) && $input['default'] == 0 || isset($input['default']) && $input['default'] == 1) {
+				$Role->default = $input['default'];
+			}
+		}else{
+			$Role = $this->get($id);
+		}
+		if(isset($input['name'])) {
 			$Role->name = $this->stripTrim($input['name']);
 		}
-		$Role->grade = count(Role::all()) + 1;
-
-		if(isset($input['default']) && $input['default'] == 0 || isset($input['default']) && $input['default'] == 1){
-			$Role->default = $input['default'];
-		}
-
 		if($Role->save()){
 			$this->role = $Role;
 			return true;
 		}else{
 			$this->errors = Role::$errors;
-			return false;
-		}
-	}
-
-	// uppdaterar en roll.
-	public function update($input){
-		$roles = $this->get();
-		$grade = $this->stripTrim($input['grade']);
-		$i = 0;
-
-		if(count($roles) == count(array_unique($grade))){
-			foreach ($roles as $role) {
-				$role->grade = $grade[$i];
-				$role->name = $this->stripTrim($input['name'][$i]);
-				if(!$role->save()){
-					return false;
-				}
-				$i++;
-			}
-			return true;
-		}else{
 			return false;
 		}
 	}

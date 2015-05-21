@@ -40,7 +40,7 @@ class RoleController extends Controller {
 	 * @permission view_role
 	 * @return objekt     objekt som innehåller allt som behövs i vyn
 	 */
-	public function index()
+	public function index($id = null)
 	{
 		$defaultId = 0;
 		$roles = $this->role->get();
@@ -50,7 +50,11 @@ class RoleController extends Controller {
 				break;
 			}
 		}
-		return View::make('role.index')->with('title', 'Roles')->with('roles', $roles)->with('selectList', $this->role->getSelectList())->with('default', $defaultId);
+		$role = null;
+		if(!is_null($id)){
+			$role = $this->role->get($id);
+		}
+		return View::make('role.index')->with('title', 'Roles')->with('roles', $roles)->with('selectList', $this->role->getSelectList())->with('default', $defaultId)->with('role', $role);
 	}
 
 	/**
@@ -58,36 +62,15 @@ class RoleController extends Controller {
 	 * @permission create_role
 	 * @return object     med värden dit användaren skall skickas.
 	 */
-	public function store(){
-		if($this->role->createOrUpdate($this->request->all())){
-			return Redirect::back()->with('success', 'The role has been created.');
-		}
-		return Redirect::back()->withErrors($this->role->getErrors())->withInput($this->request->all());
+	public function store($id = null){
+		if($this->role->createOrUpdate($this->request->all(), $id)){
+			if(is_null($id)) {
+				return Redirect::to('/roles')->with('success', 'The role has been created.');
+			}
+			return Redirect::to('/roles')->with('success', 'The role has been updated.');
+ 		}
+ 		return Redirect::back()->withErrors($this->role->getErrors())->withInput($this->request->all());
 
-	}
-
-	/**
-	 * Visar vyn för att redigera en roll
-	 * @permission update_role
-	 * @param  int $id id på rollen som skall redigeras
-	 * @return objekt     objekt som innehåller allt som behövs i vyn
-	 */
-	public function edit($id)
-	{
-		return View::make('role.edit')->with('title', 'Edit role')->with('roles', $this->role->get());
-	}
-
-	/**
-	 * Uppdatera en roll.
-	 * @permission update_role
-	 * @return object     med värden dit användaren skall skickas.
-	 */
-	public function update(){
-		if($this->role->update($this->request->all())){
-			return Redirect::back()->with('success', 'The role has been updated.');
-		}else{
-			return Redirect::back()->withErrors($this->role->getErrors())->withInput($this->request->all());
-		}
 	}
 
 	/**

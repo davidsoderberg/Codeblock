@@ -22,7 +22,6 @@ class RolesTableSeeder extends Seeder {
 			array (
 				'id' => 1,
 				'name' => 'User',
-				'grade' => 1,
 				'created_at' => '2015-03-30 17:01:05',
 				'updated_at' => '2015-05-11 06:44:00',
 				'default' => 1,
@@ -31,7 +30,6 @@ class RolesTableSeeder extends Seeder {
 			array (
 				'id' => 2,
 				'name' => 'Admin',
-				'grade' => 2,
 				'created_at' => '2015-03-30 08:09:07',
 				'updated_at' => '2015-05-11 06:44:00',
 				'default' => 0,

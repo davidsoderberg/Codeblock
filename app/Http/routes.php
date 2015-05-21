@@ -99,11 +99,9 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::post('permissions/update', 'RoleController@updateRolePermission');
 
 	Route::post('role/default', 'RoleController@setDefault');
-	Route::post('roles/store', 'RoleController@store');
-	Route::get('roles/edit/{id}', 'RoleController@edit');
-	Route::post('roles/update', 'RoleController@update');
+	Route::post('roles/store/{id?}', 'RoleController@store');
 	Route::get('roles/delete/{id}', 'RoleController@delete');
-	Route::get('roles', 'RoleController@index');
+	Route::get('roles/{id?}', 'RoleController@index');
 
 	Route::get('logout', 'UserController@logout');
 });
