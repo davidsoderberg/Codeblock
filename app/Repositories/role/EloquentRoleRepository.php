@@ -20,11 +20,11 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 	public function createOrUpdate($input, $id = null) {
 		if(is_null($id)){
 			$Role = new Role;
-			if(isset($input['default']) && $input['default'] == 0 || isset($input['default']) && $input['default'] == 1) {
-				$Role->default = $input['default'];
-			}
 		}else{
 			$Role = $this->get($id);
+		}
+		if(isset($input['default']) && $input['default'] == 0 || isset($input['default']) && $input['default'] == 1) {
+			$Role->default = $input['default'];
 		}
 		if(isset($input['name'])) {
 			$Role->name = $this->stripTrim($input['name']);
@@ -45,13 +45,15 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 
 	// Sätter rollen som alla nya användare får.
 	public function setDefault($id){
-		$current = $this->getDefault();
-		$current->default = 0;
-		if($current->save()){
-			if(is_numeric($id) && $id > 0) {
+		if(is_numeric($id) && $id > 0) {
+			$current = $this->getDefault();
+			if($this->createOrUpdate(['default' => 0], $current->id)){
 				$new = $this->get($id);
 				$new->default = 1;
-				return $new->save();
+				if($new->save()){
+					return true;
+				}
+				$this->createOrUpdate(['default' => 1], $current->id);
 			}
 		}
 		return false;
