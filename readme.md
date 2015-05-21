@@ -7,9 +7,7 @@ Repository for codeblock.se
 2. Create database and database user with all permissions.
 3. create an .env from .env.example and add all your config values in there.
 4. Run `php artisan Install`.
-5. Create user on the website.
-6. Create a role and change so it is the default role on `/roles`. 
-7. Run `php artisan websocket` with [supervisor](http://supervisord.org/).
+5. Run `php artisan websocket` with [supervisor](http://supervisord.org/).
 
 ## Saker som jag är medveten om som finns i koden
 * I vissa kontrollrar och modeller finns det kommentarer som autoskapas då jag använder kommandon för att skapa dem

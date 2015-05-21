@@ -139,7 +139,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
 	public function getrolenameAttribute()
 	{
-		return $this->roles->name;
+		if(!is_null($this->roles)) {
+			return $this->roles->name;
+		}
 	}
 
 	public function getisactiveAttribute(){

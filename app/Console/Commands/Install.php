@@ -3,6 +3,7 @@
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Permission\PermissionRepository;
 use App\Repositories\Role\RoleRepository;
+use App\Repositories\User\UserRepository;
 use Illuminate\Support\Facades\DB;
 use App\Repositories\CRepository;
 use App\Services\Github;
@@ -42,7 +43,7 @@ class Install extends Command {
 	 *
 	 * @return mixed
 	 */
-	public function fire(RoleRepository $roleRepository, PermissionRepository $permissionRepository, CategoryRepository $categoryRepository)
+	public function fire(RoleRepository $roleRepository, PermissionRepository $permissionRepository, CategoryRepository $categoryRepository, UserRepository $userRepository)
 	{
 		$startat = $this->option('startat');
 		// tests the smtp configs.
@@ -105,15 +106,54 @@ class Install extends Command {
 			foreach($permissionRepository->get() as $permission) {
 				$ids[] = $permission->id;
 			}
-			if(!$roleRepository->createOrUpdate(array('name' => 'Super admin', 'default' => 1))) {
+			if(!$roleRepository->createOrUpdate(array('name' => 'Admin'))) {
 				$this->error('The role could not be created, please try agian.');
 			}
 			if(!$roleRepository->syncPermissions($roleRepository->role, $ids)) {
 				$roleRepository->delete($roleRepository->role->id);
 				$this->error('The role could get any permissions, please try agian and use option startat with "Role" as value.');
 			}
+
+			$roleRepository->createOrUpdate(array('name' => 'User','default' => 1));
+			$startat = 'User';
 		}
+		if($startat = 'User' && count($userRepository->get()) == 0 || count($userRepository->get()) == 0){
+			$errorkeys = ['username', 'password', 'email'];
+			$info = $this->getUserInfo($errorkeys);
+
+			while($userRepository->createOrUpdate($info + ['active' => 1]) != true){
+				$this->error('');
+				$this->error('This errors do you need to fix for your admin user:');
+				foreach($userRepository->errors->all() as $error){
+					$this->error(' * '.$error);
+				}
+				$this->info('');
+				$errorkeys = $userRepository->errors->keys();
+				$info = $this->getUserInfo($errorkeys, $info);
+			}
+		}
+
 		$this->info('You have now installed codeblock.');
+	}
+
+	private function getUserInfo(array $keys = array(), array $old = array()){
+		if(in_array('username', $keys)) {
+			$username = $this->ask('Your admin username:');
+		}else{
+			$username = $old['username'];
+		}
+		if(in_array('email', $keys)) {
+			$email = $this->ask('Your admin email:');
+		}else{
+			$email = $old['email'];
+		}
+		if(in_array('password', $keys)) {
+			$password = $this->secret('Your admin password:');
+		}else{
+			$password = $old['password'];
+		}
+
+		return ['email' => $email, 'username' => $username, 'password' => $password];
 	}
 
 	/**

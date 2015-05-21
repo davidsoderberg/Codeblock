@@ -80,6 +80,11 @@ class EloquentUserRepository extends CRepository implements UserRepository {
 			}
 		}
 
+		if(count($this->get()) == 0 && isset($input['active'])){
+			$User->active = $this->stripTrim($input['active']);
+			$id = 1;
+		}
+
 		if(isset($input['email'])){
 			$User->email = $this->stripTrim($input['email']);
 		}
