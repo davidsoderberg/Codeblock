@@ -115,6 +115,9 @@
 				}
 
 				var label = self.prev().text().slice(0,-1).toLowerCase();
+				if(self.attr('data-name') != undefined) {
+					label = self.attr('data-name');
+				}
 				var value = self.val();
 
 				if(self.attr('data-validator') != undefined){
