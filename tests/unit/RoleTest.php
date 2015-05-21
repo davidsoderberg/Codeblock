@@ -44,6 +44,7 @@ class RoleTest extends UnitCase {
 		$input = ['name' => 'hej'];
 		$this->assertTrue($this->repo->createOrUpdate($input));
 		$this->assertFalse($this->repo->setDefault(0));
+		$this->assertFalse($this->repo->setDefault(3));
 		$this->assertTrue($this->repo->setDefault(2));
 	}
 

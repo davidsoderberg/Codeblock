@@ -46,14 +46,16 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 	// Sätter rollen som alla nya användare får.
 	public function setDefault($id){
 		if(is_numeric($id) && $id > 0) {
-			$current = $this->getDefault();
-			if($this->createOrUpdate(['default' => 0], $current->id)){
-				$new = $this->get($id);
-				$new->default = 1;
-				if($new->save()){
-					return true;
+			$new = $this->get($id);
+			if(!is_null($new)) {
+				$current = $this->getDefault();
+				if($this->createOrUpdate(['default' => 0], $current->id)) {
+					$new->default = 1;
+					if($new->save()) {
+						return true;
+					}
+					$this->createOrUpdate(['default' => 1], $current->id);
 				}
-				$this->createOrUpdate(['default' => 1], $current->id);
 			}
 		}
 		return false;
