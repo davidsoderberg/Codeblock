@@ -25,6 +25,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	        foreach ($object->rates as $rate) {
 				$rate->delete();
 			}
+			foreach($object->socials as $social){
+				$social->delete();
+			}
+			foreach($object->reads as $read){
+				$read->delete();
+			}
 	    });
 	}
 

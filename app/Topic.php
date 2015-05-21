@@ -8,6 +8,9 @@ class Topic extends Model
 			foreach ($object->replies as $reply) {
 				$reply->delete();
 			}
+			foreach($object->reads as $read){
+				$read->delete();
+			}
 		});
 	}
 
@@ -34,5 +37,9 @@ class Topic extends Model
 
 	public function forum(){
 		return $this->belongsTo( 'App\Forum', 'forum_id' );
+	}
+
+	public function reads(){
+		return $this->hasMany('App\Read', 'topic_id', 'id');
 	}
 }
