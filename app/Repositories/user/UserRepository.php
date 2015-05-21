@@ -2,4 +2,16 @@
 
 use App\Repositories\IRepository;
 
-interface UserRepository extends IRepository {}
+interface UserRepository extends IRepository {
+
+	public function getIdByUsername($username);
+
+	public function update($input, $id);
+
+	public function login($input);
+
+	public function forgotPassword($input);
+
+	public function activateUser($id, $token);
+
+}

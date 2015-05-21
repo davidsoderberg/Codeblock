@@ -1,5 +1,10 @@
 <?php namespace App\Repositories\Rate;
 
-use App\Repositories\IRepository;
+interface RateRepository {
 
-interface RateRepository {}
+	public function check($id);
+
+	public function calc($id);
+
+	public function rate($id, $type);
+}
