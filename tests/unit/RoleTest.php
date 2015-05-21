@@ -38,4 +38,12 @@ class RoleTest extends UnitCase {
 		$this->assertTrue($this->repo->delete(1));
 	}
 
+	public function testSetDefault(){
+		$input = ['name' => 'test', 'default' => 1];
+		$this->assertTrue($this->repo->createOrUpdate($input));
+		$input = ['name' => 'hej'];
+		$this->assertTrue($this->repo->createOrUpdate($input));
+		$this->assertFalse($this->repo->setDefault(0));
+	}
+
 }

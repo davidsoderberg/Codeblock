@@ -48,9 +48,11 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 		$current = $this->getDefault();
 		$current->default = 0;
 		if($current->save()){
-			$new = $this->get($id);
-			$new->default = 1;
-			return $new->save();
+			if(is_numeric($id) && $id > 0) {
+				$new = $this->get($id);
+				$new->default = 1;
+				return $new->save();
+			}
 		}
 		return false;
 	}
