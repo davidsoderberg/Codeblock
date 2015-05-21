@@ -21,6 +21,15 @@ class RoleControllerTest extends \IntegrationCase {
 		$this->create_role()->onPage('roles');
 	}
 
+	public function test_edit_role(){
+		$this->create_role();
+
+		$this->visit('roles/1')
+			->fill('hej', 'name')
+			->press('Update')
+			->see('The role has been updated.');
+	}
+
 	public function test_set_default(){
 		$this->visit('roles')
 			->submitForm('Set default', ['default' => 2])
