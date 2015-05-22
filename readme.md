@@ -9,6 +9,10 @@ Repository for codeblock.se
 4. Run `php artisan Install`.
 5. Run `php artisan websocket` with [supervisor](http://supervisord.org/).
 
+##Config needed for pphunit tests
+If you would like to run the phpunit tests you will need following in your .env file:  
+MAIL_HOST, MAIL_PORT, FROM_ADRESS, FROM_NAME, MAIL_USERNAME, MAIL_PASSWORD, MAIL_PRETEND, SOCKET_PORT, SOCKET_ADRESS, GITHUB_TOKEN
+
 ## Saker som jag är medveten om som finns i koden
 * I vissa kontrollrar och modeller finns det kommentarer som autoskapas då jag använder kommandon för att skapa dem
 
