@@ -6,6 +6,7 @@
 
 @section('content')
 	<h2>Browse</h2>
+	<!--
 	<div id="accordion" class="accordion">
 		<ul>
 			<li class="open">
@@ -27,6 +28,7 @@
 			</li>
 		</ul>
 	</div>
+	-->
 	<div id="browseTabs" class="tabs">
 		<ul class="clearfix">
 			<li class="open"><a href="">Categories</a></li>

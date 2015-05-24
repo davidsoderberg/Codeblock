@@ -22,6 +22,16 @@
 			</div>
 			<div>
 				<b>{{ date('Y-m-d', strtotime($comment->created_at)) }}</b> - {{HTML::actionlink($url = array('action' => 'UserController@show', 'params' => array($comment->user_id)), $comment->user->username)}}
+				@if(Auth::check())
+					<span class="pull-right">
+						@if($comment->user_id == Auth::user()->id || HTML::hasPermission('CommentController@edit'))
+							<a href="{{URL::action('PostController@show', $comment->post_id)}}/{{$comment->id}}"><i class="fa fa-pencil"></i></a>
+						@endif
+						@if(Auth::user()->id == $comment->user_id || HTML::hasPermission('CommentController@delete'))
+							<a href="{{URL::action('CommentController@delete', $comment->id)}}"><i class="fa fa-trash-o"></i></a>
+						@endif
+					</span>
+				@endif
 				<p>{{ HTML::mention(HTML::markdown($comment->comment)) }}</p>
 				<a class="reply" href="#comment-{{$comment->id}}">Reply</a>
 				@include('comment.child')

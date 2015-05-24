@@ -15,6 +15,7 @@ MAIL_HOST, MAIL_PORT, FROM_ADRESS, FROM_NAME, MAIL_USERNAME, MAIL_PASSWORD, MAIL
 
 ## Saker som jag är medveten om som finns i koden
 * I vissa kontrollrar och modeller finns det kommentarer som autoskapas då jag använder kommandon för att skapa dem
+* All kod som finns i mitt projekt är inte skriven av mig på de flesta ställerna är källa angiven. Jag kan dock ha missat någon och skrev inte källor under tiden då det inte va ett skolprojekt.
 
 ## Upplägg på koden
 Model.php är basmodellen som alla andra modeller äver av och säger till att allt som sparas via dessa modeller valideras enligt regler som specifiseras i varje model och de modellerna som har relationer har en metod deleting som tar bort alla relaterade rader när ägande rad tas bort.
