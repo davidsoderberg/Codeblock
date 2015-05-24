@@ -56,7 +56,9 @@ class Post extends Model {
 
 	public function getcategorynameAttribute()
 	{
-	return $this->category->name;
+		if(!is_null($this->category)) {
+			return $this->category->name;
+		}
 	}
 
 	protected $appends = array('categoryname');

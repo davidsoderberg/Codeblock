@@ -20,6 +20,8 @@ class CategoryTest extends UnitCase {
 		$this->assertTrue(is_object($this->repo->getErrors()));
 		$this->assertTrue($this->repo->createOrUpdate(['name' => 'hej'],1));
 		$this->repo->createOrUpdate(['name' => 'test'],1);
+		$input['name'] = 'tv';
+		$this->assertFalse($this->repo->createOrUpdate($input));
 	}
 
 	public function testGet(){
