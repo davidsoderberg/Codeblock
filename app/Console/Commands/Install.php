@@ -106,34 +106,44 @@ class Install extends Command {
 			foreach($permissionRepository->get() as $permission) {
 				$ids[] = $permission->id;
 			}
-			if(!$roleRepository->createOrUpdate(array('name' => 'Admin'))) {
-				$this->error('The role could not be created, please try agian.');
+			$created = false;
+			while($created != true){
+				$this->ShowErrors($roleRepository);
+				$role = $this->ask('Your admin role name:');
+				$created = $roleRepository->createOrUpdate(array('name' => $role));
 			}
+			$this->line('');
+			$roleRepository->errors = null;
 			if(!$roleRepository->syncPermissions($roleRepository->role, $ids)) {
 				$roleRepository->delete($roleRepository->role->id);
 				$this->error('The role could get any permissions, please try agian and use option startat with "Role" as value.');
 			}
 
-			$roleRepository->createOrUpdate(array('name' => 'User','default' => 1));
+			$created = false;
+			while($created != true){
+				$this->ShowErrors($roleRepository);
+				$role = $this->ask('Your user role name:');
+				$created = $roleRepository->createOrUpdate(array('name' => $role,'default' => 1));
+			}
+			$this->line('');
 			$startat = 'User';
 		}
 		if($startat = 'User' && count($userRepository->get()) == 0 || count($userRepository->get()) == 0){
-			$errorkeys = ['username', 'password', 'email'];
-			$info = $this->getUserInfo($errorkeys);
+			$errorkeys = array('username', 'password', 'email');
+			$info = array();
+			$created = false;
 
-			while($userRepository->createOrUpdate($info + ['active' => 1]) != true){
-				$this->error('');
-				$this->error('This errors do you need to fix for your admin user:');
-				foreach($userRepository->errors->all() as $error){
-					$this->error(' * '.$error);
+			while($created != true){
+				$keys = $this->ShowErrors($userRepository);
+				if(!is_null($keys)){
+					$errorkeys = $keys;
 				}
-				$this->info('');
-				$errorkeys = $userRepository->errors->keys();
 				$info = $this->getUserInfo($errorkeys, $info);
+				$created = $userRepository->createOrUpdate($info + ['active' => 1]);
 			}
 		}
 
-		$this->info('You have now installed codeblock.');
+		$this->line('You have now installed codeblock.');
 	}
 
 	private function getUserInfo(array $keys = array(), array $old = array()){
@@ -176,6 +186,26 @@ class Install extends Command {
 		return [
 			['startat', 'start', InputOption::VALUE_OPTIONAL, 'Start step is done.', null]
 		];
+	}
+
+	/**
+	 * @param $repository
+	 * @return mixed
+	 */
+	private function ShowErrors($repository) {
+		if(is_object($repository->errors)) {
+			if(count($repository->errors->all()) > 0) {
+				$this->line('');
+				$this->error('This errors do you need to fix:');
+				foreach($repository->errors->all() as $error) {
+					$this->error(' * ' . $error);
+				}
+				$this->line('');
+				$errorkeys = $repository->errors->keys();
+				return $errorkeys;
+			}
+		}
+		return null;
 	}
 
 }
