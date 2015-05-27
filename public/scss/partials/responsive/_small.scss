@@ -170,4 +170,19 @@
 		width: 100%;
 		border-left: none;
 	}
+	.forum{
+		.item {
+			.content{
+				display: block;
+				float: none !important;
+				@include clearfix();
+			}
+			.meta{
+				text-align: left;
+				margin-top: 5px;
+				width: 33%;
+				float: left;
+			}
+		}
+	}
 }
