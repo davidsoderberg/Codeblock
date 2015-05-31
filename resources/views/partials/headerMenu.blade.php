@@ -26,7 +26,7 @@
 			<ul>
 				{{HTML::menulink($url = array('action' => 'UserController@listUserBlock'), 'List')}}
 				{{HTML::menulink($url = array('action' => 'PostController@create'), 'Create')}}
-				<!--{{HTML::menulink($url = array('action' => 'CommentController@listComments'), 'Comments')}}-->
+				{{HTML::menulink($url = array('action' => 'CommentController@listComments'), 'Comments')}}
 			</ul>
 		</li>
 		{{HTML::menulink($url = array('action' => 'UserController@show'), '<i class="fa fa-user"></i>Profile')}}

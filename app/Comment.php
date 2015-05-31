@@ -43,4 +43,22 @@ class Comment extends Model {
 	{
 		return $this->hasMany('App\Rate', 'comment_id', 'id');
 	}
+
+	protected $appends = array('postlink', 'userlink', 'printstatus');
+
+	public function getpostlinkAttribute(){
+		return \HTML::actionlink($url = array('action' => 'PostController@show', 'params' => array($this->post_id)), $this->post->name);
+	}
+
+	public function getuserlinkAttribute(){
+		return \HTML::actionlink($url = array('action' => 'UserController@show', 'params' => array($this->user_id)), $this->user['username']);
+	}
+
+	public function getprintstatusAttribute(){
+		if($this->status == 0 ) {
+			return 'Hidden';
+		} else {
+			return 'Shown';
+		}
+	}
 }

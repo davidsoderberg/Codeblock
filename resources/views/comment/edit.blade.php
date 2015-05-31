@@ -18,9 +18,13 @@
 			</div>
 		</div>
 		<hr>
+		{{ Form::label('commentComment', 'Comment:') }}
+		{{ Form::textarea('comment', $comment->comment) }}
+	<!--
 		<p class="margin-bottom-half margin-top-half">{{ Form::label('commentComment', 'Comment:') }} {{ $comment->comment }}</p>
 		{{ Form::label('commentStatus', 'Status:') }}
 		{{ Form::select('status', array(0 => 'Hidden', 1 => 'Shown'), $comment->status) }}
+		-->
 		{{ Form::button('Edit', array('type' => 'submit')) }}
 	{{ Form::close() }}
 @stop

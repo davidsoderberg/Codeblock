@@ -200,9 +200,7 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 			foreach ($fields as $key => $field)
 			{
 				if(is_array($field)){
-					$array_key = array_keys($field)[0];
-					$fields[$key] = $field[$array_key];
-					$field = $array_key;
+					$field = array_keys($field)[0];
 				}
  				$table .= '<th>' . str_replace('_',' ', Str::title($field)) . '</th>';
  			}
@@ -215,12 +213,20 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 			{
 				$table .= '<tr>';
 				foreach($fields as $key) {
+					$array_key = null;
+					if(is_array($key)){
+						$array_key = array_keys($key)[0];
+						$key = $key[$array_key];
+					}
 					if($key != 'actions'){
 						$value = null;
 						if(is_object($d[$key])){
 							$value = $d[$key]->name;
 						}else{
 							$value = $d[$key];
+						}
+						if(!is_null($array_key)){
+							$key = $array_key;
 						}
 						$table .= '<td data-title="'.str_replace('_',' ', Str::title($key)).'">' . $value . '</td>';
 					}

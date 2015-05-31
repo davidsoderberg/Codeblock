@@ -48,16 +48,7 @@ class CommentController extends Controller {
 	 * @return mixed
 	 */
 	public function listComments(){
-		$posts = Auth::user()->posts;
-		$comments = array();
-
-		foreach ($posts as $post) {
-			foreach ($post->comments as $comment) {
-				$comments[] = $comment;
-			}
-		}
-
-		return View::make('comment.index')->with('title', 'Comments')->with('comments', $comments);
+		return View::make('comment.index')->with('title', 'Comments')->with('comments', Auth::user()->comments);
 	}
 
 	/**
