@@ -48,7 +48,7 @@ class CommentControllerTest extends \IntegrationCase {
 	public function test_edit_comment(){
 		$this->create_comment();
 		$this->visit('comments/edit/1')
-			->submitForm('Edit', ['status' => 1])
+			->submitForm('Edit', ['comment' => 'testar'])
 			->see('This comment have been updated.');
 	}
 
