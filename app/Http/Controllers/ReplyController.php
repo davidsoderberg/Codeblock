@@ -23,14 +23,17 @@ class ReplyController extends Controller {
 
 	/**
 	 * Skapar eller uppdaterar ett svar.
+	 * @permission create_reply:optional
 	 * @param null $id
 	 * @return mixed
 	 */
 	public function createOrUpdate(ReadRepository $read, NotificationRepository $notification, $id = null) {
 		if(!is_null($id)){
 			$reply = $this->reply->get($id);
-			if(Auth::user()->id != $reply->user_id){
-				return Redirect::back()->with('error', 'You can´t edit other users replies.');
+			if(!Auth::user()->hasPermission($this->getPermission(), false)) {
+				if(Auth::user()->id != $reply->user_id) {
+					return Redirect::back()->with('error', 'You can´t edit other users replies.');
+				}
 			}
 		}
 		if($this->reply->createOrUpdate($this->request->all(), $id)) {
@@ -52,13 +55,19 @@ class ReplyController extends Controller {
 
 	/**
 	 * Tar bort ett svar.
+	 * @permission delete_reply:optional
 	 * @param $id
 	 * @return mixed
 	 */
 	public function delete($id) {
-		if($this->reply->delete($id)) {
-			return Redirect::back()->with('success', 'Your reply has been deleted.');
+		$reply = $this->reply->get($id);
+		if(!is_null($reply)) {
+			if(Auth::user()->hasPermission($this->getPermission(), false) || Auth::user()->id == $reply->user_id) {
+				if($this->reply->delete($id)) {
+					return Redirect::back()->with('success', 'Your reply has been deleted.');
+				}
+			}
 		}
-		return Redirect::back();
+		return Redirect::back()->with('error', 'Your reply could not be deleted.');
 	}
 }

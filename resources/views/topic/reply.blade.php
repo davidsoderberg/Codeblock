@@ -4,13 +4,17 @@
 		<p class="font-bold">
 			{{HTML::actionlink($url = array('action' => 'UserController@showByUsername', 'params' => array($reply->user->username)), $reply->user->username)}},
 			{{$reply->created_at->diffForHumans()}}
-			@if(Auth::check() && Auth::user()->id == $reply->user_id)
+			@if(Auth::check())
 				<span class="float-right">
-									{{HTML::actionlink($url = array('action' => 'TopicController@show', 'params' => array($reply->topic->id, $reply->id)), '<i class="fa fa-pencil"></i>')}}
-					@if($reply->topic->replies->first()->id != $reply->id)
-						{{HTML::actionlink($url = array('action' => 'ReplyController@delete', 'params' => array($reply->id)), '<i class="fa fa-trash-o"></i>')}}
+					@if(Auth::user()->id == $reply->user_id || HTML::hasPermission('TopicController@createOrUpdate'))
+						{{HTML::actionlink($url = array('action' => 'TopicController@show', 'params' => array($reply->topic->id, $reply->id)), '<i class="fa fa-pencil"></i>')}}
 					@endif
-								</span>
+					@if($reply->topic->replies->first()->id != $reply->id)
+						@if(Auth::user()->id == $reply->user_id || HTML::hasPermission('ReplyController@delete'))
+							{{HTML::actionlink($url = array('action' => 'ReplyController@delete', 'params' => array($reply->id)), '<i class="fa fa-trash-o"></i>')}}
+						@endif
+					@endif
+				</span>
 			@endif
 		</p>
 		<p>{{HTML::mention(HTML::markdown($reply->reply))}}</p>

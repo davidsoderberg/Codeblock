@@ -1,6 +1,7 @@
 <?php namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
@@ -12,6 +13,13 @@ use Illuminate\Support\Facades\Redirect;
 class Permission
 {
 
+	/**
+	 * @param Router $router
+	 */
+	public function __construct(Router $router){
+		$this->router = $router;
+	}
+
     /**
      * Handle an incoming request.
      *
@@ -20,24 +28,19 @@ class Permission
      * @return mixed
      */
     public function handle($request, Closure $next)
-    {
-		$response = $next($request);
-		$actions = $request->route()->getAction();
+	{
+		$action = $this->router->getRoutes()->match($request)->getAction()['uses'];
 
 		// Fetch permission for current controller method.
-		if(array_key_exists('permission', $actions)) {
-			$permission = $actions['permission'];
-		}else{
-			$action = explode('@', $actions['uses']);
-			$permissionAnnotation = New \App\Services\Annotation\Permission($action[0]);
-			$permission = $permissionAnnotation->getPermission($action[1], true);
-		}
+		$action = explode('@', $action);
+		$permissionAnnotation = New \App\Services\Annotation\Permission($action[0]);
+		$permission = $permissionAnnotation->getPermission($action[1], true);
 
 		// Checks if user has that permission.
 		if (Auth::check() && !Auth::user()->hasPermission($permission)){
 			return Redirect::to('/')->with('error', 'You do not have the correct permission for that url.');
 		}
 
-		return $response;
+		return $next($request);
     }
 }

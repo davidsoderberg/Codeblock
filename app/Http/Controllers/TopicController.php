@@ -36,8 +36,10 @@ class TopicController extends Controller {
 			$this->client->send($topic, Auth::user()->id, 'subscribe', $this->client->getTopic($topic->id));
 		}
 		$reply = $this->reply->get($reply);
-		if(isset($reply->user_id) && $reply->user_id != Auth::user()->id){
-			return Redirect::back()->with('error', 'You can´t edit other users replies.');
+		if(!Auth::user()->hasPermission('create_reply', false)) {
+			if(isset($reply->user_id) && $reply->user_id != Auth::user()->id) {
+				return Redirect::back()->with('error', 'You can´t edit other users replies.');
+			}
 		}
 		$read->hasRead($id);
 		return View::make('topic.show')->with('title', 'Topic: '.$topic->title)->with('topic', $topic)->with('editReply', $reply);
@@ -45,15 +47,18 @@ class TopicController extends Controller {
 
 	/**
 	 * Skapar eller uppdaterar en tråd.
+	 * @permission create_topic:optional
 	 * @param null $id
 	 * @return mixed
 	 */
 	public function createOrUpdate(ReadRepository $read,$id = null) {
 		if(!is_null($id)){
-			$topic = $this->topic->get($id);
-			$reply = $topic->replies()->first();
-			if(Auth::user()->id != $reply->user_id){
-				return Redirect::back()->with('error', 'You can´t edit other users topics.');
+			if(!Auth::user()->hasPermission($this->getPermission(), false)) {
+				$topic = $this->topic->get($id);
+				$reply = $topic->replies()->first();
+				if(Auth::user()->id != $reply->user_id) {
+					return Redirect::back()->with('error', 'You can´t edit other users topics.');
+				}
 			}
 		}
 		$input = $this->request->all();
@@ -74,14 +79,21 @@ class TopicController extends Controller {
 
 	/**
 	 * Tar bort en tråd.
+	 * @permission delete_topic:optional
 	 * @param $id
 	 * @return mixed
 	 */
 	public function delete($id) {
 		try {
-			$forum_id = $this->topic->get($id)->forum_id;
-			if($this->topic->delete($id)) {
-				return Redirect::action('ForumController@show', array($forum_id))->with('success', 'Your topic has been deleted.');
+			$topic = $this->topic->get($id);
+			if(!is_null($topic)) {
+				$reply = $topic->replies()->first();
+				if(Auth::user()->hasPermission($this->getPermission(), false) || Auth::user()->id == $reply->user_id) {
+					$forum_id = $this->topic->get($id)->forum_id;
+					if($this->topic->delete($id)) {
+						return Redirect::action('ForumController@show', array($forum_id))->with('success', 'Your topic has been deleted.');
+					}
+				}
 			}
 
 		} catch(\Exception $e){}
