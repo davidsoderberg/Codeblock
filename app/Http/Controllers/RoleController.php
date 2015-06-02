@@ -93,8 +93,10 @@ class RoleController extends Controller {
 	 */
 	public function delete($id)
 	{
-		if($this->role->delete($id)){
-			return Redirect::back()->with('success', 'The role has been deleted.');
+		if(is_numeric($id) && $id != 1) {
+			if($this->role->delete($id)) {
+				return Redirect::back()->with('success', 'The role has been deleted.');
+			}
 		}
 
 		return Redirect::back()->with('error', 'The role could not be deleted.');

@@ -34,6 +34,7 @@ class ReplyControllerTest extends \IntegrationCase {
 
 	public function test_delete_reply(){
 		$this->create_reply();
+		$this->create_reply();
 
 		$this->visit('http://codeblock.dev/reply/delete/1')
 			->see('Your reply has been deleted.');

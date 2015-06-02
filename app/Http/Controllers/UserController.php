@@ -156,8 +156,10 @@ class UserController extends Controller {
 	 */
 	public function delete($id)
 	{
-		if($this->user->delete($id)){
-			return Redirect::to('users')->with('success', 'The user has been deleted.');
+		if(is_numeric($id) && $id != 1) {
+			if($this->user->delete($id)) {
+				return Redirect::to('users')->with('success', 'The user has been deleted.');
+			}
 		}
 
 		return Redirect::back()->with('error', 'The user could not be deleted.');

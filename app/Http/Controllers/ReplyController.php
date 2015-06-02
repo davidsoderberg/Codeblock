@@ -60,11 +60,13 @@ class ReplyController extends Controller {
 	 * @return mixed
 	 */
 	public function delete($id) {
-		$reply = $this->reply->get($id);
-		if(!is_null($reply)) {
-			if(Auth::user()->hasPermission($this->getPermission(), false) || Auth::user()->id == $reply->user_id) {
-				if($this->reply->delete($id)) {
-					return Redirect::back()->with('success', 'Your reply has been deleted.');
+		if(count($this->reply->get()) > 1) {
+			$reply = $this->reply->get($id);
+			if(!is_null($reply)) {
+				if(Auth::user()->hasPermission($this->getPermission(), false) || Auth::user()->id == $reply->user_id) {
+					if($this->reply->delete($id)) {
+						return Redirect::back()->with('success', 'Your reply has been deleted.');
+					}
 				}
 			}
 		}

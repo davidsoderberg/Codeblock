@@ -5,7 +5,7 @@ Repository for codeblock.se
 ## Installation instructions
 1. Install [composer](https://getcomposer.org/) and run `composer install` in this directory.
 2. Create database and database user with all permissions.
-3. create an .env from .env.example and add all your config values in there.
+3. Create an .env from .env.example and add all your config values in there.
 4. Run `php artisan Install`.
 5. Run `php artisan websocket` with [supervisor](http://supervisord.org/).
 
