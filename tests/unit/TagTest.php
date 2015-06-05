@@ -20,6 +20,9 @@ class TagTest extends UnitCase {
 		$this->assertTrue(is_object($this->repo->getErrors()));
 		$this->assertTrue($this->repo->createOrUpdate(['name' => 'hej'],1));
 		$this->repo->createOrUpdate(['name' => 'test'],1);
+		$this->repo->errors = null;
+		$this->assertFalse($this->repo->createOrUpdate(['name' => 'tv']));
+		$this->assertTrue(is_object($this->repo->getErrors()));
 	}
 
 	public function testGet(){

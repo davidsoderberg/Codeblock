@@ -134,7 +134,7 @@ class ApiController extends Controller {
 	public function createOrUpdateComment(CommentRepository $comment, $id = null){
 		if(!is_null($id)){
 			$user_id = $comment->get($id)->user_id;
-			if($user_id != Auth::user()->id){
+			if($user_id != Auth::user()->id ||!Auth::user()->hasPermission('edit_comments', false)){
 				return Response::json(array('errors' => array('user' => 'You have not that created that comment')), 400);
 			}
 		}
@@ -152,7 +152,7 @@ class ApiController extends Controller {
 	 */
 	public function createOrUpdateUser(UserRepository $user, $id = null){
 		if(!is_null($id)){
-			if($id != Auth::user()->id){
+			if($id != Auth::user()->id || !Auth::user()->hasPermission('update_users', false)){
 				return Response::json(array('errors' => array('user' => 'You are not that user')), 400);
 			}
 		}
@@ -175,7 +175,7 @@ class ApiController extends Controller {
 	public function createOrUpdateReply(ReplyRepository $reply, $id = null){
 		if(!is_null($id)){
 			$user_id = $reply->get($id)->user_id;
-			if($user_id != Auth::user()->id){
+			if($user_id != Auth::user()->id || !Auth::user()->hasPermission('create_reply', false)){
 				return Response::json(array('errors' => array('user' => 'You have not that created that reply')), 400);
 			}
 		}
@@ -197,7 +197,7 @@ class ApiController extends Controller {
 			$currentTopic = $topic->get($id);
 			$replies = $currentTopic->replies;
 			$user_id = $replies[0]->user_id;
-			if($user_id != Auth::user()->id){
+			if($user_id != Auth::user()->id || !Auth::user()->hasPermission('create_topic', false)){
 				return Response::json(array('errors' => array('user' => 'You have not that created that topic')), 400);
 			}
 		}

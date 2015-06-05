@@ -27,6 +27,14 @@ class PostTest extends UnitCase {
 		$input['name'] = 'tv';
 		$this->assertFalse($this->repo->createOrUpdate($input));
 		$this->assertTrue(count($this->repo->errors) > 0);
+
+		$this->repo->errors = null;
+		$this->assertFalse($this->repo->createOrUpdate(['name' => '', 'cat_id' => 2, 'description' => '', 'code' => ''], 1));
+		$this->assertTrue(count($this->repo->errors) > 0);
+
+		$this->repo->errors = null;
+		$this->assertFalse($this->repo->createOrUpdate(['name' => ' ', 'cat_id' => 2, 'description' => 'test', 'code' => 'test'], 1));
+		$this->assertTrue(count($this->repo->errors) > 0);
 	}
 
 	public function testGet(){
@@ -74,6 +82,7 @@ class PostTest extends UnitCase {
 		$this->assertTrue($this->repo->createOrUpdate($input));
 		$this->assertTrue($this->repo->duplicate(1));
 		$this->assertEquals(count($this->repo->getForked(1)),1);
+		$this->assertEquals(count($this->repo->getForked(2)),0);
 	}
 
 	public function testDelete(){
