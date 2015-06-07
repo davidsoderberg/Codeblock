@@ -14,11 +14,30 @@ class ArticleTest extends UnitCase {
 	}
 
 	public function testCreateOrUpdate(){
+		$input = ['title' => '', 'body' => ''];
+		$this->assertFalse($this->repo->createOrUpdate($input));
+		$this->assertTrue(count($this->repo->getErrors()) == 2);
+		$this->repo->errors = null;
+		$input = ['title' => '', 'body' => 'hej'];
+		$this->assertFalse($this->repo->createOrUpdate($input));
+		$this->assertTrue(count($this->repo->getErrors()) == 1);
+		$this->repo->errors = null;
+		$input = ['title' => 'test', 'body' => ''];
+		$this->assertFalse($this->repo->createOrUpdate($input));
+		$this->assertTrue(count($this->repo->getErrors()) == 1);
+		$this->repo->errors = null;
 		$input = ['title' => 'test', 'body' => 'test'];
 		$this->assertTrue($this->repo->createOrUpdate($input));
-		$this->assertfalse($this->repo->createOrUpdate(['title' => ''],1));
+		$this->assertfalse($this->repo->createOrUpdate(['title' => '', 'body' => ''],1));
 		$this->assertTrue(is_object($this->repo->getErrors()));
-		$this->assertTrue($this->repo->createOrUpdate(['title' => 'hej'],1));
+		$this->repo->errors = null;
+		$this->assertfalse($this->repo->createOrUpdate(['title' => 'hej', 'body' => ''],1));
+		$this->assertTrue(is_object($this->repo->getErrors()));
+		$this->repo->errors = null;
+		$this->assertfalse($this->repo->createOrUpdate(['title' => '', 'body' => 'test'],1));
+		$this->assertTrue(is_object($this->repo->getErrors()));
+		$this->repo->errors = null;
+		$this->assertTrue($this->repo->createOrUpdate(['title' => 'hej', 'body' => 'test'],1));
 		$this->repo->createOrUpdate(['title' => 'test'],1);
 	}
 

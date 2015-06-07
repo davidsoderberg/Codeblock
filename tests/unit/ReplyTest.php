@@ -22,6 +22,9 @@ class ReplyTest extends UnitCase {
 	public function testCreateOrUpdate(){
 		$input = ['reply' => 'test', 'topic_id' => 1];
 		$this->assertTrue($this->repo->createOrUpdate($input));
+		$this->assertfalse($this->repo->createOrUpdate(['reply' => '', 'topic_id' => 1]));
+		$this->assertTrue(is_object($this->repo->getErrors()));
+		$this->repo->errors = null;
 		$this->assertfalse($this->repo->createOrUpdate(['reply' => ''],1));
 		$this->assertTrue(is_object($this->repo->getErrors()));
 		$this->assertTrue($this->repo->createOrUpdate(['reply' => 'hej'],1));

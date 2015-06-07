@@ -108,18 +108,31 @@ class PostTest extends UnitCase {
 		$this->assertTrue($post->stars['count'] == 0);
 	}
 
-	public function testComment(){
+	public function testGetComment(){
+		$this->assertTrue(is_object($this->repoComment->get()));
+		$this->assertFalse(is_object($this->repoComment->get(1)));
+
+		$this->be(User::find(1));
+		$input = ['name' => 'test', 'cat_id' => 2, 'description' => 'test', 'code' => 'test'];
+		$this->repo->createOrUpdate($input);
+		$input = ['post_id' => 1, 'comment' => 'hej'];
+		$this->assertTrue($this->repoComment->createOrUpdate($input));
+
+		$this->assertTrue(is_object($this->repoComment->get(1)));
+	}
+
+	public function testCreateOrUpdateComment(){
 		$input = ['name' => 'test', 'cat_id' => 2, 'description' => 'test', 'code' => 'test'];
 		$this->be(User::find(1));
 		$this->assertTrue($this->repo->createOrUpdate($input));
-		$input = ['post_id' => 1, 'comment' => 'hej'];
+		$input = ['post_id' => 1, 'comment' => 'test'];
 		$this->assertTrue($this->repoComment->createOrUpdate($input));
 		$input = ['status' => '2'];
 		$this->assertTrue($this->repoComment->createOrUpdate($input, 1));
 		$this->assertEquals(count($this->repo->get(1)->comments),1);
 	}
 
-	public function testDelteComment(){
+	public function testDeleteComment(){
 		$input = ['name' => 'test', 'cat_id' => 2, 'description' => 'test', 'code' => 'test'];
 		$this->be(User::find(1));
 		$this->assertTrue($this->repo->createOrUpdate($input));

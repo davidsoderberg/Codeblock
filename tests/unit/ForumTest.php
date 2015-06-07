@@ -21,6 +21,16 @@ class ForumTest extends UnitCase {
 	public function testCreateOrUpdate(){
 		$input = ['title' => 'test', 'description' => 'test'];
 		$this->assertTrue($this->repo->createOrUpdate($input));
+
+		$this->assertFalse($this->repo->createOrUpdate(['title' => '', 'description' => '']));
+		$this->assertTrue(count($this->repo->getErrors()) == 2);
+		$this->repo->errors = null;
+		$this->assertFalse($this->repo->createOrUpdate(['title' => 'test', 'description' => '']));
+		$this->assertTrue(count($this->repo->getErrors()) == 1);
+		$this->repo->errors = null;
+		$this->assertFalse($this->repo->createOrUpdate(['title' => '', 'description' => 'test']));
+		$this->assertTrue(count($this->repo->getErrors()) == 1);
+		$this->repo->errors = null;
 		$this->assertfalse($this->repo->createOrUpdate(['title' => ''],1));
 		$this->assertTrue(is_object($this->repo->getErrors()));
 		$this->assertTrue($this->repo->createOrUpdate(['title' => 'hej'],1));
