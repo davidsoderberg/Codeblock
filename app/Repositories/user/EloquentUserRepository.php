@@ -50,7 +50,15 @@ class EloquentUserRepository extends CRepository implements UserRepository {
 
 	// Hämtar användarens id med hjälp av användarnamnet.
 	public function getIdByUsername($username){
-		$user = User::where('username', '=', $username)->first();
+		return $this->getIdBy('username', $username);
+	}
+
+	public function getIdByEmail($email){
+		return $this->getIdBy('email', $email);
+	}
+
+	private function getIdBy($field, $value){
+		$user = User::where($field, '=', $value)->first();
 		if(is_null($user)){
 			return 0;
 		}

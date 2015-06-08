@@ -6,6 +6,8 @@ interface UserRepository extends IRepository {
 
 	public function getIdByUsername($username);
 
+	public function getIdByEmail($email);
+
 	public function update($input, $id);
 
 	public function login($input);
