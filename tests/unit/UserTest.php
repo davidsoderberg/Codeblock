@@ -27,12 +27,12 @@ class UserTest extends UnitCase {
 		$this->assertFalse($this->repo->createOrUpdate($user));
 		$this->assertTrue(is_object($this->repo->getErrors()));
 		$this->repo->errors = null;
-		$user['email'] = 'testtest.test';
+		$user['email'] = 'testtest.com';
 		$this->assertFalse($this->repo->createOrUpdate($user));
 		$this->assertTrue(is_object($this->repo->getErrors()));
 
 		$this->repo->errors = null;
-		$user['email'] = 'test@test.test';
+		$user['email'] = 'test@test.com';
 		$user['username'] = '';
 		$this->assertFalse($this->repo->createOrUpdate($user));
 		$this->assertTrue(is_object($this->repo->getErrors()));
@@ -42,6 +42,18 @@ class UserTest extends UnitCase {
 		$user['username'] = 'test';
 		$this->assertFalse($this->repo->createOrUpdate($user));
 		$this->assertTrue(is_object($this->repo->getErrors()));
+
+		$this->repo->createOrUpdate($input);
+		$input = ['username' => 'test', 'password' => 'test', 'email' => 'hej@hej.com', 'active' => 1, 'role' => 1];
+		$this->assertFalse($this->repo->createOrUpdate($input));
+		$this->assertTrue(count($this->repo->getErrors()) == 1);
+		$this->repo->errors = null;
+		$token = str_replace('/','', md5('test@test.com'));
+		$this->repo->activateUser(3, $token);
+		$input['username'] = 'hej';
+		$input['email'] = 'test@test.com';
+		$this->assertFalse($this->repo->createOrUpdate($input));
+		$this->assertTrue(count($this->repo->getErrors()) == 1);
 	}
 
 	public function testGet(){
