@@ -260,16 +260,31 @@ class UserController extends Controller {
 					return Redirect::to('/user')->with('error', 'You have already connected ' . $social . ' to your account.');
 				}
 			}else{
-				$socials = Social::all();
-				if(count($socials) > 0) {
-					foreach($socials as $soc) {
-						if($social == $soc->social && $user->getId() == $soc->social_id) {
-							Auth::loginUsingId($soc->user_id);
-							return Redirect::to('/user')->with('success','You have logged in.');
+				try {
+					$socials = Social::all();
+					$id = 0;
+					if(count($socials) > 0) {
+						foreach($socials as $soc) {
+							if($social == $soc->social && $user->getId() == $soc->social_id) {
+								$id = $soc->user_id;
+							}
 						}
 					}
-				}
-				return Redirect::to('/login')->with('error', 'We could not logg you in with your connected social media, please login with the login form and connect '.$social.' with your account.');
+					if($id == 0) {
+						$id = $this->user->getIdByEmail($user->getEmail());
+						if($id == 0) {
+							$id = $this->user->getIdByUsername($user->getNickname());
+						}
+						if($id > 0) {
+							Social::create(array("social" => $social, "user_id" => $id, "social_id" => $user->getId()));
+						}
+					}
+					if($id > 0) {
+						Auth::loginUsingId($id);
+						return Redirect::to('/user')->with('success', 'You have logged in.');
+					}
+				} catch (\Exception $e){}
+				return Redirect::to('/login')->with('error', 'We could not log you in with your connected social media, please login with the login form and connect '.$social.' with your account.');
 			}
 		}
 		return $socialite->driver($social)->redirect();
