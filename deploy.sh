@@ -3,7 +3,6 @@
 # composer.phar dump-autoload -o
 # php artisan InsertPermissions onlyInsert
 
-
 ssh $USER@$HOST -- "
  set -e
  git pull origin master
