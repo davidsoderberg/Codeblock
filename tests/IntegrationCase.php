@@ -1,13 +1,15 @@
 <?php
 
-use Laracasts\Integrated\Extensions\Laravel as IntegrationTest;
-use Laracasts\Integrated\Services\Laravel\DatabaseTransactions;
-use Laracasts\TestDummy\Factory;
+use Illuminate\Foundation\Testing\TestCase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+
 use \Illuminate\Support\Facades\Auth;
 
-class IntegrationCase extends IntegrationTest {
+class IntegrationCase extends TestCase {
 
 	use TestTrait, DatabaseTransactions;
+
+	protected $baseUrl = 'http://localhost';
 
 	public function tearDown(){
 		if(Auth::check()){
@@ -29,15 +31,7 @@ class IntegrationCase extends IntegrationTest {
 	}
 
 	public function create($model, array $overrides = [], $numbers = 1){
-		return Factory::times($numbers)->create($model, $overrides);
-	}
-
-	public function getAttributes($model){
-		return Factory::attributesFor($model);
-	}
-
-	public function Build($model, array $override = []){
-		return Factory::build($model, $override);
+		return factory($model)->times($numbers)->create($overrides);
 	}
 
 	protected function sign_in(){

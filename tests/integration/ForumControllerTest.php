@@ -26,8 +26,7 @@ class ForumControllerTest extends \IntegrationCase {
 
 		$this->visit('forums')
 			->click('Edit')
-			->fill('hej', 'title')
-			->press('Send')
+			->submitForm('Send', ['title' => 'hej'])
 			->see('hej')
 			->see('Your forum has been updated.');
 	}

@@ -28,8 +28,7 @@ class CategoryControllerTest extends \IntegrationCase {
 		$this->create_category();
 
 		$this->visit('categories/1')
-			->fill('hej','name')
-			->press('Send')
+			->submitForm('Send', ['name' => 'hej'])
 			->see('Your category has been updated.')
 			->onPage('categories');
 	}

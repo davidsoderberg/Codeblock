@@ -25,8 +25,7 @@ class RoleControllerTest extends \IntegrationCase {
 		$this->create_role();
 
 		$this->visit('roles/1')
-			->fill('hej', 'name')
-			->press('Update')
+			->submitForm('Update', ['name' => 'hej'])
 			->see('The role has been updated.');
 	}
 

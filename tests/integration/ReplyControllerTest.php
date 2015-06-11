@@ -27,8 +27,7 @@ class ReplyControllerTest extends \IntegrationCase {
 	public function test_edit_reply(){
 		$this->create_reply();
 		$this->visit('http://codeblock.dev/forum/topic/1/1')
-			->fill('hej', 'reply')
-			->press('Reply')
+			->submitForm('Reply', ['reply' => 'hej'])
 			->see('Your Reply has been saved.');
 	}
 

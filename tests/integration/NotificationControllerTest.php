@@ -16,7 +16,7 @@ class NotificationControllerTest extends \IntegrationCase {
 
 	public function test_notification_view(){
 		$this->create_notification();
-		$this->visit('notifications')->statusCode(200);
+		$this->visit('notifications')->seeStatusCode(200);
 	}
 
 	public function test_delete_notification(){

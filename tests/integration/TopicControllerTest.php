@@ -27,8 +27,7 @@ class TopicControllerTest extends \IntegrationCase {
 		$this->create_topic();
 
 		$this->visit('forum/topic/1')
-			->fill('hej', 'title')
-			->press('Update topic title')
+			->submitForm('Update topic title', ['title' => 'hej'])
 			->see('hej')
 			->see('Your topic has been updated.');
 	}

@@ -26,8 +26,7 @@ class ArticleControllerTest extends \IntegrationCase {
 		$this->create_article();
 
 		$this->visit('news/1')
-			->fill('hej','title')
-			->press('Send')
+			->submitForm('Send', ['title' => 'hej'])
 			->see('hej')
 			->see('Your article has been updated.')
 			->onPage('news');

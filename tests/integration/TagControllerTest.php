@@ -28,8 +28,7 @@ class TagControllerTest extends \IntegrationCase {
 		$this->create_tag();
 
 		$this->visit('tags/1')
-			->fill('hej','name')
-			->press('Send')
+			->submitForm('Send', ['name' => 'hej'])
 			->see('Your tag has been updated.')
 			->onPage('tags');
 	}

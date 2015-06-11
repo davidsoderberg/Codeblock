@@ -12,7 +12,7 @@ class PostControllerTest extends \IntegrationCase {
 	}
 
 	public function test_view_posts(){
-		$this->visit('posts')->statusCode(200);
+		$this->visit('posts')->seeStatusCode(200);
 	}
 
 	public function create_post(){
@@ -49,8 +49,7 @@ class PostControllerTest extends \IntegrationCase {
 	public function test_edit_post(){
 		$this->create_post();
 		$this->visit('posts/edit/1')
-			->fill('test', 'description')
-			->press('Save')
+			->submitForm('Save', ['description' => 'test'])
 			->see('Your block has been saved.')
 			->onPage('posts/1');
 	}

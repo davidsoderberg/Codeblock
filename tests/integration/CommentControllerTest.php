@@ -24,8 +24,8 @@ class CommentControllerTest extends \IntegrationCase {
 
 
 	public function test_comment_views(){
-		$this->visit('comments')->statusCode(200);
-		$this->visit('comments/list')->statusCode(200);
+		$this->visit('comments')->seeStatusCode(200);
+		$this->visit('comments/list')->seeStatusCode(200);
 	}
 
 
@@ -56,8 +56,7 @@ class CommentControllerTest extends \IntegrationCase {
 		$this->create_comment();
 
 		$this->visit('posts/1/1')
-			->fill('hej','comment')
-			->press('Comment')
+			->submitForm('Comment', ['comment' => 'hej'])
 			->see('This comment have been updated.');
 	}
 
