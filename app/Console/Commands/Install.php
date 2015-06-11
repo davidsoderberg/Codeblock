@@ -54,6 +54,7 @@ class Install extends Command {
 			if(!$mail->sendEmail('emails.notification', $emailInfo, $data)) {
 				$this->error('The mail is not configured correctly, please try agian and use option startat with "Mail" as value.');
 			}
+			$this->line('SMTP settings: ok');
 			$startat = 'Github';
 		}
 		// tests the github configs.
@@ -62,6 +63,7 @@ class Install extends Command {
 			if(!$github->isToken(env('GITHUB_TOKEN', null))) {
 				$this->error('The github token is not valid, please try agian and use option startat with "Github" as value.');
 			}
+			$this->line('Github token: ok');
 			$startat = 'Database';
 		}
 		// tests the database configs.
@@ -71,6 +73,7 @@ class Install extends Command {
 			} catch (\Exception $e){
 				$this->error('The database is not configured correctly, please try agian and use option startat with "Database" as value.');
 			}
+			$this->line('Database connection: ok');
 			$startat = 'Migration';
 		}
 		// migrates all migrations.
@@ -80,6 +83,7 @@ class Install extends Command {
 			} catch (\Exception $e){
 				$this->error('The migration could not be done for some reason, please try agian and use option startat with "Migration" as value.');
 			}
+			$this->line('Migration: done');
 			$startat = 'Seed';
 		}
 		// Seeds the database.
@@ -89,6 +93,7 @@ class Install extends Command {
 			} catch(\Exception $e) {
 				$this->error('The seed of database could not be done for some reason, please try agian and use option startat with "Seed" as value.');
 			}
+			$this->line('Seed: done');
 			$startat = 'Permissions';
 		}
 		// insert all permissions.
@@ -98,6 +103,7 @@ class Install extends Command {
 			} catch(\Exception $e) {
 				$this->error('The permissions colud not be created for some reason, please try agian and use option startat with "Permissions" as value.');
 			}
+			$this->line('Permissions: created');
 			$startat = 'Role';
 		}
 		// creating the default role.
@@ -126,6 +132,7 @@ class Install extends Command {
 				$created = $roleRepository->createOrUpdate(array('name' => $role,'default' => 1));
 			}
 			$this->line('');
+			$this->line('Roles: created');
 			$startat = 'User';
 		}
 		if($startat = 'User' && count($userRepository->get()) == 0 || count($userRepository->get()) == 0){
@@ -141,9 +148,10 @@ class Install extends Command {
 				$info = $this->getUserInfo($errorkeys, $info);
 				$created = $userRepository->createOrUpdate($info + ['active' => 1]);
 			}
+			$this->line('First user: created & activated');
 		}
 
-		$this->line('You have now installed codeblock.');
+		$this->line('Codeblock: installed');
 	}
 
 	private function getUserInfo(array $keys = array(), array $old = array()){
