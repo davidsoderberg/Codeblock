@@ -3,7 +3,7 @@
 use App\NotificationType;
 use App\Repositories\Notification\NotificationRepository;
 use App\Services\Jwt;
-use Illuminate\Foundation\Bus\DispatchesCommands;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Log;
@@ -30,7 +30,7 @@ abstract class Controller extends BaseController {
 	 */
 	protected $request;
 
-	use DispatchesCommands, ValidatesRequests;
+	use DispatchesJobs, ValidatesRequests;
 
 	/**
 	 *
