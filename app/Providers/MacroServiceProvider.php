@@ -5,7 +5,7 @@ use Illuminate\Html\HtmlServiceProvider;
 
 class MacroServiceProvider extends HtmlServiceProvider {
 	protected function registerHtmlBuilder() {
-		$this->app->bindShared('html', function($app)
+		$this->app->singleton('html', function($app)
 		{
 			return new HtmlBuilder($app['url']);
 		});
