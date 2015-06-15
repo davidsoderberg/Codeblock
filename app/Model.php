@@ -4,8 +4,15 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class Model extends \Illuminate\Database\Eloquent\Model {
+	use \Venturecraft\Revisionable\RevisionableTrait;
 
 	public static $errors;
+
+	protected $revisionEnabled = false;
+
+	public function setRevisionEnabled(){
+		$this->revisionEnabled = !$this->revisionEnabled;
+	}
 
 	public static function boot()
 	{

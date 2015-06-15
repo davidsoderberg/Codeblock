@@ -18,7 +18,8 @@
         "laravel/socialite": "2.*",
         "yzalis/identicon": "*",
         "textalk/websocket": "1.0.*",
-        "cboden/ratchet": "0.3.*"
+        "cboden/ratchet": "0.3.*",
+        "venturecraft/revisionable": "1.*"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~4.4.0@stable",

@@ -151,21 +151,21 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 		return Post::where($where[0], $where[1], $where[2])->get();
 	}
 
-	// sparar eller uppdarerar ett block.
-	public function createOrUpdate($input, $id = null)
-	{
-		if(!is_numeric($id)) {
-			$Post = new Post;
-			if(is_object(Auth::user())){
-				$Post->user_id = Auth::user()->id;
-			}else{
-				Session::flash('error', 'You have not logged in');
-				return false;
+	public function undo($input, $id){
+		if(is_numeric($id)){
+			$post = Post::find($id);
+			//$post->setRevisionEnabled();
+			if(isset($input['code'])){
+				$input['code'] = html_entity_decode($input['code']);
 			}
-		} else {
-			$Post = Post::find($id);
+			$return = $this->save($input, $post);
+			//$post->setRevisionEnabled();
+			return $return;
 		}
+		return false;
+	}
 
+	private function save($input, $Post){
 		$except = array('tags', '_token', '_url', 'token', '_method');
 
 		foreach ($input as $key => $value) {
@@ -192,6 +192,24 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 			$this->errors = $Post::$errors;
 			return false;
 		}
+	}
+
+	// sparar eller uppdarerar ett block.
+	public function createOrUpdate($input, $id = null)
+	{
+		if(!is_numeric($id)) {
+			$Post = new Post;
+			if(is_object(Auth::user())){
+				$Post->user_id = Auth::user()->id;
+			}else{
+				Session::flash('error', 'You have not logged in');
+				return false;
+			}
+		} else {
+			$Post = Post::find($id);
+		}
+
+		return $this->save($input, $Post);
 	}
 
 	// tar bort ett block.

@@ -19,6 +19,8 @@ class Post extends Model {
 
 	protected $table = 'posts';
 
+	protected $revisionEnabled = true;
+
 	protected $fillable = array('name', 'cat_id', 'description', 'code', 'user_id', 'org', 'slug');
 
 	protected $guarded = array('id');

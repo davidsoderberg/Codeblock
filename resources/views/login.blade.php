@@ -54,6 +54,7 @@
     {{ Form::text('email', Input::old('email'), array('id' => 'forgotEmail', 'placeholder' => 'Email', 'data-validator' => 'required|pattern:email')) }}
     {{ Form::button('Send password', array('type' => 'submit')) }}
     {{ Form::close() }}
+    @include('partials.licenseModal')
 @stop
 
 @section('script')

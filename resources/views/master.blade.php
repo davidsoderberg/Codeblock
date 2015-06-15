@@ -45,7 +45,6 @@
 			</div>
 		</div>
 		<div class="wrapper">
-            @include('partials.modal')
 			@yield('content')
 			<div id="toast-container">{{HTML::toast()}}</div>
 		</div>

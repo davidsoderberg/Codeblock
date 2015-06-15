@@ -10,6 +10,7 @@ use App\Services\Github;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
+use Venturecraft\Revisionable\Revision;
 
 class PostController extends Controller {
 
@@ -86,6 +87,24 @@ class PostController extends Controller {
 			}
 		}
 	}
+
+	public function undo($id){
+		$revision = Revision::find($id);
+		if(!is_null($revision)) {
+			$post = $this->post->get($revision->revisionable_id);
+			if(!is_null($post)) {
+				if(Auth::user()->id == $post->user_id || Auth::user()->hasPermission($this->getPermission(), false)) {
+					$input = array($revision->fieldName() => $revision->oldValue());
+					if($this->post->undo($input, $revision->revisionable_id)) {
+						//$revision->delete($id);
+						return Redirect::back()->with('success', 'That change have been undone.');
+					}
+				}
+			}
+		}
+		return Redirect::back()->with('error', 'We could not undo that change.');
+	}
+
 	/**
 	 * Visar vyn för att skapa block.
 	 * @return objekt objekt med allt som skall skickas till create vyn
