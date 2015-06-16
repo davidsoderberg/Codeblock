@@ -9,12 +9,11 @@ class Permission extends Model {
 	 */
 	protected $table = 'permissions';
 
-	protected $fillable = array('name', 'permission');
+	protected $fillable = array('permission');
 
 	protected $guarded = array('id');
 
 	public static $rules = array(
-		'name' => 'required|min:3|unique:permissions,name',
 		'permission' => 'required|alpha_dash|unique:permissions,permission',
 	);
 
@@ -22,4 +21,10 @@ class Permission extends Model {
 	{
 		return $this->belongsToMany('App\Role');
 	}
+
+	public function getNameAttribute(){
+		return ucfirst(str_replace('_', ' ', $this->permission));
+	}
+
+	protected $appends = array('name');
 }

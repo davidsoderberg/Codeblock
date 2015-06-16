@@ -20,7 +20,7 @@
 				@if(!empty($permissions))
 					@foreach ($permissions as $permission)
 						<tr>
-							<td>{{ ucfirst($permission->name)}}</td>
+							<td>{{ $permission->name }}</td>
 							@foreach ($roles as $role => $value)
 								<td data-title="{{$role}}">
 									{{ Form::checkbox(str_replace(' ', '', $role).'[]', $permission->id, $value[$permission->permission]) }}
