@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html manifest="{{asset('codeblock.manifest')}}">
 	<head>
 		<meta name="google-site-verification" content="3M7wk4STJBxWp1JZHRFZ-LNG7N8kZkYIRDqX4uRJsLk" />
 		<meta charset="utf-8">
