@@ -115,7 +115,7 @@ class Install extends Command {
 			$created = false;
 			while($created != true){
 				$this->ShowErrors($roleRepository);
-				$role = $this->ask('Your admin role name:');
+				$role = $this->ask('Your admin role name');
 				$created = $roleRepository->createOrUpdate(array('name' => $role));
 			}
 			$this->line('');
@@ -128,7 +128,7 @@ class Install extends Command {
 			$created = false;
 			while($created != true){
 				$this->ShowErrors($roleRepository);
-				$role = $this->ask('Your user role name:');
+				$role = $this->ask('Your user role name');
 				$created = $roleRepository->createOrUpdate(array('name' => $role,'default' => 1));
 			}
 			$this->line('');
@@ -156,17 +156,17 @@ class Install extends Command {
 
 	private function getUserInfo(array $keys = array(), array $old = array()){
 		if(in_array('username', $keys)) {
-			$username = $this->ask('Your admin username:');
+			$username = $this->ask('Your admin username');
 		}else{
 			$username = $old['username'];
 		}
 		if(in_array('email', $keys)) {
-			$email = $this->ask('Your admin email:');
+			$email = $this->ask('Your admin email');
 		}else{
 			$email = $old['email'];
 		}
 		if(in_array('password', $keys)) {
-			$password = $this->secret('Your admin password:');
+			$password = $this->secret('Your admin password');
 		}else{
 			$password = $old['password'];
 		}
