@@ -20,7 +20,6 @@ $factory->define(App\Notification::class, function ($faker) {
 		'body' => $faker->sentence(),
 		'object_id' => $faker->numberBetween(1,10),
 		'object_type' => $faker->sentence(1),
-		'sent_at' => $faker->date(),
 		'from_id' => 1
 	];
 });

@@ -104,7 +104,6 @@ class EloquentNotificationRepository extends CRepository implements Notification
 		$note = $this->setType($type, $note);
 		$note = $this->setObject($object, $note);
 		$note = $this->setcontent($subject, $body, $type, $note);
-		$note->sent_at = new \DateTime('now');
 
 
 		if($note->save()){

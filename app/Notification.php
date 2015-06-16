@@ -11,7 +11,6 @@ class Notification extends Model {
 		'body',
 		'object_id',
 		'object_type',
-		'sent_at',
 		'from_id'
 	);
 
@@ -24,7 +23,6 @@ class Notification extends Model {
 		'body' => 'required|min:3',
 		'object_id' => 'integer',
 		'object_type' => 'min:3',
-		'sent_at' => 'required|date',
 		'from_id' => 'required|integer',
 	);
 

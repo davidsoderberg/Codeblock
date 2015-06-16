@@ -24,9 +24,9 @@ class EloquentPermissionRepository extends CRepository implements PermissionRepo
 			$Permission = Permission::find($id);
 		}
 
-		if(isset($input['name'])){
-			$Permission->name = $this->stripTrim($input['name']);
-			$Permission->permission = str_replace(' ', '_', strtolower($Permission->name));
+		if(isset($input['permission'])){
+			$input['permission'] = $this->stripTrim(str_replace('_', ' ', strtolower($input['permission'])));
+			$Permission->permission = str_replace(' ', '_', $input['permission']);
 		}
 
 		if($Permission->save()){
