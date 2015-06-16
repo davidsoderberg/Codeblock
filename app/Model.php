@@ -14,6 +14,16 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 		$this->revisionEnabled = !$this->revisionEnabled;
 	}
 
+	public function getAnswer($boolean){
+		if(is_bool($boolean) || in_array($boolean, [0,1])) {
+			if($boolean == 1 || $boolean == true) {
+				return 'Yes';
+			}
+			return 'No';
+		}
+		return $boolean;
+	}
+
 	public static function boot()
 	{
 		parent::boot();

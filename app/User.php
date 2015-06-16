@@ -145,10 +145,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	}
 
 	public function getisactiveAttribute(){
-		if($this->active == 1){
-			return 'yes';
-		}
-		return 'no';
+		return $this->getAnswer($this->active);
 	}
 
 	protected $appends = array('rolename', 'isactive');
