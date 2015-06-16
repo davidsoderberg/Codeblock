@@ -21,7 +21,6 @@ class CreateNotificationsTable extends Migration
 			$table->integer('object_id');
 			$table->string('object_type');
 			$table->boolean('is_read')->default(0);
-			$table->timestamp('sent_at');
 			$table->integer('from_id');
 			$table->timestamps();
 		});
