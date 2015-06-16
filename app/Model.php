@@ -15,7 +15,11 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	}
 
 	public function getAnswer($boolean){
-		if(is_bool($boolean) || in_array($boolean, [0,1])) {
+		if(
+			$boolean === true || $boolean === false ||
+			$boolean === 0 || $boolean === 1 ||
+			$boolean === "1" || $boolean === "0"
+		) {
 			if($boolean == 1 || $boolean == true) {
 				return 'Yes';
 			}
