@@ -11,6 +11,8 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 
 	public $id;
 
+	public $add = true;
+
 	// getter för id.
 	public function getId(){
 		return $this->id;
@@ -21,23 +23,24 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	{
 		if(is_null($id)){
 			$posts =  Post::all();
-			foreach ($posts as $post) {
-				$post->category = $post->category;
-				$post->comments = $post->comments;
-				$post->posttags = $post->posttags;
-				$post->stars = $this->getStars($post->stars);
-				//$post->category->lang = $this->jsSwitch($post->category->name);
-				$post->org = $this->get($post->org);
-				$post->forked = count($this->where(array('org', '=', $post->id)));
+			if($this->add){
+				foreach ($posts as $post) {
+					$post->category = $post->category;
+					$post->comments = $post->comments;
+					$post->posttags = $post->posttags;
+					$post->stars = $this->getStars($post->stars);
+					//$post->category->lang = $this->jsSwitch($post->category->name);
+					$post->org = $this->get($post->org);
+					$post->forked = count($this->where(array('org', '=', $post->id)));
+				}
 			}
-			return $posts;
 		}else{
 			if(is_numeric($id)) {
 				$post = Post::find($id);
 			}else{
 				$post = Post::where('slug', $id)->first();
 			}
-			if(!is_null($post)){
+			if(!is_null($post) && $this->add){
 				$post->category = $post->category;
 				$post->comments = $post->comments;
 				$post->posttags = $post->posttags;
@@ -46,8 +49,15 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 				$post->org = $this->get($post->org);
 				$post->forked = count($this->where(array('org', '=', $post->id)));
 			}
-			return $post;
+			$posts = $post;
 		}
+		$this->add = true;
+		return $posts;
+	}
+
+	private function getWithoutAdd($id = null){
+		$this->add = false;
+		return $this->get($id);
 	}
 
 	// hämtar block som har en vis kategori eller är skapade den senaste veckan.
@@ -153,7 +163,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 
 	public function undo($input, $id){
 		if(is_numeric($id)){
-			$post = Post::find($id);
+			$post = $this->getWithoutAdd($id);
 			//$post->setRevisionEnabled();
 			if(isset($input['code'])){
 				$input['code'] = html_entity_decode($input['code']);
@@ -206,7 +216,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 				return false;
 			}
 		} else {
-			$Post = Post::find($id);
+			$Post = $this->getWithoutAdd($id);
 		}
 
 		return $this->save($input, $Post);
@@ -214,7 +224,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 
 	// tar bort ett block.
 	public function delete($id){
-		$Post = Post::find($id);
+		$Post = $this->getWithoutAdd($id);
 		if(!is_null($Post)) {
 			return $Post->delete();
 		}
