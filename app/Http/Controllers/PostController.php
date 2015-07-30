@@ -220,11 +220,14 @@ class PostController extends Controller {
 	 * @return objekt med vyn som skall vissas med alla variabler som behövs.
 	 */
 	public function category($id){
-		if($id != 0){
-			$category = $this->category->get($id);
-		}else{
+		$id = urldecode($id);
+		if(is_numeric($id) && $id == 0){
 			$this->category->name = "What's new";
 			$category = $this->category;
+			$id = (int) $id;
+		}else{
+			$category = $this->category->get($id);
+			$id = $category->id;
 		}
 		return View::make('post.list')->with('title', 'Posts in category: '.$category->name )->with('posts', $this->post->getByCategory($id))->with('category', $category);
 	}
@@ -235,7 +238,9 @@ class PostController extends Controller {
 	 * @return objekt med vyn som skall vissas med alla variabler som behövs.
 	 */
 	public function tag($id){
+		$id = urldecode($id);
 		$tag = $this->tag->get($id);
+		$id = $tag->id;
 		return View::make('post.list')->with('title', 'Posts with tag: '.$tag->name)->with('posts', $this->post->getByTag($id))->with('tag', $tag);
 	}
 

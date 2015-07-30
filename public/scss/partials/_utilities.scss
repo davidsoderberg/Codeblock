@@ -42,6 +42,9 @@
 .display-block, .only-large, .hidden-print{
 	display: block;
 }
+.decoration-none{
+	text-decoration: none;
+}
 .display-none, .only-small, .close-reply, .visible-print{
 	display: none;
 }

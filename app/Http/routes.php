@@ -28,7 +28,9 @@ Route::get('command/{command}/{password}/{param?}', 'MenuController@command')
 
 Route::get('posts/list', 'PostController@listPosts');
 Route::get('posts/tag/{id}', 'PostController@tag');
+Route::get('posts/tag/{name}', 'PostController@tag');
 Route::get('posts/category/{id}', 'PostController@category');
+Route::get('posts/category/{name}', 'PostController@category');
 Route::get('user/list/{id?}', 'UserController@listUserBlock');
 Route::get('posts/{id}', 'PostController@show');
 Route::get('posts/{id}/{comment}', 'PostController@show');
@@ -91,6 +93,8 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::get('user/edit/{id}', 'UserController@edit');
 	Route::post('user/update/{id}', 'UserController@update');
 	Route::get('users', 'UserController@index');
+	Route::get('backup', 'UserController@backup');
+
 	/*
 	Route::post('permissions/store/{id?}', 'PermissionController@createOrUpdate');
 	Route::get('permissions/delete/{id}', 'PermissionController@delete');

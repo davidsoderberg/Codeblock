@@ -41,6 +41,10 @@ class UserController extends Controller {
 		return View::make('user.create')->with('title', Lang::get('app.userCreate'));
 	}
 
+	public function backup(){
+		return View::make('user.backup')->with('title', 'Backup codeblocks')->with('json', Auth::user()->posts->toJson());
+	}
+
 	/**
 	 * @param RoleRepository $role
 	 * @param null $id

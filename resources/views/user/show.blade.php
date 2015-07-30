@@ -58,7 +58,7 @@
                     @if($post->stars > 0)
                         <div class="clearfix margin-bottom-half">
 					<span class="float-left">
-						{{HTML::actionlink($url = array('action' => 'PostController@show', 'params' => array($post->id)), $post->name.', '.$post->category->name)}}
+						{{HTML::actionlink($url = array('action' => 'PostController@show', 'params' => array($post->slug)), $post->name.', '.$post->category->name)}}
 					</span>
 					<span class="float-right">
 						<i class="fa fa-star"></i> {{ $post->stars }}

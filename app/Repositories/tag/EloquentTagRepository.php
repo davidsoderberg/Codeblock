@@ -11,7 +11,11 @@ class EloquentTagRepository extends CRepository implements TagRepository {
 		if(is_null($id)){
 			return Tag::all();
 		}else{
-			return Tag::find($id);
+			if(is_numeric($id)) {
+				return Tag::find($id);
+			}else{
+				return Tag::where('name', $id)->first();
+			}
 		}
 	}
 

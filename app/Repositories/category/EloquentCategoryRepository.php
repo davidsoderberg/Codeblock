@@ -11,7 +11,11 @@ class EloquentCategoryRepository extends CRepository implements CategoryReposito
 		if(is_null($id)){
 			return Category::all();
 		}else{
-			return Category::find($id);
+			if(is_numeric($id)) {
+				return Category::find($id);
+			}else{
+				return Category::where('name', $id)->first();
+			}
 		}
 	}
 

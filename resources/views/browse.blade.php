@@ -14,7 +14,7 @@
 				<div class="content">
 					{{HTML::actionlink($url = array('action' => 'PostController@category', 'params' => array(0)), 'What is new?', array('class' => 'block'))}}
 					@foreach ($categories as $category)
-						{{HTML::actionlink($url = array('action' => 'PostController@category', 'params' => array($category->id)), $category->name, array('class' => 'block'))}}
+						{{HTML::actionlink($url = array('action' => 'PostController@category', 'params' => array(urlencode($category->name))), $category->name, array('class' => 'block'))}}
 					@endforeach
 				</div>
 			</li>
@@ -22,7 +22,7 @@
 				<a href="">Tags</a>
 				<div class="content" id="tagList">
 					@foreach ($tags as $tag)
-						{{HTML::actionlink($url = array('action' => 'PostController@tag', 'params' => array($tag->id)), $tag->name, array('class' => 'block'))}}
+						{{HTML::actionlink($url = array('action' => 'PostController@tag', 'params' => array(urlencode($tag->name))), $tag->name, array('class' => 'block'))}}
 					@endforeach
 				</div>
 			</li>
@@ -38,14 +38,14 @@
 			<li class="open">
 				{{HTML::actionlink($url = array('action' => 'PostController@category', 'params' => array(0)), 'What is new?', array('class' => 'block'))}}
 				@foreach ($categories as $category)
-					{{HTML::actionlink($url = array('action' => 'PostController@category', 'params' => array($category->id)), $category->name, array('class' => 'block'))}}
+					{{HTML::actionlink($url = array('action' => 'PostController@category', 'params' => array(urlencode($category->name))), $category->name, array('class' => 'block'))}}
 				@endforeach
 				<div class="clear"></div>
 			</li>
 			<li>
 				<div id="tagList">
 					@foreach ($tags as $tag)
-						{{HTML::actionlink($url = array('action' => 'PostController@tag', 'params' => array($tag->id)), $tag->name, array('class' => 'block'))}}
+						{{HTML::actionlink($url = array('action' => 'PostController@tag', 'params' => array(urlencode($tag->name))), $tag->name, array('class' => 'block'))}}
 					@endforeach
 				</div>
 			</li>
