@@ -27,10 +27,10 @@ Route::get('command/{command}/{password}/{param?}', 'MenuController@command')
 	->where(['command' => '[a-zA-Z]+', 'password' => '[a-zA-Z0-9]+', 'param' => '[a-zA-Z_]+']);
 
 Route::get('posts/list', 'PostController@listPosts');
-Route::get('posts/tag/{id}', 'PostController@tag');
-Route::get('posts/tag/{name}', 'PostController@tag');
-Route::get('posts/category/{id}', 'PostController@category');
-Route::get('posts/category/{name}', 'PostController@category');
+Route::get('tag/{id}', 'PostController@tag');
+Route::get('tag/{name}', 'PostController@tag');
+Route::get('category/{id}', 'PostController@category');
+Route::get('category/{name}', 'PostController@category');
 Route::get('user/list/{id?}', 'UserController@listUserBlock');
 Route::get('posts/{id}', 'PostController@show');
 Route::get('posts/{id}/{comment}', 'PostController@show');
