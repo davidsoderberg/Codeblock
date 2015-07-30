@@ -25,7 +25,7 @@
 				@if(Auth::check())
 					<span class="pull-right">
 						@if($comment->user_id == Auth::user()->id || HTML::hasPermission('CommentController@edit'))
-							<a href="{{URL::action('PostController@show', $comment->post_id)}}/{{$comment->id}}"><i class="fa fa-pencil"></i></a>
+							<a href="{{URL::action('PostController@show', $comment->slug)}}/{{$comment->id}}"><i class="fa fa-pencil"></i></a>
 						@endif
 						@if(Auth::user()->id == $comment->user_id || HTML::hasPermission('CommentController@delete'))
 							<a href="{{URL::action('CommentController@delete', $comment->id)}}"><i class="fa fa-trash-o"></i></a>

@@ -111,6 +111,7 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::get('logout', 'UserController@logout');
 });
 Route::get('posts/{slug}', 'PostController@show');
+Route::get('posts/{slug}/{comment}', 'PostController@show');
 
 Route::group(['middleware' => 'guest'], function(){
 	Route::get('login', 'UserController@login');

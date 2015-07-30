@@ -12,7 +12,7 @@
 					</li>
 				@endforeach
 				@if($post->revisionHistory->count() <= 99)
-					<li class="margin-bottom-half">{{$post->created_at->format('Y-m-d')}} - {{HTML::actionlink($url = array('action' => 'UserController@show', 'params' => array($post->user_id)), $post->user->username)}} created this codeblock.</li>
+					<li class="margin-bottom-half">{{$post->created_at->format('Y-m-d')}} - {{HTML::actionlink($url = array('action' => 'UserController@show', 'params' => array($post->user->username)), $post->user->username)}} created this codeblock.</li>
 				@endif
 			</ul>
 		</div>

@@ -13,7 +13,7 @@
 					<h3 class="text-left margin-top-half">{{HTML::actionlink($url = array('action' => 'PostController@show', 'params' => array($post->slug)), $post->name), array('class' => 'display-block decoration-none')}}</h3>
 					<div class="margin-bottom-half">
 						<p>
-							<i class="fa fa-user"></i> {{HTML::actionlink($url = array('action' => 'UserController@show', 'params' => array($post->user->id)), $post->user->username)}}
+							<i class="fa fa-user"></i> {{HTML::actionlink($url = array('action' => 'UserController@show', 'params' => array($post->user->username)), $post->user->username)}}
 							<i class="fa fa-minus"></i>
 							<i class="fa fa-calendar"></i> {{ date('Y-m-d',strtotime($post->created_at)) }}
 						</p>
