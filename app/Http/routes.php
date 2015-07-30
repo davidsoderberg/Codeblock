@@ -32,6 +32,7 @@ Route::get('tag/{name}', 'PostController@tag');
 Route::get('category/{id}', 'PostController@category');
 Route::get('category/{name}', 'PostController@category');
 Route::get('user/list/{id?}', 'UserController@listUserBlock');
+Route::get('user/list/{username?}', 'UserController@listUserBlock');
 Route::get('posts/{id}', 'PostController@show');
 Route::get('posts/{id}/{comment}', 'PostController@show');
 Route::get('user/{id?}', 'UserController@show');
