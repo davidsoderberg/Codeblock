@@ -24,9 +24,10 @@
 		<li class="dropdown">
 			{{HTML::actionlink($url = array('action' => 'UserController@listUserBlock'), '<i class="fa fa-code"></i>My Codeblocks <i class="fa fa-bars only-small display-inline"></i>', array('class' => 'hideUl'))}}
 			<ul>
-				{{HTML::menulink($url = array('action' => 'UserController@listUserBlock'), 'List')}}
-				{{HTML::menulink($url = array('action' => 'PostController@create'), 'Create')}}
-				{{HTML::menulink($url = array('action' => 'CommentController@listComments'), 'Comments')}}
+				{{HTML::menulink($url = array('action' => 'UserController@listUserBlock'), '<i class="fa fa-list"></i>List')}}
+				{{HTML::menulink($url = array('action' => 'PostController@create'), '<i class="fa fa-pencil"></i>Create')}}
+				{{HTML::menulink($url = array('action' => 'CommentController@listComments'), '<i class="fa fa-comment"></i>Comments')}}
+				{{HTML::menulink($url = array('action' => 'UserController@backup'), '<i class="fa fa-save"></i>Backup')}}
 			</ul>
 		</li>
 		{{HTML::menulink($url = array('action' => 'UserController@show'), '<i class="fa fa-user"></i>Profile')}}
