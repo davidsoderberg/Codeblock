@@ -19,6 +19,7 @@ var js = [
 gulp.task('default', ['browser-sync'], function() {
 	gulp.watch(['public/scss/style.scss', 'public/scss/partials/**/*.scss'], ['sass', 'reload']);
 	gulp.watch(js, ['js', 'reload']);
+	gulp.watch('resources/views/**/*', ['reload']);
 });
 
 gulp.task('deploy', ['js'], function(){
