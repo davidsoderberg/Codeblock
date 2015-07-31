@@ -69,3 +69,11 @@
 .fa-15x{
 	font-size: 1.5em;
 }
+.green{
+	&-background {
+		background: $green;
+	}
+	&-color{
+		color: $green;
+	}
+}

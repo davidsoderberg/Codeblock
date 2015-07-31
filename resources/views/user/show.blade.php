@@ -53,6 +53,7 @@
         </div>
         <div class="float-right clearfix">
             <h3>Starred codeblock</h3>
+            <!--
             @if($user->posts->stars > 0)
                 @foreach ($user->posts as $post)
                     @if($post->stars > 0)
@@ -69,6 +70,21 @@
             @else
                 <div class="text-center alert info">No starred codeblocks, yet</div>
             @endif
+            -->
+            @if(count($user->stars) > 0)
+				@foreach($user->stars as $star)
+			        <div class="clearfix margin-bottom-half">
+					<span class="float-left">
+						{{HTML::actionlink($url = array('action' => 'PostController@show', 'params' => array($star->post->slug)), $star->post->name.', '.$star->post->category->name)}}
+					</span>
+					<span class="float-right">
+						<i class="fa fa-star"></i> {{ $star->post->stars }}
+					</span>
+			        </div>
+		        @endforeach
+	        @else
+		        <div class="text-center alert info">You have not starred any codeblocks, yet</div>
+	        @endif
         </div>
     </div>
     @if($user->id == Auth::user()->id)

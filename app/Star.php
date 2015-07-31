@@ -18,4 +18,9 @@ class Star extends Model {
 		'user_id'  => 'required|integer'
 	);
 
+
+	public function post() {
+		return $this->belongsTo( 'App\Post', 'post_id' );
+	}
+
 }

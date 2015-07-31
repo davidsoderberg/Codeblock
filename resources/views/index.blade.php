@@ -16,6 +16,9 @@
 &lt;/p&gt;</textarea>
 <div class="text-center">
 	{{HTML::actionlink($url = array('action' => 'MenuController@browse'), 'START BROWSING CODE', array('class' => 'button big'))}}
+	@if(!Auth::check())
+		{{HTML::actionlink($url = array('action' => 'MenuController@browse'), 'SIGN UP', array('class' => 'button big green-background'))}}
+	@endif
 </div>
 @stop
 

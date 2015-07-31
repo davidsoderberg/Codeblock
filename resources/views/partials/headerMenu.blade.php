@@ -1,6 +1,8 @@
 <ul class="float-left">
 	<li class="divider"></li>
-	{{HTML::menulink($url = array('action' => 'MenuController@index'), '<i class="fa fa-home"></i>Home')}}
+	@if(!Auth::check())
+		{{HTML::menulink($url = array('action' => 'MenuController@index'), '<i class="fa fa-home"></i>Home')}}
+	@endif
 	{{HTML::menulink($url = array('action' => 'MenuController@browse'), '<i class="fa fa-folder-open"></i>Browse')}}
 	{{HTML::menulink($url = array('action' => 'ArticleController@index'), '<i class="fa fa-info-circle"></i>News')}}
 	{{HTML::menulink($url = array('action' => 'MenuController@contact'), '<i class="fa fa-phone"></i>Contact')}}
