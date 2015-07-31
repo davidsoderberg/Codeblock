@@ -34,7 +34,11 @@
 				@endif
 				</div>
 				<h1 id="loggo">
-					{{HTML::actionlink($url = array('action' => 'MenuController@index'), '<span class="color-red">C</span><span class="color-green">o</span><span class="color-orange">d</span><span class="color-blue">e</span>block<img src="'.HTML::version('img/favicon.png').'" width="32" height="32" alt="">')}}
+					@if(Auth::check())
+						{{HTML::actionlink($url = array('action' => 'MenuController@browse'), '<span class="color-red">C</span><span class="color-green">o</span><span class="color-orange">d</span><span class="color-blue">e</span>block<img src="'.HTML::version('img/favicon.png').'" width="32" height="32" alt="">')}}
+					@else
+						{{HTML::actionlink($url = array('action' => 'MenuController@index'), '<span class="color-red">C</span><span class="color-green">o</span><span class="color-orange">d</span><span class="color-blue">e</span>block<img src="'.HTML::version('img/favicon.png').'" width="32" height="32" alt="">')}}
+					@endif
 				</h1>
 				<div class="display-none">
 					<a href="#" id="menubutton" class="hideUl"><i class="fa fa-bars"></i>Menu</a>

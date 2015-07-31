@@ -3,6 +3,7 @@
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Tag\TagRepository;
 use App\Repositories\CRepository;
+use Illuminate\Support\Facades\Auth;
 use Orangehill\Iseed\Facades\Iseed;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
@@ -71,6 +72,9 @@ class MenuController extends Controller {
 	 */
 	public function index()
 	{
+		if(Auth::check()){
+			return Redirect::action('MenuController@browse');
+		}
 		return View::make('index')->with('title', 'Home');
 	}
 

@@ -39,8 +39,6 @@ Route::get('user/{id?}', 'UserController@show');
 Route::get('user/{username?}', 'UserController@showByUsername');
 Route::group(['middleware' => 'auth'], function() {
 
-	Route::get('/', 'MenuController@browse');
-
 	Route::get('posts/create', 'PostController@create');
 	Route::get('posts/edit/{id}', 'PostController@edit');
 	Route::get('posts/delete/{id}', 'PostController@delete');
