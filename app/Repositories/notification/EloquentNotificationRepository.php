@@ -26,10 +26,7 @@ class EloquentNotificationRepository extends CRepository implements Notification
 
 	// Sätter id på den användare som notifikationen ska till.
 	public function setUserId($user_id, $note){
-		if(!is_numeric($user_id)){
-			$user_id = $this->user->getIdByUsername($this->stripTrim($user_id));
-		}
-		if(!is_null($this->user->get($user_id))){
+		if(!is_null($this->user->get($this->stripTrim($user_id)))){
 			$note->user_id = $user_id;
 		}else{
 			$this->errors = array('to_user' => array('That user does not exist.'));

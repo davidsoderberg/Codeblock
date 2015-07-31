@@ -1,8 +1,8 @@
 <div class="item">
-	{{HTML::actionlink($url = array('action' => 'UserController@showByUsername', 'params' => array($reply->user->username)), '<img alt="Avatar for '.$reply->user->username.'" src="'.HTML::avatar($reply->user->id).'">', array('class' => 'avatar'))}}
+	{{HTML::actionlink($url = array('action' => 'UserController@show', 'params' => array($reply->user->username)), '<img alt="Avatar for '.$reply->user->username.'" src="'.HTML::avatar($reply->user->id).'">', array('class' => 'avatar'))}}
 	<div class="reply">
 		<p class="font-bold">
-			{{HTML::actionlink($url = array('action' => 'UserController@showByUsername', 'params' => array($reply->user->username)), $reply->user->username)}},
+			{{HTML::actionlink($url = array('action' => 'UserController@show', 'params' => array($reply->user->username)), $reply->user->username)}},
 			{{$reply->created_at->diffForHumans()}}
 			@if(Auth::check())
 				<span class="float-right">

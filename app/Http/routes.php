@@ -36,7 +36,7 @@ Route::get('user/list/{username?}', 'UserController@listUserBlock');
 Route::get('posts/{id}', 'PostController@show');
 Route::get('posts/{id}/{comment}', 'PostController@show');
 Route::get('user/{id?}', 'UserController@show');
-Route::get('user/{username?}', 'UserController@showByUsername');
+Route::get('user/{username?}', 'UserController@show');
 Route::group(['middleware' => 'auth'], function() {
 
 	Route::get('posts/create', 'PostController@create');

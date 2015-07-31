@@ -81,23 +81,14 @@ class UserController extends Controller {
 	 */
 	public function show($id = 0)
 	{
-		if(Auth::check()) {
-			if($id == 0){
-				$id = Auth::user()->id;
-			}
-			$user = $this->user->get($id);
-			return View::make('user.show')->with('title', $user->username)->with('user', $user);
+		if(Auth::check() && $id === 0){
+			$id = Auth::user()->id;
 		}
 		$user = $this->user->get($id);
+		if(Auth::check()) {
+			return View::make('user.show')->with('title', $user->username)->with('user', $user);
+		}
 		return Redirect::action('UserController@listUserBlock', array($user->username));
-	}
-
-	/**
-	 * @param $username
-	 * @return objekt
-	 */
-	public function showByUsername($username){
-		return $this->show($this->user->getIdByUsername($username));
 	}
 
 	/**
@@ -106,10 +97,7 @@ class UserController extends Controller {
 	 * @return objekt     objekt som innehåller allt som behövs i vyn
 	 */
 	public function listUserBlock($id = 0){
-		if(!is_numeric($id)){
-			$id = $this->user->getIdByUsername($id);
-		}
-		if($id == 0){
+		if($id === 0){
 			if(Auth::check()) {
 				$id = Auth::user()->id;
 			}

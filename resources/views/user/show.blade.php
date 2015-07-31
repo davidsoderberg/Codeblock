@@ -78,7 +78,7 @@
 						{{HTML::actionlink($url = array('action' => 'PostController@show', 'params' => array($star->post->slug)), $star->post->name.', '.$star->post->category->name)}}
 					</span>
 					<span class="float-right">
-						<i class="fa fa-star"></i> {{ $star->post->stars }}
+						<i class="fa fa-star"></i> {{ count($star->post->stars) }}
 					</span>
 			        </div>
 		        @endforeach
