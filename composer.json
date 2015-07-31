@@ -11,7 +11,7 @@
       }
     ],
 	"require": {
-		"laravel/framework": "5.1.*",
+		"laravel/framework": "5.1.4",
         "illuminate/html": "@dev",
         "davidsoderberg/iseed": "master",
         "firebase/php-jwt": "1.*",
