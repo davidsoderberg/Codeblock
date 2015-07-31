@@ -33,6 +33,13 @@ class MenuControllerTest extends \IntegrationCase {
 
 	public function test_Home_page(){
 		$this->visit('/')->see('<h2>Welcome</h2>');
+
+		$this->sign_in();
+		$this->visit('/')
+			->see('What is new?')
+			->onPage('browse');
+
+		$this->visit('logout');
 	}
 
 	public function test_Browse_page(){
