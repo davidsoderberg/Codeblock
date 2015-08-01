@@ -254,6 +254,22 @@
 	}
 }
 
+#embed{
+	h2{
+		color: #fff;
+		margin: 0.5em 0 0 0;
+	}
+	a{
+		color: #fff;
+	}
+	.CodeMirror-scroll{
+		height: auto;
+	}
+	.cm-s-codeblock.CodeMirror{
+		padding: 0;
+	}
+}
+
 .block{
 	background: $browngray;
 	border: 1px solid $browngray;

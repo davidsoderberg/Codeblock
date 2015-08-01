@@ -46,6 +46,18 @@ class PostController extends Controller {
 	{
 		return View::make('post.index')->with('title', 'Posts')->with('posts', $this->post->get());
 	}
+
+
+	public function embed($id){
+		$post = $this->post->get($id);
+		$lang = $this->post->jsSwitch($post->category->name);
+		if($post->private != 1){
+			return View::make('post.embed')->with('post', $post)->with('lang', $lang);
+		}else{
+			return View::make('errors.404')->with('title', '404')->with('post', $post);
+		}
+	}
+
 	/**
 	 * Visar enstaka blocks vy
 	 * @param  int $id id på blocket som skall vissas
