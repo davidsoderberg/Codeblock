@@ -88,39 +88,49 @@
         </div>
     </div>
     @if($user->id == Auth::user()->id)
-        <h2>Change user information</h2>
-        {{ Form::model($user, array('action' => array('UserController@store', $user->id))) }}
-        @if(count(Auth::user()->socials) < 5)
-            <p class="font-bold">Connect:</p>
-            <p class="margin-bottom-one">
-                @if(!Auth::user()->hasSocial('facebook'))
-		            {{HTML::actionlink($url = array('action' => 'UserController@oauth', 'params' => array('facebook')), '<i class="fa fa-15x fa-facebook-square facebook-blue"></i>')}}
-                @endif
-                @if(!Auth::user()->hasSocial('twitter'))
-		            {{HTML::actionlink($url = array('action' => 'UserController@oauth', 'params' => array('twitter')), '<i class="fa fa-15x fa-twitter-square twitter-blue"></i>')}}
-                @endif
-                @if(!Auth::user()->hasSocial('google'))
-		            {{HTML::actionlink($url = array('action' => 'UserController@oauth', 'params' => array('google')), '<i class="fa fa-15x fa-google-plus-square google-plus-red"></i>')}}
-                @endif
-                @if(!Auth::user()->hasSocial('bitbucket'))
-		            {{HTML::actionlink($url = array('action' => 'UserController@oauth', 'params' => array('bitbucket')), '<i class="fa fa-15x fa-bitbucket-square bitbucket-blue"></i>')}}
-                @endif
-                @if(!Auth::user()->hasSocial('github'))
-		                {{HTML::actionlink($url = array('action' => 'UserController@oauth', 'params' => array('github')), '<i class="fa fa-15x fa-github-square github-black"></i>')}}
-                @endif
-            </p>
-        @endif
-        {{ Form::label('createEmail', 'Email:') }}
-        {{ Form::text('email', Input::old('email'), array('id' => 'createEmail', 'placeholder' => 'Email', 'data-validator' => 'required|pattern:email')) }}
-        {{ $errors->first('email', '<div class="alert error">:message</div>') }}
-        {{ Form::label('oldPassword', 'Old Password:') }}
-        {{ Form::password('oldpassword', array('id' => 'oldPassword', 'placeholder' => 'Old Password')) }}
-        {{ $errors->first('oldpassword', '<div class="alert error">:message</div>') }}
-        {{ Form::label('createPassword', 'Password:') }}
-        {{ Form::password('password', array('id' => 'createPassword', 'placeholder' => 'Password')) }}
-        {{ $errors->first('password', '<div class="alert error">:message</div>') }}
-        {{ Form::button('Change', array('type' => 'submit')) }}
-        {{ Form::close() }}
+    <div id="accordion" class="accordion margin-top-half">
+        <ul class="margin-bottom-none">
+            <li>
+                <a href="#">Change user information</a>
+                <div class="content">
+                    <div class="margin-top-half">
+                        {{ Form::model($user, array('action' => array('UserController@store', $user->id))) }}
+                        @if(count(Auth::user()->socials) < 5)
+                            <p class="font-bold">Connect:</p>
+                            <p class="margin-bottom-one">
+                                @if(!Auth::user()->hasSocial('facebook'))
+                                    {{HTML::actionlink($url = array('action' => 'UserController@oauth', 'params' => array('facebook')), '<i class="fa fa-15x fa-facebook-square facebook-blue"></i>')}}
+                                @endif
+                                @if(!Auth::user()->hasSocial('twitter'))
+                                    {{HTML::actionlink($url = array('action' => 'UserController@oauth', 'params' => array('twitter')), '<i class="fa fa-15x fa-twitter-square twitter-blue"></i>')}}
+                                @endif
+                                @if(!Auth::user()->hasSocial('google'))
+                                    {{HTML::actionlink($url = array('action' => 'UserController@oauth', 'params' => array('google')), '<i class="fa fa-15x fa-google-plus-square google-plus-red"></i>')}}
+                                @endif
+                                @if(!Auth::user()->hasSocial('bitbucket'))
+                                    {{HTML::actionlink($url = array('action' => 'UserController@oauth', 'params' => array('bitbucket')), '<i class="fa fa-15x fa-bitbucket-square bitbucket-blue"></i>')}}
+                                @endif
+                                @if(!Auth::user()->hasSocial('github'))
+                                    {{HTML::actionlink($url = array('action' => 'UserController@oauth', 'params' => array('github')), '<i class="fa fa-15x fa-github-square github-black"></i>')}}
+                                @endif
+                            </p>
+                        @endif
+                        {{ Form::label('createEmail', 'Email:') }}
+                        {{ Form::text('email', Input::old('email'), array('id' => 'createEmail', 'placeholder' => 'Email', 'data-validator' => 'required|pattern:email')) }}
+                        {{ $errors->first('email', '<div class="alert error">:message</div>') }}
+                        {{ Form::label('oldPassword', 'Old Password:') }}
+                        {{ Form::password('oldpassword', array('id' => 'oldPassword', 'placeholder' => 'Old Password')) }}
+                        {{ $errors->first('oldpassword', '<div class="alert error">:message</div>') }}
+                        {{ Form::label('createPassword', 'Password:') }}
+                        {{ Form::password('password', array('id' => 'createPassword', 'placeholder' => 'Password')) }}
+                        {{ $errors->first('password', '<div class="alert error">:message</div>') }}
+                        {{ Form::button('Change', array('type' => 'submit')) }}
+                        {{ Form::close() }}
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
     @endif
 @stop
 
