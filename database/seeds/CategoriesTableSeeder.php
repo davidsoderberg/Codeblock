@@ -92,6 +92,13 @@ class CategoriesTableSeeder extends Seeder {
 					'created_at' => '2014-04-08 05:13:22',
 					'updated_at' => '2014-04-08 05:13:22',
 			),
+			11 =>
+				array(
+					'id' => 12,
+					'name' => 'Other',
+					'created_at' => '2014-04-08 05:13:22',
+					'updated_at' => '2014-04-08 05:13:22',
+				)
 		));
 	}
 

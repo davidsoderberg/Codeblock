@@ -7,9 +7,10 @@
 	<h2>Create Codeblock</h2>
 	@if($hasRequest)
 		{{ Form::model(null, array('action' => 'PostController@forkGist')) }}
-			{{ Form::label('title','Id of gist:') }}
+			{{ Form::label('title','Gist:') }}
 			<div class="input-group">
-				{{ Form::text('id', Input::old('id'), array('id' => 'gistId', 'placeholder' => 'Id of gist', 'data-validator' => 'required')) }}
+				{{ Form::text('id', Input::old('id'), array('id' => 'gistId', 'placeholder' => 'Gist id', 'data-validator' => 'required')) }}
+				<span class="font-small">Gist is githubs codeblock! You can copy that code to codeblock by copy the id of that code that is shown in the url.</span>
 				<span class="button-group">
 					{{ Form::button('Fork gist', array('type' => 'submit')) }}
 				</span>

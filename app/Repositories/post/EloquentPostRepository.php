@@ -262,6 +262,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	public function jsSwitch($category){
 		$category = strtolower($category);
 		$CodeMirrorcategories = array(
+			'other' => '',
 			'html' => 'xml',
 			'c#' => 'clike',
 			'asp.net' => 'clike',
