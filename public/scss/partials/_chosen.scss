@@ -1,6 +1,9 @@
 .chosen-container {
 	&.chosen-container-active .chosen-choices{
 		box-shadow: none !important;
+		li.search-field input[type="text"]{
+			height: auto;
+		}
 	}
 	.chosen-drop{
 		margin-top: -1em;
@@ -12,6 +15,7 @@
 	.chosen-choices{
 		border:1px solid $browngray;
 		margin-bottom: 1em;
+		padding: 5px 7.5px;
 		li.search-choice{
 			border-radius: 0;
 			background: transparent;
