@@ -249,9 +249,9 @@ class UserController extends Controller {
 				if($create) {
 					$user = Social::create(array("social" => $social, "user_id" => $authedUser->id, "social_id" => $user->getId()));
 					if($user) {
-						return Redirect::to('/user')->with('success', 'You have connect ' . $social . ' to your account.');
+						return Redirect::to('/user')->with('success', 'You have connected ' . $social . ' to your account.');
 					}
-					return Redirect::to('/user')->with('error', 'We could not connect ' . $social . ' to your account.');
+					return Redirect::to('/user')->with('error', 'We could not connected ' . $social . ' to your account.');
 				} else {
 					return Redirect::to('/user')->with('error', 'You have already connected ' . $social . ' to your account.');
 				}
