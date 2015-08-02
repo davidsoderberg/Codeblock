@@ -9,7 +9,7 @@
 			{{ Form::model($user, array('action' => array('UserController@update', $user->id))) }}
 				<h2>Edit {{ $user->username }}</h2>
 				{{ Form::label('role', 'Role:') }}
-				{{ Form::select('role', array(1 => 'User', 2 => 'Admin'), $user->role, array('data-validator' => 'required')) }}
+				{{ Form::select('role', $roles, $user->role, array('data-validator' => 'required')) }}
 				{{ $errors->first('role', '<div class="alert error">:message</div>') }}
 
 				{{ Form::select('active', array(0 => 'Not active', 1 => 'Active'), $user->active, array('data-validator' => 'required')) }}

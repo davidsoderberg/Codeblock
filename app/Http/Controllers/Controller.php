@@ -85,4 +85,12 @@ abstract class Controller extends BaseController {
 		}
 		return Response::json(array('message', 'You could not get your auth token, please try agian'), 400);
 	}
+
+	protected function getSelectArray($objects, $key = 'id', $value = 'name'){
+		$selectArray = [];
+		foreach($objects as $object){
+			$selectArray[$object[$key]] = $object[$value];
+		}
+		return $selectArray;
+	}
 }

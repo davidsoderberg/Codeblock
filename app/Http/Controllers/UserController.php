@@ -116,10 +116,8 @@ class UserController extends Controller {
 	 * @param  int $id id för användaren som skall redigeras.
 	 * @return objekt     objekt som innehåller allt som behövs i vyn
 	 */
-	public function edit($id)
-	{
-		$user = $this->user->get($id);
-		return View::make('user.edit')->with('title', 'Edit User')->with('user', $user);
+	public function edit(RoleRepository $role, $id) {
+		return View::make('user.edit')->with('title', 'Edit User')->with('user', $this->user->get($id))->with('roles', $this->getSelectArray($role->get(), 'id', 'name'));
 	}
 
 	/**
