@@ -5,19 +5,6 @@
 
 @section('content')
 	<h2>Create Codeblock</h2>
-	@if($hasRequest)
-		{{ Form::model(null, array('action' => 'PostController@forkGist')) }}
-			{{ Form::label('title','Gist:') }}
-			<div class="input-group">
-				{{ Form::text('id', Input::old('id'), array('id' => 'gistId', 'placeholder' => 'Gist id', 'data-validator' => 'required')) }}
-				<span class="font-small">Gist is githubs codeblock! You can copy that code to codeblock by copy the id of that code that is shown in the url.</span>
-				<span class="button-group">
-					{{ Form::button('Fork gist', array('type' => 'submit')) }}
-				</span>
-			</div>
-		{{ Form::close() }}
-		<div class="horizontalRule"><span>OR</span></div>
-	@endif
 	{{ Form::model($post, array('action' => 'PostController@createOrUpdate')) }}
 		{{ Form::label('blockName', 'Name:') }}
 		{{ Form::text('name', Input::old('name'), array('id' => 'blockName', 'placeholder' => 'Name of codeblock', 'data-validator' => 'required|min:3')) }}
@@ -46,6 +33,20 @@
 
 		{{ Form::button('Create', array('type' => 'submit')) }}
 	{{ Form::close() }}
+	@if($hasRequest)
+		<div class="horizontalRule"><span>OR</span></div>
+		<h2>Import gist from github</h2>
+		{{ Form::model(null, array('action' => 'PostController@forkGist')) }}
+			{{ Form::label('title','Gist:') }}
+			<div class="input-group">
+				{{ Form::text('id', Input::old('id'), array('id' => 'gistId', 'placeholder' => 'Gist id', 'data-validator' => 'required')) }}
+				<div class="font-small">Gist is githubs codeblock! You can copy that code to codeblock by copy the id of that code that is shown in the url.</div>
+					<span class="button-group">
+						{{ Form::button('Fork gist', array('type' => 'submit')) }}
+					</span>
+			</div>
+		{{ Form::close() }}
+	@endif
 @stop
 
 @section('script')
