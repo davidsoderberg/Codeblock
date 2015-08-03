@@ -104,6 +104,10 @@ class MenuController extends Controller {
 		return View::make('contact')->with('title', 'Contact');
 	}
 
+	public function markdown(){
+		return View::make('markdown')->with('title', 'Markdown');
+	}
+
 	/**
 	 * Vy för att skicka kontaktformuläret.
 	 * @return object     med värden dit användaren skall skickas.

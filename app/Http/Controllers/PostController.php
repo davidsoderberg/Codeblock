@@ -75,7 +75,7 @@ class PostController extends Controller {
 				}
 			}
 			return View::make('post.show')
-				->with('title', 'show')
+				->with('title', 'Codeblock: '. $post->name)
 				->with('post', $post)
 				->with('rate', $this->rate)
 				->with('lang', $lang)

@@ -32,20 +32,8 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 	 * @return mixed|string
 	 */
 	public function markdown($text){
-		$text = htmlentities($text);
-		// Inspirerad och hämtat delar från: https://gist.github.com/jbroadway/2836900
-		$rules = array (
-			'/\[([^\[]+)\]\(([^\)]+)\)/' => '<a href=\'\2\'>\1</a>',
-			'/(\*\*|__)(.*?)\1/' => '<strong>\2</strong>',
-			'/(\*|_)(.*?)\1/' => '<i>\2</i>',
-			'/\:\"(.*?)\"\:/' => '<q>\1</q>',
-			//'/```(.*?)```/' => '<pre>\1</pre>',
-			'/`(.*?)`/' => '<code>\1</code>'
-		);
-		foreach ($rules as $regex => $replacement) {
-			$text = preg_replace($regex, $replacement, $text);
-		}
-		return $text;
+		$parser = new Markdown();
+		return $parser->text(nl2br($text));
 	}
 
 	/**

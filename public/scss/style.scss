@@ -270,6 +270,22 @@
 	}
 }
 
+#markdown{
+	pre {
+		background-color: #F8F8F8;
+		border: 1px solid #DDD;
+		font-size: 13px;
+		line-height: 19px;
+		overflow: auto;
+		padding: 6px 10px;
+		border-radius: 3px;
+	}
+	h3, h4{
+		margin-top: 0.5em;
+		text-align: left;
+	}
+}
+
 .block{
 	background: $browngray;
 	border: 1px solid $browngray;
