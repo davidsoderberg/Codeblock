@@ -20,7 +20,7 @@
 			</span>
 			@endif
 		</p>
-		<p>{{$art->body}}</p>
+		<p>{{HTML::markdown($art->body, true)}}</p>
 	@endforeach
 	@else
 		<div class="text-center alert info">We have no news articles right now.</div>
@@ -40,6 +40,7 @@
 			{{ Form::label('Body', 'Body:') }}
 			{{ Form::textarea('body', Input::old('body'), array('id' => 'Body', 'placeholder' => 'Body of article', 'data-validator' => 'required|min:3')) }}
 			{{ $errors->first('body', '<div class="alert error">:message</div>') }}
+			<div class="margin-top-minus-one font-small">You can use {{HTML::actionlink($url = array('action' => 'MenuController@markdown'), 'markdown')}} in article body!</div>
 			{{ Form::button('Send', array('type' => 'submit')) }}
 			{{ Form::close() }}
 		@endif

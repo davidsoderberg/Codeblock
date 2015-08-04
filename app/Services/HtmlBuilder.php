@@ -27,12 +27,12 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 	}
 
 	/**
-	 * Replace markdown with html.
 	 * @param $text
+	 * @param bool|false $parseAll
 	 * @return mixed|string
 	 */
-	public function markdown($text){
-		$parser = new Markdown();
+	public function markdown($text, $parseAll = false){
+		$parser = new Markdown($parseAll);
 		return $parser->text(nl2br($text));
 	}
 
