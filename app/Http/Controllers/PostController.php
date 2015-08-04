@@ -7,6 +7,7 @@ use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Tag\TagRepository;
 use App\Repositories\Rate\RateRepository;
 use App\Services\Github;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
@@ -201,7 +202,12 @@ class PostController extends Controller {
 		if(!is_null($post)) {
 			if(Auth::check() && Auth::user()->id == $post->user_id || Auth::user()->hasPermission($this->getPermission(), false)) {
 				if($this->post->delete($id)) {
-					return Redirect::back()->with('success', 'Your codeblock has been deleted.');
+					if(str_contains(URL::previous(), $id) || str_contains(URL::previous(), $post->slug)){
+						$redirect = Redirect::to('user');
+					}else{
+						$redirect = Redirect::back();
+					}
+					return $redirect->with('success', 'Your codeblock has been deleted.');
 				}
 			}else{
 				return Redirect::back()->with('error', 'You do not have permission to delete that codeblock.');

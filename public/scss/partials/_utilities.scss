@@ -83,3 +83,12 @@
 		color: $green;
 	}
 }
+
+.red{
+	&-background {
+		background: $red;
+	}
+	&-color{
+		color: $red;
+	}
+}

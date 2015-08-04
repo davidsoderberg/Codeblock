@@ -24,7 +24,7 @@
                                 @if($user->id == Auth::user()->id)
 	                                <span class="float-right">
 		                                {{HTML::actionlink($url = array('action' => 'PostController@edit', 'params' => array($user->posts[$i]->id)), '<i class="fa fa-pencil"></i>')}}
-	                                    {{HTML::actionlink($url = array('action' => 'PostController@delete', 'params' => array($user->posts[$i]->id)), '<i class="fa fa-trash-o"></i>')}}
+	                                    {{HTML::actionlink($url = array('action' => 'PostController@delete', 'params' => array($user->posts[$i]->id)), '<i class="fa fa-trash-o"></i>', array('class' => 'confirm'))}}
 									</span>
                                 @endif
                             </div>

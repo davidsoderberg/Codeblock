@@ -73,6 +73,13 @@
 				</div>
 			</div>
 		</div>
+		<div class="confirmModal">
+			<div class="wrapper text-center">
+				<h2>Are you sure?</h2>
+				<a href="" class="button big green-background">Yes</a>
+				<a href="" class="button big red-background">No</a>
+			</div>
+		</div>
 		<script>
 			var appConfig = {
 				SOCKET_PORT: '{{env('SOCKET_PORT')}}',

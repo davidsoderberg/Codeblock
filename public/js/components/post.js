@@ -7,10 +7,21 @@ var	post = {
 	bindEvents: function () {
 		jQuery('.code-editor').each(this.codeEditor);
 		jQuery('.reply').click(this.reply);
+		jQuery('.confirm').click(this.confirm);
 		jQuery('#blockCategory').change(this.categoryChange);
 		if(typeof this.editorArray['blockCode'] != 'undefined'){
 			this.editorArray['blockCode'].on("blur",this.blur);
 		}
+	},
+
+	confirm: function(event) {
+		event.preventDefault();
+		jQuery('.confirmModal .green-background').attr('href', jQuery(this).attr('href'));
+		jQuery('.confirmModal').toggleClass('open');
+		jQuery('.confirmModal .red-background').click(function(event){
+			event.preventDefault();
+			jQuery('.confirmModal').toggleClass('open');
+		});
 	},
 
 	blur: function(){

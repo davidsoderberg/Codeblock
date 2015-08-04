@@ -430,6 +430,10 @@
 	}
 }
 
+.confirmModal{
+	@extend .modal;
+}
+
 .inline-form{
 	.alert {
 		margin-top: 0;
