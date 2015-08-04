@@ -9,7 +9,7 @@
     <div class="verticalRule">
         <div class="float-left clearfix">
             @if($user->id == Auth::user()->id)
-                <h3>Your codeblocks</h3>
+                <h3>{{HTML::actionlink($url = array('action' => 'UserController@listUserBlock'), 'My codeblocks')}}</h3>
             @else
                 <h3>{{ $user->username }}s codeblock</h3>
             @endif
@@ -52,7 +52,7 @@
             </div>
         </div>
         <div class="float-right clearfix">
-            <h3>Starred codeblock</h3>
+            <h3>{{HTML::actionlink($url = array('action' => 'UserController@listStarred'), 'Starred codeblock')}}</h3>
             <!--
             @if($user->posts->stars > 0)
                 @foreach ($user->posts as $post)

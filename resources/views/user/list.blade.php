@@ -8,6 +8,16 @@
 	@if(isset($posts))
 		<h2>{{ $user->username }}s Codeblocks</h2>
 		@if(count($posts) > 0)
+			<p>
+				<b>Sort by:</b>
+				@if(Auth::check() && Auth::user()->username === $user->username)
+					{{HTML::actionlink($url = array('action' => 'UserController@listUserBlock'), 'date')}}
+					<a href="{{URL::action('UserController@listUserBlock')}}/category">category</a>
+				@else
+					{{HTML::actionlink($url = array('action' => 'UserController@listUserBlock', 'params' => array($user->username)), 'date')}}
+					<a href="{{URL::action('UserController@listUserBlock')}}/{{$user->username}}/category">category</a>
+				@endif
+			</p>
 			@foreach ($posts as $post)
 				@if($post->private != 1 || Auth::check() && Auth::user()->id == $post->user_id)
 					<h3 class="text-left margin-top-half">{{HTML::actionlink($url = array('action' => 'PostController@show', 'params' => array($post->slug)),$post->name, array('class' => 'display-block decoration-none'))}}</h3>

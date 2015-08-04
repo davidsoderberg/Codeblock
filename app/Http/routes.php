@@ -13,6 +13,7 @@
 Route::pattern('id', '[0-9]+');
 Route::pattern('username', '[-_0-9A-Za-z]+');
 Route::pattern('slug', '[-a-zA-Z0-9-]+');
+Route::pattern('sort', 'category');
 
 Route::get('/', 'MenuController@index');
 Route::get('browse', 'MenuController@browse');
@@ -34,14 +35,16 @@ Route::get('tag/{id}', 'PostController@tag');
 Route::get('tag/{name}', 'PostController@tag');
 Route::get('category/{id}', 'PostController@category');
 Route::get('category/{name}', 'PostController@category');
-Route::get('user/list/{id?}', 'UserController@listUserBlock');
-Route::get('user/list/{username?}', 'UserController@listUserBlock');
+Route::get('user/list/{id?}/{sort?}', 'UserController@listUserBlock');
+Route::get('user/list/{username?}/{sort?}', 'UserController@listUserBlock');
+Route::get('user/list/{sort?}', 'UserController@listUserBlock');
 Route::get('posts/{id}', 'PostController@show');
 Route::get('posts/{id}/{comment}', 'PostController@show');
 Route::get('user/{id?}', 'UserController@show');
 Route::get('user/{username?}', 'UserController@show');
 Route::group(['middleware' => 'auth'], function() {
 
+	Route::get('starred', 'UserController@listStarred');
 	Route::get('posts/create', 'PostController@create');
 	Route::get('posts/edit/{id}', 'PostController@edit');
 	Route::get('posts/delete/{id}', 'PostController@delete');

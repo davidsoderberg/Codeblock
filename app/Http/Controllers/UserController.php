@@ -91,12 +91,22 @@ class UserController extends Controller {
 		return Redirect::action('UserController@listUserBlock', array($user->username));
 	}
 
+	public function listStarred(){
+		$user = Auth::user();
+		return View::make('user.starred')->with('title', 'Starred codeblock by '.$user->username)->with('user', $user)->with('posts', $user->stars);
+	}
+
 	/**
 	 * Visar en lista användaren block.
 	 * @param  int $id id på anvädaren vars block skall listas.
 	 * @return objekt     objekt som innehåller allt som behövs i vyn
 	 */
-	public function listUserBlock($id = 0){
+	public function listUserBlock($id = 0, $sort = 0){
+		if($id === 'category'){
+			$sorting = $sort;
+			$sort = $id;
+			$id = $sorting;
+		}
 		if($id === 0){
 			if(Auth::check()) {
 				$id = Auth::user()->id;
@@ -107,7 +117,13 @@ class UserController extends Controller {
 		if(is_null($user)){
 			return Redirect::action('MenuController@browse');
 		}
-		return View::make('user.list')->with('title', $user->username)->with('user', $user)->with('posts', $user->posts);
+		$posts = $user->posts;
+		if($sort === 'category') {
+			$posts = $user->posts->sortBy(function ($item) {
+				return $item['category']['name'];
+			});
+		}
+		return View::make('user.list')->with('title', $user->username)->with('user', $user)->with('posts', $posts);
 	}
 
 	/**

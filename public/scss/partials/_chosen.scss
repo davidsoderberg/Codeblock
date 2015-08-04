@@ -21,6 +21,9 @@
 			background: transparent;
 			border: 1px solid $browngray;
 		}
+		li.search-field input[type="text"]{
+			height: auto !important;
+		}
 	}
 	.chosen-results li.highlighted{
 		background: $browngray;
