@@ -254,4 +254,16 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 			return '<div class="text-center alert info">'.$info.'</div>';
 		}
 	}
+
+	public function codemirror($lang){
+		$codemirror = new Codemirror();
+		if(!is_array($lang)){
+			$lang = $codemirror->jsSwitch($lang);
+		}
+		foreach($lang as $la) {
+			if($codemirror->modeExists($la)) {
+				echo '<script src="' . asset('js/codemirror/mode/' . $la . '/' . $la . '.js') . '"></script>';
+			}
+		}
+	}
 }

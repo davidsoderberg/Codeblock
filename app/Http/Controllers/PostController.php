@@ -51,9 +51,8 @@ class PostController extends Controller {
 
 	public function embed($id){
 		$post = $this->post->get($id);
-		$lang = $this->post->jsSwitch($post->category->name);
 		if($post->private != 1){
-			return View::make('post.embed')->with('post', $post)->with('lang', $lang);
+			return View::make('post.embed')->with('post', $post);
 		}else{
 			return View::make('errors.404')->with('title', '404')->with('post', $post);
 		}
@@ -67,7 +66,6 @@ class PostController extends Controller {
 	 */
 	public function show($id, $comment_id = null){
 		$post = $this->post->get($id);
-		$lang = $this->post->jsSwitch($post->category->name);
 		if($post->private != 1){
 			$comment = null;
 			foreach($post->comments as $CurrentComment){
@@ -79,7 +77,6 @@ class PostController extends Controller {
 				->with('title', 'Codeblock: '. $post->name)
 				->with('post', $post)
 				->with('rate', $this->rate)
-				->with('lang', $lang)
 				->with('commentToEdit', $comment);
 		}else{
 			if(Auth::check()){
@@ -91,7 +88,7 @@ class PostController extends Controller {
 					}
 				}
 				if(Auth::user()->id == $post->user_id || Auth::user()->hasPermission($this->getPermission(), false)){
-					return View::make('post.show')->with('title', 'show')->with('post', $post)->with('lang', $lang);
+					return View::make('post.show')->with('title', 'show')->with('post', $post);
 				}else{
 					return Redirect::back()->with('error', 'You have no access to that codeblock.');
 				}

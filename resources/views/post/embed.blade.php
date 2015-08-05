@@ -13,12 +13,6 @@
 	<textarea class="code-editor readonly" data-lang="xml" id="blockCode">{{ $post->code }}</textarea>
 @endif
 <script src="{{ HTML::version('js/script.min.js') }}"></script>
-@if(count($lang) > 1)
-	@foreach($lang as $la)
-		<script src="{{ asset('js/codemirror/mode/'.$la.'/'.$la.'.js') }}"></script>
-	@endforeach
-@else
-	<script src="{{ asset('js/codemirror/mode/'.$lang.'/'.$lang.'.js') }}"></script>
-@endif
+{{HTML::codemirror($post->category->name)}}
 </body>
 </html>

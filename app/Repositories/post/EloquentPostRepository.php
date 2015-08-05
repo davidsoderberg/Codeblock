@@ -29,7 +29,6 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 					$post->comments = $post->comments;
 					$post->posttags = $post->posttags;
 					$post->stars = $this->getStars($post->stars);
-					//$post->category->lang = $this->jsSwitch($post->category->name);
 					$post->org = $this->get($post->org);
 					$post->forked = count($this->where(array('org', '=', $post->id)));
 				}
@@ -45,7 +44,6 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 				$post->comments = $post->comments;
 				$post->posttags = $post->posttags;
 				$post->stars = $this->getStars($post->stars);
-				//$post->category->name = $this->jsSwitch($post->category->name);
 				$post->org = $this->get($post->org);
 				$post->forked = count($this->where(array('org', '=', $post->id)));
 			}
@@ -142,7 +140,6 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 				$post->category = $post->category;
 				$post->posttags = $post->posttags;
 				$post->stars = $this->getStars($post->stars);
-				//$post->category->lang = $this->jsSwitch($post->category->name);
 				$post->org = $this->get($post->org);
 				$post->forked = count($this->where(array('org', '=', $post->id)));
 		}
@@ -256,26 +253,6 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 			$boolean = $star->save();
 		}
 		return array($boolean, $action);
-	}
-
-	// bytter ut de kategorier som inte stämmer överens med javascripts kategorierna hos codemirror.
-	public function jsSwitch($category){
-		$category = strtolower($category);
-		$CodeMirrorcategories = array(
-			'other' => '',
-			'html' => 'xml',
-			'c#' => 'clike',
-			'asp.net' => 'clike',
-			'php' => array('clike', 'xml', 'javascript', 'css', 'htmlmixed')
-		);
-		if(array_key_exists($category, $CodeMirrorcategories)){
-			$current = $CodeMirrorcategories[$category];
-			if(is_array($current)){
-				$current = array_merge(array($category), $current);
-			}
-			return $current;
-		}
-		return $category;
 	}
 
 	// söker bland blocken och skickar tillbaka de blocken den hittar en match hos.

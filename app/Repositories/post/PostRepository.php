@@ -16,7 +16,5 @@ interface PostRepository extends IRepository {
 
 	public function createOrDeleteStar($post_id);
 
-	public function jsSwitch($category);
-
 	public function search($term);
 }
