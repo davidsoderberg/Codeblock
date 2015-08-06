@@ -266,4 +266,8 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 			}
 		}
 	}
+
+	public function excerpt($text, $parseAll = false, $words = 10){
+		return Str::words($this->markdown($text, $parseAll),$words);
+	}
 }

@@ -5,34 +5,46 @@
 @stop
 
 @section('content')
-	<h2>News articles</h2>
+	@if($article == null)
+		<h2>Blog</h2>
+	@endif
 	@if(count($articles) > 0)
 	@foreach($articles as $art)
-		<h3 class="margin-top-one">{{$art->title}}</h3>
+		@if($article == null)
+			<h3 class="margin-top-one">{{HTML::actionlink($url = array('action' => 'ArticleController@index', 'params' => array($art->id)), $art->title)}}</h3>
+		@else
+			<h2>{{$art->title}}</h2>
+		@endif
 		<p class="no-margin font-bold">
 			{{$art->created_at->diffForHumans()}}
 			@if(Auth::check())
 			<span class="float-right">
-				{{HTML::actionlink($url = array('action' => 'ArticleController@delete', 'params' => array($art->id)), '<i class="fa fa-trash-o"></i>')}}
-				@if(HTML::hasPermission('ArticleController@create'))
+				@if(HTML::hasPermission('ArticleController@delete'))
+					{{HTML::actionlink($url = array('action' => 'ArticleController@delete', 'params' => array($art->id)), '<i class="fa fa-trash-o"></i>')}}
+				@endif
+				@if(HTML::hasPermission('ArticleController@create') && $article == null)
 					{{HTML::actionlink($url = array('action' => 'ArticleController@index', 'params' => array($art->id)), '<i class="fa fa-pencil"></i>')}}
 				@endif
 			</span>
 			@endif
 		</p>
-		<p>{{HTML::markdown($art->body, true)}}</p>
+		@if($article == null)
+			<p>{{HTML::excerpt($art->body, true)}}</p>
+		@else
+			<p>{{HTML::markdown($art->body, true)}}</p>
+		@endif
 	@endforeach
 	@else
-		<div class="text-center alert info">We have no news articles right now.</div>
+		<div class="text-center alert info">We have no articles right now.</div>
 	@endif
 	@if(Auth::check())
 		@if(HTML::hasPermission('ArticleController@create') || HTML::hasPermission('ArticleController@update') && isset($article->id))
 			@if(isset($article->id))
 				{{ Form::model($article, array('action' => array('ArticleController@update', $article->id))) }}
-				<h3>Update article</h3>
+				<h3 class="margin-top-one">Update article</h3>
 			@else
 				{{ Form::model($article, array('action' => 'ArticleController@create')) }}
-				<h3>Create article</h3>
+				<h3 class="margin-top-one">Create article</h3>
 			@endif
 			{{ Form::label('Title', 'Title:') }}
 			{{ Form::text('title', Input::old('title'), array('id' => 'Title', 'placeholder' => 'Title of article', 'data-validator' => 'required|min:3')) }}

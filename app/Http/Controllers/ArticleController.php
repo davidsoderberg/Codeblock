@@ -4,6 +4,7 @@ use App\Repositories\Article\ArticleRepository;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
 
 class ArticleController extends Controller {
 
@@ -36,10 +37,24 @@ class ArticleController extends Controller {
 		$Article = null;
 
 		if(is_numeric($id)){
-			$Article = $this->Article->get($id);
+			$Articles = array($this->Article->get($id));
+			$Article = $Articles[0];
+		}else{
+			$Articles = $this->Article->get();
+			$articlesArray = [];
+			$i = 0;
+			foreach($Articles as $art) {
+				if($i < 11) {
+					$articlesArray[] = $art;
+					$i++;
+				}else{
+					break;
+				}
+			}
+			$Articles = $articlesArray;
 		}
 
-		return View::make('article.index')->with('title', 'Articles')->with('articles', $this->Article->get())->with('article', $Article);
+		return View::make('article.index')->with('title', 'Articles')->with('articles', $Articles)->with('article', $Article);
 	}
 
 	/**
@@ -79,9 +94,11 @@ class ArticleController extends Controller {
 	 */
 	public function delete($id){
 		if($this->Article->delete($id)){
+			if(str_contains(URL::previous(), $id)){
+				return Redirect::action('ArticleController@index')->with('success', 'The Article has been deleted.');
+			}
 			return Redirect::back()->with('success', 'The Article has been deleted.');
 		}
-
 		return Redirect::back()->with('error', 'The Article could not be deleted.');
 	}
 

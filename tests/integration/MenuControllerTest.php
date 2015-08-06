@@ -47,7 +47,7 @@ class MenuControllerTest extends \IntegrationCase {
 	}
 
 	public function test_News_page(){
-		$this->visit('news')->see('<h2>News articles</h2>');
+		$this->visit('news')->see('<h2>Blog</h2>');
 	}
 
 	public function test_Contact_page(){
