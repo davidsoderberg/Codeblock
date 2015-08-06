@@ -93,8 +93,9 @@ class ArticleController extends Controller {
 	 * @return object     med värden dit användaren skall skickas.
 	 */
 	public function delete($id){
+		$article = $this->Article->get($id);
 		if($this->Article->delete($id)){
-			if(str_contains(URL::previous(), $id)){
+			if(str_contains(URL::previous(), $id) || str_contains(URL::previous(), $article->slug)){
 				return Redirect::action('ArticleController@index')->with('success', 'The Article has been deleted.');
 			}
 			return Redirect::back()->with('success', 'The Article has been deleted.');
