@@ -16,11 +16,11 @@ class ArticleTest extends UnitCase {
 	public function testCreateOrUpdate(){
 		$input = ['title' => '', 'body' => ''];
 		$this->assertFalse($this->repo->createOrUpdate($input));
-		$this->assertTrue(count($this->repo->getErrors()) == 2);
+		$this->assertTrue(count($this->repo->getErrors()) == 3);
 		$this->repo->errors = null;
 		$input = ['title' => '', 'body' => 'hej'];
 		$this->assertFalse($this->repo->createOrUpdate($input));
-		$this->assertTrue(count($this->repo->getErrors()) == 1);
+		$this->assertTrue(count($this->repo->getErrors()) == 2);
 		$this->repo->errors = null;
 		$input = ['title' => 'test', 'body' => ''];
 		$this->assertFalse($this->repo->createOrUpdate($input));

@@ -11,21 +11,26 @@ class EloquentArticleRepository extends CRepository implements ArticleRepository
 		if(is_null($id)){
 			return Article::all();
 		}else{
-			return Article::find($id);
+			if(is_numeric($id)) {
+				return Article::find($id);
+			}else{
+				return Article::where('slug', $id)->first();
+			}
 		}
 	}
 
 	// skapar och uppdaterar en artikel.
 	public function createOrUpdate($input, $id = null)
 	{
-		if(!is_numeric($id)) {
+		if(is_null($id)) {
 			$Article = new Article();
 		} else {
-			$Article = Article::find($id);
+			$Article = $this->get($id);
 		}
 
 		if(isset($input['title'])){
 			$Article->title = $this->stripTrim($input['title']);
+			$Article->slug = $Article->getSlug($Article->title);
 		}
 
 		if(isset($input['body'])){
@@ -42,7 +47,7 @@ class EloquentArticleRepository extends CRepository implements ArticleRepository
 
 	// tar bort en artikel.
 	public function delete($id){
-		$Article = Article::find($id);
+		$Article = $this->get($id);
 		if($Article == null){
 			return false;
 		}

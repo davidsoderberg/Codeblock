@@ -11,7 +11,7 @@
 	@if(count($articles) > 0)
 	@foreach($articles as $art)
 		@if($article == null)
-			<h3 class="margin-top-one">{{HTML::actionlink($url = array('action' => 'ArticleController@index', 'params' => array($art->id)), $art->title)}}</h3>
+			<h3 class="margin-top-one">{{HTML::actionlink($url = array('action' => 'ArticleController@index', 'params' => array($art->slug)), $art->title)}}</h3>
 		@else
 			<h2>{{$art->title}}</h2>
 		@endif

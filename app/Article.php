@@ -9,13 +9,14 @@ class Article extends Model {
 	 */
 	protected $table = 'articles';
 
-	protected $fillable = array('title', 'body');
+	protected $fillable = array('title', 'body', 'slug');
 
 	protected $guarded = array('id');
 
 	public static $rules = array(
 	    'title'  => 'required|unique:articles,title,:id:',
-	    'body' => 'required|min:3'
+	    'body' => 'required|min:3',
+		'slug' => 'required|min:3|unique:articles,slug,:id:',
 	);
 
 

@@ -19,6 +19,7 @@ Route::get('/', 'MenuController@index');
 Route::get('browse', 'MenuController@browse');
 Route::get('markdown', 'MenuController@markdown');
 Route::get('news/{id?}', 'ArticleController@index');
+Route::get('news/{slug?}', 'ArticleController@index');
 Route::get('embed/{id}', 'PostController@embed');
 Route::get('embed/{slug}', 'PostController@embed');
 Route::get('license', 'MenuController@license');

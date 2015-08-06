@@ -36,7 +36,7 @@ class ArticleController extends Controller {
 	{
 		$Article = null;
 
-		if(is_numeric($id)){
+		if($id != null){
 			$Articles = array($this->Article->get($id));
 			$Article = $Articles[0];
 		}else{
