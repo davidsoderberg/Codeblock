@@ -18,8 +18,8 @@ Route::pattern('sort', 'category');
 Route::get('/', 'MenuController@index');
 Route::get('browse', 'MenuController@browse');
 Route::get('markdown', 'MenuController@markdown');
-Route::get('news/{id?}', 'ArticleController@index');
-Route::get('news/{slug?}', 'ArticleController@index');
+Route::get('blog/{id?}', 'ArticleController@index');
+Route::get('blog/{slug?}', 'ArticleController@index');
 Route::get('embed/{id}', 'PostController@embed');
 Route::get('embed/{slug}', 'PostController@embed');
 Route::get('license', 'MenuController@license');
@@ -82,9 +82,9 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::get('categories/{id?}', 'CategoryController@index');
 
 
-	Route::get('news/delete/{id}', 'ArticleController@delete');
-	Route::post('news/store/', 'ArticleController@create');
-	Route::post('news/store/{id}', 'ArticleController@update');
+	Route::get('blog/delete/{id}', 'ArticleController@delete');
+	Route::post('blog/store/', 'ArticleController@create');
+	Route::post('blog/store/{id}', 'ArticleController@update');
 
 	Route::get('posts', 'PostController@index');
 	Route::get('comments/', 'CommentController@index');
