@@ -56,6 +56,10 @@ class Post extends Model {
 		return $this->hasMany('App\Comment', 'post_id', 'id');
 	}
 
+	public function getstarcountAttribute(){
+		return count($this->stars);
+	}
+
 	public function getcategorynameAttribute()
 	{
 		if(!is_null($this->category)) {
@@ -63,6 +67,6 @@ class Post extends Model {
 		}
 	}
 
-	protected $appends = array('categoryname');
+	protected $appends = array('categoryname', 'starcount');
 
 }

@@ -36,7 +36,8 @@
 		</ul>
 		<ul>
 			<li class="open">
-				{{HTML::actionlink($url = array('action' => 'PostController@category', 'params' => array(0)), 'What is new?', array('class' => 'block'))}}
+				{{HTML::actionlink($url = array('action' => 'PostController@category', 'params' => array(urlencode("What's new?"))), "What's new?", array('class' => 'block'))}}
+				{{HTML::actionlink($url = array('action' => 'PostController@category', 'params' => array(urlencode("Most popular"))), 'Most popular', array('class' => 'block'))}}
 				@foreach ($categories as $category)
 					{{HTML::actionlink($url = array('action' => 'PostController@category', 'params' => array(urlencode($category->name))), $category->name, array('class' => 'block'))}}
 				@endforeach

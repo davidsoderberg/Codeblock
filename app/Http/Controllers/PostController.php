@@ -236,15 +236,21 @@ class PostController extends Controller {
 	 */
 	public function category($id){
 		$id = urldecode($id);
-		if(is_numeric($id) && $id == 0){
-			$this->category->name = "What's new";
+		if($id == "What's new?") {
+			$this->category->name = $id;
+			$posts = $this->post->getNewest();
 			$category = $this->category;
-			$id = (int) $id;
-		}else{
-			$category = $this->category->get($id);
-			$id = $category->id;
 		}
-		return View::make('post.list')->with('title', 'Posts in category: '.$category->name )->with('posts', $this->post->getByCategory($id))->with('category', $category);
+		elseif($id == "Most popular"){
+			$this->category->name = $id;
+			$posts = $this->post->getPopular();
+			$category = $this->category;
+		}
+		else{
+			$category = $this->category->get($id);
+			$posts = $this->post->getByCategory($category->id);
+		}
+		return View::make('post.list')->with('title', 'Posts in category: '.$category->name )->with('posts', $posts)->with('category', $category);
 	}
 
 	/**

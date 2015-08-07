@@ -95,6 +95,38 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 		return $postArray;
 	}
 
+	public function getPopular($limit = 10, $min = 0){
+		$posts =  Post::limit($limit)->get()->sortByDesc('starcount');
+		$postArray = [];
+		foreach($posts as $post){
+			if($post->starcount > $min){
+				$postArray[] = $post;
+			}
+		}
+		return $postArray;
+	}
+
+	public function getNewest(){
+		$posts = $this->get();
+		$postArray = array();
+		foreach ($posts as $post) {
+			// Skapar carbon objekt och sätter rätt tidszon
+			$now = Carbon::now();
+			$now->timezone = 'Europe/Stockholm';
+			// Skapa en tidsstämpel på nu
+			$nowTimestamp = strtotime($now);
+			//Skapar en tidsstämpel som va för en vecka sedan;
+			$weekAgoTimestamp = strtotime($now->subWeek());
+			// kollar om blocket är skapat mellan dessa två tidsstämplar och lägger till det i post arrayen.
+			if(strtotime($post->created_at) >= $weekAgoTimestamp && strtotime($post->created_at) <= $nowTimestamp){
+				if($post->private != 1){
+					$postArray[] = $post;
+				}
+			}
+		}
+		return $postArray;
+	}
+
 	// hämtar block som har en viss ettiket.
 	public function getByTag($id){
 		$posts = $this->get();
