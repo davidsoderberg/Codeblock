@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use Venturecraft\Revisionable\Revision;
+use Illuminate\Support\Facades\Lang;
 
 class PostController extends Controller {
 
@@ -236,12 +237,12 @@ class PostController extends Controller {
 	 */
 	public function category($id){
 		$id = urldecode($id);
-		if($id == "What's new?") {
+		if($id == Lang::get('app.WhatsNew')) {
 			$this->category->name = $id;
 			$posts = $this->post->getNewest();
 			$category = $this->category;
 		}
-		elseif($id == "Most popular"){
+		elseif($id == Lang::get('app.MostPopular')){
 			$this->category->name = $id;
 			$posts = $this->post->getPopular();
 			$category = $this->category;

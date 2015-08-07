@@ -13,4 +13,6 @@ return array(
 	'CheckEnvironment' => 'Check enviroment',
 	'NoCommand' => 'No such command',
 	'WrongPassword' => 'Wrong password',
+	'MostPopular' => 'Most popular',
+	"WhatsNew" => "What's new?"
 );
