@@ -227,7 +227,21 @@ class PostController extends Controller {
 	 * @return objekt med vyn som skall vissas med alla variabler som behövs.
 	 */
 	public function search(){
-		return View::make('post.list')->with('title', 'Search on: '.trim(strip_tags($this->request->get('term'))))->with('posts', $this->post->search($this->request->get('term')));
+		$categories = $this->selectCategories();
+		$categories[''] = "All categories";
+		$tags = $this->selectTags();
+		$tags[''] = "All tags";
+		$term = trim(strip_tags($this->request->get('term')));
+		$filter = array('category' => $this->request->get('category'), 'tag' => $this->request->get('tag'));
+		$posts = $this->post->search($term, $filter);
+
+		return View::make('post.list')
+			->with('title', 'Search on: '.$term)
+			->with('posts', $posts)
+			->with('term', $term)
+			->with('filter', $filter)
+			->with('categories', $categories)
+			->with('tags', $tags);
 	}
 
 	/**
@@ -235,7 +249,7 @@ class PostController extends Controller {
 	 * @param  int $id id på kategorin som blocken skall tillhöra.
 	 * @return objekt med vyn som skall vissas med alla variabler som behövs.
 	 */
-	public function category($id){
+	public function category($id, $sort = 'date'){
 		$id = urldecode($id);
 		if($id == Lang::get('app.WhatsNew')) {
 			$this->category->name = $id;
@@ -251,6 +265,9 @@ class PostController extends Controller {
 			$category = $this->category->get($id);
 			$posts = $this->post->getByCategory($category->id);
 		}
+		if($sort != 'date'){
+			$posts = $this->post->sort($posts, $sort);
+		}
 		return View::make('post.list')->with('title', 'Posts in category: '.$category->name )->with('posts', $posts)->with('category', $category);
 	}
 
@@ -259,11 +276,15 @@ class PostController extends Controller {
 	 * @param  int $id id på ettiketen som blocken skall tillhöra.
 	 * @return objekt med vyn som skall vissas med alla variabler som behövs.
 	 */
-	public function tag($id){
+	public function tag($id, $sort = 'date'){
 		$id = urldecode($id);
 		$tag = $this->tag->get($id);
 		$id = $tag->id;
-		return View::make('post.list')->with('title', 'Posts with tag: '.$tag->name)->with('posts', $this->post->getByTag($id))->with('tag', $tag);
+		$posts = $this->post->getByTag($id);
+		if($sort != 'date'){
+			$posts = $this->post->sort($posts, $sort);
+		}
+		return View::make('post.list')->with('title', 'Posts with tag: '.$tag->name)->with('posts', $posts)->with('tag', $tag);
 	}
 
 	/**

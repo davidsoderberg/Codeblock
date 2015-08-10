@@ -2,6 +2,7 @@
 
 use App\Post;
 use App\Star;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
@@ -62,16 +63,16 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	public function getByCategory($id)
 	{
 		$posts = $this->get();
-		$postArray = array();
+		$postsCollection = new Collection();
 		foreach ($posts as $post) {
 			if($id != 0){
 				if($post->category->id == $id){
 					if($post->private != 1){
-						$postArray[] = $post;
+						$postsCollection->add($post);
 					}else{
 						if(Auth::check()){
 							if(Auth::user()->id == $post->user_id){
-								$postArray[] = $post;
+								$postsCollection->add($post);
 							}
 						}
 					}
@@ -87,28 +88,28 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 				// kollar om blocket är skapat mellan dessa två tidsstämplar och lägger till det i post arrayen.
 				if(strtotime($post->created_at) >= $weekAgoTimestamp && strtotime($post->created_at) <= $nowTimestamp){
 					if($post->private != 1){
-						$postArray[] = $post;
+						$postsCollection->add($post);
 					}
 				}
 			}
 		}
-		return $postArray;
+		return $postsCollection;
 	}
 
 	public function getPopular($limit = 10, $min = 0){
 		$posts =  Post::limit($limit)->get()->sortByDesc('starcount');
-		$postArray = [];
+		$postsCollection = new Collection();
 		foreach($posts as $post){
 			if($post->starcount > $min){
-				$postArray[] = $post;
+				$postsCollection->add($post);
 			}
 		}
-		return $postArray;
+		return $postsCollection;
 	}
 
 	public function getNewest(){
 		$posts = $this->get();
-		$postArray = array();
+		$postsCollection = new Collection();
 		foreach ($posts as $post) {
 			// Skapar carbon objekt och sätter rätt tidszon
 			$now = Carbon::now();
@@ -120,28 +121,45 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 			// kollar om blocket är skapat mellan dessa två tidsstämplar och lägger till det i post arrayen.
 			if(strtotime($post->created_at) >= $weekAgoTimestamp && strtotime($post->created_at) <= $nowTimestamp){
 				if($post->private != 1){
-					$postArray[] = $post;
+					$postsCollection->add($post);
 				}
 			}
 		}
-		return $postArray;
+		return $postsCollection;
 	}
 
 	// hämtar block som har en viss ettiket.
 	public function getByTag($id){
 		$posts = $this->get();
-		$postArray = array();
+		$postsCollection = new Collection();
 		foreach ($posts as $post) {
 			foreach ($post->posttags as $tag) {
 				if($id == $tag->id){
 					if($post->private != 1){
-						$postArray[] = $post;
+						$postsCollection->add($post);
 					}
 					break;
 				}
 			}
 		}
-		return $postArray;
+		return $postsCollection;
+	}
+
+	public function sort($posts, $sort = "date"){
+		return $posts->sortByDesc(function($item) use ($sort) {
+			$sort = strtolower($sort);
+			switch($sort){
+				case 'stars':
+					return $item->stars['count'];
+					break;
+				case 'comments':
+					return count($item->comments);
+					break;
+				default:
+					return $item->$sort;
+					break;
+			}
+		});
 	}
 
 	// duplicerar ett kodblock.
@@ -288,53 +306,54 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	}
 
 	// söker bland blocken och skickar tillbaka de blocken den hittar en match hos.
-	public function search($term){
+	public function search($term, $filter = array('tag' => null, 'category' => null)){
 
 		// Kollar om blocket innehåller söktermern i namn eller beskrvining
-		$namePosts = Post::where('name', 'LIKE', '%'.$term.'%')->get()->toArray();
-		$descriptionPosts = Post::where('description', 'LIKE', '%'.$term.'%')->get()->toArray();
-
-		// Lägger samman båda arrayerna
-		$LikePosts = $this->merge_search($namePosts, $descriptionPosts);
-
-		// Hämtar alla block.
-		$all_posts = $this->get();
-		$categoryTagPosts = array();
+		$posts = Post::where('name', 'LIKE', '%'.$term.'%')->get()->merge(Post::where('description', 'LIKE', '%'.$term.'%')->get());
 
 		// loopar igen alla inlägg och kollar om termen stämmer överens med ettiket, kategori eller användar-namn.
-		foreach ($all_posts as $post) {
+		foreach ($this->get() as $post) {
 			if(strtolower($post->category->name) == strtolower($term) || strtolower($post->user->username) == strtolower($term)){
-				$categoryTagPosts[] = $post;
+				$posts->add($post);
 				break;
 			}
 			foreach ($post->posttags as $tag) {
 				if(strtolower($tag->name) == strtolower($term)){
-					$categoryTagPosts[] = $post;
+					$posts->add($post);
 					break;
 				}
 			}
 		}
 
-		// Lägger sammman båda två arrayerna som skapas ovan.
-		$posts = $this->merge_search($LikePosts, $categoryTagPosts);
+		if(!is_null($filter['category']) && $filter['category'] != '') {
+			$category = $filter['category'];
+			$posts = $posts->filter(function ($item) use ($category) {
+				if($item->category->id == $category){
+					return $item;
+				}
+			});
+		}
+
+		if(!is_null($filter['tag']) && $filter['tag'] != '') {
+			$tag = $filter['tag'];
+			$posts = $posts->filter(function ($item) use ($tag) {
+				foreach($item->posttags as $posttag){
+					if($posttag->id == $tag){
+						return $item;
+					}
+				}
+			});
+		}
 
 		// hämtar dem igen och nu med alla relationer intakta.
-		$postArray = array();
+		$postCollection = new Collection();
 		foreach ($posts as $post) {
-			$postArray[] = $this->get($post['id']);
-		}
-
-		return $postArray;
-	}
-
-	// slår ihop två sökningar till ett resultat.
-	private function merge_search($resultarray, $array){
-		foreach ($array as $value) {
-			if(!in_array($value, $resultarray)){
-				$resultarray[] = $value;
+			if($post['private'] != 1) {
+				$postCollection->add($this->get($post['id']));
 			}
 		}
-		return $resultarray;
+
+		return $postCollection->unique();
 	}
 
 }

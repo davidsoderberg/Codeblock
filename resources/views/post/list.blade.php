@@ -12,8 +12,34 @@
 	@else
 		<h2>{{ $title }}</h2>
 	@endif
+	@if(isset($term))
+		{{ Form::open(array('action' => 'PostController@search')) }}
+			<div class="verticalRule noRule">
+				<div class="float-left">
+					{{ Form::select('category', $categories, $filter['category']) }}
+				</div>
+				<div class="float-right">
+					{{ Form::select('tag', $tags, $filter['tag']) }}
+				</div>
+			</div>
+			{{ Form::hidden('term', $term) }}
+			<div class="text-center">
+				{{ Form::button('Filter', array('type' => 'submit', 'class' => 'display-block width-100 float-none')) }}
+			</div>
+			<div class="horizontalRule margin-bottom-half margin-top-one"></div>
+		{{ Form::close() }}
+	@endif
 
 	@if(count($posts) > 0)
+		@if(!isset($term))
+			<div class="margin-bottom-one">
+				<label>Sort by:</label>
+				<a href="date" class="float-none button">Date</a>
+				<a href="name" class="float-none button">Name</a>
+				<a href="stars" class="float-none button">Stars</a>
+				<a href="comments" class="float-none button">Comments</a>
+			</div>
+		@endif
 		@foreach ($posts as $post)
 			@if($post->private != 1)
 				<h3 class="text-left margin-top-half">{{HTML::actionlink($url = array('action' => 'PostController@show', 'params' => array($post->slug)), $post->name, array('class' => 'display-block decoration-none'))}}</h3>
@@ -44,7 +70,11 @@
 			@endif
 		@endforeach
 	@else
-		<div class="text-center alert info">There are no blocks here yet.</div>
+		@if(isset($term))
+			<div class="text-center alert info">There are no matches on: {{$term}}</div>
+		@else
+			<div class="text-center alert info">There are no blocks here yet.</div>
+		@endif
 	@endif
 @stop
 

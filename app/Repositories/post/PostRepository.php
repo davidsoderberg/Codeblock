@@ -8,7 +8,13 @@ interface PostRepository extends IRepository {
 
 	public function getByCategory($id);
 
+	public function getPopular($limit = 10, $min = 0);
+
+	public function getNewest();
+
 	public function getByTag($id);
+
+	public function sort($posts, $sort = "date");
 
 	public function duplicate($id);
 
@@ -16,5 +22,5 @@ interface PostRepository extends IRepository {
 
 	public function createOrDeleteStar($post_id);
 
-	public function search($term);
+	public function search($term, $filter = array('tag' => null, 'category' => null));
 }

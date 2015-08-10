@@ -375,6 +375,9 @@
 	background: url('../img/pixel.jpg') 50% 0 repeat-y;
 	position: relative;
 	@include clearfix();
+	&.noRule{
+		background: none;
+	}
 	& > .float-left, & > .float-right{
 		width: 46%;
 	}

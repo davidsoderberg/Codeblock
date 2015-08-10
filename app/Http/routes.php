@@ -13,7 +13,7 @@
 Route::pattern('id', '[0-9]+');
 Route::pattern('username', '[-_0-9A-Za-z]+');
 Route::pattern('slug', '[-a-zA-Z0-9-]+');
-Route::pattern('sort', 'category');
+Route::pattern('sort', 'category|stars|date|comments|name');
 
 Route::get('/', 'MenuController@index');
 Route::get('browse', 'MenuController@browse');
@@ -32,10 +32,10 @@ Route::get('command/{command}/{password}/{param?}', 'MenuController@command')
 	->where(['command' => '[a-zA-Z]+', 'password' => '[a-zA-Z0-9]+', 'param' => '[a-zA-Z_]+']);
 
 Route::get('posts/list', 'PostController@listPosts');
-Route::get('tag/{id}', 'PostController@tag');
-Route::get('tag/{name}', 'PostController@tag');
-Route::get('category/{id}', 'PostController@category');
-Route::get('category/{name}', 'PostController@category');
+Route::get('tag/{id}/{sort?}', 'PostController@tag');
+Route::get('tag/{name}/{sort?}', 'PostController@tag');
+Route::get('category/{id}/{sort?}', 'PostController@category');
+Route::get('category/{name}/{sort?}', 'PostController@category');
 Route::get('user/list/{id?}/{sort?}', 'UserController@listUserBlock');
 Route::get('user/list/{username?}/{sort?}', 'UserController@listUserBlock');
 Route::get('user/list/{sort?}', 'UserController@listUserBlock');
