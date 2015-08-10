@@ -34,10 +34,11 @@
 		@if(!isset($term))
 			<div class="margin-bottom-one">
 				<label>Sort by:</label>
-				<a href="date" class="float-none button">Date</a>
-				<a href="name" class="float-none button">Name</a>
-				<a href="stars" class="float-none button">Stars</a>
-				<a href="comments" class="float-none button">Comments</a>
+				@if(isset($category))
+					@include('partials.sortlinks', array('name' => $category->name, 'type' => 'category'))
+				@else
+					@include('partials.sortlinks', array('name' => $tag->name, 'type' => 'tag'))
+				@endif
 			</div>
 		@endif
 		@foreach ($posts as $post)
