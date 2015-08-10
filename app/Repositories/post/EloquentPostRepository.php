@@ -146,19 +146,24 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	}
 
 	public function sort($posts, $sort = "date"){
-		return $posts->sortByDesc(function($item) use ($sort) {
-			$sort = strtolower($sort);
-			switch($sort){
-				case 'stars':
-					return $item->stars['count'];
-					break;
-				case 'comments':
-					return count($item->comments);
-					break;
-				default:
-					return $item->$sort;
-					break;
-			}
+		if($sort != 'name') {
+			return $posts->sortByDesc(function ($item) use ($sort) {
+				$sort = strtolower($sort);
+				switch($sort) {
+					case 'stars':
+						return $item->stars['count'];
+						break;
+					case 'comments':
+						return count($item->comments);
+						break;
+					default:
+						return $item->$sort;
+						break;
+				}
+			});
+		}
+		return $posts->sortBy(function ($item) {
+			return $item->name;
 		});
 	}
 
