@@ -157,7 +157,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 						return count($item->comments);
 						break;
 					default:
-						return $item->$sort;
+						return $item->created_at;
 						break;
 				}
 			});

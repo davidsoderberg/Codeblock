@@ -33,7 +33,7 @@
 	@if(count($posts) > 0)
 		@if(!isset($term))
 			<div class="margin-bottom-one">
-				<label>Sort by:</label>
+				<label class="margin-bottom-half full-width-small">Sort by:</label>
 				@if(isset($category))
 					@include('partials.sortlinks', array('name' => $category->name, 'type' => 'category'))
 				@else
