@@ -21,7 +21,7 @@
 			</div>
 		</div>
 		{{ Form::label('', 'Tags:') }}
-		{{ Form::select('tags[]', $tags, $post->posttags, array('multiple', 'class' => 'chosen-select', 'data-placeholder' => 'Choose some tags')) }}
+		{{ Form::select('tags[]', $tags, $post->tags, array('multiple', 'class' => 'chosen-select', 'data-placeholder' => 'Choose some tags')) }}
 
 		{{ Form::label('blockCode', 'Code:') }}
         @if(is_array($post->category->lang))

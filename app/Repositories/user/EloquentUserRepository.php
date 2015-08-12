@@ -22,7 +22,6 @@ class EloquentUserRepository extends CRepository implements UserRepository {
 					$i = 0;
 					foreach($user->posts as $post) {
 						$post->category = $post->category($post->category)->first();
-						$post->posttags = $post->posttags;
 						$post->stars = count($post->stars);
 						if($post->stars > 0) {
 							$i++;
@@ -43,7 +42,6 @@ class EloquentUserRepository extends CRepository implements UserRepository {
 					$i = 0;
 					foreach($user->posts as $post) {
 						$post->category = $post->category($post->category)->first();
-						$post->posttags = $post->posttags;
 						$post->stars = count($post->stars);
 						if($post->stars > 0) {
 							$i++;

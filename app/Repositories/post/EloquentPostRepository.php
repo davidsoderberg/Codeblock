@@ -26,9 +26,6 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 			$posts =  Post::all();
 			if($this->add){
 				foreach ($posts as $post) {
-					$post->category = $post->category;
-					$post->comments = $post->comments;
-					$post->posttags = $post->posttags;
 					$post->stars = $this->getStars($post->stars);
 					$post->org = $this->get($post->org);
 					$post->forked = count($this->where(array('org', '=', $post->id)));
@@ -41,9 +38,6 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 				$post = Post::where('slug', $id)->first();
 			}
 			if(!is_null($post) && $this->add){
-				$post->category = $post->category;
-				$post->comments = $post->comments;
-				$post->posttags = $post->posttags;
 				$post->stars = $this->getStars($post->stars);
 				$post->org = $this->get($post->org);
 				$post->forked = count($this->where(array('org', '=', $post->id)));
@@ -133,7 +127,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 		$posts = $this->get();
 		$postsCollection = new Collection();
 		foreach ($posts as $post) {
-			foreach ($post->posttags as $tag) {
+			foreach ($post->tags as $tag) {
 				if($id == $tag->id){
 					if($post->private != 1){
 						$postsCollection->add($post);
@@ -172,7 +166,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 		$post = $this->get($id);
 		$input = array();
 		$input['tags'] = array();
-		foreach ($post->posttags as $tag) {
+		foreach ($post->tags as $tag) {
 			$input['tags'][] = $tag->id;
 		}
 		$existingPost = $this->where(array('name', '=', $post->name.' '.Auth::user()->id));
@@ -193,7 +187,6 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 		$posts = $this->where(array('org', '=', $id));
 		foreach ($posts as $post) {
 				$post->category = $post->category;
-				$post->posttags = $post->posttags;
 				$post->stars = $this->getStars($post->stars);
 				$post->org = $this->get($post->org);
 				$post->forked = count($this->where(array('org', '=', $post->id)));
@@ -247,7 +240,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 		if($Post->save()){
 			$this->id = $Post->id;
 			if(isset($input['tags'])){
-				$Post->posttags()->sync($input['tags']);
+				$Post->tags()->sync($input['tags']);
 			}
 			return true;
 		}else{
@@ -322,7 +315,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 				$posts->add($post);
 				break;
 			}
-			foreach ($post->posttags as $tag) {
+			foreach ($post->tags as $tag) {
 				if(strtolower($tag->name) == strtolower($term)){
 					$posts->add($post);
 					break;
@@ -342,7 +335,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 		if(!is_null($filter['tag']) && $filter['tag'] != '') {
 			$tag = $filter['tag'];
 			$posts = $posts->filter(function ($item) use ($tag) {
-				foreach($item->posttags as $posttag){
+				foreach($item->tags as $posttag){
 					if($posttag->id == $tag){
 						return $item;
 					}

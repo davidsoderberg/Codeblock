@@ -37,7 +37,9 @@
 				@if(isset($category))
 					@include('partials.sortlinks', array('name' => $category->name, 'type' => 'category'))
 				@else
-					@include('partials.sortlinks', array('name' => $tag->name, 'type' => 'tag'))
+					@if(isset($tag))
+						@include('partials.sortlinks', array('name' => $tag->name, 'type' => 'tag'))
+					@endif
 				@endif
 			</div>
 		@endif

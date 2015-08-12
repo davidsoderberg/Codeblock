@@ -5,8 +5,8 @@ class Post extends Model {
 	public static function boot() {
 	    parent::boot();
 	    static::deleting(function($object) {
-	    	if(!empty($object->posttags[0])){
-				$object->posttags()->detach();
+	    	if(!empty($object->tags[0])){
+				$object->tags()->detach();
 			}
 			foreach ($object->stars as $star) {
 				$star->delete();
@@ -38,7 +38,7 @@ class Post extends Model {
 		return $this->belongsTo( 'App\Category', 'cat_id' );
 	}
 
-	public function posttags() {
+	public function tags() {
 		return $this->belongsToMany('App\Tag','post_tag');
 	}
 

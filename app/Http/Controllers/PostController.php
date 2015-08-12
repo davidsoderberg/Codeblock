@@ -155,10 +155,10 @@ class PostController extends Controller {
 			return Redirect::back()->with('error', 'That codeblock is not yours.');
 		}
 		$tagsarray = array();
-		foreach ($post->posttags as $tag) {
+		foreach ($post->tags as $tag) {
 			$tagsarray[] = $tag->id;
 		}
-		$post->posttags = $tagsarray;
+		$post->tags = $tagsarray;
 
 		return View::make('post.edit')->with('title', 'Edit')->with('post', $post)->with('tags', $this->selectTags())->with('categories', $this->selectCategories());
 	}
