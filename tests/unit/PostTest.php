@@ -101,11 +101,11 @@ class PostTest extends UnitCase {
 		$return = $this->repo->createOrDeleteStar($post->id);
 		$this->assertTrue($return[0]);
 		$post = $this->repo->get(1);
-		$this->assertTrue($post->stars['count'] == 1);
+		$this->assertTrue($post->starcount == 1);
 		$return = $this->repo->createOrDeleteStar($post->id);
 		$this->assertTrue($return[0]);
 		$post = $this->repo->get(1);
-		$this->assertTrue($post->stars['count'] == 0);
+		$this->assertTrue($post->starcount == 0);
 	}
 
 	public function testGetComment(){

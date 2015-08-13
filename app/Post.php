@@ -56,8 +56,21 @@ class Post extends Model {
 		return $this->hasMany('App\Comment', 'post_id', 'id');
 	}
 
+	public function original(){
+		return $this->belongsTo( 'App\Post', 'org' );
+	}
+
 	public function getstarcountAttribute(){
-		return count($this->stars);
+		return count($this->stars()->getResults());
+	}
+
+	public function StaredByUser($user_id){
+		$stars = $this->stars()->getResults();
+		$userArray = array();
+		foreach ($stars as $star) {
+			$userArray[] = $star->user_id;
+		}
+		return in_array($user_id, $userArray);
 	}
 
 	public function getcategorynameAttribute()
@@ -67,6 +80,10 @@ class Post extends Model {
 		}
 	}
 
-	protected $appends = array('categoryname', 'starcount');
+	public function getforkedAttribute(){
+		return count(Post::where('org', '=', $this->id));
+	}
+
+	protected $appends = array('categoryname', 'starcount', 'forked');
 
 }

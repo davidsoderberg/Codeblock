@@ -12,8 +12,6 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 
 	public $id;
 
-	public $add = true;
-
 	// getter för id.
 	public function getId(){
 		return $this->id;
@@ -24,33 +22,15 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	{
 		if(is_null($id)){
 			$posts =  Post::all();
-			if($this->add){
-				foreach ($posts as $post) {
-					$post->stars = $this->getStars($post->stars);
-					$post->org = $this->get($post->org);
-					$post->forked = count($this->where(array('org', '=', $post->id)));
-				}
-			}
 		}else{
 			if(is_numeric($id)) {
 				$post = Post::find($id);
 			}else{
 				$post = Post::where('slug', $id)->first();
 			}
-			if(!is_null($post) && $this->add){
-				$post->stars = $this->getStars($post->stars);
-				$post->org = $this->get($post->org);
-				$post->forked = count($this->where(array('org', '=', $post->id)));
-			}
 			$posts = $post;
 		}
-		$this->add = true;
 		return $posts;
-	}
-
-	private function getWithoutAdd($id = null){
-		$this->add = false;
-		return $this->get($id);
 	}
 
 	// hämtar block som har en vis kategori eller är skapade den senaste veckan.
@@ -169,7 +149,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 		foreach ($post->tags as $tag) {
 			$input['tags'][] = $tag->id;
 		}
-		$existingPost = $this->where(array('name', '=', $post->name.' '.Auth::user()->id));
+		$existingPost = Post::where('name', '=', $post->name.' '.Auth::user()->id)->get();
 		if(count($existingPost) < 1){
 			$input['name'] = $post->name.' '.Auth::user()->id;
 			$input['cat_id'] = $post->cat_id;
@@ -184,31 +164,12 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 
 	// hämtar vilka kodblock som är skapade ur ett visst kodblock.
 	public function getForked($id){
-		$posts = $this->where(array('org', '=', $id));
-		foreach ($posts as $post) {
-				$post->category = $post->category;
-				$post->stars = $this->getStars($post->stars);
-				$post->org = $this->get($post->org);
-				$post->forked = count($this->where(array('org', '=', $post->id)));
-		}
-		return $posts;
-	}
-
-	// hämtar block där värderna stämmer överens med vilkoren som är inputen till denna metod.
-	private function where($where){
-		if(is_array($where[0])){
-			$post = Post::where($where[0][0], $where[0][1], $where[0][2]);
-			for ($i=1; $i < count($where) ; $i++) {
-				$post = $post->where($where[$i][0], $where[$i][1], $where[$i][2]);
-			}
-			return $post->get();
-		}
-		return Post::where($where[0], $where[1], $where[2])->get();
+		return Post::where('org', $id)->get();
 	}
 
 	public function undo($input, $id){
 		if(is_numeric($id)){
-			$post = $this->getWithoutAdd($id);
+			$post = $this->get($id);
 			//$post->setRevisionEnabled();
 			if(isset($input['code'])){
 				$input['code'] = html_entity_decode($input['code']);
@@ -261,7 +222,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 				return false;
 			}
 		} else {
-			$Post = $this->getWithoutAdd($id);
+			$Post = $this->get($id);
 		}
 
 		return $this->save($input, $Post);
@@ -269,21 +230,11 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 
 	// tar bort ett block.
 	public function delete($id){
-		$Post = $this->getWithoutAdd($id);
+		$Post = $this->get($id);
 		if(!is_null($Post)) {
 			return $Post->delete();
 		}
 		return false;
-	}
-
-	// räknar ut antalet stjärnor och vilka som har stjärnmärkt ett block.
-	private function getStars($stars){
-		$starsCount = count($stars);
-		$userArray = array();
-		foreach ($stars as $star) {
-			$userArray[] = $star->user_id;
-		}
-		return array('count' => $starsCount, 'userArray' => $userArray);
 	}
 
 	// skapar och tar bort en stjärna för ett block.
