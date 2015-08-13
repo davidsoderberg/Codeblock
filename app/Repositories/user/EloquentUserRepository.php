@@ -51,7 +51,7 @@ class EloquentUserRepository extends CRepository implements UserRepository {
 			}
 		} else {
 			$this->errors = new MessageBag;
-			$User = User::find($id);
+			$User = $this->get($id);
 			if(isset($input['password']) && $input['password'] != ''){
 				if(Auth::validate(['username' => $User->username, 'password' => $input['oldpassword']])){
 					$User->password = Hash::make($input['password']);
@@ -108,7 +108,7 @@ class EloquentUserRepository extends CRepository implements UserRepository {
 
 	// uppdaterar en användares roll eller status.
 	public function update($input, $id){
-		$user = User::find($id);
+		$user = $this->get($id);
 		if(!is_null($user)){
 			$user->role = $this->stripTrim($input['role']);
 			$user->active = $this->stripTrim($input['active']);
@@ -123,7 +123,7 @@ class EloquentUserRepository extends CRepository implements UserRepository {
 
 	// tar bort en användare
 	public function delete($id){
-		$user = User::find($id);
+		$user = $this->get($id);
 		if(!is_null($user)){
 			return $user->delete();
 		}
@@ -162,7 +162,7 @@ class EloquentUserRepository extends CRepository implements UserRepository {
 
 	// aktiverar en användare.
 	public function activateUser($id, $token){
-		$user = User::find($id);
+		$user = $this->get($id);
 		if(!is_null($user)){
 			if($user->active == 0){
 				if($token == $this->makeToken($user->email)){
@@ -191,7 +191,7 @@ class EloquentUserRepository extends CRepository implements UserRepository {
 
 	// skickar aktiveringsmejlet.
 	private function sendActivateMail($id){
-		$user = User::find($id);
+		$user = $this->get($id);
 		$token = $this->makeToken($user->email);
 		$data = array('token' => $token, 'id' => $user->id, 'Username' => $user->username);
 		$emailInfo = array('toEmail' => $user->email, 'toName' => $user->username, 'subject' => 'Welcome');
