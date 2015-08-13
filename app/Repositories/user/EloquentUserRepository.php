@@ -8,50 +8,16 @@ use Illuminate\Support\MessageBag;
 
 class EloquentUserRepository extends CRepository implements UserRepository {
 
-	public $add = true;
-
 	// Hämtar en eller alla användare
 	public function get($id = null)
 	{
 		if(is_null($id)){
-			$users =  User::all();
-			if($this->add) {
-				foreach($users as $user) {
-					$user->password = null;
-					$user->posts = $user->posts;
-					$i = 0;
-					foreach($user->posts as $post) {
-						$post->category = $post->category($post->category)->first();
-						$post->stars = count($post->stars);
-						if($post->stars > 0) {
-							$i++;
-						}
-					}
-					$user->posts->stars = $i;
-				}
-			}
-			return $users;
+			return User::all();
 		}else{
 			if(!is_numeric($id)){
 				$id = $this->getIdByUsername($id);
 			}
-			$user = User::find($id);
-			if($user != null){
-				if($this->add) {
-					$user->posts = $user->posts;
-					$i = 0;
-					foreach($user->posts as $post) {
-						$post->category = $post->category($post->category)->first();
-						$post->stars = count($post->stars);
-						if($post->stars > 0) {
-							$i++;
-						}
-					}
-					$user->posts->stars = $i;
-					$user->password = null;
-				}
-			}
-			return $user;
+			return User::find($id);
 		}
 	}
 
@@ -87,7 +53,7 @@ class EloquentUserRepository extends CRepository implements UserRepository {
 			$this->errors = new MessageBag;
 			$User = User::find($id);
 			if(isset($input['password']) && $input['password'] != ''){
-				if(Hash::check($input['oldpassword'], $User->password)){
+				if(Auth::validate(['username' => $User->username, 'password' => $input['oldpassword']])){
 					$User->password = Hash::make($input['password']);
 				}else{
 					$this->errors->add('oldpassword', 'Your old password was not correct.');

@@ -54,15 +54,15 @@
         <div class="float-right clearfix">
             <h3>{{HTML::actionlink($url = array('action' => 'UserController@listStarred'), 'Starred codeblock')}}</h3>
             <!--
-            @if($user->posts->stars > 0)
+            @if($user->hasStarMarkedPosts())
                 @foreach ($user->posts as $post)
-                    @if($post->stars > 0)
+                    @if($post->starcount > 0)
                         <div class="clearfix margin-bottom-half">
 					<span class="float-left">
 						{{HTML::actionlink($url = array('action' => 'PostController@show', 'params' => array($post->slug)), $post->name.', '.$post->category->name)}}
 					</span>
 					<span class="float-right">
-						<i class="fa fa-star"></i> {{ $post->stars }}
+						<i class="fa fa-star"></i> {{ $post->starcount }}
 					</span>
                         </div>
                     @endif

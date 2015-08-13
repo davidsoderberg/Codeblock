@@ -47,7 +47,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @var array
 	 */
 
-	// protected $hidden = array('password');
+	//protected $hidden = array('password');
 
 	protected $fillable = array('username', 'email', 'role', 'active');
 
@@ -187,6 +187,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 			return in_array(strtolower($permission[0]), $permissions_array);
 		}
 		return $empty;
+	}
+
+	public function hasStarMarkedPosts(){
+		foreach($this->posts as $post) {
+			if($post->starcount > 0) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
