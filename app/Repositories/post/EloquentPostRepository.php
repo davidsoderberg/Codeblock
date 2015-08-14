@@ -125,7 +125,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 				$sort = strtolower($sort);
 				switch($sort) {
 					case 'stars':
-						return $item->stars['count'];
+						return $item->starcount;
 						break;
 					case 'comments':
 						return count($item->comments);
