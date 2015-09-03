@@ -25,6 +25,10 @@ class Topic extends Model
 
 	protected $guarded = array('id');
 
+	protected $hidden = array('forum', 'updated_at');
+
+	protected $with = ['replies'];
+
 	public static $rules = array(
 		'title'  => 'required|min:3',
 		'forum_id' => 'required|integer',
@@ -42,4 +46,13 @@ class Topic extends Model
 	public function reads(){
 		return $this->hasMany('App\Read', 'topic_id', 'id');
 	}
+
+	public function getforumtitleAttribute(){
+		if($this->forum) {
+			return $this->forum->title;
+		}
+		return "";
+	}
+
+	protected $appends = array('forumtitle');
 }

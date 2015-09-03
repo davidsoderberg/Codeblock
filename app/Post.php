@@ -25,6 +25,8 @@ class Post extends Model {
 
 	protected $guarded = array('id');
 
+	protected $with = ['tags', 'category'];
+
 	public static $rules = array(
 	    'name' => 'required|min:3|unique:posts,name,:id:',
 	    'cat_id'  => 'required|integer',

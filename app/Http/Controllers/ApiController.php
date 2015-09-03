@@ -45,6 +45,7 @@ class ApiController extends Controller {
 	 * @return mixed
 	 */
 	public function Posts(PostRepository $post, $id = null){
+		//dd($post->get($id));
 		return Response::json(array('data' => $post->get($id)), 200);
 	}
 

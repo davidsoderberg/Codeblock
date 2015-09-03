@@ -13,6 +13,8 @@ class Tag extends Model {
 
 	protected $guarded = array('id');
 
+	protected $hidden = array('pivot');
+
 	public static $rules = array(
 	    'name' => 'required|min:3|unique:tags,name,:id:',
 	);

@@ -8,6 +8,8 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
 	public static $errors;
 
+	protected $hidden = array("updated_at");
+
 	protected $revisionEnabled = false;
 
 	public function setRevisionEnabled(){

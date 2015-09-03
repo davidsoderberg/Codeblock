@@ -13,6 +13,8 @@ class Reply extends Model
 
 	protected $guarded = array('id');
 
+	protected $hidden = array('user', 'updated_at');
+
 	public static $rules = array(
 		'reply'  => 'required|min:3',
 		'topic_id' => 'required|integer',
@@ -26,4 +28,10 @@ class Reply extends Model
 	public function topic(){
 		return $this->belongsTo( 'App\Topic', 'topic_id' );
 	}
+
+	public function getusernameAttribute(){
+		return $this->user->username;
+	}
+
+	protected $appends = array('username');
 }
