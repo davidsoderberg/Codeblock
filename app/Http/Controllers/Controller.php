@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\Model;
 use App\NotificationType;
 use App\Repositories\Notification\NotificationRepository;
 use App\Services\Jwt;
@@ -100,7 +101,9 @@ abstract class Controller extends BaseController {
 				$object->addToHidden();
 			}
 		}else{
-			$objects->addToHidden();
+			if($objects instanceof Model) {
+				$objects->addToHidden();
+			}
 		}
 		return $objects;
 	}
