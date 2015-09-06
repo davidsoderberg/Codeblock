@@ -8,12 +8,18 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
 	public static $errors;
 
+	protected $addHidden = array();
+
 	protected $hidden = array("updated_at");
 
 	protected $revisionEnabled = false;
 
 	public function setRevisionEnabled(){
 		$this->revisionEnabled = !$this->revisionEnabled;
+	}
+
+	public function addToHidden(){
+		$this->addHidden($this->addHidden);
 	}
 
 	public function getAnswer($boolean){

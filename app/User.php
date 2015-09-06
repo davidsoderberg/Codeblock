@@ -53,6 +53,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
 	protected $guarded = array('id', 'password');
 
+	protected $addHidden = array('password', 'remember_token', 'role', 'isactive');
+
 	public static $rules = array(
 	    'email'  => 'required|email|unique:users,email,:id:',
 	    'username' => 'required|alpha_dash|unique:users,username,:id:',

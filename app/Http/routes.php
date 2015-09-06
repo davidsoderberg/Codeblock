@@ -161,5 +161,13 @@ Route::group(['prefix' => 'api', 'middleware' => 'api'],function(){
 
 		Route::put('category/{id}', 'ApiController@createOrUpdateCategory');
 		Route::put('tag/{id}', 'ApiController@createOrUpdateTag');
+
+		Route::delete('category/{id}', 'ApiController@deleteCategory');
+		Route::delete('tag/{id}', 'ApiController@deleteTag');
+		Route::delete('forum/{id}', 'ApiController@deleteForum');
+		Route::delete('replies/{id}', 'ApiController@deleteReply');
+		Route::delete('topics/{id}', 'ApiController@deleteTopic');
+		Route::delete('comment/{id}', 'ApiController@deleteComment');
+		Route::delete('Post/{id}', 'ApiController@deletePost');
 	});
 });

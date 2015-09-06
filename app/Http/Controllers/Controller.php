@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use App\Services\Client;
-use Illuminate\Http\Request;
 
 /**
  * Class Controller
@@ -92,5 +91,16 @@ abstract class Controller extends BaseController {
 			$selectArray[$object[$key]] = $object[$value];
 		}
 		return $selectArray;
+	}
+
+	protected function addHidden($objects){
+		if(is_a($objects, Collection::class)){
+			foreach($objects as $object){
+				$object->addToHidden();
+			}
+		}else{
+			$objects->addToHidden();
+		}
+		return $objects;
 	}
 }

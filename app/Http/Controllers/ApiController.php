@@ -45,7 +45,6 @@ class ApiController extends Controller {
 	 * @return mixed
 	 */
 	public function Posts(PostRepository $post, $id = null){
-		//dd($post->get($id));
 		return Response::json(array('data' => $post->get($id)), 200);
 	}
 
@@ -56,7 +55,7 @@ class ApiController extends Controller {
 	 * @return mixed
 	 */
 	public function Users(UserRepository $user, $id = null){
-		return Response::json(array('data' => $user->get($id)), 200);
+		return Response::json(array('data' => $this->addHidden($user->get($id))), 200);
 	}
 
 	/**
@@ -212,6 +211,128 @@ class ApiController extends Controller {
 			return Response::json(array('message' => 'Your topic has been saved'), 201);
 		}
 		return Response::json(array('errors' => $topic->getErrors()), 400);
+	}
+
+	/**
+	 * Tar bort en tråd.
+	 * @permission delete_topic:optional
+	 * @param $id
+	 * @return mixed
+	 */
+	public function deleteTopic($id) {
+		try {
+			$topic = $this->topic->get($id);
+			if(!is_null($topic)) {
+				$reply = $topic->replies()->first();
+				if(Auth::user()->hasPermission($this->getPermission(), false) || Auth::user()->id == $reply->user_id) {
+					if($this->topic->delete($id)) {
+						return Response::json(array('message' => 'Your topic has been deleted.'));
+					}
+				}
+			}
+
+		} catch(\Exception $e){}
+		return Response::json(array('errors' => 'That topic could not be deleted.'));
+	}
+
+	/**
+	 * Ta bort en ettiket
+	 * @permission delete_tags
+	 * @param  int $id id för ettiketen som skall tas bort.
+	 * @return object     med värden dit användaren skall skickas.
+	 */
+	public function deleteTag($id){
+		if($this->tag->delete($id)){
+			return Response::json(array('message' => 'The tag has been deleted.'));
+		}
+		return Response::json(array('errors' => 'The tag could not be deleted.'));
+	}
+
+	/**
+	 * Ta bort ett block.
+	 * @permission delete_post:optional
+	 * @param  int $id Id för blocket som skall tas bort.
+	 * @return array     Typ av medelande och meddelande
+	 */
+	public function deletePost($id)
+	{
+		$post = $this->post->get($id);
+		if(!is_null($post)) {
+			if(Auth::check() && Auth::user()->id == $post->user_id || Auth::user()->hasPermission($this->getPermission(), false)) {
+				if($this->post->delete($id)) {
+					return Response::json(array('message' => 'Your codeblock has been deleted.'));
+				}
+			}else{
+				return Response::json(array('errors' => 'You do not have permission to delete that codeblock.'));
+			}
+		}
+		return Response::json(array('errors' => 'We could not delete that codeblock.'));
+	}
+
+	/**
+	 * Tar bort ett forum.
+	 * @permission delete_forums
+	 * @param $id
+	 * @return mixed
+	 */
+	public function deleteForum($id) {
+		if($this->forum->delete($id)) {
+			return Response::json(array('message' => 'Your forum has been deleted.'));
+		}
+		return Response::json(array('errors' => 'We could not delete that forum.'));
+	}
+
+	/**
+	 * Ta bort en kategori
+	 * @permission delete_categories
+	 * @param  int $id id för kategori som skall tas bort.
+	 * @return object     med värden dit användaren skall skickas.
+	 */
+	public function deleteCategory($id){
+		if($this->category->delete($id)){
+			return Response::json(array('message' => 'The category has been deleted.'));
+		}
+		return Response::json(array('errors' => 'The category could not be deleted.'));
+	}
+
+	/**
+	 * Tar bort ett svar.
+	 * @permission delete_reply:optional
+	 * @param $id
+	 * @return mixed
+	 */
+	public function deleteReply($id) {
+		if(count($this->reply->get()) > 1) {
+			$reply = $this->reply->get($id);
+			if(!is_null($reply)) {
+				if(Auth::user()->hasPermission($this->getPermission(), false) || Auth::user()->id == $reply->user_id) {
+					if($this->reply->delete($id)) {
+						return Response::json(array('message' => 'Your reply has been deleted.'));
+					}
+				}
+			}
+		}
+		return Response::json(array('errors' => 'Your reply could not be deleted.'));
+	}
+
+	/**
+	 * Ta bort en kommentar
+	 * @permission delete_comments:optional
+	 * @param  int $id id för kommentaren som skall tas bort.
+	 * @return object     med värden dit användaren skall skickas.
+	 */
+	public function deleteComment($id){
+		try {
+			$comment = $this->comment->get($id);
+			if(Auth::check() && Auth::user()->id == $comment->user_id || Auth::user()->hasPermission($this->getPermission(), false)) {
+				if($this->comment->delete($id)) {
+					return Response::json(array('message' => 'That comment has now been deleted.'));
+				}
+			} else {
+				return Response::json(array('errors' => 'You do not have permission to delete that comment.'));
+			}
+		} catch(\Exception $e){}
+		return Response::json(array('errors' => 'We could not delete that comment.'));
 	}
 
 	/**
