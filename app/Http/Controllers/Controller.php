@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use App\Services\Client;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class Controller
@@ -94,7 +95,7 @@ abstract class Controller extends BaseController {
 	}
 
 	protected function addHidden($objects){
-		if(is_a($objects, Collection::class)){
+		if($objects instanceof Collection){
 			foreach($objects as $object){
 				$object->addToHidden();
 			}
