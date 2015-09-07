@@ -131,43 +131,76 @@ Route::group(['middleware' => 'guest'], function(){
 
 Route::group(['prefix' => 'api', 'middleware' => 'api'],function(){
 
-	Route::get('categories/{id?}', 'ApiController@Categories');
-	Route::get('tags/{id?}', 'ApiController@Tags');
-	Route::get('posts/{id?}', 'ApiController@Posts');
-	Route::get('users/{id?}', 'ApiController@Users');
-	Route::get('forums/{id?}', 'ApiController@forums');
-	Route::get('topics/{id?}', 'ApiController@topics');
-	Route::post('auth', 'ApiController@Auth');
-	Route::get('jwt', 'ApiController@getJwt');
-	Route::post('auth/register', 'ApiController@createOrUpdateUser');
-	Route::post('auth/forgot', 'ApiController@forgotPassword');
+	Route::get('', 'ApiController@index');
 
-	Route::group(['middleware' =>  'jwt'], function(){
-		Route::post('comment', 'ApiController@createOrUpdateComment');
-		Route::post('topics', 'ApiController@createOrUpdateTopic');
-		Route::post('replies', 'ApiController@createOrUpdateReply');
-		Route::post('post', 'ApiController@createOrUpdatePost');
-		Route::post('star/{id}', 'ApiController@Star');
+	Route::group(['prefix' => 'posts'], function(){
+		Route::get('{id?}', 'ApiController@Posts');
+		Route::group(['middleware' =>  'jwt'], function() {
+			Route::post('', 'ApiController@createOrUpdatePost');
+			Route::delete('/{id}', 'ApiController@deletePost');
+			Route::put('/{id}', 'ApiController@createOrUpdatePost');
+			Route::post('star/{id}', 'ApiController@Star');
+		});
+	});
+
+	Route::group(['prefix' => 'comments', 'middleware' =>  'jwt'], function(){
+		Route::post('/', 'ApiController@createOrUpdateComment');
+		Route::put('/{id}', 'ApiController@createOrUpdateComment');
+		Route::delete('/{id}', 'ApiController@deleteComment');
 		Route::post('rate/{id}', 'ApiController@Rate');
+	});
 
-		Route::put('post/{id}', 'ApiController@createOrUpdatePost');
-		Route::put('comment/{id}', 'ApiController@createOrUpdateComment');
-		Route::put('user/{id}', 'ApiController@createOrUpdateUser');
-		Route::put('topics/{id}', 'ApiController@createOrUpdateTopic');
-		Route::put('replies/{id}', 'ApiController@createOrUpdateReply');
+	Route::group(['prefix' => 'categories'], function(){
+		Route::get('/{id?}', 'ApiController@Categories');
+		Route::group(['middleware' =>  'jwt'], function() {
+			Route::post('/', 'ApiController@createOrUpdateCategory');
+			Route::put('/{id}', 'ApiController@createOrUpdateCategory');
+			Route::delete('/{id}', 'ApiController@deleteCategory');
+		});
+	});
 
-		Route::post('category', 'ApiController@createOrUpdateCategory');
-		Route::post('tag', 'ApiController@createOrUpdateTag');
+	Route::group(['prefix' => 'tags'], function(){
+		Route::get('/{id?}', 'ApiController@Categories');
+		Route::group(['middleware' =>  'jwt'], function() {
+			Route::post('/', 'ApiController@createOrUpdateCategory');
+			Route::put('/{id}', 'ApiController@createOrUpdateCategory');
+			Route::delete('/{id}', 'ApiController@deleteCategory');
+		});
+	});
 
-		Route::put('category/{id}', 'ApiController@createOrUpdateCategory');
-		Route::put('tag/{id}', 'ApiController@createOrUpdateTag');
+	Route::group(['prefix' => 'topics'], function(){
+		Route::get('/{id?}', 'ApiController@topics');
+		Route::group(['middleware' =>  'jwt'], function() {
+			Route::post('/', 'ApiController@createOrUpdateTopic');
+			Route::put('/{id}', 'ApiController@createOrUpdateTopic');
+			Route::delete('/{id}', 'ApiController@deleteTopic');
+		});
+	});
 
-		Route::delete('category/{id}', 'ApiController@deleteCategory');
-		Route::delete('tag/{id}', 'ApiController@deleteTag');
-		Route::delete('forum/{id}', 'ApiController@deleteForum');
-		Route::delete('replies/{id}', 'ApiController@deleteReply');
-		Route::delete('topics/{id}', 'ApiController@deleteTopic');
-		Route::delete('comment/{id}', 'ApiController@deleteComment');
-		Route::delete('Post/{id}', 'ApiController@deletePost');
+	Route::group(['prefix' => 'replies', 'middleware' =>  'jwt'], function(){
+		Route::post('/', 'ApiController@createOrUpdateReply');
+		Route::put('/{id}', 'ApiController@createOrUpdateReply');
+		Route::delete('/{id}', 'ApiController@deleteReply');
+	});
+
+	Route::group(['prefix' => 'users'], function(){
+		Route::get('/{id?}', 'ApiController@Users');
+		Route::group(['middleware' =>  'jwt'], function() {
+			Route::put('/{id}', 'ApiController@createOrUpdateUser');
+		});
+	});
+
+	Route::group(['prefix' => 'forums'], function(){
+		Route::get('/{id?}', 'ApiController@forums');
+		Route::group(['middleware' =>  'jwt'], function() {
+			Route::delete('/{id}', 'ApiController@deleteForum');
+		});
+	});
+
+	Route::group(['prefix' => 'auth'], function(){
+		Route::get('/', 'ApiController@getJwt');
+		Route::post('/', 'ApiController@Auth');
+		Route::post('/register', 'ApiController@createOrUpdateUser');
+		Route::post('/forgot', 'ApiController@forgotPassword');
 	});
 });
