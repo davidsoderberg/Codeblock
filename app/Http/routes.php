@@ -18,108 +18,166 @@ Route::pattern('sort', 'category|stars|date|comments|name');
 Route::get('/', 'MenuController@index');
 Route::get('browse', 'MenuController@browse');
 Route::get('markdown', 'MenuController@markdown');
-Route::get('blog/{id?}', 'ArticleController@index');
-Route::get('blog/{slug?}', 'ArticleController@index');
-Route::get('embed/{id}', 'PostController@embed');
-Route::get('embed/{slug}', 'PostController@embed');
+Route::group(['prefix' => 'embed'], function(){
+	Route::get('/{id}', 'PostController@embed');
+	Route::get('/{slug}', 'PostController@embed');
+});
 Route::get('license', 'MenuController@license');
-Route::get('contact', 'MenuController@contact');
-Route::post('contact/send', 'MenuController@sendContact');
-Route::post('user/store/{id?}', 'UserController@store');
+Route::group(['prefix' => 'contact'], function(){
+	Route::get('/', 'MenuController@contact');
+	Route::post('/send', 'MenuController@sendContact');
+});
 Route::get('oauth/{social}', 'UserController@oauth');
 Route::post('search', 'PostController@search');
 Route::get('command/{command}/{password}/{param?}', 'MenuController@command')
 	->where(['command' => '[a-zA-Z]+', 'password' => '[a-zA-Z0-9]+', 'param' => '[a-zA-Z_]+']);
 
-Route::get('posts/list', 'PostController@listPosts');
-Route::get('tag/{id}/{sort?}', 'PostController@tag');
-Route::get('tag/{name}/{sort?}', 'PostController@tag');
-Route::get('category/{id}/{sort?}', 'PostController@category');
-Route::get('category/{name}/{sort?}', 'PostController@category');
-Route::get('user/list/{id?}/{sort?}', 'UserController@listUserBlock');
-Route::get('user/list/{username?}/{sort?}', 'UserController@listUserBlock');
-Route::get('user/list/{sort?}', 'UserController@listUserBlock');
-Route::get('posts/{id}', 'PostController@show');
-Route::get('posts/{id}/{comment}', 'PostController@show');
-Route::get('user/{id?}', 'UserController@show');
-Route::get('user/{username?}', 'UserController@show');
+Route::group(['prefix' => 'posts'], function(){
+	Route::get('/list', 'PostController@listPosts');
+	Route::get('/{id}', 'PostController@show');
+	Route::get('/{id}/{comment}', 'PostController@show');
+	Route::group(['middleware' => 'auth'], function() {
+		Route::get('/', 'PostController@index');
+		Route::get('/create', 'PostController@create');
+		Route::get('/edit/{id}', 'PostController@edit');
+		Route::get('/delete/{id}', 'PostController@delete');
+		Route::get('/star/{id}', 'PostController@star');
+		Route::post('/store/{id?}', 'PostController@createOrUpdate');
+		Route::get('/fork/{id}', 'PostController@fork');
+		Route::get('/forked/{id}', 'PostController@forked');
+		Route::post('/gist', 'PostController@forkGist');
+		Route::get('/history/undo/{id}', 'PostController@undo');
+	});
+	Route::get('/{slug}', 'PostController@show');
+	Route::get('/{slug}/{comment}', 'PostController@show');
+});
+
+Route::group(['prefix' => 'notifications'], function() {
+	Route::group(['middleware' => 'auth'], function() {
+		Route::get('/', 'NotificationController@listNotification');
+		Route::get('/delete/{id}', 'NotificationController@delete');
+	});
+});
+
+Route::group(['prefix' => 'comments'], function(){
+	Route::group(['middleware' => 'auth'], function() {
+		Route::get('/', 'CommentController@index');
+		Route::get('/list', 'CommentController@listComments');
+		Route::post('/{id?}', 'CommentController@createOrUpdate');
+		Route::get('/edit/{id}', 'CommentController@edit');
+		Route::get('/delete/{id}', 'CommentController@delete');
+	});
+});
+
+Route::group(['prefix' => 'rate'], function() {
+	Route::group(['middleware' => 'auth'], function() {
+		Route::get('/minus/{id}', 'RateController@minus');
+		Route::get('/plus/{id}', 'RateController@plus');
+	});
+});
+
+Route::group(['prefix' => 'forum'], function(){
+	Route::group(['middleware' => 'auth'], function() {
+		Route::get('/', 'ForumController@listForums');
+		Route::get('/{id}', 'ForumController@show');
+		//Route::get('forums/{id}', 'ForumController@forumsRedirect');
+		Route::get('/topic/{id}/{reply?}', 'TopicController@show');
+	});
+});
+
+Route::group(['prefix' => 'topics'], function(){
+	Route::group(['middleware' => 'auth'], function() {
+		Route::post('/store/{id?}', 'TopicController@createOrUpdate');
+		Route::get('/delete/{id}', 'TopicController@delete');
+	});
+});
+
+Route::group(['prefix' => 'reply'], function(){
+	Route::group(['middleware' => 'auth'], function() {
+		Route::post('/store/{id?}', 'ReplyController@createOrUpdate');
+		Route::get('/delete/{id}', 'ReplyController@delete');
+	});
+});
+
+Route::group(['prefix' => 'categories'], function(){
+	Route::get('list/{id}/{sort?}', 'PostController@category');
+	Route::get('list/{name}/{sort?}', 'PostController@category');
+	Route::group(['middleware' => 'auth'], function() {
+		Route::get('/delete/{id}', 'CategoryController@delete');
+		Route::post('/store/{id?}', 'CategoryController@createOrUpdate');
+		Route::get('/{id?}', 'CategoryController@index');
+	});
+});
+
+Route::group(['prefix' => 'blog'], function(){
+	Route::get('/{id?}', 'ArticleController@index');
+	Route::get('/{slug?}', 'ArticleController@index');
+	Route::group(['middleware' => 'auth'], function() {
+		Route::get('/delete/{id}', 'ArticleController@delete');
+		Route::post('/store/', 'ArticleController@create');
+		Route::post('/store/{id}', 'ArticleController@update');
+	});
+});
+
+Route::group(['prefix' => 'forums'], function(){
+	Route::group(['middleware' => 'auth'], function() {
+		Route::get('/delete/{id}', 'ForumController@delete');
+		Route::post('/store/{id?}', 'ForumController@createOrUpdate');
+		Route::get('/{id?}', 'ForumController@index');
+	});
+});
+
+Route::group(['prefix' => 'tags'], function(){
+	Route::get('list/{id}/{sort?}', 'PostController@tag');
+	Route::get('list/{name}/{sort?}', 'PostController@tag');
+	Route::group(['middleware' => 'auth'], function() {
+		Route::get('/delete/{id}', 'TagController@delete');
+		Route::post('/store/{id?}', 'TagController@createOrUpdate');
+		Route::get('/{id?}', 'TagController@index');
+	});
+});
+
+Route::group(['prefix' => 'user'], function(){
+	Route::post('/store/{id?}', 'UserController@store');
+	Route::get('/list/{id?}/{sort?}', 'UserController@listUserBlock');
+	Route::get('/list/{username?}/{sort?}', 'UserController@listUserBlock');
+	Route::get('/list/{sort?}', 'UserController@listUserBlock');
+	Route::get('/{id?}', 'UserController@show');
+	Route::get('/{username?}', 'UserController@show');
+	Route::group(['middleware' => 'auth'], function() {
+		Route::post('/delete/{id}', 'UserController@delete');
+		Route::get('/edit/{id}', 'UserController@edit');
+		Route::post('/update/{id}', 'UserController@update');
+	});
+});
+
+Route::group(['prefix' => 'permissions'], function(){
+	Route::group(['middleware' => 'auth'], function() {
+		/*
+			Route::post('/store/{id?}', 'PermissionController@createOrUpdate');
+			Route::get('/delete/{id}', 'PermissionController@delete');
+			Route::get('/{id?}', 'PermissionController@index');
+		*/
+		Route::get('/', 'RoleController@editRolePermission');
+		Route::post('/update', 'RoleController@updateRolePermission');
+	});
+});
+
+Route::group(['prefix' => 'roles'], function(){
+	Route::group(['middleware' => 'auth'], function() {
+		Route::post('/default', 'RoleController@setDefault');
+		Route::post('/store/{id?}', 'RoleController@store');
+		Route::get('/delete/{id}', 'RoleController@delete');
+		Route::get('/{id?}', 'RoleController@index');
+	});
+});
+
 Route::group(['middleware' => 'auth'], function() {
-
 	Route::get('starred', 'UserController@listStarred');
-	Route::get('posts/create', 'PostController@create');
-	Route::get('posts/edit/{id}', 'PostController@edit');
-	Route::get('posts/delete/{id}', 'PostController@delete');
-	Route::get('posts/star/{id}', 'PostController@star');
-	Route::post('posts/store/{id?}', 'PostController@createOrUpdate');
-	Route::get('posts/fork/{id}', 'PostController@fork');
-	Route::get('posts/forked/{id}', 'PostController@forked');
-	Route::post('posts/gist', 'PostController@forkGist');
-	Route::get('posts/history/undo/{id}',  'PostController@undo');
-
-	Route::get('notifications/', 'NotificationController@listNotification');
-	Route::get('notifications/delete/{id}', 'NotificationController@delete');
-
-	Route::get('comments/list', 'CommentController@listComments');
-	Route::post('comments/{id?}', 'CommentController@createOrUpdate');
-	Route::get('comments/edit/{id}', 'CommentController@edit');
-	Route::get('comments/delete/{id}', 'CommentController@delete');
-
-	Route::get('rate/minus/{id}', 'RateController@minus');
-	Route::get('rate/plus/{id}', 'RateController@plus');
-
-	Route::get('forum', 'ForumController@listForums');
-	Route::get('forum/{id}', 'ForumController@show');
-	//Route::get('forums/{id}', 'ForumController@forumsRedirect');
-	Route::get('forum/topic/{id}/{reply?}', 'TopicController@show');
-
-	Route::post('topics/store/{id?}', 'TopicController@createOrUpdate');
-	Route::get('topics/delete/{id}', 'TopicController@delete');
-	Route::post('reply/store/{id?}', 'ReplyController@createOrUpdate');
-	Route::get('reply/delete/{id}', 'ReplyController@delete');
-
-	Route::get('categories/delete/{id}', 'CategoryController@delete');
-	Route::post('categories/store/{id?}', 'CategoryController@createOrUpdate');
-	Route::get('categories/{id?}', 'CategoryController@index');
-
-
-	Route::get('blog/delete/{id}', 'ArticleController@delete');
-	Route::post('blog/store/', 'ArticleController@create');
-	Route::post('blog/store/{id}', 'ArticleController@update');
-
-	Route::get('posts', 'PostController@index');
-	Route::get('comments/', 'CommentController@index');
-
-	Route::get('forums/delete/{id}', 'ForumController@delete');
-	Route::post('forums/store/{id?}', 'ForumController@createOrUpdate');
-	Route::get('forums/{id?}', 'ForumController@index');
-
-	Route::get('tags/delete/{id}', 'TagController@delete');
-	Route::post('tags/store/{id?}', 'TagController@createOrUpdate');
-	Route::get('tags/{id?}', 'TagController@index');
-
-	Route::post('user/delete/{id}', 'UserController@delete');
-	Route::get('user/edit/{id}', 'UserController@edit');
-	Route::post('user/update/{id}', 'UserController@update');
 	Route::get('users', 'UserController@index');
 	Route::get('backup', 'UserController@backup');
-
-	/*
-	Route::post('permissions/store/{id?}', 'PermissionController@createOrUpdate');
-	Route::get('permissions/delete/{id}', 'PermissionController@delete');
-	Route::get('permissions/{id?}', 'PermissionController@index');
-	*/
-	Route::get('permissions', 'RoleController@editRolePermission');
-	Route::post('permissions/update', 'RoleController@updateRolePermission');
-
-	Route::post('role/default', 'RoleController@setDefault');
-	Route::post('roles/store/{id?}', 'RoleController@store');
-	Route::get('roles/delete/{id}', 'RoleController@delete');
-	Route::get('roles/{id?}', 'RoleController@index');
-
 	Route::get('logout', 'UserController@logout');
 });
-Route::get('posts/{slug}', 'PostController@show');
-Route::get('posts/{slug}/{comment}', 'PostController@show');
 
 Route::group(['middleware' => 'guest'], function(){
 	Route::get('login', 'UserController@login');
@@ -127,7 +185,6 @@ Route::group(['middleware' => 'guest'], function(){
 	Route::post('forgotpassword', 'UserController@forgotPassword');
 	Route::get('activate/{id}/{token}', 'UserController@activate');
 });
-
 
 Route::group(['prefix' => 'api', 'middleware' => 'api'],function(){
 
@@ -160,11 +217,11 @@ Route::group(['prefix' => 'api', 'middleware' => 'api'],function(){
 	});
 
 	Route::group(['prefix' => 'tags'], function(){
-		Route::get('/{id?}', 'ApiController@Categories');
+		Route::get('/{id?}', 'ApiController@Tags');
 		Route::group(['middleware' =>  'jwt'], function() {
-			Route::post('/', 'ApiController@createOrUpdateCategory');
-			Route::put('/{id}', 'ApiController@createOrUpdateCategory');
-			Route::delete('/{id}', 'ApiController@deleteCategory');
+			Route::post('/', 'ApiController@createOrUpdateTag');
+			Route::put('/{id}', 'ApiController@createOrUpdateTag');
+			Route::delete('/{id}', 'ApiController@deleteTag');
 		});
 	});
 

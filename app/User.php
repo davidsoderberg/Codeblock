@@ -150,6 +150,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return $this->getAnswer($this->active);
 	}
 
+	public function getlinksAttribute(){
+		return $this->hateoas($this->id, 'users');
+	}
+
 	protected $appends = array('rolename', 'isactive');
 
 	public function hasSocial($social) {

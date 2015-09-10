@@ -21,4 +21,8 @@ class Category extends Model {
 		return $this->hasMany( 'App\Post' );
 	}
 
+	public function getlinksAttribute(){
+		return $this->hateoas($this->id, 'categories');
+	}
+
 }

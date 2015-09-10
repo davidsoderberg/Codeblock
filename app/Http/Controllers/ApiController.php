@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\Model;
 use App\Repositories\Comment\CommentRepository;
 use App\Repositories\CRepository;
 use App\Repositories\Forum\ForumRepository;
@@ -13,9 +14,7 @@ use App\Repositories\User\UserRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Str;
 
 /**
  * Class ApiController
@@ -33,64 +32,15 @@ class ApiController extends Controller {
 
 	private $collection;
 
+	private $stringErrors = 'errors';
+	private $stringMessage = 'messsage';
+	private $stringData = 'data';
+	private $stringUser = 'user';
+
 	public function __construct(){
 		parent::__construct();
+		Model::$append = true;
 		$this->setParams();
-	}
-
-	private function hateoas($id = null){
-		$route = $this->request->route();
-		$filterOn = $route->getAction()['prefix'];
-		$routeArray = array();
-		foreach(Route::getRoutes()->getRoutes() as $route){
-			if(Str::contains($route->uri(), $filterOn)){
-				if(in_array('jwt', $route->middleware())){
-					if(!is_null($this->request->get('token'))){
-						$routeArray[] = $this->getURL($id, $route);
-					}
-				}else{
-					$routeArray[] = $this->getURL($id, $route);
-				}
-			}
-		}
-		return $routeArray;
-	}
-
-	/**
-	 * @param $id
-	 * @param $route
-	 * @return array
-	 */
-	private function getURL($id = null, $route) {
-		$method = $route->methods()[0];
-		$params = $_GET;
-		if(Str::contains($route->uri(), 'id')) {
-			$url = $route->uri().$this->joinParams($params);
-			if(is_null($id)){
-				$url = str_replace('/{id?}', '', $url);
-			}else{
-				$url = str_replace('{id}', $id, $url);
-				$url = str_replace('{id?}', $id, $url);
-			}
-		}else {
-			$url =	$route->uri().$this->joinParams($params);
-		}
-		return array('method' => $method, 'uri' => $url);
-	}
-
-	private function joinParams($params){
-		$first = true;
-		$string = '';
-		foreach($params as $key => $value){
-			if($first) {
-				$string .= '?';
-				$first = false;
-			} else {
-				$string .= '&';
-			}
-			$string .= $key.'='.$value;
-		}
-		return $string;
 	}
 
 	private function setParams(){
@@ -154,11 +104,13 @@ class ApiController extends Controller {
 	}
 
 	private function createNewCollection() {
-		$collection = new Collection();
-		foreach($this->collection as $item) {
-			$collection->add($item);
+		if($this->collection instanceof Collection) {
+			$collection = new Collection();
+			foreach($this->collection as $item) {
+				$collection->add($item);
+			}
+			$this->collection = $collection;
 		}
-		$this->collection = $collection;
 	}
 
 	private function getCollection(CRepository $repository, $id = null){
@@ -168,6 +120,7 @@ class ApiController extends Controller {
 			$this->sort();
 			$this->paginate();
 		}
+		$this->createNewCollection();
 		return $this->collection;
 	}
 
@@ -183,7 +136,7 @@ class ApiController extends Controller {
 	 * @return mixed
 	 */
 	public function Categories(CategoryRepository $category, $id = null) {
-		return Response::json(array('data' => $this->getCollection($category, $id), 'links' => $this->hateoas($id)), 200);
+		return Response::json(array($this->stringData => $this->getCollection($category, $id)), 200);
 	}
 
 	/**
@@ -193,7 +146,7 @@ class ApiController extends Controller {
 	 * @return mixed
 	 */
 	public function Tags(TagRepository $tag, $id = null){
-		return Response::json(array('data' => $this->getCollection($tag, $id), 'links' => $this->hateoas($id)), 200);
+		return Response::json(array($this->stringData => $this->getCollection($tag, $id)), 200);
 	}
 
 	/**
@@ -203,7 +156,7 @@ class ApiController extends Controller {
 	 * @return mixed
 	 */
 	public function Posts(PostRepository $post, $id = null){
-		return Response::json(array('data' => $this->getCollection($post, $id), 'links' => $this->hateoas($id)), 200);
+		return Response::json(array($this->stringData => $this->getCollection($post, $id)), 200);
 	}
 
 	/**
@@ -213,7 +166,7 @@ class ApiController extends Controller {
 	 * @return mixed
 	 */
 	public function Users(UserRepository $user, $id = null){
-		return Response::json(array('data' => $this->getCollection($user, $id), 'links' => $this->hateoas($id)), 200);
+		return Response::json(array($this->stringData => $this->getCollection($user, $id)), 200);
 	}
 
 	/**
@@ -223,7 +176,7 @@ class ApiController extends Controller {
 	 * @return mixed
 	 */
 	public function forums(ForumRepository $forum, $id = null){
-		return Response::json(array('data' => $this->getCollection($forum, $id), 'links' => $this->hateoas($id)), 200);
+		return Response::json(array($this->stringData => $this->getCollection($forum, $id)), 200);
 	}
 
 	/**
@@ -233,7 +186,7 @@ class ApiController extends Controller {
 	 * @return mixed
 	 */
 	public function topics(TopicRepository $topic, $id = null){
-		return Response::json(array('data' => $this->getCollection($topic, $id), 'links' => $this->hateoas($id)), 200);
+		return Response::json(array($this->stringData => $this->getCollection($topic, $id)), 200);
 	}
 
 	/**
@@ -245,9 +198,9 @@ class ApiController extends Controller {
 	 */
 	public function createOrUpdateCategory(CategoryRepository $category, $id = null){
 		if($category->createOrUpdate($this->request->all(), $id)){
-			return Response::json(array('message' => 'Your category has been saved', 'links' => $this->hateoas($id)), 201);
+			return Response::json(array($this->stringMessage => 'Your category has been saved'), 201);
 		}
-		return Response::json(array('errors' => $category->getErrors()), 400);
+		return Response::json(array($this->stringErrors => $category->getErrors()), 400);
 	}
 
 	/**
@@ -259,9 +212,9 @@ class ApiController extends Controller {
 	 */
 	public function createOrUpdateTag(TagRepository $tag, $id = null){
 		if($tag->createOrUpdate($this->request->all(), $id)){
-			return Response::json(array('message' => 'Your tag has been saved', 'links' => $this->hateoas($id)), 201);
+			return Response::json(array($this->stringMessage => 'Your tag has been saved'), 201);
 		}
-		return Response::json(array('errors' => $tag->getErrors()), 400);
+		return Response::json(array($this->stringErrors => $tag->getErrors()), 400);
 	}
 
 	/**
@@ -274,13 +227,13 @@ class ApiController extends Controller {
 		if(!is_null($id)){
 			$user_id = $post->get($id)->user_id;
 			if($user_id != Auth::user()->id){
-				return Response::json(array('errors' => array('user' => 'You have not that created that codeblock')), 400);
+				return Response::json(array($this->stringErrors => array($this->stringUser => 'You have not that created that codeblock')), 400);
 			}
 		}
 		if($post->createOrUpdate($this->request->all(), $id)){
-			return Response::json(array('message' => 'Your block has been saved', 'links' => $this->hateoas($id)), 201);
+			return Response::json(array($this->stringMessage => 'Your block has been saved'), 201);
 		}
-		return Response::json(array('errors' => $post->getErrors()), 400);
+		return Response::json(array($this->stringErrors => $post->getErrors()), 400);
 	}
 
 	/**
@@ -293,13 +246,13 @@ class ApiController extends Controller {
 		if(!is_null($id)){
 			$user_id = $comment->get($id)->user_id;
 			if($user_id != Auth::user()->id ||!Auth::user()->hasPermission('edit_comments', false)){
-				return Response::json(array('errors' => array('user' => 'You have not that created that comment')), 400);
+				return Response::json(array($this->stringErrors => array($this->stringUser => 'You have not that created that comment')), 400);
 			}
 		}
 		if($comment->createOrUpdate($this->request->all(), $id)){
-			return Response::json(array('message' => 'Your comment has been saved', 'links' => $this->hateoas($id)), 201);
+			return Response::json(array($this->stringMessage => 'Your comment has been saved'), 201);
 		}
-		return Response::json(array('errors' => $comment->getErrors()), 400);
+		return Response::json(array($this->stringErrors => $comment->getErrors()), 400);
 	}
 
 	/**
@@ -311,17 +264,17 @@ class ApiController extends Controller {
 	public function createOrUpdateUser(UserRepository $user, $id = null){
 		if(!is_null($id)){
 			if($id != Auth::user()->id || !Auth::user()->hasPermission('update_users', false)){
-				return Response::json(array('errors' => array('user' => 'You are not that user')), 400);
+				return Response::json(array($this->stringErrors => array($this->stringUser => 'You are not that user')), 400);
 			}
 		}
 		if($user->createOrUpdate($this->request->all(), $id)){
 			if(is_null($id)){
-				return Response::json(array('message' => 'Your user has been created, use the link in the mail to activate your user.', 'links' => $this->hateoas($id)), 201);
+				return Response::json(array($this->stringMessage => 'Your user has been created, use the link in the mail to activate your user.'), 201);
 			}else{
-				return Response::json(array('message' => 'Your user has been saved.', 'links' => $this->hateoas($id)), 201);
+				return Response::json(array($this->stringMessage => 'Your user has been saved.'), 201);
 			}
 		}
-		return Response::json(array('errors' => $user->getErrors()), 400);
+		return Response::json(array($this->stringErrors => $user->getErrors()), 400);
 	}
 
 	/**
@@ -334,13 +287,13 @@ class ApiController extends Controller {
 		if(!is_null($id)){
 			$user_id = $reply->get($id)->user_id;
 			if($user_id != Auth::user()->id || !Auth::user()->hasPermission('create_reply', false)){
-				return Response::json(array('errors' => array('user' => 'You have not that created that reply')), 400);
+				return Response::json(array($this->stringErrors => array($this->stringUser => 'You have not that created that reply')), 400);
 			}
 		}
 		if($reply->createOrUpdate($this->request->all(), $id)){
-			return Response::json(array('message' => 'Your reply has been saved', 'links' => $this->hateoas($id)), 201);
+			return Response::json(array($this->stringMessage => 'Your reply has been saved'), 201);
 		}
-		return Response::json(array('errors' => $reply->getErrors()), 400);
+		return Response::json(array($this->stringErrors => $reply->getErrors()), 400);
 	}
 
 	/**
@@ -356,7 +309,7 @@ class ApiController extends Controller {
 			$replies = $currentTopic->replies;
 			$user_id = $replies[0]->user_id;
 			if($user_id != Auth::user()->id || !Auth::user()->hasPermission('create_topic', false)){
-				return Response::json(array('errors' => array('user' => 'You have not that created that topic')), 400);
+				return Response::json(array($this->stringErrors => array($this->stringUser => 'You have not that created that topic')), 400);
 			}
 		}
 		$input = $this->request->all();
@@ -364,11 +317,11 @@ class ApiController extends Controller {
 			$input['topic_id'] = $topic->topic->id;
 			if(is_null($id) && !$reply->createOrUpdate($input)) {
 				$topic->delete($topic->topic->id);
-				return Response::json(array('errors' => $reply->getErrors()), 400);
+				return Response::json(array($this->stringErrors => $reply->getErrors()), 400);
 			}
-			return Response::json(array('message' => 'Your topic has been saved', 'links' => $this->hateoas($id)), 201);
+			return Response::json(array($this->stringMessage => 'Your topic has been saved'), 201);
 		}
-		return Response::json(array('errors' => $topic->getErrors()), 400);
+		return Response::json(array($this->stringErrors => $topic->getErrors()), 400);
 	}
 
 	/**
@@ -384,13 +337,13 @@ class ApiController extends Controller {
 				$reply = $topic->replies()->first();
 				if(Auth::user()->hasPermission($this->getPermission(), false) || Auth::user()->id == $reply->user_id) {
 					if($this->topic->delete($id)) {
-						return Response::json(array('message' => 'Your topic has been deleted.', 'links' => $this->hateoas($id)));
+						return Response::json(array($this->stringMessage => 'Your topic has been deleted.'));
 					}
 				}
 			}
 
 		} catch(\Exception $e){}
-		return Response::json(array('errors' => 'That topic could not be deleted.'));
+		return Response::json(array($this->stringErrors => 'That topic could not be deleted.'));
 	}
 
 	/**
@@ -401,9 +354,9 @@ class ApiController extends Controller {
 	 */
 	public function deleteTag($id){
 		if($this->tag->delete($id)){
-			return Response::json(array('message' => 'The tag has been deleted.', 'links' => $this->hateoas($id)));
+			return Response::json(array($this->stringMessage => 'The tag has been deleted.'));
 		}
-		return Response::json(array('errors' => 'The tag could not be deleted.'));
+		return Response::json(array($this->stringErrors => 'The tag could not be deleted.'));
 	}
 
 	/**
@@ -418,13 +371,13 @@ class ApiController extends Controller {
 		if(!is_null($post)) {
 			if(Auth::check() && Auth::user()->id == $post->user_id || Auth::user()->hasPermission($this->getPermission(), false)) {
 				if($this->post->delete($id)) {
-					return Response::json(array('message' => 'Your codeblock has been deleted.', 'links' => $this->hateoas($id)));
+					return Response::json(array($this->stringMessage => 'Your codeblock has been deleted.'));
 				}
 			}else{
-				return Response::json(array('errors' => 'You do not have permission to delete that codeblock.'));
+				return Response::json(array($this->stringErrors => 'You do not have permission to delete that codeblock.'));
 			}
 		}
-		return Response::json(array('errors' => 'We could not delete that codeblock.'));
+		return Response::json(array($this->stringErrors => 'We could not delete that codeblock.'));
 	}
 
 	/**
@@ -435,9 +388,9 @@ class ApiController extends Controller {
 	 */
 	public function deleteForum($id) {
 		if($this->forum->delete($id)) {
-			return Response::json(array('message' => 'Your forum has been deleted.', 'links' => $this->hateoas($id)));
+			return Response::json(array($this->stringMessage => 'Your forum has been deleted.'));
 		}
-		return Response::json(array('errors' => 'We could not delete that forum.'));
+		return Response::json(array($this->stringErrors => 'We could not delete that forum.'));
 	}
 
 	/**
@@ -448,9 +401,9 @@ class ApiController extends Controller {
 	 */
 	public function deleteCategory($id){
 		if($this->category->delete($id)){
-			return Response::json(array('message' => 'The category has been deleted.', 'links' => $this->hateoas($id)));
+			return Response::json(array($this->stringMessage => 'The category has been deleted.'));
 		}
-		return Response::json(array('errors' => 'The category could not be deleted.'));
+		return Response::json(array($this->stringErrors => 'The category could not be deleted.'));
 	}
 
 	/**
@@ -465,12 +418,12 @@ class ApiController extends Controller {
 			if(!is_null($reply)) {
 				if(Auth::user()->hasPermission($this->getPermission(), false) || Auth::user()->id == $reply->user_id) {
 					if($this->reply->delete($id)) {
-						return Response::json(array('message' => 'Your reply has been deleted.', 'links' => $this->hateoas($id)));
+						return Response::json(array($this->stringMessage => 'Your reply has been deleted.'));
 					}
 				}
 			}
 		}
-		return Response::json(array('errors' => 'Your reply could not be deleted.'));
+		return Response::json(array($this->stringErrors => 'Your reply could not be deleted.'));
 	}
 
 	/**
@@ -484,13 +437,13 @@ class ApiController extends Controller {
 			$comment = $this->comment->get($id);
 			if(Auth::check() && Auth::user()->id == $comment->user_id || Auth::user()->hasPermission($this->getPermission(), false)) {
 				if($this->comment->delete($id)) {
-					return Response::json(array('message' => 'That comment has now been deleted.', 'links' => $this->hateoas($id)));
+					return Response::json(array($this->stringMessage => 'That comment has now been deleted.'));
 				}
 			} else {
-				return Response::json(array('errors' => 'You do not have permission to delete that comment.'));
+				return Response::json(array($this->stringErrors => 'You do not have permission to delete that comment.'));
 			}
 		} catch(\Exception $e){}
-		return Response::json(array('errors' => 'We could not delete that comment.'));
+		return Response::json(array($this->stringErrors => 'We could not delete that comment.'));
 	}
 
 	/**
@@ -500,9 +453,9 @@ class ApiController extends Controller {
 	 */
 	public function forgotPassword(UserRepository $user){
 		if($user->forgotPassword($this->request->all())){
-			return Response::json(array('message' => 'A new password have been sent to you.'), 200);
+			return Response::json(array($this->stringMessage => 'A new password have been sent to you.'), 200);
 		}
-		return Response::json(array('message' => "Your email don't exists in our database."), 400);
+		return Response::json(array($this->stringMessage => "Your email don't exists in our database."), 400);
 	}
 
 	/**
@@ -515,11 +468,11 @@ class ApiController extends Controller {
 		$star = $post->createOrDeleteStar($id);
 		if($star[0]){
 			if($star[1] == 'create'){
-				return Response::json(array('message', 'You have now add a star to this codblock.', 'links' => $this->hateoas($id)), 201);
+				return Response::json(array($this->stringMessage, 'You have now add a star to this codblock.'), 201);
 			}
-			return Response::json(array('message', 'You have now removed a star from this codblock.', 'links' => $this->hateoas($id)), 201);
+			return Response::json(array($this->stringMessage, 'You have now removed a star from this codblock.'), 201);
 		}
-		return Response::json(array('message', 'Something went wrong, please try again.'), 400);
+		return Response::json(array($this->stringMessage, 'Something went wrong, please try again.'), 400);
 	}
 
 	/**
@@ -530,13 +483,13 @@ class ApiController extends Controller {
 	 */
 	public function Rate(RateRepository $rate, $id){
 		if($rate->rate($id, '+')){
-			return Response::json(array('message' => 'Your up rated a comment.', 'links' => $this->hateoas($id)), 200);
+			return Response::json(array($this->stringMessage => 'Your up rated a comment.'), 200);
 		}else {
 			if($rate->rate($id, '-')) {
-				return Response::json(array('message' => 'Your down rated a comment.', 'links' => $this->hateoas($id)), 200);
+				return Response::json(array($this->stringMessage => 'Your down rated a comment.'), 200);
 			}
 		}
-		return Response::json(array('message', 'You could not rate that comment, please try agian'), 400);
+		return Response::json(array($this->stringMessage, 'You could not rate that comment, please try agian'), 400);
 	}
 
 	/**

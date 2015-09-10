@@ -33,5 +33,9 @@ class Reply extends Model
 		return $this->user->username;
 	}
 
+	public function getlinksAttribute(){
+		return $this->hateoas($this->id, 'replies');
+	}
+
 	protected $appends = array('username');
 }

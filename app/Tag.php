@@ -23,4 +23,8 @@ class Tag extends Model {
 		return $this->belongsToMany('App\Post','post_tag');
 	}
 
+	public function getlinksAttribute(){
+		return $this->hateoas($this->id, 'tags');
+	}
+
 }

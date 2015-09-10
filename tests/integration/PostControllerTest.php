@@ -28,13 +28,13 @@ class PostControllerTest extends \IntegrationCase {
 
 	public function test_view_with_tag(){
 		$this->create_post();
-		$this->visit('tag/1')
+		$this->visit('tags/list/1')
 			->see('test codeblock');
 	}
 
 	public function test_view_with_category(){
 		$this->create_post();
-		$this->visit('category/2')
+		$this->visit('categories/list/2')
 			->see('test codeblock');
 	}
 

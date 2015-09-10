@@ -54,5 +54,9 @@ class Topic extends Model
 		return "";
 	}
 
+	public function getlinksAttribute(){
+		return $this->hateoas($this->id, 'topics');
+	}
+
 	protected $appends = array('forumtitle');
 }

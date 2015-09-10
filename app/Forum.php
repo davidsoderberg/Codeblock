@@ -69,4 +69,8 @@ class Forum extends Model
 		}
 		return true;
 	}
+
+	public function getlinksAttribute(){
+		return $this->hateoas($this->id, 'forums');
+	}
 }

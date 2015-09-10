@@ -1,10 +1,22 @@
 <?php namespace App;
 
+use App\Services\HateoasTrait;
+use Venturecraft\Revisionable\RevisionableTrait;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class Model extends \Illuminate\Database\Eloquent\Model {
-	use \Venturecraft\Revisionable\RevisionableTrait;
+	use RevisionableTrait;
+	use HateoasTrait;
+
+	public function __construct(){
+		parent::__construct();
+		if(Self::$append){
+			$this->addLinks();
+		}
+	}
+
+	public static $append = false;
 
 	public static $errors;
 
@@ -20,6 +32,14 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
 	public function addToHidden(){
 		$this->addHidden($this->addHidden);
+	}
+
+	public function addLinks(){
+		$this->appends[] = 'links';
+	}
+
+	public function getlinksAttribute(){
+		return [];
 	}
 
 	public function getAnswer($boolean){

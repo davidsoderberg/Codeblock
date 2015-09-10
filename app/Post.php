@@ -25,7 +25,7 @@ class Post extends Model {
 
 	protected $guarded = array('id');
 
-	protected $with = ['tags', 'category'];
+	protected $with = ['tags', 'category', 'user'];
 
 	public static $rules = array(
 	    'name' => 'required|min:3|unique:posts,name,:id:',
@@ -84,6 +84,10 @@ class Post extends Model {
 
 	public function getforkedAttribute(){
 		return count(Post::where('org', '=', $this->id));
+	}
+
+	public function getlinksAttribute(){
+		return $this->hateoas($this->id, 'posts');
 	}
 
 	protected $appends = array('categoryname', 'starcount', 'forked');
