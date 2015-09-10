@@ -123,7 +123,7 @@ class UserController extends Controller {
 				return $item['category']['name'];
 			});
 		}
-		return View::make('user.list')->with('title', $user->username)->with('user', $user)->with('posts', $posts);
+		return View::make('user.list')->with('title', $user->username)->with('user', $user)->with('posts', $posts->reverse());
 	}
 
 	/**

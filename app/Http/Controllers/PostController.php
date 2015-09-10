@@ -219,7 +219,7 @@ class PostController extends Controller {
 	 * @return objekt objekt med alla block som skall visas.
 	 */
 	public function listPosts(){
-		return View::make('post.list')->with('title', 'All Codeblocks')->with('posts', $this->post->get());
+		return View::make('post.list')->with('title', 'All Codeblocks')->with('posts', $this->post->get()->reverse());
 	}
 
 	/**
@@ -237,7 +237,7 @@ class PostController extends Controller {
 
 		return View::make('post.list')
 			->with('title', 'Search on: '.$term)
-			->with('posts', $posts)
+			->with('posts', $posts->reverse())
 			->with('term', $term)
 			->with('filter', $filter)
 			->with('categories', $categories)
@@ -268,7 +268,7 @@ class PostController extends Controller {
 		if($sort != 'date'){
 			$posts = $this->post->sort($posts, $sort);
 		}
-		return View::make('post.list')->with('title', 'Posts in category: '.$category->name )->with('posts', $posts)->with('category', $category);
+		return View::make('post.list')->with('title', 'Posts in category: '.$category->name )->with('posts', $posts->reverse())->with('category', $category);
 	}
 
 	/**
@@ -284,7 +284,7 @@ class PostController extends Controller {
 		if($sort != 'date'){
 			$posts = $this->post->sort($posts, $sort);
 		}
-		return View::make('post.list')->with('title', 'Posts with tag: '.$tag->name)->with('posts', $posts)->with('tag', $tag);
+		return View::make('post.list')->with('title', 'Posts with tag: '.$tag->name)->with('posts', $posts->reverse())->with('tag', $tag);
 	}
 
 	/**

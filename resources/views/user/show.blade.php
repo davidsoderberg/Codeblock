@@ -14,7 +14,7 @@
                 <h3>{{ $user->username }}s codeblock</h3>
             @endif
             @if(count($user->posts) != 0)
-                @for ($i = 0; $i < 10 ; $i++)
+                    @for ($i = count($user->posts); $i > (count($user->posts) - 11) ; $i--)
                     @if(isset($user->posts[$i]))
                         @if($user->id == Auth::user()->id || $user->id != Auth::user()->id && $user->posts[$i]->private == 0)
                             <div class="clearfix margin-bottom-half">
@@ -72,7 +72,7 @@
             @endif
             -->
             @if(count($user->stars) > 0)
-				@foreach($user->stars as $star)
+				@foreach($user->stars->reverse() as $star)
 			        <div class="clearfix margin-bottom-half">
 					<span class="float-left">
 						{{HTML::actionlink($url = array('action' => 'PostController@show', 'params' => array($star->post->slug)), $star->post->name.', '.$star->post->category->name)}}

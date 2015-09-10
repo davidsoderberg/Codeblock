@@ -35,10 +35,10 @@
 			<div class="margin-bottom-one">
 				<label class="margin-bottom-half full-width-small">Sort by:</label>
 				@if(isset($category))
-					@include('partials.sortlinks', array('name' => $category->name, 'type' => 'category'))
+					@include('partials.sortlinks', array('name' => $category->name, 'type' => 'categories/list'))
 				@else
 					@if(isset($tag))
-						@include('partials.sortlinks', array('name' => $tag->name, 'type' => 'tag'))
+						@include('partials.sortlinks', array('name' => $tag->name, 'type' => 'tags/list'))
 					@endif
 				@endif
 			</div>
