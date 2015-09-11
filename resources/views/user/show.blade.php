@@ -13,18 +13,18 @@
             @else
                 <h3>{{ $user->username }}s codeblock</h3>
             @endif
-            @if(count($user->posts) != 0)
-                    @for ($i = count($user->posts); $i > (count($user->posts) - 11) ; $i--)
-                    @if(isset($user->posts[$i]))
-                        @if($user->id == Auth::user()->id || $user->id != Auth::user()->id && $user->posts[$i]->private == 0)
+            @if(count($posts) != 0)
+                    @for ($i = 0; $i < 10 ; $i++)
+                    @if(isset($posts[$i]))
+                        @if($user->id == Auth::user()->id || $user->id != Auth::user()->id && $posts[$i]->private == 0)
                             <div class="clearfix margin-bottom-half">
 							<span class="float-left">
-								{{HTML::actionlink($url = array('action' => 'PostController@show', 'params' => array($user->posts[$i]->slug)), $user->posts[$i]->name)}}
+								{{HTML::actionlink($url = array('action' => 'PostController@show', 'params' => array($posts[$i]->slug)), $posts[$i]->name)}}
 							</span>
                                 @if($user->id == Auth::user()->id)
 	                                <span class="float-right">
-		                                {{HTML::actionlink($url = array('action' => 'PostController@edit', 'params' => array($user->posts[$i]->id)), '<i class="fa fa-pencil"></i>')}}
-	                                    {{HTML::actionlink($url = array('action' => 'PostController@delete', 'params' => array($user->posts[$i]->id)), '<i class="fa fa-trash-o"></i>', array('class' => 'confirm'))}}
+		                                {{HTML::actionlink($url = array('action' => 'PostController@edit', 'params' => array($posts[$i]->id)), '<i class="fa fa-pencil"></i>')}}
+	                                    {{HTML::actionlink($url = array('action' => 'PostController@delete', 'params' => array($posts[$i]->id)), '<i class="fa fa-trash-o"></i>', array('class' => 'confirm'))}}
 									</span>
                                 @endif
                             </div>

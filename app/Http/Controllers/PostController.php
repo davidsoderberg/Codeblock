@@ -265,10 +265,11 @@ class PostController extends Controller {
 			$category = $this->category->get($id);
 			$posts = $this->post->getByCategory($category->id);
 		}
-		if($sort != 'date'){
+		if($sort != ''){
 			$posts = $this->post->sort($posts, $sort);
 		}
-		return View::make('post.list')->with('title', 'Posts in category: '.$category->name )->with('posts', $posts->reverse())->with('category', $category);
+
+		return View::make('post.list')->with('title', 'Posts in category: '.$category->name )->with('posts', $posts)->with('category', $category);
 	}
 
 	/**
@@ -281,10 +282,10 @@ class PostController extends Controller {
 		$tag = $this->tag->get($id);
 		$id = $tag->id;
 		$posts = $this->post->getByTag($id);
-		if($sort != 'date'){
+		if($sort != ''){
 			$posts = $this->post->sort($posts, $sort);
 		}
-		return View::make('post.list')->with('title', 'Posts with tag: '.$tag->name)->with('posts', $posts->reverse())->with('tag', $tag);
+		return View::make('post.list')->with('title', 'Posts with tag: '.$tag->name)->with('posts', $posts)->with('tag', $tag);
 	}
 
 	/**

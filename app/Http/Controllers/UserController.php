@@ -5,6 +5,7 @@ use App\Repositories\Notification\NotificationRepository;
 use App\Repositories\Role\RoleRepository;
 use App\Repositories\User\UserRepository;
 use App\Social;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
@@ -85,8 +86,16 @@ class UserController extends Controller {
 			$id = Auth::user()->id;
 		}
 		$user = $this->user->get($id);
+		$posts = $user->posts->sortByDesc('created_at');
+		if($posts instanceof Collection){
+			$collection = new Collection();
+			foreach($posts as $item) {
+				$collection->add($item);
+			}
+			$posts = $collection;
+		}
 		if(Auth::check()) {
-			return View::make('user.show')->with('title', $user->username)->with('user', $user);
+			return View::make('user.show')->with('title', $user->username)->with('user', $user)->with('posts', $posts);
 		}
 		return Redirect::action('UserController@listUserBlock', array($user->username));
 	}
@@ -122,8 +131,10 @@ class UserController extends Controller {
 			$posts = $user->posts->sortBy(function ($item) {
 				return $item['category']['name'];
 			});
+		}else{
+			$posts = $posts->sortByDesc('created_at');
 		}
-		return View::make('user.list')->with('title', $user->username)->with('user', $user)->with('posts', $posts->reverse());
+		return View::make('user.list')->with('title', $user->username)->with('user', $user)->with('posts', $posts);
 	}
 
 	/**
