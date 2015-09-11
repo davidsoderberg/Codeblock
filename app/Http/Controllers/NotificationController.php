@@ -36,6 +36,7 @@ class NotificationController extends Controller {
 	 * @return mixed
 	 */
 	public function listNotification(){
+		$this->notification->setRead(Auth::user()->id);
 		return View::make('notification.list')->with('title', 'Notifications');
 	}
 

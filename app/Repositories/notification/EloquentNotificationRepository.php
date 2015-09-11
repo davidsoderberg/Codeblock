@@ -24,6 +24,14 @@ class EloquentNotificationRepository extends CRepository implements Notification
 		return Notification::all();
 	}
 
+	public function setRead($user_id){
+		$notifications = Notification::where('user_id', $user_id)->get();
+		foreach($notifications as $notification){
+			$notification->is_read = 1;
+			$notification->save();
+		}
+	}
+
 	// Sätter id på den användare som notifikationen ska till.
 	public function setUserId($user_id, $note){
 		if(!is_null($this->user->get($this->stripTrim($user_id)))){

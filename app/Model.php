@@ -9,8 +9,8 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	use RevisionableTrait;
 	use HateoasTrait;
 
-	public function __construct(){
-		parent::__construct();
+	public function __construct(array $attributes = []){
+		parent::__construct($attributes);
 		if(Self::$append){
 			$this->addLinks();
 		}
