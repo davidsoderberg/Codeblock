@@ -83,7 +83,7 @@ class Post extends Model {
 	}
 
 	public function getforkedAttribute(){
-		return count(Post::where('org', '=', $this->id));
+		return count(Post::where('org', '=', $this->id)->get());
 	}
 
 	public function getlinksAttribute(){
