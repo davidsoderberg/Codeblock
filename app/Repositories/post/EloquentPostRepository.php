@@ -255,7 +255,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	}
 
 	// söker bland blocken och skickar tillbaka de blocken den hittar en match hos.
-	public function search($term, $filter = array('tag' => null, 'category' => null)){
+	public function search($term, $filter = array('tag' => null, 'category' => null, 'only' => 0)){
 
 		// Kollar om blocket innehåller söktermern i namn eller beskrvining
 		$posts = Post::where('name', 'LIKE', '%'.$term.'%')->get()->merge(Post::where('description', 'LIKE', '%'.$term.'%')->get());
@@ -290,6 +290,14 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 					if($posttag->id == $tag){
 						return $item;
 					}
+				}
+			});
+		}
+
+		if(!is_null($filter['only']) && $filter['only'] != 0) {
+			$posts = $posts->filter(function ($item){
+				if($item->user_id == Auth::user()->id){
+					return $item;
 				}
 			});
 		}

@@ -232,7 +232,7 @@ class PostController extends Controller {
 		$tags = $this->selectTags();
 		$tags[''] = "All tags";
 		$term = trim(strip_tags($this->request->get('term')));
-		$filter = array('category' => $this->request->get('category'), 'tag' => $this->request->get('tag'));
+		$filter = array('category' => $this->request->get('category'), 'tag' => $this->request->get('tag'), 'only' => $this->request->get('only'));
 		$posts = $this->post->search($term, $filter);
 
 		return View::make('post.list')

@@ -44,6 +44,6 @@
 		</a>
 		{{ Form::open(array('action' => 'PostController@search')) }}
 		{{ Form::text('term', null, array('placeholder' => 'Search')) }}
-		{{ Form::close() }}
+		{{ Form::close(false) }}
 	</li>
 </ul>

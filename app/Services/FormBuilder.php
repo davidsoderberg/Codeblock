@@ -18,7 +18,12 @@ class FormBuilder extends \Illuminate\Html\FormBuilder{
 	/**
 	 * @return string
 	 */
-	public function close(){
-		return $this->Honeypot().parent::close();
+	public function close($honeypot = true){
+		if($honeypot) {
+			$honeypot = $this->Honeypot();
+		}else{
+			$honeypot = '';
+		}
+		return $honeypot.parent::close();
 	}
 }
