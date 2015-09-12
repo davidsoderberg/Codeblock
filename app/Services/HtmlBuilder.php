@@ -1,6 +1,8 @@
 <?php namespace App\Services;
 
 use App\Services\Annotation\Permission;
+use Illuminate\Html\FormBuilder;
+use Illuminate\Html\FormFacade;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -79,6 +81,10 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 				return '<div class="toast animated lightSpeedIn '.$value.'"><a href="#" class="close-toast">X</a> ' . Session::get($value) . '</div>';
 			}
 		}
+	}
+
+	public function Honeypot(){
+		return '<div class="display-none">'.FormFacade::input('text', 'honeyName').'</div>';
 	}
 
 	/**

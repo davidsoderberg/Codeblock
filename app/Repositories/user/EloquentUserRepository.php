@@ -1,5 +1,6 @@
 <?php namespace App\Repositories\User;
 
+use App\Model;
 use App\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -145,15 +146,21 @@ class EloquentUserRepository extends CRepository implements UserRepository {
 
 	// skickar ett nytt lösenord till användaren.
 	public function forgotPassword($input){
-		$newPassword = $this->createPassword();
-		$user = User::where('email', '=', $this->stripTrim($input['email']))->first();
-		if(!is_null($user)){
-			$user->password = $newPassword[1];
-			if($user->save()){
-				$data = array('password' => $newPassword[0], 'Username' => $user->username);
-				$emailInfo = array('toEmail' => $this->stripTrim($input['email']), 'toName' => $user->username, 'subject' => 'Forgot password');
-				if($this->sendEmail('emails.forgotPassword', $emailInfo, $data)){
-					return true;
+		if(Model::Honeypot($input)) {
+			$newPassword = $this->createPassword();
+			$user = User::where('email', '=', $this->stripTrim($input['email']))->first();
+			if(!is_null($user)) {
+				$user->password = $newPassword[1];
+				if($user->save()) {
+					$data = array('password' => $newPassword[0], 'Username' => $user->username);
+					$emailInfo = array(
+						'toEmail' => $this->stripTrim($input['email']),
+						'toName' => $user->username,
+						'subject' => 'Forgot password'
+					);
+					if($this->sendEmail('emails.forgotPassword', $emailInfo, $data)) {
+						return true;
+					}
 				}
 			}
 		}

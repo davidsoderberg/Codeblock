@@ -16,6 +16,8 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 		}
 	}
 
+	public static $rules;
+
 	public static $append = false;
 
 	public static $errors;
@@ -28,6 +30,11 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
 	public function setRevisionEnabled(){
 		$this->revisionEnabled = !$this->revisionEnabled;
+	}
+
+	public static function Honeypot($data = ''){
+		$honeyName = 'honeyName';
+		return Self::isValid(array($honeyName => $data[$honeyName]), array($honeyName => 'honeypot'));
 	}
 
 	public function addToHidden(){
@@ -73,7 +80,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	}
 
 	// validerings metoden som kör rule variablen från alla modeller när det modell objektet sparas.
-	public static function isValid($data)
+	public static function isValid($data, $rules = array())
 	{
 		$id = null;
 		if(is_object($data)){
@@ -83,7 +90,9 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 			}
 		}
 
-		$rules = static::$rules;
+		if(count($rules) == 0) {
+			$rules = static::$rules;
+		}
 
 		if(is_numeric($id)){
 			// found on: http://forumsarchive.laravel.io/viewtopic.php?pid=46571
