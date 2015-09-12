@@ -52,7 +52,6 @@
     {{ Form::model(null, array('action' => 'UserController@forgotPassword')) }}
     {{ Form::label('forgotEmail', 'Email:') }}
     {{ Form::text('email', Input::old('email'), array('id' => 'forgotEmail', 'placeholder' => 'Email', 'data-validator' => 'required|pattern:email')) }}
-    {{ HTML::Honeypot() }}
     {{ Form::button('Send password', array('type' => 'submit')) }}
     {{ Form::close() }}
     @include('partials.licenseModal')
