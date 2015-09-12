@@ -23,14 +23,20 @@
 				</div>
 			</div>
 			{{ Form::hidden('term', $term) }}
-			<div class="verticalRule noRule">
-				<div class="float-left text-center">
-					{{Form::checkbox('only', null, $filter['only'])}}Only my codeblocks
+			@if(Auth::check())
+				<div class="verticalRule noRule">
+					<div class="float-left text-center">
+						{{Form::checkbox('only', null, $filter['only'])}}Only my codeblocks
+					</div>
+					<div class="float-right">
+						{{ Form::button('Filter', array('type' => 'submit', 'class' => 'display-block width-100 float-none')) }}
+					</div>
 				</div>
-				<div class="float-right">
+			@else
+				<div class="text-center">
 					{{ Form::button('Filter', array('type' => 'submit', 'class' => 'display-block width-100 float-none')) }}
 				</div>
-			</div>
+			@endif
 			<div class="horizontalRule margin-bottom-half margin-top-one"></div>
 		{{ Form::close() }}
 	@endif
