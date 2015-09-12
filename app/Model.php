@@ -16,8 +16,6 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 		}
 	}
 
-	public static $rules;
-
 	public static $append = false;
 
 	public static $errors;
@@ -30,11 +28,6 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
 	public function setRevisionEnabled(){
 		$this->revisionEnabled = !$this->revisionEnabled;
-	}
-
-	public static function Honeypot($data = ''){
-		$honeyName = 'honeyName';
-		return Self::isValid(array($honeyName => $data[$honeyName]), array($honeyName => 'honeypot'));
 	}
 
 	public function addToHidden(){

@@ -18,6 +18,7 @@ class Kernel extends HttpKernel {
 		'App\Http\Middleware\VerifyCsrf',
 		'App\Http\Middleware\Localization',
 		'App\Http\Middleware\Permission',
+		'App\Http\Middleware\Honeypot',
 		//'Illuminate\Foundation\Http\Middleware\VerifyCsrfToken',
 	];
 
