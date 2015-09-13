@@ -163,6 +163,13 @@
 		display: none;
 	}
 
+	.button{
+		&.absolute{
+			position: relative;
+			float: none;width: 100%;
+			margin-bottom: 0.5em;
+		}
+	}
 	.button.big, .button.big{
 		display: block;
 		margin-top: 0.5em !important;

@@ -53,4 +53,11 @@
 	pre.embed{
 		word-wrap: break-word;
 	}
+	.button{
+		&.absolute{
+			position: relative;
+			float: none;width: 100%;
+			margin-bottom: 0.5em;
+		}
+	}
 }
