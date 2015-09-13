@@ -182,7 +182,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	}
 
 	private function save($input, $Post){
-		$except = array('tags', '_token', '_url', 'token', '_method');
+		$except = array('tags', '_token', '_url', 'token', '_method', 'honeyName');
 
 		foreach ($input as $key => $value) {
 			if(!in_array($key, $except)){
