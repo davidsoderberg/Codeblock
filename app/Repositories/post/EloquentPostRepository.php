@@ -120,25 +120,31 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	}
 
 	public function sort($posts, $sort = "date"){
-		if($sort !== 'name') {
-			return $posts->sortByDesc(function ($item) use ($sort) {
-				$sort = strtolower($sort);
-				switch($sort) {
-					case 'stars':
-						return $item->starcount;
-						break;
-					case 'comments':
-						return count($item->comments);
-						break;
-					default:
-						return $item->created_at;
-						break;
-				}
-			});
-		}
-		return $posts->sortBy(function ($item) {
-			return $item->name;
+		$sort = strtolower($sort);
+		$posts = $posts->sortByDesc(function ($item) use ($sort) {
+			switch($sort) {
+				case 'stars':
+					return $item->starcount;
+					break;
+				case 'comments':
+					return count($item->comments);
+					break;
+				case 'name':
+					return $item->name;
+					break;
+				case 'category':
+					return $item->category->name;
+					break;
+				default:
+					return $item->created_at;
+					break;
+			}
 		});
+
+		if(in_array($sort, array('name', 'category'))){
+			$posts = $posts->reverse();
+		}
+		return $posts;
 	}
 
 	// duplicerar ett kodblock.

@@ -121,7 +121,7 @@ class UserController extends Controller {
 	 * @param int $sort
 	 * @return mixed objekt som innehåller allt som behövs i vyn
 	 */
-	public function listUserBlock(PostRepository $post, $id = 0, $sort = 0){
+	public function listUserBlock(PostRepository $post, $id = 0, $sort = 'date'){
 		$parameters = Route::getCurrentRoute()->parameters();
 		$patterns = Route::getPatterns();
 
@@ -149,13 +149,7 @@ class UserController extends Controller {
 			return Redirect::action('MenuController@browse');
 		}
 
-		if($sort === 'category') {
-			$posts = $user->posts->sortBy(function ($item) {
-				return $item->category->name;
-			});
-		}else{
-			$posts = $post->sort($user->posts, $sort);
-		}
+		$posts = $post->sort($user->posts, $sort);
 
 		return View::make('user.list')->with('title', $user->username)->with('user', $user)->with('posts', $posts);
 	}
