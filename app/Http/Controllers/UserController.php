@@ -2,10 +2,12 @@
 
 use App\NotificationType;
 use App\Repositories\Notification\NotificationRepository;
+use App\Repositories\Post\PostRepository;
 use App\Repositories\Role\RoleRepository;
 use App\Repositories\User\UserRepository;
 use App\Social;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
@@ -114,33 +116,47 @@ class UserController extends Controller {
 
 	/**
 	 * Visar en lista användaren block.
-	 * @param  int $id id på anvädaren vars block skall listas.
-	 * @return objekt     objekt som innehåller allt som behövs i vyn
+	 * @param PostRepository $post
+	 * @param int $id id på anvädaren vars block skall listas.
+	 * @param int $sort
+	 * @return mixed objekt som innehåller allt som behövs i vyn
 	 */
-	public function listUserBlock($id = 0, $sort = 0){
-		if($id === 'category'){
-			$sorting = $sort;
-			$sort = $id;
-			$id = $sorting;
+	public function listUserBlock(PostRepository $post, $id = 0, $sort = 0){
+		$parameters = Route::getCurrentRoute()->parameters();
+		$patterns = Route::getPatterns();
+
+		$matchSort = false;
+		if(isset($parameters['username'])) {
+			$matchSort = preg_match('/' . $patterns['sort'] . '/', $parameters['username']);
 		}
-		if($id === 0){
-			if(Auth::check()) {
-				$id = Auth::user()->id;
-			}
+
+		if(isset($parameters['id']) || isset($parameters['username']) && !$matchSort ){
+			$id = (isset($parameters['id'])) ? $parameters['id'] : $parameters['username'];
+		}else{
+			$id = (Auth::check()) ? Auth::user()->id : $id;
+		}
+
+		if($matchSort){
+			$parameters['sort'] = $parameters['username'];
+		}
+
+		if(isset($parameters['sort'])){
+			$sort = $parameters['sort'];
 		}
 
 		$user = $this->user->get($id);
 		if(is_null($user)){
 			return Redirect::action('MenuController@browse');
 		}
-		$posts = $user->posts;
+
 		if($sort === 'category') {
 			$posts = $user->posts->sortBy(function ($item) {
-				return $item['category']['name'];
+				return $item->category->name;
 			});
 		}else{
-			$posts = $posts->sortByDesc('created_at');
+			$posts = $post->sort($user->posts, $sort);
 		}
+
 		return View::make('user.list')->with('title', $user->username)->with('user', $user)->with('posts', $posts);
 	}
 

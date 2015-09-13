@@ -120,7 +120,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	}
 
 	public function sort($posts, $sort = "date"){
-		if($sort != 'name') {
+		if($sort !== 'name') {
 			return $posts->sortByDesc(function ($item) use ($sort) {
 				$sort = strtolower($sort);
 				switch($sort) {

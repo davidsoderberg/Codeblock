@@ -11,11 +11,17 @@
 			<p>
 				<b>Sort by:</b>
 				@if(Auth::check() && Auth::user()->username === $user->username)
-					{{HTML::actionlink($url = array('action' => 'UserController@listUserBlock'), 'date')}}
-					<a href="{{URL::action('UserController@listUserBlock')}}/category">category</a>
+					<a href="/user/list" class="margin-bottom-half full-width-small float-none button">Date</a>
+					<a href="/user/list/name" class="margin-bottom-half full-width-small float-none button">Name</a>
+					<a href="/user/list/category" class="margin-bottom-half full-width-small float-none button">Category</a>
+					<a href="/user/list/stars" class="margin-bottom-half full-width-small float-none button">Stars</a>
+					<a href="/user/list/comments" class="margin-bottom-half full-width-small float-none button">Comments</a>
 				@else
-					{{HTML::actionlink($url = array('action' => 'UserController@listUserBlock', 'params' => array($user->username)), 'date')}}
-					<a href="{{URL::action('UserController@listUserBlock')}}/{{$user->username}}/category">category</a>
+					<a href="/user/list/{{$user->username}}" class="margin-bottom-half full-width-small float-none button">Date</a>
+					<a href="/user/list/{{$user->username}}/name" class="margin-bottom-half full-width-small float-none button">Name</a>
+					<a href="/user/list/{{$user->username}}/category" class="margin-bottom-half full-width-small float-none button">Category</a>
+					<a href="/user/list/{{$user->username}}/stars" class="margin-bottom-half full-width-small float-none button">Stars</a>
+					<a href="/user/list/{{$user->username}}/comments" class="margin-bottom-half full-width-small float-none button">Comments</a>
 				@endif
 			</p>
 			@foreach ($posts as $post)
