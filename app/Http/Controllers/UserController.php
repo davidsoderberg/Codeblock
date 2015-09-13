@@ -23,6 +23,13 @@ class UserController extends Controller {
 		$this->user = $user;
 	}
 
+	public function setOnly(){
+		if(Auth::check()){
+			Auth::user()->setOnly();
+		}
+		return Redirect::back();
+	}
+
 	/**
 	 * Visar index vyn för användare
 	 * @permission view_users

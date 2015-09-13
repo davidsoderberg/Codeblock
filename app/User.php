@@ -5,6 +5,7 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
@@ -202,6 +203,18 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 			}
 		}
 		return false;
+	}
+
+	public function showOnly(){
+		return Session::has('only');
+	}
+
+	public function setOnly(){
+		if(Session::has('only')){
+			Session::forget('only');
+			return;
+		}
+		Session::put('only', 'yes');
 	}
 
 }

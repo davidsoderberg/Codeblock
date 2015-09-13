@@ -5,13 +5,26 @@
 @stop
 
 @section('content')
-	@if(isset($category))
-		<h2>All Codeblocks in category: {{ $category->name }}</h2>
-	@elseif(isset($tag))
-		<h2>All Codeblocks with tag: {{ $tag->name }}</h2>
-	@else
-		<h2>{{ $title }}</h2>
-	@endif
+	<div class="position-relative">
+		@if(isset($category) || isset($tag))
+			@if(Auth::check())
+				{{ Form::open(array('action' => 'UserController@setOnly')) }}
+					@if(!Auth::user()->showOnly())
+						{{ Form::button('Show only my codeblocks', array('type' => 'submit', 'class' => 'button small absolute')) }}
+					@else
+						{{ Form::button('Show codeblocks by all', array('type' => 'submit', 'class' => 'button small absolute')) }}
+					@endif
+				{{Form::close(false)}}
+			@endif
+		@endif
+		@if(isset($category))
+			<h2>All Codeblocks in category: {{ $category->name }}</h2>
+		@elseif(isset($tag))
+			<h2>All Codeblocks with tag: {{ $tag->name }}</h2>
+		@else
+			<h2>{{ $title }}</h2>
+		@endif
+	</div>
 	@if(isset($term))
 		{{ Form::open(array('action' => 'PostController@search')) }}
 			<div class="verticalRule noRule">

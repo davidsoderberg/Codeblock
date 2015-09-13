@@ -7,6 +7,7 @@ use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Tag\TagRepository;
 use App\Repositories\Rate\RateRepository;
 use App\Services\Github;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Redirect;
@@ -244,6 +245,21 @@ class PostController extends Controller {
 			->with('tags', $tags);
 	}
 
+	private function only($posts){
+		if(Auth::check()) {
+			if(Auth::user()->showOnly() && $posts instanceof Collection) {
+				$collection = new Collection();
+				foreach($posts as $post) {
+					if($post->user_id == Auth::user()->id) {
+						$collection->add($post);
+					}
+				}
+				return $collection;
+			}
+		}
+		return $posts;
+	}
+
 	/**
 	 * Vissar alla block i en kategori.
 	 * @param  int $id id på kategorin som blocken skall tillhöra.
@@ -264,6 +280,7 @@ class PostController extends Controller {
 		else{
 			$category = $this->category->get($id);
 			$posts = $this->post->getByCategory($category->id);
+			$posts = $this->only($posts);
 		}
 		if($sort != ''){
 			$posts = $this->post->sort($posts, $sort);
@@ -282,6 +299,7 @@ class PostController extends Controller {
 		$tag = $this->tag->get($id);
 		$id = $tag->id;
 		$posts = $this->post->getByTag($id);
+		$posts = $this->only($posts);
 		if($sort != ''){
 			$posts = $this->post->sort($posts, $sort);
 		}

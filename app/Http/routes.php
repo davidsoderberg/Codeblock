@@ -138,6 +138,7 @@ Route::group(['prefix' => 'tags'], function(){
 });
 
 Route::group(['prefix' => 'user'], function(){
+	Route::post('only', 'UserController@setOnly');
 	Route::post('/store/{id?}', 'UserController@store');
 	Route::get('/list/{id?}/{sort?}', 'UserController@listUserBlock');
 	Route::get('/list/{username?}/{sort?}', 'UserController@listUserBlock');
