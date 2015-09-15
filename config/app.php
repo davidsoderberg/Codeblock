@@ -151,7 +151,7 @@ return [
 
 		'Orangehill\Iseed\IseedServiceProvider',
 		'Laravel\Socialite\SocialiteServiceProvider',
-
+		Barryvdh\Debugbar\ServiceProvider::class,
 	],
 
 	/*
