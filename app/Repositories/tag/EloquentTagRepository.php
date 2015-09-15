@@ -9,12 +9,12 @@ class EloquentTagRepository extends CRepository implements TagRepository {
 	public function get($id = null)
 	{
 		if(is_null($id)){
-			return Tag::all();
+			return $this->cache('all', Tag::where('id', '!=', 0));
 		}else{
 			if(is_numeric($id)) {
-				return Tag::find($id);
+				return $this->cache($id, Tag::where('id',$id), 'first');
 			}else{
-				return Tag::where('name', $id)->first();
+				return $this->cache($id, Tag::where('name',$id), 'first');
 			}
 		}
 	}
@@ -25,7 +25,7 @@ class EloquentTagRepository extends CRepository implements TagRepository {
 		if(!is_numeric($id)) {
 			$Tag = new Tag;
 		} else {
-			$Tag = Tag::find($id);
+			$Tag = $this->get($id);
 		}
 
 		if(isset($input['name'])){
@@ -43,7 +43,7 @@ class EloquentTagRepository extends CRepository implements TagRepository {
 
 	// tar bort en ettiket.
 	public function delete($id){
-		$Tag = Tag::find($id);
+		$Tag = $this->get($id);
 		if($Tag == null){
 			return false;
 		}

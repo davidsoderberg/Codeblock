@@ -11,9 +11,9 @@ class EloquentTopicRepository extends CRepository implements TopicRepository {
 	public function get($id = null)
 	{
 		if(is_null($id)){
-			return Topic::all();
+			return $this->cache('all', Topic::where('id', '!=', 0));
 		}else{
-			return Topic::find($id);
+			return $this->cache($id, Topic::where('id',$id), 'first');
 		}
 	}
 
@@ -23,7 +23,7 @@ class EloquentTopicRepository extends CRepository implements TopicRepository {
 		if(!is_numeric($id)) {
 			$Topic = new Topic;
 		} else {
-			$Topic = Topic::find($id);
+			$Topic = $this->get($id);
 		}
 
 		if(isset($input['title'])){
@@ -45,7 +45,7 @@ class EloquentTopicRepository extends CRepository implements TopicRepository {
 
 	// tar bort en tråd.
 	public function delete($id){
-		$Topic = Topic::find($id);
+		$Topic = $this->get($id);
 		if($Topic == null){
 			return false;
 		}

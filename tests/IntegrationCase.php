@@ -11,6 +11,12 @@ class IntegrationCase extends TestCase {
 
 	protected $baseUrl = 'http://localhost';
 
+	public function setUp(){
+		parent::setUp();
+		\Illuminate\Support\Facades\Cache::flush();
+		$this->resetEvents();
+	}
+
 	public function tearDown(){
 		if(Auth::check()){
 			Auth::logout();

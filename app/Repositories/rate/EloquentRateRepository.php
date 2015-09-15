@@ -3,13 +3,20 @@
 use App\Rate;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\CRepository;
+use App\Services\CollectionService;
 
 class EloquentRateRepository extends CRepository implements RateRepository {
+
+	private function get(){
+		return $this->cache('all', Rate::where('id', '!=', 0));
+	}
 
 	// metod för att kolla om en användare har get en kommentar ett omdöme.
 	public function check($id)
 	{
-		$rate = Rate::where('user_id', '=', Auth::user()->id)->where('comment_id', '=', $id)->first();
+		$rate = CollectionService::filter($this->get(), 'user_id', Auth::user()->id);
+		$rate = CollectionService::filter($rate, 'comment_id', $id, 'first');
+		//$rate = Rate::where('user_id', '=', Auth::user()->id)->where('comment_id', '=', $id)->first();
 		if(!is_null($rate)){
 			return $rate->type;
 		}
@@ -18,7 +25,11 @@ class EloquentRateRepository extends CRepository implements RateRepository {
 
 	// räknar ut totalen av en kommetars omdöme.
 	public function calc($id){
-		return count(Rate::where('type', '=', '+')->where('comment_id', '=', $id)->get()) - count(Rate::where('type', '=', '-')->where('comment_id', '=', $id)->get());
+		$first = CollectionService::filter($this->get(), 'type', '+');
+		$first = CollectionService::filter($first, 'comment_id', $id);
+		$second = CollectionService::filter($this->get(), 'type', '-');
+		$second = CollectionService::filter($second, 'comment_id', $id);
+		return count($first) - count($second);
 	}
 
 	// skapa en kommentars omdöme
@@ -45,7 +56,9 @@ class EloquentRateRepository extends CRepository implements RateRepository {
 
 	// tar bort ett omdöme.
 	private function delete($id, $type){
-		$rate = Rate::where('type', '=', $this->typeSwitch($type))->where('user_id', '=', Auth::user()->id)->where('comment_id', '=', $id)->first();
+		$rate = CollectionService::filter($this->get(), 'type', $this->typeSwitch($type));
+		$rate = CollectionService::filter($rate, 'user_id', Auth::user()->id);
+		$rate = CollectionService::filter($rate, 'comment_id', $id, 'first');
 		if(!is_null($rate)){
 			return $rate->delete();
 		}

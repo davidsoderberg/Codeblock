@@ -6,16 +6,8 @@ class UnitCase extends Illuminate\Foundation\Testing\TestCase {
 
 	public function setUp(){
 		parent::setUp();
+		\Illuminate\Support\Facades\Cache::flush();
 		$this->resetEvents();
 	}
 
-	// Hittad på: https://github.com/laravel/framework/issues/1181
-	private function resetEvents()
-	{
-		$models = array('App\Tag', 'App\User');
-		foreach ($models as $model) {
-			call_user_func(array($model, 'flushEventListeners'));
-			call_user_func(array($model, 'boot'));
-		}
-	}
 }

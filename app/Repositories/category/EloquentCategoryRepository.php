@@ -9,12 +9,12 @@ class EloquentCategoryRepository extends CRepository implements CategoryReposito
 	public function get($id = null)
 	{
 		if(is_null($id)){
-			return Category::all();
+			return $this->cache('all', Category::where('id', '!=', 0));
 		}else{
 			if(is_numeric($id)) {
-				return Category::find($id);
+				return $this->cache($id, Category::where('id',$id), 'first');
 			}else{
-				return Category::where('name', $id)->first();
+				return $this->cache($id, Category::where('name',$id), 'first');
 			}
 		}
 	}
@@ -25,7 +25,7 @@ class EloquentCategoryRepository extends CRepository implements CategoryReposito
 		if(!is_numeric($id)) {
 			$Category = new Category;
 		} else {
-			$Category = Category::find($id);
+			$Category = $this->get($id);
 		}
 
 		if(isset($input['name'])){
@@ -42,11 +42,11 @@ class EloquentCategoryRepository extends CRepository implements CategoryReposito
 
 	// tar bort en kategori.
 	public function delete($id){
-		$Category = Category::find($id);
-		if($Category == null){
-			return false;
+		$Category = $this->get($id);
+		if($Category != null) {
+			return $Category->delete();
 		}
-		return $Category->delete();
+		return false;
 	}
 
 }

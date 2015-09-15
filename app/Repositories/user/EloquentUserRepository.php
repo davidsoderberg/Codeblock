@@ -1,24 +1,24 @@
 <?php namespace App\Repositories\User;
 
-use App\Model;
 use App\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\CRepository;
 use Illuminate\Support\MessageBag;
+use App\Services\CollectionService;
 
 class EloquentUserRepository extends CRepository implements UserRepository {
 
 	// Hämtar en eller alla användare
 	public function get($id = null) {
 		if(is_null($id)) {
-			return User::all();
+			return $this->cache('all', User::where('id', '!=', 0));
 		} else {
 			if(!is_numeric($id)) {
 				$id = $this->getIdByUsername($id);
 			}
 
-			return User::find($id);
+			return $this->cache($id, User::where('id',$id), 'first');
 		}
 	}
 
@@ -32,7 +32,7 @@ class EloquentUserRepository extends CRepository implements UserRepository {
 	}
 
 	private function getIdBy($field, $value) {
-		$user = User::where($field, '=', $value)->first();
+		$user = CollectionService::filter($this->get(), $field, $value, 'first');
 		if(is_null($user)) {
 			return 0;
 		}
@@ -94,7 +94,7 @@ class EloquentUserRepository extends CRepository implements UserRepository {
 			if(in_array('email', $checkErrors)) {
 				$olduser = null;
 				if(isset($input['email'])) {
-					$olduser = User::where('email', '=', $this->stripTrim($input['email']))->first();
+					$olduser = CollectionService::filter($this->get(), 'email', $this->stripTrim($input['email']), 'first');
 				}
 				if(!is_null($olduser)) {
 					if($olduser->active == 0) {
@@ -151,7 +151,7 @@ class EloquentUserRepository extends CRepository implements UserRepository {
 	// skickar ett nytt lösenord till användaren.
 	public function forgotPassword($input) {
 		$newPassword = $this->createPassword();
-		$user = User::where('email', '=', $this->stripTrim($input['email']))->first();
+		$user = CollectionService::filter($this->get(), 'email', $this->stripTrim($input['email']), 'first');
 		if(!is_null($user)) {
 			$user->password = $newPassword[1];
 			if($user->save()) {

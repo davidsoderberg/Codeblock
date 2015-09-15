@@ -1,5 +1,6 @@
 <?php namespace App;
 
+use App\Repositories\CRepository;
 use App\Services\HateoasTrait;
 use Venturecraft\Revisionable\RevisionableTrait;
 use Illuminate\Support\Facades\Validator;
@@ -62,6 +63,16 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 		// körs på alla modell object som sparas.
 		static::saving(function($object){
 			return $object::isValid($object);
+		});
+
+		static::saved(function(){
+			CRepository::flush(Self::query()->getModel());
+			return true;
+		});
+
+		static::deleted(function(){
+			CRepository::flush(Self::query()->getModel());
+			return true;
 		});
 	}
 

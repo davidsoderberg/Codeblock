@@ -38,7 +38,6 @@ class EloquentArticleRepository extends CRepository implements ArticleRepository
 		}
 
 		if($Article->save()){
-			$this->flushCache($Article);
 			return true;
 		}else{
 			$this->errors = $Article::$errors;
@@ -50,11 +49,7 @@ class EloquentArticleRepository extends CRepository implements ArticleRepository
 	public function delete($id){
 		$Article = $this->get($id);
 		if($Article != null) {
-			if($Article->delete()) {
-				$this->flushCache($Article);
-
-				return true;
-			}
+			return $Article->delete();
 		}
 		return false;
 	}

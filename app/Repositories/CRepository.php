@@ -10,6 +10,12 @@ Class CRepository {
 	// fel behållaren för fel
 	public $errors;
 
+	public static $self;
+
+	public function __construct(){
+		Self::$self = $this;
+	}
+
 	// get metod för felen
 	public function getErrors(){
 		return $this->errors;
@@ -40,5 +46,9 @@ Class CRepository {
 			}
 		}
 		return FALSE;
+	}
+
+	public static function flush($model = null){
+		Self::$self->flushCache($model);
 	}
 }

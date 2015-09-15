@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
 use App\Repositories\CRepository;
+use App\Services\CollectionService;
 
 class EloquentPostRepository extends CRepository implements PostRepository {
 
@@ -21,12 +22,12 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	public function get($id = null)
 	{
 		if(is_null($id)){
-			$posts =  Post::all();
+			$posts = $this->cache('all', Post::where('id', '!=', 0));
 		}else{
 			if(is_numeric($id)) {
-				$post = Post::find($id);
+				$post = $this->cache($id, Post::where('id',$id), 'first');
 			}else{
-				$post = Post::where('slug', $id)->first();
+				$post = $this->cache($id, Post::where('slug',$id), 'first');
 			}
 			$posts = $post;
 		}
@@ -71,7 +72,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	}
 
 	public function getPopular($limit = 10, $min = 0){
-		$posts =  Post::limit($limit)->get()->sortByDesc('starcount');
+		$posts =  $this->sort($this->get()->take($limit),'stars');
 		$postsCollection = new Collection();
 		foreach($posts as $post){
 			if($post->starcount > $min){
@@ -155,7 +156,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 		foreach ($post->tags as $tag) {
 			$input['tags'][] = $tag->id;
 		}
-		$existingPost = Post::where('name', '=', $post->name.' '.Auth::user()->id)->get();
+		$existingPost = CollectionService::filter($this->get(), 'name', $post->name . ' ' . Auth::user()->id);
 		if(count($existingPost) < 1){
 			$input['name'] = $post->name.' '.Auth::user()->id;
 			$input['cat_id'] = $post->cat_id;
@@ -170,7 +171,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 
 	// hämtar vilka kodblock som är skapade ur ett visst kodblock.
 	public function getForked($id){
-		return Post::where('org', $id)->get();
+		return CollectionService::filter($this->get(), 'org', $id);
 	}
 
 	public function undo($input, $id){
