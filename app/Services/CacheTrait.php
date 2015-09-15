@@ -5,7 +5,11 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
-trait EloquentCacheTrait
+/**
+ * Class EloquentCacheTrait
+ * @package App\Services
+ */
+trait CacheTrait
 {
 	/**
 	 * Cache duration in minutes; 0 is forever
@@ -42,7 +46,10 @@ trait EloquentCacheTrait
 	 */
 	protected $model = null;
 
-	protected static $cacheKey;
+	/**
+	 * @var
+	 */
+	protected $cacheKey = '';
 
 	/**
 	 * Retrieve from cache if not empty, otherwise store results
@@ -105,7 +112,7 @@ trait EloquentCacheTrait
 	 * @return string
 	 */
 	protected function getCacheKey(){
-		return Self::$cacheKey;
+		return $this->cacheKey;
 	}
 
 	/**
@@ -145,8 +152,19 @@ trait EloquentCacheTrait
 	 * @param $model
 	 */
 	public function setModel($model){
-		Self::$cacheKey = $model::$Key;
+		$this->cacheKey = $this->getClass($model);
 		$this->model = $model;
+	}
+
+	/**
+	 * @param $object
+	 * @return string
+	 */
+	protected function getClass($object) {
+		if(is_object($object)) {
+			$object = get_class($object);
+		}
+		return strtolower(str_replace('App\\', '', $object));
 	}
 
 	/**
@@ -220,8 +238,11 @@ trait EloquentCacheTrait
 	 *
 	 * @return void
 	 */
-	public function flushCache()
+	public function flushCache($model = null)
 	{
+		if(!is_null($model)) {
+			$this->setModel($model);
+		}
 		$keys = $this->getServiceKeys();
 
 		array_map(function ($key) {

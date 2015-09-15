@@ -9,12 +9,12 @@ class EloquentArticleRepository extends CRepository implements ArticleRepository
 	public function get($id = null)
 	{
 		if(is_null($id)){
-			return Article::all();
+			return $this->cache('all', Article::where('id', '!=', 0));
 		}else{
 			if(is_numeric($id)) {
-				return Article::find($id);
+				return $this->cache($id, Article::where('id',$id), 'first');
 			}else{
-				return Article::where('slug', $id)->first();
+				return $this->cache($id, Article::where('slug',$id), 'first');
 			}
 		}
 	}
@@ -38,6 +38,7 @@ class EloquentArticleRepository extends CRepository implements ArticleRepository
 		}
 
 		if($Article->save()){
+			$this->flushCache($Article);
 			return true;
 		}else{
 			$this->errors = $Article::$errors;
@@ -48,10 +49,14 @@ class EloquentArticleRepository extends CRepository implements ArticleRepository
 	// tar bort en artikel.
 	public function delete($id){
 		$Article = $this->get($id);
-		if($Article == null){
-			return false;
+		if($Article != null) {
+			if($Article->delete()) {
+				$this->flushCache($Article);
+
+				return true;
+			}
 		}
-		return $Article->delete();
+		return false;
 	}
 
 }

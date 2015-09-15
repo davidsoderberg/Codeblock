@@ -1,8 +1,11 @@
 <?php namespace App\Repositories;
 
+use App\Services\CacheTrait;
 use Illuminate\Support\Facades\Mail;
 // bas klassen för repon
 Class CRepository {
+
+	use CacheTrait;
 
 	// fel behållaren för fel
 	public $errors;
