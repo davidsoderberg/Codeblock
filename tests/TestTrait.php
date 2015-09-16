@@ -41,6 +41,7 @@ trait TestTrait{
 			'App\Rate',
 			'App\Reply',
 			'App\Role',
+			'App\Star',
 			'App\Tag',
 			'App\Topic',
 			'App\User',
