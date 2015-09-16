@@ -5,6 +5,7 @@ use App\Repositories\Notification\NotificationRepository;
 use App\Repositories\Post\PostRepository;
 use App\Repositories\Role\RoleRepository;
 use App\Repositories\User\UserRepository;
+use App\Services\CollectionService;
 use App\Social;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Route;
@@ -150,8 +151,10 @@ class UserController extends Controller {
 		}
 
 		$posts = $post->sort($user->posts, $sort);
+		if(!Auth::check() || Auth::check() && Auth::user()->id != $user->id) {
+			$posts = CollectionService::filter($posts, 'private', 0);
+		}
 
-		$this->perPage = 3;
 		$paginator = $this->createPaginator($posts);
 		$posts = $paginator['data'];
 		$paginator = $paginator['paginator'];
