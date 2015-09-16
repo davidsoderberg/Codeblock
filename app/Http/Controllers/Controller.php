@@ -5,6 +5,7 @@ use App\NotificationType;
 use App\Repositories\Notification\NotificationRepository;
 use App\Services\Jwt;
 use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Log;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use App\Services\Client;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Request;
 
 /**
  * Class Controller
@@ -30,6 +32,8 @@ abstract class Controller extends BaseController {
 	 * @var mixed
 	 */
 	protected $request;
+
+	protected $perPage = 10;
 
 	use DispatchesJobs, ValidatesRequests;
 
@@ -106,5 +110,15 @@ abstract class Controller extends BaseController {
 			}
 		}
 		return $objects;
+	}
+
+	public function createPaginator(Collection  $data){
+		if(!isset($_GET['page']) || !is_numeric($_GET['page'])){
+			$_GET['page'] = 1;
+		}
+		$paginator = new LengthAwarePaginator($data, count($data), $this->perPage, $_GET['page'], array('path' => '/'.Request::path()));
+		$data = $data->slice(($_GET['page'] * $this->perPage) - $this->perPage, $this->perPage);
+
+		return array('data' => $data, 'paginator' => $paginator);
 	}
 }

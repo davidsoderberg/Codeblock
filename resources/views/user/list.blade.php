@@ -38,6 +38,9 @@
 					<hr class="margin-bottom-half">
 				@endif
 			@endforeach
+			@if(isset($paginator))
+				{{$paginator->render()}}
+			@endif
 		@else
 			<div class="text-center alert info">{{ $user->username }} have no blocks yet.</div>
 		@endif

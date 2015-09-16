@@ -287,7 +287,11 @@ class PostController extends Controller {
 			$posts = $this->post->sort($posts, $sort);
 		}
 
-		return View::make('post.list')->with('title', 'Posts in category: '.$category->name )->with('posts', $posts)->with('category', $category);
+		$paginator = $this->createPaginator($posts);
+		$posts = $paginator['data'];
+		$paginator = $paginator['paginator'];
+
+		return View::make('post.list')->with('title', 'Posts in category: '.$category->name )->with('posts', $posts)->with('category', $category)->with('paginator', $paginator);
 	}
 
 	/**
@@ -304,7 +308,10 @@ class PostController extends Controller {
 		if($sort != ''){
 			$posts = $this->post->sort($posts, $sort);
 		}
-		return View::make('post.list')->with('title', 'Posts with tag: '.$tag->name)->with('posts', $posts)->with('tag', $tag);
+		$paginator = $this->createPaginator($posts);
+		$posts = $paginator['data'];
+		$paginator = $paginator['paginator'];
+		return View::make('post.list')->with('title', 'Posts with tag: '.$tag->name)->with('posts', $posts)->with('tag', $tag)->with('paginator', $paginator);
 	}
 
 	/**

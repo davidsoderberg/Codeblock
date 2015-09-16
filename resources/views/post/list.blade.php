@@ -98,6 +98,9 @@
 				@endif
 			@endif
 		@endforeach
+		@if(isset($paginator))
+			{{$paginator->render()}}
+		@endif
 	@else
 		@if(isset($term))
 			<div class="text-center alert info">There are no matches on: {{$term}}</div>

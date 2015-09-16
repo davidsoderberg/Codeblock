@@ -151,7 +151,12 @@ class UserController extends Controller {
 
 		$posts = $post->sort($user->posts, $sort);
 
-		return View::make('user.list')->with('title', $user->username)->with('user', $user)->with('posts', $posts);
+		$this->perPage = 3;
+		$paginator = $this->createPaginator($posts);
+		$posts = $paginator['data'];
+		$paginator = $paginator['paginator'];
+
+		return View::make('user.list')->with('title', $user->username)->with('user', $user)->with('posts', $posts)->with('paginator', $paginator);
 	}
 
 	/**
