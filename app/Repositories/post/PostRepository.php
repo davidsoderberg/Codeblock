@@ -1,6 +1,7 @@
 <?php namespace App\Repositories\Post;
 
 use App\Repositories\IRepository;
+use App\Repositories\Star\StarRepository;
 
 interface PostRepository extends IRepository {
 
@@ -20,7 +21,7 @@ interface PostRepository extends IRepository {
 
 	public function getForked($id);
 
-	public function createOrDeleteStar($post_id);
+	public function createOrDeleteStar(StarRepository $starRepository, $post_id);
 
 	public function search($term, $filter = array('tag' => null, 'category' => null));
 }

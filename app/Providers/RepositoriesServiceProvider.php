@@ -20,6 +20,7 @@ class RepositoriesServiceProvider extends ServiceProvider {
 		$this->app->bind('App\Repositories\Reply\ReplyRepository', 'App\Repositories\Reply\EloquentReplyRepository');
 		$this->app->bind('App\Repositories\Read\ReadRepository', 'App\Repositories\Read\EloquentReadRepository');
 		$this->app->bind('App\Repositories\Article\ArticleRepository', 'App\Repositories\Article\EloquentArticleRepository');
+		$this->app->bind('App\Repositories\Star\StarRepository', 'App\Repositories\Star\EloquentStarRepository');
 	}
 
 }

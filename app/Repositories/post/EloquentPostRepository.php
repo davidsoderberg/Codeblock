@@ -1,6 +1,7 @@
 <?php namespace App\Repositories\Post;
 
 use App\Post;
+use App\Repositories\Star\StarRepository;
 use App\Star;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -245,8 +246,9 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	}
 
 	// skapar och tar bort en stjärna för ett block.
-	public function createOrDeleteStar($post_id){
-		$star = Star::where('user_id', '=', Auth::user()->id)->where('post_id', '=', $post_id)->first();
+	public function createOrDeleteStar(StarRepository $starRepository, $post_id){
+		$stars = CollectionService::filter($starRepository->get(), 'user_id', Auth::user()->id);
+		$star = CollectionService::filter($stars, 'post_id', $post_id, 'first');
 		$boolean = false;
 		$action = 'delete';
 		if($star != null){
