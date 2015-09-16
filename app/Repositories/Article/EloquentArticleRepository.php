@@ -2,6 +2,7 @@
 
 use App\Article;
 use App\Repositories\CRepository;
+use App\Services\CollectionService;
 
 class EloquentArticleRepository extends CRepository implements ArticleRepository {
 
@@ -12,9 +13,9 @@ class EloquentArticleRepository extends CRepository implements ArticleRepository
 			return $this->cache('all', Article::where('id', '!=', 0));
 		}else{
 			if(is_numeric($id)) {
-				return $this->cache($id, Article::where('id',$id), 'first');
+				return CollectionService::filter($this->get(), 'id', $id, 'first');
 			}else{
-				return $this->cache($id, Article::where('slug',$id), 'first');
+				return CollectionService::filter($this->get(), 'slug', $id, 'first');
 			}
 		}
 	}

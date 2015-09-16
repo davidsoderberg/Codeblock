@@ -20,7 +20,7 @@ class EloquentNotificationRepository extends CRepository implements Notification
 	// hämtar en eller alla notifikationer.
 	public function get($id = 0){
 		if(is_numeric($id) && $id > 0){
-			return $this->cache($id, Notification::where('id',$id), 'first');
+			return CollectionService::filter($this->get(), 'id', $id, 'first');
 		}
 		return $this->cache('all', Notification::where('id', '!=', 0));
 	}

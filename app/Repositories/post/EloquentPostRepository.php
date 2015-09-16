@@ -25,9 +25,9 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 			$posts = $this->cache('all', Post::where('id', '!=', 0));
 		}else{
 			if(is_numeric($id)) {
-				$post = $this->cache($id, Post::where('id',$id), 'first');
+				$post = CollectionService::filter($this->get(), 'id', $id, 'first');
 			}else{
-				$post = $this->cache($id, Post::where('slug',$id), 'first');
+				$post =  CollectionService::filter($this->get(), 'slug', $id, 'first');
 			}
 			$posts = $post;
 		}

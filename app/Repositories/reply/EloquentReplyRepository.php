@@ -15,7 +15,7 @@ class EloquentReplyRepository extends CRepository implements ReplyRepository {
 		if(is_null($id)){
 			return $this->cache('all', Reply::where('id', '!=', 0));
 		}else{
-			return $this->cache($id, Reply::where('id',$id), 'first');
+			return CollectionService::filter($this->get(), 'id', $id, 'first');
 		}
 	}
 

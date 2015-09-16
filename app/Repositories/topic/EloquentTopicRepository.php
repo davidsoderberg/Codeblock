@@ -2,6 +2,7 @@
 
 use App\Topic;
 use App\Repositories\CRepository;
+use App\Services\CollectionService;
 
 class EloquentTopicRepository extends CRepository implements TopicRepository {
 
@@ -13,7 +14,7 @@ class EloquentTopicRepository extends CRepository implements TopicRepository {
 		if(is_null($id)){
 			return $this->cache('all', Topic::where('id', '!=', 0));
 		}else{
-			return $this->cache($id, Topic::where('id',$id), 'first');
+			return CollectionService::filter($this->get(), 'id', $id, 'first');
 		}
 	}
 

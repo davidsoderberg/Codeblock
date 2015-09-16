@@ -2,6 +2,7 @@
 
 use App\Tag;
 use App\Repositories\CRepository;
+use App\Services\CollectionService;
 
 class EloquentTagRepository extends CRepository implements TagRepository {
 
@@ -12,9 +13,9 @@ class EloquentTagRepository extends CRepository implements TagRepository {
 			return $this->cache('all', Tag::where('id', '!=', 0));
 		}else{
 			if(is_numeric($id)) {
-				return $this->cache($id, Tag::where('id',$id), 'first');
+				return CollectionService::filter($this->get(), 'id', $id, 'first');
 			}else{
-				return $this->cache($id, Tag::where('name',$id), 'first');
+				return CollectionService::filter($this->get(), 'name', $id, 'first');
 			}
 		}
 	}

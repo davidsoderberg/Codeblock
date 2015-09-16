@@ -2,6 +2,7 @@
 
 use App\Permission;
 use App\Repositories\CRepository;
+use App\Services\CollectionService;
 
 class EloquentPermissionRepository extends CRepository implements PermissionRepository {
 
@@ -9,7 +10,7 @@ class EloquentPermissionRepository extends CRepository implements PermissionRepo
 	public function get($id = null)
 	{
 		if(!is_null($id)){
-			return $this->cache($id, Permission::where('id',$id), 'first');
+			return CollectionService::filter($this->get(), 'id', $id, 'first');
 		}else{
 			return $this->cache('all', Permission::where('id', '!=', 0));
 		}

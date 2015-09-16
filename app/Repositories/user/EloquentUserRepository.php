@@ -18,7 +18,7 @@ class EloquentUserRepository extends CRepository implements UserRepository {
 				$id = $this->getIdByUsername($id);
 			}
 
-			return $this->cache($id, User::where('id',$id), 'first');
+			return CollectionService::filter($this->get(), 'id', $id, 'first');
 		}
 	}
 

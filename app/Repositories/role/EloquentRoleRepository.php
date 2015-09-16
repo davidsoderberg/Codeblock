@@ -14,7 +14,7 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 		if(is_null($id)) {
 			return $this->cache('all', Role::where('id', '!=', 0));
 		}
-		return $this->cache($id, Role::where('id',$id), 'first');
+		return CollectionService::filter($this->get(), 'id', $id, 'first');
 	}
 
 	// skapar en roll.

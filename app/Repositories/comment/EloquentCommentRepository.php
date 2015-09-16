@@ -3,6 +3,7 @@
 use App\Comment;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\CRepository;
+use App\Services\CollectionService;
 
 class EloquentCommentRepository extends CRepository implements CommentRepository {
 
@@ -10,7 +11,7 @@ class EloquentCommentRepository extends CRepository implements CommentRepository
 	public function get($id = null)
 	{
 		if(!is_null($id)){
-			$comment = $this->cache($id, Comment::where('id',$id), 'first');
+			$comment = CollectionService::filter($this->get(), 'id', $id, 'first');
 		}else{
 			$comment = $this->cache('all', Comment::where('id', '!=', 0));
 		}

@@ -2,6 +2,7 @@
 
 use App\Category;
 use App\Repositories\CRepository;
+use App\Services\CollectionService;
 
 class EloquentCategoryRepository extends CRepository implements CategoryRepository {
 
@@ -12,9 +13,9 @@ class EloquentCategoryRepository extends CRepository implements CategoryReposito
 			return $this->cache('all', Category::where('id', '!=', 0));
 		}else{
 			if(is_numeric($id)) {
-				return $this->cache($id, Category::where('id',$id), 'first');
+				return CollectionService::filter($this->get(), 'id', $id, 'first');
 			}else{
-				return $this->cache($id, Category::where('name',$id), 'first');
+				return CollectionService::filter($this->get(), 'name', $id, 'first');
 			}
 		}
 	}

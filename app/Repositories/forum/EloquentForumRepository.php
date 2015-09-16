@@ -2,6 +2,7 @@
 
 use App\Forum;
 use App\Repositories\CRepository;
+use App\Services\CollectionService;
 
 class EloquentForumRepository extends CRepository implements ForumRepository {
 
@@ -9,7 +10,7 @@ class EloquentForumRepository extends CRepository implements ForumRepository {
 	public function get($id = null)
 	{
 		if(!is_null($id)){
-			return $this->cache($id, Forum::where('id',$id), 'first');
+			return CollectionService::filter($this->get(), 'id', $id, 'first');
 		}else{
 			return $this->cache('all', Forum::where('id', '!=', 0));
 		}
