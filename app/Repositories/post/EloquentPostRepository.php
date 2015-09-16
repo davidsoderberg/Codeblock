@@ -1,12 +1,14 @@
 <?php namespace App\Repositories\Post;
 
 use App\Post;
+use App\Repositories\Star\StarRepository;
 use App\Star;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
 use App\Repositories\CRepository;
+use App\Services\CollectionService;
 
 class EloquentPostRepository extends CRepository implements PostRepository {
 
@@ -21,12 +23,12 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	public function get($id = null)
 	{
 		if(is_null($id)){
-			$posts =  Post::all();
+			$posts = $this->cache('all', Post::where('id', '!=', 0));
 		}else{
 			if(is_numeric($id)) {
-				$post = Post::find($id);
+				$post = CollectionService::filter($this->get(), 'id', $id, 'first');
 			}else{
-				$post = Post::where('slug', $id)->first();
+				$post =  CollectionService::filter($this->get(), 'slug', $id, 'first');
 			}
 			$posts = $post;
 		}
@@ -71,7 +73,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	}
 
 	public function getPopular($limit = 10, $min = 0){
-		$posts =  Post::limit($limit)->get()->sortByDesc('starcount');
+		$posts =  $this->sort($this->get()->take($limit),'stars');
 		$postsCollection = new Collection();
 		foreach($posts as $post){
 			if($post->starcount > $min){
@@ -155,7 +157,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 		foreach ($post->tags as $tag) {
 			$input['tags'][] = $tag->id;
 		}
-		$existingPost = Post::where('name', '=', $post->name.' '.Auth::user()->id)->get();
+		$existingPost = CollectionService::filter($this->get(), 'name', $post->name . ' ' . Auth::user()->id);
 		if(count($existingPost) < 1){
 			$input['name'] = $post->name.' '.Auth::user()->id;
 			$input['cat_id'] = $post->cat_id;
@@ -170,7 +172,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 
 	// hämtar vilka kodblock som är skapade ur ett visst kodblock.
 	public function getForked($id){
-		return Post::where('org', $id)->get();
+		return CollectionService::filter($this->get(), 'org', $id);
 	}
 
 	public function undo($input, $id){
@@ -244,8 +246,9 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	}
 
 	// skapar och tar bort en stjärna för ett block.
-	public function createOrDeleteStar($post_id){
-		$star = Star::where('user_id', '=', Auth::user()->id)->where('post_id', '=', $post_id)->first();
+	public function createOrDeleteStar(StarRepository $starRepository, $post_id){
+		$stars = CollectionService::filter($starRepository->get(), 'user_id', Auth::user()->id);
+		$star = CollectionService::filter($stars, 'post_id', $post_id, 'first');
 		$boolean = false;
 		$action = 'delete';
 		if($star != null){

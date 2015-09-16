@@ -2,6 +2,7 @@
 
 use App\Role;
 use App\Repositories\CRepository;
+use App\Services\CollectionService;
 
 class EloquentRoleRepository extends CRepository implements RoleRepository {
 
@@ -11,9 +12,9 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 	public function get($id = null)
 	{
 		if(is_null($id)) {
-			return Role::all();
+			return $this->cache('all', Role::where('id', '!=', 0));
 		}
-		return Role::find($id);
+		return CollectionService::filter($this->get(), 'id', $id, 'first');
 	}
 
 	// skapar en roll.
@@ -40,7 +41,7 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 
 	// Hämtar rollen som alla nya användare får.
 	public function getDefault(){
-		return Role::where('default', 1)->first();
+		return CollectionService::filter($this->get(), 'default', 1, 'first');
 	}
 
 	// Sätter rollen som alla nya användare får.

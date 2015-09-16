@@ -2,6 +2,7 @@
 
 use App\Repositories\Post\EloquentPostRepository;
 use App\Repositories\Comment\EloquentCommentRepository;
+use App\Repositories\Star\EloquentStarRepository;
 use App\User;
 
 class PostTest extends UnitCase {
@@ -98,11 +99,11 @@ class PostTest extends UnitCase {
 		$this->be(User::find(1));
 		$this->assertTrue($this->repo->createOrUpdate($input));
 		$post = $this->repo->get(1);
-		$return = $this->repo->createOrDeleteStar($post->id);
+		$return = $this->repo->createOrDeleteStar(new EloquentStarRepository(), $post->id);
 		$this->assertTrue($return[0]);
 		$post = $this->repo->get(1);
 		$this->assertTrue($post->starcount == 1);
-		$return = $this->repo->createOrDeleteStar($post->id);
+		$return = $this->repo->createOrDeleteStar(new EloquentStarRepository(), $post->id);
 		$this->assertTrue($return[0]);
 		$post = $this->repo->get(1);
 		$this->assertTrue($post->starcount == 0);

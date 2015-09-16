@@ -32,7 +32,7 @@ var	async = {
 
 	getJWT: function() {
 		var self = async;
-		jQuery.get("/api/jwt", function (data) {
+		jQuery.get("/api/auth", function (data) {
 			var date = new Date;
 			date.setHours(date.getHours() + 2);
 			date = date.getTime();

@@ -3,6 +3,7 @@
 use App\Comment;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\CRepository;
+use App\Services\CollectionService;
 
 class EloquentCommentRepository extends CRepository implements CommentRepository {
 
@@ -10,9 +11,9 @@ class EloquentCommentRepository extends CRepository implements CommentRepository
 	public function get($id = null)
 	{
 		if(!is_null($id)){
-			$comment = Comment::find($id);
+			$comment = CollectionService::filter($this->get(), 'id', $id, 'first');
 		}else{
-			$comment = Comment::all();
+			$comment = $this->cache('all', Comment::where('id', '!=', 0));
 		}
 		return $comment;
 	}
@@ -27,7 +28,7 @@ class EloquentCommentRepository extends CRepository implements CommentRepository
 				$Comment->post_id = $this->stripTrim($input['post_id']);
 			}
 		} else {
-			$Comment = Comment::find($id);
+			$Comment = $this->get($id);
 		}
 
 		if(isset($input['comment'])){
@@ -52,14 +53,14 @@ class EloquentCommentRepository extends CRepository implements CommentRepository
 
 	// tar bort en kommentar.
 	public function delete($id){
-		$Comment = Comment::find($id);
-		if($Comment == null){
-			return false;
+		$Comment = $this->get($id);
+		if($Comment != null) {
+			foreach($Comment->rates as $rate) {
+				$rate->delete();
+			}
+			return $Comment->delete();
 		}
-		foreach ($Comment->rates as $rate) {
-			$rate->delete();
-		}
-		return $Comment->delete();
+		return false;
 	}
 
 }

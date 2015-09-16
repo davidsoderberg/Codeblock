@@ -4,6 +4,7 @@ use App\Notification;
 use App\NotificationType;
 use App\Repositories\CRepository;
 use App\Repositories\User\UserRepository;
+use App\Services\CollectionService;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
 use App\Services\HtmlBuilder;
@@ -19,13 +20,13 @@ class EloquentNotificationRepository extends CRepository implements Notification
 	// hämtar en eller alla notifikationer.
 	public function get($id = 0){
 		if(is_numeric($id) && $id > 0){
-			return Notification::find($id);
+			return CollectionService::filter($this->get(), 'id', $id, 'first');
 		}
-		return Notification::all();
+		return $this->cache('all', Notification::where('id', '!=', 0));
 	}
 
 	public function setRead($user_id){
-		$notifications = Notification::where('user_id', $user_id)->get();
+		$notifications = CollectionService::filter($this->get(), 'user_id', $user_id);
 		foreach($notifications as $notification){
 			$notification->is_read = 1;
 			$notification->save();
@@ -201,7 +202,7 @@ class EloquentNotificationRepository extends CRepository implements Notification
 
 	// Tar bort en notifikation.
 	public function delete($id){
-		$Notification = Notification::find($id);
+		$Notification = $this->get($id);
 		if($Notification == null){
 			return false;
 		}

@@ -3,7 +3,7 @@
 use App\Reply;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\CRepository;
-use Illuminate\Support\MessageBag;
+use App\Services\CollectionService;
 
 class EloquentReplyRepository extends CRepository implements ReplyRepository {
 
@@ -13,9 +13,9 @@ class EloquentReplyRepository extends CRepository implements ReplyRepository {
 	public function get($id = null)
 	{
 		if(is_null($id)){
-			return Reply::all();
+			return $this->cache('all', Reply::where('id', '!=', 0));
 		}else{
-			return Reply::find($id);
+			return CollectionService::filter($this->get(), 'id', $id, 'first');
 		}
 	}
 
@@ -25,7 +25,7 @@ class EloquentReplyRepository extends CRepository implements ReplyRepository {
 		if(!is_numeric($id)) {
 			$Reply = new Reply;
 		} else {
-			$Reply = Reply::find($id);
+			$Reply = $this->get($id);
 		}
 
 		if(isset($input['reply'])){
@@ -51,7 +51,7 @@ class EloquentReplyRepository extends CRepository implements ReplyRepository {
 
 	// tar bort ett svar.
 	public function delete($id){
-		$Reply = Reply::find($id);
+		$Reply = $this->get($id);
 		if($Reply == null){
 			return false;
 		}

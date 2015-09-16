@@ -2,16 +2,17 @@
 
 use App\Permission;
 use App\Repositories\CRepository;
+use App\Services\CollectionService;
 
 class EloquentPermissionRepository extends CRepository implements PermissionRepository {
 
 	// hämtar en eller alla rättigheter.
 	public function get($id = null)
 	{
-		if(is_null($id)){
-			return Permission::all();
+		if(!is_null($id)){
+			return CollectionService::filter($this->get(), 'id', $id, 'first');
 		}else{
-			return Permission::find($id);
+			return $this->cache('all', Permission::where('id', '!=', 0));
 		}
 	}
 
@@ -21,7 +22,7 @@ class EloquentPermissionRepository extends CRepository implements PermissionRepo
 		if(!is_numeric($id)) {
 			$Permission = new Permission;
 		} else {
-			$Permission = Permission::find($id);
+			$Permission = $this->get($id);
 		}
 
 		if(isset($input['permission'])){
@@ -39,7 +40,7 @@ class EloquentPermissionRepository extends CRepository implements PermissionRepo
 
 	// tar bort en rättighet
 	public function delete($id){
-		$Permission = Permission::find($id);
+		$Permission = $this->get($id);
 		if($Permission == null){
 			return false;
 		}

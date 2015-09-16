@@ -1,11 +1,20 @@
 <?php namespace App\Repositories;
 
+use App\Services\CacheTrait;
 use Illuminate\Support\Facades\Mail;
 // bas klassen för repon
 Class CRepository {
 
+	use CacheTrait;
+
 	// fel behållaren för fel
 	public $errors;
+
+	public static $self;
+
+	public function __construct(){
+		Self::$self = $this;
+	}
 
 	// get metod för felen
 	public function getErrors(){
@@ -37,5 +46,9 @@ Class CRepository {
 			}
 		}
 		return FALSE;
+	}
+
+	public static function flush($model = null){
+		Self::$self->flushCache($model);
 	}
 }

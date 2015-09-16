@@ -2,6 +2,7 @@
 
 use App\Article;
 use App\Repositories\CRepository;
+use App\Services\CollectionService;
 
 class EloquentArticleRepository extends CRepository implements ArticleRepository {
 
@@ -9,12 +10,12 @@ class EloquentArticleRepository extends CRepository implements ArticleRepository
 	public function get($id = null)
 	{
 		if(is_null($id)){
-			return Article::all();
+			return $this->cache('all', Article::where('id', '!=', 0));
 		}else{
 			if(is_numeric($id)) {
-				return Article::find($id);
+				return CollectionService::filter($this->get(), 'id', $id, 'first');
 			}else{
-				return Article::where('slug', $id)->first();
+				return CollectionService::filter($this->get(), 'slug', $id, 'first');
 			}
 		}
 	}
@@ -48,10 +49,10 @@ class EloquentArticleRepository extends CRepository implements ArticleRepository
 	// tar bort en artikel.
 	public function delete($id){
 		$Article = $this->get($id);
-		if($Article == null){
-			return false;
+		if($Article != null) {
+			return $Article->delete();
 		}
-		return $Article->delete();
+		return false;
 	}
 
 }

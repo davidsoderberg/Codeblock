@@ -28,4 +28,28 @@ trait TestTrait{
 			Artisan::call('db:seed', ['--class' => 'PermissionRoleTableSeeder']);
 		}
 	}
+
+	// Hittad på: https://github.com/laravel/framework/issues/1181
+	protected function resetEvents()
+	{
+		$models = array(
+			'App\Article',
+			'App\Category',
+			'App\Comment',
+			'App\Forum',
+			'App\Post',
+			'App\Rate',
+			'App\Reply',
+			'App\Role',
+			'App\Star',
+			'App\Tag',
+			'App\Topic',
+			'App\User',
+		);
+		foreach ($models as $model) {
+			call_user_func(array($model, 'flushEventListeners'));
+			call_user_func(array($model, 'boot'));
+		}
+	}
+
 }
