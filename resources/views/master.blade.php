@@ -61,9 +61,9 @@
 				<div class="menu float-right">
 					<ul>
 						<li class="divider"></li>
-						<li><a href="" target="_blank"><i class="fa fa-facebook-square facebook-blue"></i> Facebook</a></li>
+						<li><a href="https://www.facebook.com/Codeblock-1470640509923344/timeline/" target="_blank"><i class="fa fa-facebook-square facebook-blue"></i> Facebook</a></li>
 						<li class="divider"></li>
-						<li><a href="" target="_blank"><i class="fa fa-twitter-square twitter-blue"></i> Twitter</a></li>
+						<li><a href="https://twitter.com/Codeblock_se" target="_blank"><i class="fa fa-twitter-square twitter-blue"></i> Twitter</a></li>
 						<li class="divider"></li>
 						<li><a href="" target="_blank"><i class="fa fa-google-plus-square google-plus-red"></i> Google+</a></li>
 						<li class="divider"></li>
