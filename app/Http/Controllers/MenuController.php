@@ -3,6 +3,8 @@
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Tag\TagRepository;
 use App\Repositories\CRepository;
+use App\Services\LaravelLogViewer;
+use App\Services\LogViewer;
 use Illuminate\Support\Facades\Auth;
 use Orangehill\Iseed\Facades\Iseed;
 use Illuminate\Support\Facades\Validator;
@@ -132,5 +134,10 @@ class MenuController extends Controller {
 		}else{
 			return Redirect::back()->withErrors($v->messages())->withInput();
 		}
+	}
+
+	public function log(){
+		//dd(LogViewer::all());
+		return View::make('log')->with('title', 'Log')->with('logs', LogViewer::all());
 	}
 }

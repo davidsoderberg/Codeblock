@@ -16,6 +16,7 @@ Route::pattern('slug', '[-a-zA-Z0-9-]+');
 Route::pattern('sort', 'category|stars|date|comments|name');
 
 Route::get('/', 'MenuController@index');
+Route::get('/log', 'MenuController@log');
 Route::get('browse', 'MenuController@browse');
 Route::get('markdown', 'MenuController@markdown');
 Route::group(['prefix' => 'embed'], function(){

@@ -95,3 +95,36 @@
 .position-relative{
 	position: relative;
 }
+
+.log-emergency{
+	padding: 1em;
+	border: 2px solid darken($red, 25%);
+}
+.log-alert{
+	padding: 1em;
+	border: 2px solid darken($red, 18.75%);
+}
+.log-critical{
+	padding: 1em;
+	border: 2px solid darken($red, 12.5%);
+}
+.log-error {
+	padding: 1em;
+	border: 2px solid darken($red, 6.25%);
+}
+.log-warning{
+	padding: 1em;
+	border: 2px solid darken($orange, 25%);
+}
+.log-notice{
+	padding: 1em;
+	border: 2px solid darken($orange, 12.5%);
+}
+.log-info{
+	padding: 1em;
+	border: 2px solid darken($blue, 25%);
+}
+.log-debug{
+	padding: 1em;
+	border: 2px solid darken($blue, 12.5%);
+}
