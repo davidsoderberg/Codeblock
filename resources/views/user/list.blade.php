@@ -8,22 +8,7 @@
 	@if(isset($posts))
 		<h2>{{ $user->username }}s Codeblocks</h2>
 		@if(count($posts) > 0)
-			<p>
-				<b>Sort by:</b>
-				@if(Auth::check() && Auth::user()->username === $user->username)
-					<a href="/user/list" class="margin-bottom-half full-width-small float-none button">Date</a>
-					<a href="/user/list/name" class="margin-bottom-half full-width-small float-none button">Name</a>
-					<a href="/user/list/category" class="margin-bottom-half full-width-small float-none button">Category</a>
-					<a href="/user/list/stars" class="margin-bottom-half full-width-small float-none button">Stars</a>
-					<a href="/user/list/comments" class="margin-bottom-half full-width-small float-none button">Comments</a>
-				@else
-					<a href="/user/list/{{$user->username}}" class="margin-bottom-half full-width-small float-none button">Date</a>
-					<a href="/user/list/{{$user->username}}/name" class="margin-bottom-half full-width-small float-none button">Name</a>
-					<a href="/user/list/{{$user->username}}/category" class="margin-bottom-half full-width-small float-none button">Category</a>
-					<a href="/user/list/{{$user->username}}/stars" class="margin-bottom-half full-width-small float-none button">Stars</a>
-					<a href="/user/list/{{$user->username}}/comments" class="margin-bottom-half full-width-small float-none button">Comments</a>
-				@endif
-			</p>
+			@include('partials.sortlinks')
 			@foreach ($posts as $post)
 				@if($post->private != 1 || Auth::check() && Auth::user()->id == $post->user_id)
 					<h3 class="text-left margin-top-half">{{HTML::actionlink($url = array('action' => 'PostController@show', 'params' => array($post->slug)),$post->name, array('class' => 'display-block decoration-none'))}}</h3>

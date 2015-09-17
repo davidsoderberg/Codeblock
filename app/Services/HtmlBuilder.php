@@ -3,6 +3,7 @@
 use App\Services\Annotation\Permission;
 use Illuminate\Html\FormFacade;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
@@ -274,5 +275,43 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder{
 
 	public function excerpt($text, $parseAll = false, $words = 10){
 		return Str::words($this->markdown($text, $parseAll),$words);
+	}
+
+	public function sortlink($name){
+		$parameters = Request::route()->parameters();
+
+		if(isset($parameters['username'])) {
+			$patterns = Route::getPatterns();
+			if(preg_match('/' . $patterns['sort'] . '/', $parameters['username'])){
+				$parameters['sort'] = $parameters['username'];
+			}
+		}
+
+		$url = Request::url();
+		if(isset($parameters['sort'])){
+			$url = str_replace($parameters['sort'], strtolower($name), $url);
+		}else{
+			$url .= '/'.strtolower($name);
+		}
+
+		if(count(Request::all()) > 0){
+			$i = 0;
+			foreach(Request::all() as $key => $value){
+				if($i == 0){
+					$url .= '?';
+				}else{
+					$url .= '&';
+				}
+				$url .= $key.'='.$value;
+				$i++;
+			}
+		}
+
+		$attributes = $this->attributes(array(
+			'href' => $url,
+			'class' => 'margin-bottom-half full-width-small float-none button'
+		));
+
+		return '<a '.$attributes.'>'.$name.'</a>';
 	}
 }

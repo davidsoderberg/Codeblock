@@ -56,16 +56,9 @@
 
 	@if(count($posts) > 0)
 		@if(!isset($term))
-			<div class="margin-bottom-one">
-				<label class="margin-bottom-half full-width-small">Sort by:</label>
-				@if(isset($category))
-					@include('partials.sortlinks', array('name' => $category->name, 'type' => 'categories/list'))
-				@else
-					@if(isset($tag))
-						@include('partials.sortlinks', array('name' => $tag->name, 'type' => 'tags/list'))
-					@endif
-				@endif
-			</div>
+			@if(isset($category) || isset($tag))
+				@include('partials.sortlinks')
+			@endif
 		@endif
 		@foreach ($posts as $post)
 			@if($post->private != 1)
