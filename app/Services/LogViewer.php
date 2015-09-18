@@ -1,5 +1,6 @@
 <?php namespace App\Services;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\File;
 use Psr\Log\LogLevel;
 use ReflectionClass;
@@ -39,8 +40,8 @@ class LogViewer
 	 */
 	public static function setFile($file)
 	{
-		if (File::exists(storage_path() . '/logs/' . $file)) {
-			self::$file = storage_path() . '/logs/' . $file;
+		if (File::exists($file)) {
+			self::$file = $file;
 		}
 	}
 
@@ -57,7 +58,7 @@ class LogViewer
 	 */
 	public static function all()
 	{
-		$log = array();
+		$log = new Collection();
 
 		$log_levels = self::getLogLevels();
 
@@ -94,7 +95,7 @@ class LogViewer
 
 						if (!isset($current[2])) continue;
 
-						$log[] = array(
+						$log->add(array(
 							'level' => $level_value,
 							'level_class' => self::$levels_classes[$level_value],
 							'level_img' => self::$levels_imgs[$level_value],
@@ -102,13 +103,13 @@ class LogViewer
 							'text' => $current[2],
 							'in_file' => isset($current[3]) ? $current[3] : null,
 							'stack' => preg_replace("/^\n*/", '', $log_data[$i])
-						);
+						));
 					}
 				}
 			}
 		}
 
-		return array_reverse($log);
+		return $log->reverse();
 	}
 
 	/**

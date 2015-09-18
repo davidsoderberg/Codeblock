@@ -5,6 +5,7 @@ use App\Repositories\Tag\TagRepository;
 use App\Repositories\CRepository;
 use App\Services\LaravelLogViewer;
 use App\Services\LogViewer;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Orangehill\Iseed\Facades\Iseed;
 use Illuminate\Support\Facades\Validator;
@@ -137,7 +138,23 @@ class MenuController extends Controller {
 	}
 
 	public function log(){
-		//dd(LogViewer::all());
-		return View::make('log')->with('title', 'Log')->with('logs', LogViewer::all());
+		$logs = new Collection();
+		$count = 0;
+		foreach(LogViewer::getFiles() as $file){
+			LogViewer::setFile($file);
+
+			foreach(LogViewer::all() as $item) {
+				$logs->add($item);
+			}
+
+			$count++;
+			if($count >= 2){
+				break;
+			}
+		}
+
+		$logs = $this->createPaginator($logs);
+
+		return View::make('log')->with('title', 'Log')->with('logs', $logs['data'])->with('paginator', $logs['paginator']);
 	}
 }
