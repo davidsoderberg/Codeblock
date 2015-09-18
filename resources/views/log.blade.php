@@ -17,7 +17,7 @@
         <div class="text-center alert info">There are no log item here yet.</div>
     @endif
     @if(isset($paginator))
-        {{$paginator->render()}}
+        {{$paginator}}
     @endif
 @stop
 
