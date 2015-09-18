@@ -286,10 +286,13 @@ class PostController extends Controller {
 		if($sort != ''){
 			$posts = $this->post->sort($posts, $sort);
 		}
+		$paginator = null;
 
-		$paginator = $this->createPaginator($posts);
-		$posts = $paginator['data'];
-		$paginator = $paginator['paginator'];
+		if($id != Lang::get('app.WhatsNew') && $id != Lang::get('app.MostPopular')) {
+			$paginator = $this->createPaginator($posts);
+			$posts = $paginator['data'];
+			$paginator = $paginator['paginator'];
+		}
 
 		return View::make('post.list')->with('title', 'Posts in category: '.$category->name )->with('posts', $posts)->with('category', $category)->with('paginator', $paginator);
 	}
