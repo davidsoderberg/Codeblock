@@ -24,8 +24,6 @@ class ApiController extends Controller {
 
 	private $page = 1;
 
-	private $perPage = 10;
-
 	private $limit = 0;
 
 	private $sort = '';

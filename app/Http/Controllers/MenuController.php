@@ -137,6 +137,10 @@ class MenuController extends Controller {
 		}
 	}
 
+	/**
+	 * @permission view_log
+	 * @return mixed
+	 */
 	public function log(){
 		$logs = new Collection();
 		$count = 0;

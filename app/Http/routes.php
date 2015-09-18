@@ -16,7 +16,6 @@ Route::pattern('slug', '[-a-zA-Z0-9-]+');
 Route::pattern('sort', 'category|stars|date|comments|name');
 
 Route::get('/', 'MenuController@index');
-Route::get('/log', 'MenuController@log');
 Route::get('browse', 'MenuController@browse');
 Route::get('markdown', 'MenuController@markdown');
 Route::group(['prefix' => 'embed'], function(){
@@ -175,6 +174,7 @@ Route::group(['prefix' => 'roles'], function(){
 });
 
 Route::group(['middleware' => 'auth'], function() {
+	Route::get('/log', 'MenuController@log');
 	Route::get('starred', 'UserController@listStarred');
 	Route::get('users', 'UserController@index');
 	Route::get('backup', 'UserController@backup');
