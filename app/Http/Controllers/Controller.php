@@ -4,6 +4,7 @@ use App\Model;
 use App\NotificationType;
 use App\Repositories\Notification\NotificationRepository;
 use App\Services\Jwt;
+use App\Services\PaginationPresenter;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Routing\Controller as BaseController;
@@ -119,6 +120,6 @@ abstract class Controller extends BaseController {
 		$paginator = new LengthAwarePaginator($data, count($data), $this->perPage, $_GET['page'], array('path' => '/'.Request::path()));
 		$data = $data->slice(($_GET['page'] * $this->perPage) - $this->perPage, $this->perPage);
 
-		return array('data' => $data, 'paginator' => $paginator);
+		return array('data' => $data, 'paginator' => $paginator->render());
 	}
 }

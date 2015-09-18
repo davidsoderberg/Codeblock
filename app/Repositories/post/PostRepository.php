@@ -11,7 +11,7 @@ interface PostRepository extends IRepository {
 
 	public function getPopular($limit = 10, $min = 0);
 
-	public function getNewest();
+	public function getNewest($limit = 10);
 
 	public function getByTag($id);
 

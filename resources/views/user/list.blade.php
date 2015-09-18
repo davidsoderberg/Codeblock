@@ -24,7 +24,7 @@
 				@endif
 			@endforeach
 			@if(isset($paginator))
-				{{$paginator->render()}}
+				{{$paginator}}
 			@endif
 		@else
 			<div class="text-center alert info">{{ $user->username }} have no blocks yet.</div>

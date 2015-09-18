@@ -92,7 +92,7 @@
 			@endif
 		@endforeach
 		@if(isset($paginator))
-			{{$paginator->render()}}
+			{{$paginator}}
 		@endif
 	@else
 		@if(isset($term))

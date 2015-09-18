@@ -83,7 +83,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 		return $postsCollection;
 	}
 
-	public function getNewest(){
+	public function getNewest($limit = 10){
 		$posts = $this->get();
 		$postsCollection = new Collection();
 		foreach ($posts as $post) {
@@ -99,6 +99,9 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 				if($post->private != 1){
 					$postsCollection->add($post);
 				}
+			}
+			if($postsCollection->count() == 10){
+				break;
 			}
 		}
 		return $postsCollection;
