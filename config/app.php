@@ -152,6 +152,7 @@ return [
 		'Orangehill\Iseed\IseedServiceProvider',
 		'Laravel\Socialite\SocialiteServiceProvider',
 		Barryvdh\Debugbar\ServiceProvider::class,
+		'Ipunkt\LaravelAnalytics\AnalyticsServiceProvider',
 	],
 
 	/*
@@ -200,6 +201,7 @@ return [
 		'HTML' 		=> 'Illuminate\Html\HtmlFacade',
 		'Form' 		=> 'Illuminate\Html\FormFacade',
 		'Socialize' => 'Laravel\Socialite\Facades\Socialite',
+		'Analytics' => 'Ipunkt\LaravelAnalytics\AnalyticsFacade',
 
 	],
 
