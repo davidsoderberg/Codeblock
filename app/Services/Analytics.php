@@ -46,7 +46,7 @@ class Analytics{
 
 	public static function track($category, $action, $label = null, $value = null){
 		if(env('APP_DEBUG')) {
-			$analytics = new GoogleAnalytics();
+			$analytics = new GoogleAnalytics(config('analytics.configurations.GoogleAnalytics'));
 			try {
 				$analytics->trackEvent(Self::getCategory($category), Self::getAction($action), $label, $value);
 			} catch(\OutOfRangeException $e) {
