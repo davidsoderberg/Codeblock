@@ -41,7 +41,7 @@ return [
 			/**
 			 * Use ip anonymized
 			 */
-			'anonymize_ip' => true,
+			'anonymize_ip' => false,
 
 			/**
 			 * Auto tracking pageview: ga('send', 'pageview');
