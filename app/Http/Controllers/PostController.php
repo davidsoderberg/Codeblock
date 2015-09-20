@@ -7,6 +7,7 @@ use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Star\StarRepository;
 use App\Repositories\Tag\TagRepository;
 use App\Repositories\Rate\RateRepository;
+use App\Services\Analytics;
 use App\Services\Github;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\URL;
@@ -77,10 +78,10 @@ class PostController extends Controller {
 				}
 			}
 			return View::make('post.show')
-				->with('title', 'Codeblock: '. $post->name)
-				->with('post', $post)
-				->with('rate', $this->rate)
-				->with('commentToEdit', $comment);
+			           ->with('title', 'Codeblock: '. $post->name)
+			           ->with('post', $post)
+			           ->with('rate', $this->rate)
+			           ->with('commentToEdit', $comment);
 		}else{
 			if(Auth::check()){
 				if(!empty($post->comments[0])){
@@ -238,12 +239,12 @@ class PostController extends Controller {
 		$posts = $this->post->search($term, $filter);
 
 		return View::make('post.list')
-			->with('title', 'Search on: '.$term)
-			->with('posts', $posts->reverse())
-			->with('term', $term)
-			->with('filter', $filter)
-			->with('categories', $categories)
-			->with('tags', $tags);
+		           ->with('title', 'Search on: '.$term)
+		           ->with('posts', $posts->reverse())
+		           ->with('term', $term)
+		           ->with('filter', $filter)
+		           ->with('categories', $categories)
+		           ->with('tags', $tags);
 	}
 
 	private function only($posts){
@@ -268,13 +269,13 @@ class PostController extends Controller {
 	 */
 	public function category($id, $sort = 'date'){
 		$id = urldecode($id);
-		if($id == Lang::get('app.WhatsNew')) {
-			$this->category->name = $id;
+		if($id == str_slug(Lang::get('app.WhatsNew'))) {
+			$this->category->name = Lang::get('app.WhatsNew');
 			$posts = $this->post->getNewest();
 			$category = $this->category;
 		}
-		elseif($id == Lang::get('app.MostPopular')){
-			$this->category->name = $id;
+		elseif($id == str_slug(Lang::get('app.MostPopular'))){
+			$this->category->name = Lang::get('app.MostPopular');
 			$posts = $this->post->getPopular();
 			$category = $this->category;
 		}
@@ -286,13 +287,10 @@ class PostController extends Controller {
 		if($sort != ''){
 			$posts = $this->post->sort($posts, $sort);
 		}
-		$paginator = null;
 
-		if($id != Lang::get('app.WhatsNew') && $id != Lang::get('app.MostPopular')) {
-			$paginator = $this->createPaginator($posts);
-			$posts = $paginator['data'];
-			$paginator = $paginator['paginator'];
-		}
+		$paginator = $this->createPaginator($posts);
+		$posts = $paginator['data'];
+		$paginator = $paginator['paginator'];
 
 		return View::make('post.list')->with('title', 'Posts in category: '.$category->name )->with('posts', $posts)->with('category', $category)->with('paginator', $paginator);
 	}
@@ -311,9 +309,11 @@ class PostController extends Controller {
 		if($sort != ''){
 			$posts = $this->post->sort($posts, $sort);
 		}
+
 		$paginator = $this->createPaginator($posts);
 		$posts = $paginator['data'];
 		$paginator = $paginator['paginator'];
+
 		return View::make('post.list')->with('title', 'Posts with tag: '.$tag->name)->with('posts', $posts)->with('tag', $tag)->with('paginator', $paginator);
 	}
 
@@ -342,6 +342,7 @@ class PostController extends Controller {
 	 */
 	public function fork($id){
 		if($this->post->duplicate($id)){
+			Analytics::track(Analytics::CATEGORY_INTERNAL, Analytics::ACTION_FORK, $this->post->getId());
 			return Redirect::to('/posts/edit/'.$this->post->getId())->with('success', 'Your have forked a block and can now edit.');
 		}
 		return Redirect::back()->with('error', 'We could not fork this codeblock right now, please try again.');
@@ -376,12 +377,15 @@ class PostController extends Controller {
 					$data = array('name' => $data['filename'], 'description' => 'A forked <a href="https://api.github.com/gists/' . $id . '" target="_blank">gist</a>', 'cat_id' => $category_Id, 'code' => $data['content']);
 
 					if($this->post->createOrUpdate($data)) {
+						Analytics::track(Analytics::CATEGORY_SOCIAL, Analytics::ACTION_FORK, $id);
 						return Redirect::to('/posts/' . $this->post->getId())->with('success', 'The requested <a href="https://gist.github.com/' . $id . '" target="_blank">gist</a> have been forked.');
 					}
 				}
 			}
+			Analytics::track(Analytics::CATEGORY_ERROR, Analytics::ACTION_FORK, 'Github: '.$id);
 			return Redirect::back()->with('error', 'The requested <a href="https://gist.github.com/' . $id . '" target="_blank">gist</a> could not be forked.');
 		}
+		Analytics::track(Analytics::CATEGORY_ERROR, Analytics::ACTION_FORK, 'Github');
 		return Redirect::back()->with('error', 'Sorry right now we not have any api request left please try agian later.');
 	}
 }
