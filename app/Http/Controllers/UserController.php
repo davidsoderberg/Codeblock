@@ -5,6 +5,7 @@ use App\Repositories\Notification\NotificationRepository;
 use App\Repositories\Post\PostRepository;
 use App\Repositories\Role\RoleRepository;
 use App\Repositories\User\UserRepository;
+use App\Services\Analytics;
 use App\Services\CollectionService;
 use App\Social;
 use Illuminate\Database\Eloquent\Collection;
@@ -299,8 +300,10 @@ class UserController extends Controller {
 				if($create) {
 					$user = Social::create(array("social" => $social, "user_id" => $authedUser->id, "social_id" => $user->getId()));
 					if($user) {
+						Analytics::track(Analytics::CATEGORY_SOCIAL, Analytics::ACTION_CONNECT, $social);
 						return Redirect::to('/user')->with('success', 'You have connected ' . $social . ' to your account.');
 					}
+					Analytics::track(Analytics::CATEGORY_ERROR, Analytics::ACTION_CONNECT, $social);
 					return Redirect::to('/user')->with('error', 'We could not connected ' . $social . ' to your account.');
 				} else {
 					return Redirect::to('/user')->with('error', 'You have already connected ' . $social . ' to your account.');
@@ -327,9 +330,11 @@ class UserController extends Controller {
 					}
 					if($id > 0) {
 						Auth::loginUsingId($id);
+						Analytics::track(Analytics::CATEGORY_SOCIAL, Analytics::ACTION_LOGIN, $social);
 						return Redirect::to('/user')->with('success', 'You have logged in.');
 					}
 				} catch (\Exception $e){}
+				Analytics::track(Analytics::CATEGORY_ERROR, Analytics::ACTION_LOGIN, $social);
 				return Redirect::to('/login')->with('error', 'We could not log you in with your connected social media, please login with the login form and connect '.$social.' with your account.');
 			}
 		}
