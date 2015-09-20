@@ -78,10 +78,10 @@ class PostController extends Controller {
 				}
 			}
 			return View::make('post.show')
-				->with('title', 'Codeblock: '. $post->name)
-				->with('post', $post)
-				->with('rate', $this->rate)
-				->with('commentToEdit', $comment);
+			           ->with('title', 'Codeblock: '. $post->name)
+			           ->with('post', $post)
+			           ->with('rate', $this->rate)
+			           ->with('commentToEdit', $comment);
 		}else{
 			if(Auth::check()){
 				if(!empty($post->comments[0])){
@@ -239,12 +239,12 @@ class PostController extends Controller {
 		$posts = $this->post->search($term, $filter);
 
 		return View::make('post.list')
-			->with('title', 'Search on: '.$term)
-			->with('posts', $posts->reverse())
-			->with('term', $term)
-			->with('filter', $filter)
-			->with('categories', $categories)
-			->with('tags', $tags);
+		           ->with('title', 'Search on: '.$term)
+		           ->with('posts', $posts->reverse())
+		           ->with('term', $term)
+		           ->with('filter', $filter)
+		           ->with('categories', $categories)
+		           ->with('tags', $tags);
 	}
 
 	private function only($posts){
@@ -269,13 +269,13 @@ class PostController extends Controller {
 	 */
 	public function category($id, $sort = 'date'){
 		$id = urldecode($id);
-		if($id == Lang::get('app.WhatsNew')) {
-			$this->category->name = $id;
+		if($id == str_slug(Lang::get('app.WhatsNew'))) {
+			$this->category->name = Lang::get('app.WhatsNew');
 			$posts = $this->post->getNewest();
 			$category = $this->category;
 		}
-		elseif($id == Lang::get('app.MostPopular')){
-			$this->category->name = $id;
+		elseif($id == str_slug(Lang::get('app.MostPopular'))){
+			$this->category->name = Lang::get('app.MostPopular');
 			$posts = $this->post->getPopular();
 			$category = $this->category;
 		}
@@ -287,13 +287,10 @@ class PostController extends Controller {
 		if($sort != ''){
 			$posts = $this->post->sort($posts, $sort);
 		}
-		$paginator = null;
 
-		if($id != Lang::get('app.WhatsNew') && $id != Lang::get('app.MostPopular')) {
-			$paginator = $this->createPaginator($posts);
-			$posts = $paginator['data'];
-			$paginator = $paginator['paginator'];
-		}
+		$paginator = $this->createPaginator($posts);
+		$posts = $paginator['data'];
+		$paginator = $paginator['paginator'];
 
 		return View::make('post.list')->with('title', 'Posts in category: '.$category->name )->with('posts', $posts)->with('category', $category)->with('paginator', $paginator);
 	}
@@ -312,9 +309,11 @@ class PostController extends Controller {
 		if($sort != ''){
 			$posts = $this->post->sort($posts, $sort);
 		}
+
 		$paginator = $this->createPaginator($posts);
 		$posts = $paginator['data'];
 		$paginator = $paginator['paginator'];
+
 		return View::make('post.list')->with('title', 'Posts with tag: '.$tag->name)->with('posts', $posts)->with('tag', $tag)->with('paginator', $paginator);
 	}
 
