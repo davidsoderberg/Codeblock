@@ -47,12 +47,22 @@ class gaTracking {
 					break;
 				case 'UserController@oauth':
 					if(Session::has('success')){
-						Analytics::track(Analytics::CATEGORY_SOCIAL, Analytics::ACTION_CONNECT);
-						Analytics::track(Analytics::CATEGORY_SOCIAL, Analytics::ACTION_LOGIN);
+						if(Session::has('social_connect')) {
+							Analytics::track(Analytics::CATEGORY_SOCIAL, Analytics::ACTION_CONNECT, Session::get('social_connect'));
+						}
+						if(Session::has('social_login')) {
+							Analytics::track(Analytics::CATEGORY_SOCIAL, Analytics::ACTION_LOGIN, Session::get('social_login'));
+						}
 					}else{
-						Analytics::track(Analytics::CATEGORY_ERROR, Analytics::ACTION_CONNECT);
-						Analytics::track(Analytics::CATEGORY_ERROR, Analytics::ACTION_LOGIN);
+						if(Session::has('social_connect')) {
+							Analytics::track(Analytics::CATEGORY_ERROR, Analytics::ACTION_CONNECT, Session::get('social_connect'));
+						}
+						if(Session::has('social_login')) {
+							Analytics::track(Analytics::CATEGORY_ERROR, Analytics::ACTION_LOGIN, Session::get('social_login'));
+						}
 					}
+					Session::forget('social_connect');
+					Session::forget('social_login');
 					break;
 			}
 		}

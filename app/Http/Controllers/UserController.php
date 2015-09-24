@@ -279,6 +279,7 @@ class UserController extends Controller {
 	 */
 	public function oauth($social, Socialite $socialite){
 		if($this->request->get('code') || $this->request->get('oauth_token') && $this->request->get('oauth_verifier')){
+			Session::put('social_connect', $social);
 			$user = $socialite->driver($social)->user();
 			if($social == 'github') {
 				Session::put('github_access_token', $user->token);
@@ -295,7 +296,6 @@ class UserController extends Controller {
 						}
 					}
 				}
-
 				if($create) {
 					$user = Social::create(array("social" => $social, "user_id" => $authedUser->id, "social_id" => $user->getId()));
 					if($user) {
@@ -306,6 +306,7 @@ class UserController extends Controller {
 					return Redirect::to('/user')->with('error', 'You have already connected ' . $social . ' to your account.');
 				}
 			}else{
+				Session::put('social_login', $social);
 				try {
 					$socials = Social::all();
 					$id = 0;
