@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use Venturecraft\Revisionable\Revision;
 use Illuminate\Support\Facades\Lang;
+use App\Services\Analytics;
 
 class PostController extends Controller {
 
@@ -341,6 +342,7 @@ class PostController extends Controller {
 	 */
 	public function fork($id){
 		if($this->post->duplicate($id)){
+			Analytics::track(Analytics::CATEGORY_INTERNAL, Analytics::ACTION_FORK, $this->post->getId());
 			return Redirect::to('/posts/edit/'.$this->post->getId())->with('success', 'Your have forked a block and can now edit.');
 		}
 		return Redirect::back()->with('error', 'We could not fork this codeblock right now, please try again.');
@@ -375,12 +377,15 @@ class PostController extends Controller {
 					$data = array('name' => $data['filename'], 'description' => 'A forked <a href="https://api.github.com/gists/' . $id . '" target="_blank">gist</a>', 'cat_id' => $category_Id, 'code' => $data['content']);
 
 					if($this->post->createOrUpdate($data)) {
+						Analytics::track(Analytics::CATEGORY_SOCIAL, Analytics::ACTION_FORK, $this->post->getId());
 						return Redirect::to('/posts/' . $this->post->getId())->with('success', 'The requested <a href="https://gist.github.com/' . $id . '" target="_blank">gist</a> have been forked.');
 					}
 				}
 			}
+			Analytics::track(Analytics::CATEGORY_ERROR, Analytics::ACTION_FORK, 'Github: '.$id);
 			return Redirect::back()->with('error', 'The requested <a href="https://gist.github.com/' . $id . '" target="_blank">gist</a> could not be forked.');
 		}
+		Analytics::track(Analytics::CATEGORY_ERROR, Analytics::ACTION_FORK, 'Github');
 		return Redirect::back()->with('error', 'Sorry right now we not have any api request left please try agian later.');
 	}
 }

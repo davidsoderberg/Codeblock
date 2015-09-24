@@ -1,9 +1,11 @@
 <?php namespace App\Services;
 
 
-use Ipunkt\LaravelAnalytics\Providers\GoogleAnalytics;
+use Irazasyed\LaravelGAMP\Facades\GAMP;
 
 class Analytics{
+
+	private static $clientId = 'codeblock.se';
 
 	private static $categories = array(
 		'social',
@@ -46,11 +48,22 @@ class Analytics{
 
 	public static function track($category, $action, $label = null, $value = null){
 		if(env('APP_DEBUG')) {
-			$analytics = new GoogleAnalytics(config('analytics.configurations.GoogleAnalytics'));
+			$analytics = GAMP::setClientId(Self::$clientId);
 			try {
-				$analytics->trackEvent(Self::getCategory($category), Self::getAction($action), $label, $value);
+				$analytics->setEventCategory(Self::getCategory($category))->setEventAction(Self::getAction($action));
+				if(!is_null($label)){
+					$analytics->setEventLabel($label);
+				}
+				if(!is_null($value)){
+					$analytics->setEventValue($value);
+				}
+				$analytics->sendEvent();
 			} catch(\OutOfRangeException $e) {
-				$analytics->trackEvent(Self::getCategory(Self::CATEGORY_ERROR), Self::getAction(Self::ACTION_CREATE), 'Track event, '.$e->getMessage());
+				$analytics->setEventCategory(Self::getCategory(Self::CATEGORY_ERROR))
+					->setEventAction(Self::getAction(Self::ACTION_CREATE))
+					->setEventLabel('Track event')
+					->setEventValue($e->getMessage())
+					->sendEvent();
 			}
 		}
 	}
