@@ -47,7 +47,7 @@ class Analytics{
 	}
 
 	public static function track($category, $action, $label = null, $value = null){
-		if(env('APP_DEBUG')) {
+		if(!env('APP_DEBUG')) {
 			$analytics = GAMP::setClientId(Self::$clientId);
 			try {
 				$analytics->setEventCategory(Self::getCategory($category))->setEventAction(Self::getAction($action));
