@@ -46,16 +46,20 @@ class Analytics{
 		throw new \OutOfRangeException("That action does not exist.");
 	}
 
-	public static function track($category, $action, $label = null, $value = null){
+	private static function parseLabel($label = null){
+		if(is_array($label)){
+			return json_encode($label);
+		}
+		return $label;
+	}
+
+	public static function track($category, $action, $label = null){
 		if(!env('APP_DEBUG')) {
 			$analytics = GAMP::setClientId(Self::$clientId);
 			try {
 				$analytics->setEventCategory(Self::getCategory($category))->setEventAction(Self::getAction($action));
 				if(!is_null($label)){
-					$analytics->setEventLabel($label);
-				}
-				if(!is_null($value)){
-					$analytics->setEventValue($value);
+					$analytics->setEventLabel(Self::parseLabel($label));
 				}
 				$analytics->sendEvent();
 			} catch(\OutOfRangeException $e) {

@@ -299,13 +299,13 @@ class UserController extends Controller {
 				if($create) {
 					$user = Social::create(array("social" => $social, "user_id" => $authedUser->id, "social_id" => $user->getId()));
 					if($user) {
-						Analytics::track(Analytics::CATEGORY_SOCIAL, Analytics::ACTION_CONNECT, $social);
+						Analytics::track(Analytics::CATEGORY_SOCIAL, Analytics::ACTION_CONNECT, array('social' => $social));
 						return Redirect::to('/user')->with('success', 'You have connected ' . $social . ' to your account.');
 					}
-					Analytics::track(Analytics::CATEGORY_ERROR, Analytics::ACTION_CONNECT, $social);
+					Analytics::track(Analytics::CATEGORY_ERROR, Analytics::ACTION_CONNECT, array('social' => $social));
 					return Redirect::to('/user')->with('error', 'We could not connected ' . $social . ' to your account.');
 				} else {
-					Analytics::track(Analytics::CATEGORY_ERROR, Analytics::ACTION_CONNECT, $social);
+					Analytics::track(Analytics::CATEGORY_ERROR, Analytics::ACTION_CONNECT, array('social' => $social));
 					return Redirect::to('/user')->with('error', 'You have already connected ' . $social . ' to your account.');
 				}
 			}else{
@@ -330,11 +330,18 @@ class UserController extends Controller {
 					}
 					if($id > 0) {
 						Auth::loginUsingId($id);
-						Analytics::track(Analytics::CATEGORY_SOCIAL, Analytics::ACTION_LOGIN, $social.': '.$id);
+						Analytics::track(
+							Analytics::CATEGORY_SOCIAL,
+							Analytics::ACTION_LOGIN,
+							array(
+								'social' => $social,
+								'username' => Auth::user()->username
+							)
+						);
 						return Redirect::to('/user')->with('success', 'You have logged in.');
 					}
 				} catch (\Exception $e){}
-				Analytics::track(Analytics::CATEGORY_ERROR, Analytics::ACTION_LOGIN, $social);
+				Analytics::track(Analytics::CATEGORY_ERROR, Analytics::ACTION_LOGIN, array('social' => $social));
 				return Redirect::to('/login')->with('error', 'We could not log you in with your connected social media, please login with the login form and connect '.$social.' with your account.');
 			}
 		}
