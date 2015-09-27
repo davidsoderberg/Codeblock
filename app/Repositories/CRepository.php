@@ -13,6 +13,7 @@ Class CRepository {
 	public static $self;
 
 	public function __construct(){
+		$this->enableCaching = env('CACHE');
 		Self::$self = $this;
 	}
 
