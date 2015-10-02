@@ -43,6 +43,12 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 		return [];
 	}
 
+	protected $modelsToReload = [];
+
+	public function getModelsToReload(){
+		return $this->modelsToReload;
+	}
+
 	public function getAnswer($boolean){
 		if(
 			$boolean === true || $boolean === false ||
@@ -65,15 +71,27 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 			return $object::isValid($object);
 		});
 
-		static::saved(function(){
-			CRepository::flush(Self::query()->getModel());
+		static::saved(function($object){
+			Self::reloadModels($object);
 			return true;
 		});
 
-		static::deleted(function(){
-			CRepository::flush(Self::query()->getModel());
+		static::deleted(function($object){
+			Self::reloadModels($object);
 			return true;
 		});
+	}
+
+	protected static function reloadModels(\App\Model $object){
+		$models = $object->getModelsToReload();
+		$models[] = get_class($object);
+		$models = array_unique($models);
+		foreach($models as $model){
+			if(!str_contains($model, 'App\\')){
+				$model = 'App\\'+$model;
+			}
+			CRepository::flush(new $model());
+		}
 	}
 
 	// From: https://laracasts.com/discuss/channels/general-discussion/how-to-validate-a-slug-unique-in-laravel-5

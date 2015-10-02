@@ -19,6 +19,8 @@ class Tag extends Model {
 	    'name' => 'required|min:3|unique:tags,name,:id:',
 	);
 
+	protected $modelsToReload = ['App\Post'];
+
 	public function Posts() {
 		return $this->belongsToMany('App\Post','post_tag');
 	}

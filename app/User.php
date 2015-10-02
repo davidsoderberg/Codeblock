@@ -35,6 +35,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	    });
 	}
 
+	protected $modelsToReload = [
+		'App\Post',
+		'App\Comment',
+		'App\Star',
+		'App\Rate',
+		'App\Social',
+		'App\Read',
+		'App\Notification'
+	];
+
 	/**
 	 * The database table used by the model.
 	 *

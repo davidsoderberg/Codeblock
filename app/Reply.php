@@ -13,6 +13,8 @@ class Reply extends Model
 
 	protected $guarded = array('id');
 
+	protected $modelsToReload = ['App\Topic', 'App\User', 'App\Forum'];
+
 	protected $hidden = array('user', 'updated_at');
 
 	public static $rules = array(

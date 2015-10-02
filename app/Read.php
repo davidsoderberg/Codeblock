@@ -18,4 +18,6 @@ class read extends Model {
 		'topic_id' => 'required|integer',
 	);
 
+	protected $modelsToReload = ['App\User', 'App\Topic'];
+
 }

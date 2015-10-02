@@ -17,6 +17,8 @@ class Role extends Model {
 		'name' => 'required|min:3|unique:roles,name,:id:'
 	);
 
+	protected $modelsToReload = ['App\Permission', 'App\User'];
+
 	public function permissions()
 	{
 		return $this->belongsToMany('App\Permission');

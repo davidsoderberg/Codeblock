@@ -17,6 +17,8 @@ class Permission extends Model {
 		'permission' => 'required|alpha_dash|unique:permissions,permission',
 	);
 
+	protected $modelsToReload = ['App\Role'];
+
 	public function roles()
 	{
 		return $this->belongsToMany('App\Role');
