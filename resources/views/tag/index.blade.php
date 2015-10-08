@@ -18,7 +18,6 @@
 			{{ Form::model($tag, array('action' => 'TagController@createOrUpdate')) }}
 			@endif
 				<h3>Make/update</h3>
-				{{ HTML::flash() }}
 				{{ Form::label('Name', 'Name:') }}
 				{{ Form::text('name', Input::old('name'), array('id' => 'Name', 'placeholder' => 'Name of tag', 'data-validator' => 'required|min:3')) }}
 				{{ $errors->first('name', '<div class="alert error">:message</div>') }}
