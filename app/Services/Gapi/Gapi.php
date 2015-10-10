@@ -1,10 +1,10 @@
-<?php namespace App\Services;
+<?php namespace App\Services\Gapi;
 
 use Spatie\LaravelAnalytics\LaravelAnalyticsFacade;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 
-class Gapi{
+class Gapi implements GapiInterface{
 
 	public function getTopKeywords($numberOfDays = 365, $maxResults = 20){
 		return LaravelAnalyticsFacade::getTopKeywords($numberOfDays, $maxResults);
