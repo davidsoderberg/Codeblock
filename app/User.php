@@ -1,5 +1,6 @@
 <?php namespace App;
 
+use App\ModelTraits\UserHasTeamsTrait;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\Session;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
-	use Authenticatable, CanResetPassword;
+	use Authenticatable, CanResetPassword, UserHasTeamsTrait;
 
 	public static function boot() {
 	    parent::boot();
