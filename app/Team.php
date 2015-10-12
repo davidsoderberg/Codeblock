@@ -18,7 +18,7 @@ class Team extends Model {
 	protected $guarded = array('id');
 
 	public static $rules = array(
-		'name'  => 'required|name|unique:teams,name,:id:',
+		'name'  => 'required|min:3|unique:teams,name,:id:',
 		'owner_id' => 'integer'
 	);
 

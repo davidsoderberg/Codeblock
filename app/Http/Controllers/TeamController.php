@@ -39,7 +39,7 @@ class TeamController extends Controller {
 	/**
 	 * @param null $id
 	 *
-	 * @permission view_teams
+	 * @permission view_team
 	 * @return mixed
 	 */
 	public function index( $id = null ) {
@@ -88,10 +88,8 @@ class TeamController extends Controller {
 			if ( is_null( $id ) ) {
 				return Redirect::to( 'teams' )->with( 'success', 'Your team has been created.' );
 			}
-
 			return Redirect::to( 'teams' )->with( 'success', 'Your team has been updated.' );
 		}
-
 		return Redirect::back()->withErrors( $this->teamRepository->getErrors() )->withInput( $this->request->all() );
 	}
 
@@ -117,10 +115,10 @@ class TeamController extends Controller {
 	}
 
 	/**
+	 * @param $token
 	 * @return mixed
 	 */
-	public function respondInvite() {
-		$token  = $this->request->get( 'token' );
+	public function respondInvite($token) {
 		$action = 'accepted';
 
 		$invite = $this->inviteRepository->getInviteFromAcceptToken( $token );

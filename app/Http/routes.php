@@ -61,6 +61,7 @@ Route::group(['prefix' => 'teams'], function(){
 });
 
 Route::group(['prefix' => 'team'], function(){
+	Route::get('/{token}', 'TeamController@respondInvite');
 	Route::group(['middleware' => 'auth'], function() {
 		Route::post('/store/{id?}', 'TeamController@createOrUpdate');
 		Route::get('/{id?}', 'TeamController@listTeams');
