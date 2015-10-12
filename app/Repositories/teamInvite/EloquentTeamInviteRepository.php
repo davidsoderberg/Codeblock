@@ -58,7 +58,7 @@ class EloquentTeamInviteRepository extends CRepository implements TeamInviteRepo
 		$this->deleteInvite($invite);
 	}
 
-	public function deleteInvite( TeamInvite $invite ){
+	private function deleteInvite( TeamInvite $invite ){
 		return $invite->delete();
 	}
 

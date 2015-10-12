@@ -52,6 +52,21 @@ Route::group(['prefix' => 'posts'], function(){
 	Route::get('/{slug}/{comment}', 'PostController@show');
 });
 
+Route::group(['prefix' => 'teams'], function(){
+	Route::group(['middleware' => 'auth'], function() {
+		Route::get('/delete/{id}', 'TeamController@delete');
+		Route::post('/store/{id?}', 'TeamController@createOrUpdate');
+		Route::get('/{id?}', 'TeamController@index');
+	});
+});
+
+Route::group(['prefix' => 'team'], function(){
+	Route::group(['middleware' => 'auth'], function() {
+		Route::post('/store/{id?}', 'TeamController@createOrUpdate');
+		Route::get('/{id?}', 'TeamController@listTeams');
+	});
+});
+
 Route::group(['prefix' => 'notifications'], function() {
 	Route::group(['middleware' => 'auth'], function() {
 		Route::get('/', 'NotificationController@listNotification');
