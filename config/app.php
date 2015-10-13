@@ -154,6 +154,7 @@ return [
 		Barryvdh\Debugbar\ServiceProvider::class,
 		Irazasyed\LaravelGAMP\LaravelGAMPServiceProvider::class,
 		Spatie\LaravelAnalytics\LaravelAnalyticsServiceProvider::class,
+		Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
 	],
 
 	/*
