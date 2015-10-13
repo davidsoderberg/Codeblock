@@ -24,7 +24,7 @@ class GapiController extends Controller {
 	}
 
 	/**
-	 * @permission view_analytics
+	 * @permission view_analytics_pages
 	 * @return mixed
 	 */
 	public function mostVisitedPages(){
@@ -44,7 +44,7 @@ class GapiController extends Controller {
 	}
 
 	/**
-	 * @permission view_analytics
+	 * @permission view_analytics_visitors
 	 * @return mixed
 	 */
 	public function visitorsAndPageViews(){
@@ -64,7 +64,7 @@ class GapiController extends Controller {
 	}
 
 	/**
-	 * @permission view_analytics
+	 * @permission view_analytics_events
 	 * @return mixed
 	 */
 	public function events(){
