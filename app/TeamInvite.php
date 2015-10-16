@@ -18,7 +18,7 @@ class TeamInvite extends Model {
 	protected $guarded = array('id');
 
 	public static $rules = array(
-		'email'  => 'required|email|unique:teaminvites,email,:id:',
+		'email'  => 'required|email',
 		'type' => 'in:invite, request',
 		'accept_token' => 'required',
 		'deny_token' => 'required',

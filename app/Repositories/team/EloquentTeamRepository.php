@@ -52,4 +52,8 @@ class EloquentTeamRepository extends CRepository implements TeamRepository {
 		return false;
 	}
 
+	public function leave($id){
+		return Auth::user()->detachTeam($this->get($id));
+	}
+
 }

@@ -1,6 +1,7 @@
 <?php namespace App\Repositories\TeamInvite;
 
 use App\Repositories\CRepository;
+use App\Repositories\Team\TeamRepository;
 use App\Team;
 use App\TeamInvite;
 use App\User;
@@ -11,54 +12,62 @@ class EloquentTeamInviteRepository extends CRepository implements TeamInviteRepo
 	const INVITE = 'invite';
 	const REQUEST = 'request';
 
-	public function inviteToTeam( User $user, Team $team, $type = TeamInviteRepository::INVITE ) {
+	public function inviteToTeam(User $user, Team $team, $type = Self::INVITE) {
 
 		$invite = new TeamInvite();
 		$invite->user_id = Auth::user()->getKey();
 		$invite->team_id = $team->id;
 		$invite->type = $type;
 		$invite->email = $user->email;
-		$invite->accept_token = md5( uniqid( microtime() ) );
-		$invite->deny_token = md5( uniqid( microtime() ) );
+		$invite->accept_token = md5(uniqid(microtime()));
+		$invite->deny_token = md5(uniqid(microtime()));
 
-		if ( $invite->save() ) {
-			$data = array( 'subject' => 'Team Invite' );
+		if($invite->save()) {
+			$data = array(
+				'subject' => 'Team Invite',
+				'invite' => $invite,
+				'user' => $user,
+				'team' => $team
+			);
 			$emailInfo = array(
 				'toEmail' => $user->email,
-				'toName'  => $user->username,
+				'toName' => $user->username,
 				'subject' => $data['subject'],
 			);
-			return $this->sendEmail( '', $emailInfo, $data );
+			if(!$this->sendEmail('emails.invite', $emailInfo, $data)) {
+				$this->deleteInvite($invite);
+			} else {
+				return true;
+			}
 		} else {
 			$this->errors = $invite::$errors;
 		}
+
 		return false;
 	}
 
-	public function hasPendingInvite( $email, Team $team ) {
-		return TeamInvite::where( 'email', "=", $email )
-		                 ->where( 'team_id', "=", $team->getKey() )
-		                 ->first() ? true : false;
+	public function hasPendingInvite($email, Team $team) {
+		return TeamInvite::where('email', "=", $email)->where('team_id', "=", $team->getKey())->first() ? true : false;
 	}
 
-	public function getInviteFromAcceptToken( $token ) {
-		return TeamInvite::where( 'accept_token', '=', $token )->first();
+	public function getInviteFromAcceptToken($token) {
+		return TeamInvite::where('accept_token', '=', $token)->first();
 	}
 
-	public function acceptInvite( TeamInvite $invite ) {
-		Auth::user()->attachTeam( $invite->team );
-		$this->deleteInvite($invite);
+	public function acceptInvite(TeamInvite $invite) {
+		Auth::user()->attachTeam($invite->team);
+		return $this->deleteInvite($invite);
 	}
 
-	public function getInviteFromDenyToken( $token ) {
-		return TeamInvite::where( 'deny_token', '=', $token )->first();
+	public function getInviteFromDenyToken($token) {
+		return TeamInvite::where('deny_token', '=', $token)->first();
 	}
 
-	public function denyInvite( TeamInvite $invite ) {
-		$this->deleteInvite($invite);
+	public function denyInvite(TeamInvite $invite) {
+		return $this->deleteInvite($invite);
 	}
 
-	private function deleteInvite( TeamInvite $invite ){
+	private function deleteInvite(TeamInvite $invite) {
 		return $invite->delete();
 	}
 

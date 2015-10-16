@@ -12,7 +12,7 @@ trait UserHasTeamsTrait
 
 	public function ownedTeams()
 	{
-		return $this->teams()->where( "owner_id", "=", $this->getKey() );
+		return $this->hasMany( 'App\Team', 'owner_id', 'id' );
 	}
 
 	public function invites()
@@ -27,16 +27,6 @@ trait UserHasTeamsTrait
 			$user->teams()->sync( [ ] );
 			return true;
 		} );
-	}
-
-	public function isOwner()
-	{
-		return ( $this->teams()->where( "owner_id", "=", $this->getKey() )->first() ) ? true : false;
-	}
-
-	public function isTeamOwner()
-	{
-		return $this->isOwner();
 	}
 
 	public function attachTeam( $team )
@@ -83,7 +73,8 @@ trait UserHasTeamsTrait
 	public function detachTeam( $team )
 	{
 		$teamId = $this->retrieveTeamId( $team );
-		$this->teams()->detach( $teamId );
+		$detaches = $this->teams()->detach( $teamId );
+		return $detaches > 0;
 	}
 
 	public function detachTeams( $teams )

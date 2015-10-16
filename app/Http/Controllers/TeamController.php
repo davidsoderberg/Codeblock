@@ -86,32 +86,42 @@ class TeamController extends Controller {
 	public function createOrUpdate( $id = null ) {
 		if ( $this->teamRepository->createOrUpdate( $this->request->all(), $id ) ) {
 			if ( is_null( $id ) ) {
-				return Redirect::to( 'teams' )->with( 'success', 'Your team has been created.' );
+				return Redirect::back()->with( 'success', 'Your team has been created.' );
 			}
-			return Redirect::to( 'teams' )->with( 'success', 'Your team has been updated.' );
+			return Redirect::back()->with( 'success', 'Your team has been updated.' );
 		}
 		return Redirect::back()->withErrors( $this->teamRepository->getErrors() )->withInput( $this->request->all() );
 	}
 
 	/**
 	 * @param UserRepository $user
-	 * @param                $id
 	 *
 	 * @return mixed
 	 */
-	public function invite( UserRepository $user, $id ) {
+	public function invite( UserRepository $user ) {
 		$userId = $user->getIdByEmail( $this->request->get( 'email' ) );
-		$team   = $this->teamRepository->get( $id );
+		$team   = $this->teamRepository->get( $this->request->get( 'id' ) );
 		$user   = $user->get( $userId );
+
+		if($user->id == $team->owner_id){
+			return Redirect::back()->with( 'error', 'You can not invite yourself to your own team.');
+		}
 
 		if ( $this->inviteRepository->inviteToTeam( $user, $team ) ) {
 			return Redirect::back()
-			               ->with( 'success', 'You have invite ' . $user->username . ' to ' . $team->title . '.' );
+			               ->with( 'success', 'You have invite ' . $user->username . ' to ' . $team->name . '.' );
 		}
 
 		return Redirect::back()
-		               ->with( 'errors', 'You could not invite ' . $user->username . ' to ' . $team->title . '.' )
+		               ->with( 'error', 'You could not invite ' . $user->username . ' to ' . $team->name . '.' )
 		               ->withInput( $this->request->all() );
+	}
+
+	public function leave($id){
+		if($this->teamRepository->leave($id)){
+			return Redirect::back()->with( 'success', 'You have leaved that team now.' );
+		}
+		return Redirect::back()->with( 'error', 'You could not leave that team.' );
 	}
 
 	/**
@@ -127,6 +137,10 @@ class TeamController extends Controller {
 			$action = 'denied';
 		}
 
+		if(is_null($invite)){
+			return Redirect::to('/')->with( 'error', 'That invite are invalid.' );
+		}
+
 		if ( $action == 'accepted' ) {
 			$inviteResponded = $this->inviteRepository->acceptInvite( $invite );
 		} else {
@@ -137,7 +151,7 @@ class TeamController extends Controller {
 			return Redirect::back()->with( 'success', 'You have now ' . $action . ' that invite.' );
 		}
 
-		return Redirect::back()->with( 'errors', 'That invite could not be ' . $action . '.' );
+		return Redirect::back()->with( 'error', 'That invite could not be ' . $action . '.' );
 	}
 
 	/**
