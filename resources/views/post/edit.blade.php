@@ -20,8 +20,16 @@
 				{{ Form::select('private', array(0 => 'No', 1 => 'Yes'), $post->private) }}
 			</div>
 		</div>
-		{{ Form::label('', 'Tags:') }}
-		{{ Form::select('tags[]', $tags, $post->tags, array('multiple', 'class' => 'chosen-select', 'data-placeholder' => 'Choose some tags')) }}
+		<div class="verticalRule">
+			<div class="float-left">
+				{{ Form::label('', 'Tags:') }}
+				{{ Form::select('tags[]', $tags, $post->tags, array('multiple', 'class' => 'chosen-select', 'data-placeholder' => 'Choose some tags')) }}
+			</div>
+			<div class="float-right">
+				{{ Form::label('team_id', 'Codeblock belongs to team:') }}<br />
+				{{ Form::select('team_id', $teams, $post->team_id) }}
+			</div>
+		</div>
 
 		{{ Form::label('blockCode', 'Code:') }}
         @if(is_array($post->category->lang))

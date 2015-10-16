@@ -78,10 +78,10 @@ class PostController extends Controller {
 				}
 			}
 			return View::make('post.show')
-			           ->with('title', 'Codeblock: '. $post->name)
-			           ->with('post', $post)
-			           ->with('rate', $this->rate)
-			           ->with('commentToEdit', $comment);
+					   ->with('title', 'Codeblock: '. $post->name)
+					   ->with('post', $post)
+					   ->with('rate', $this->rate)
+					   ->with('commentToEdit', $comment);
 		}else{
 			if(Auth::check()){
 				if(!empty($post->comments[0])){
@@ -125,7 +125,13 @@ class PostController extends Controller {
 	 */
 	public function create(Github $github)
 	{
-		return View::make('post.create')->with('title', 'create')->with('post', null)->with('tags', $this->selectTags())->with('categories', $this->selectCategories())->with('hasRequest', $github->hasRequestLeft());
+		return View::make('post.create')
+			->with('title', 'create')
+			->with('post', null)
+			->with('tags', $this->selectTags())
+			->with('categories', $this->selectCategories())
+			->with('teams', $this->selectTeams())
+			->with('hasRequest', $github->hasRequestLeft());
 	}
 	/**
 	 * Är vyn skapa och redigera anropa för att lägga till/ uppdatera blocket i databasen.
@@ -163,7 +169,12 @@ class PostController extends Controller {
 		}
 		$post->tags = $tagsarray;
 
-		return View::make('post.edit')->with('title', 'Edit')->with('post', $post)->with('tags', $this->selectTags())->with('categories', $this->selectCategories());
+		return View::make('post.edit')
+			->with('title', 'Edit')
+			->with('post', $post)
+			->with('tags', $this->selectTags())
+			->with('categories', $this->selectCategories())
+			->with('teams', $this->selectTeams());
 	}
 
 	/**
@@ -172,9 +183,19 @@ class PostController extends Controller {
 	 */
 	private function selectCategories(){
 		$selectArray = array();
-		$selectArray[''] = 'Codeblock category';
+		$selectArray[0] = 'Codeblock category';
 		foreach ($this->categories as $category) {
 			$selectArray[$category->id] = $category->name;
+		}
+		return $selectArray;
+	}
+
+	private function selectTeams(){
+		$selectArray = array();
+		$selectArray[''] = 'Select Team';
+		$teams = Auth::user()->teams->merge(Auth::user()->ownedTeams);
+		foreach ($teams as $team) {
+			$selectArray[$team->id] = $team->name;
 		}
 		return $selectArray;
 	}
@@ -239,12 +260,12 @@ class PostController extends Controller {
 		$posts = $this->post->search($term, $filter);
 
 		return View::make('post.list')
-		           ->with('title', 'Search on: '.$term)
-		           ->with('posts', $posts->reverse())
-		           ->with('term', $term)
-		           ->with('filter', $filter)
-		           ->with('categories', $categories)
-		           ->with('tags', $tags);
+				   ->with('title', 'Search on: '.$term)
+				   ->with('posts', $posts->reverse())
+				   ->with('term', $term)
+				   ->with('filter', $filter)
+				   ->with('categories', $categories)
+				   ->with('tags', $tags);
 	}
 
 	private function only($posts){

@@ -51,6 +51,11 @@
 		</div>
 		<div class="float-right clearfix">
 			<h3>Codeblocks</h3>
+			@foreach($team->posts as $post)
+				<div class="clearfix margin-bottom-half">
+					{{HTML::actionlink($url = array('action' => 'PostController@show', 'params' => array($post->slug)), $post->name)}}
+				</div>
+			@endforeach
 		</div>
 	</div>
 @stop
