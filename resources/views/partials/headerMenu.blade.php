@@ -23,6 +23,14 @@
 				array(array('action' => 'RoleController@editRolePermission'), 'Permissions')
 			)
 		)}}
+		{{HTML::submenu(
+				'<i class="fa fa-bar-chart"></i>Analytics <i class="fa fa-bars only-small display-inline"></i>',
+				array(
+					array(array('action' => 'GapiController@mostVisitedPages'), 'Most visited pages'),
+					array(array('action' => 'GapiController@visitorsAndPageViews'), 'Visitors and views'),
+					array(array('action' => 'GapiController@events'), 'Events'),
+				)
+			)}}
 		<li class="dropdown">
 			{{HTML::actionlink($url = array('action' => 'UserController@listUserBlock'), '<i class="fa fa-code"></i>My Codeblocks <i class="fa fa-bars only-small display-inline"></i>', array('class' => 'hideUl'))}}
 			<ul>

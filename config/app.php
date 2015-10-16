@@ -153,6 +153,8 @@ return [
 		'Laravel\Socialite\SocialiteServiceProvider',
 		Barryvdh\Debugbar\ServiceProvider::class,
 		Irazasyed\LaravelGAMP\LaravelGAMPServiceProvider::class,
+		Spatie\LaravelAnalytics\LaravelAnalyticsServiceProvider::class,
+		Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
 	],
 
 	/*
@@ -202,6 +204,7 @@ return [
 		'Form' 		=> 'Illuminate\Html\FormFacade',
 		'Socialize' => 'Laravel\Socialite\Facades\Socialite',
 		'GAMP'  => Irazasyed\LaravelGAMP\Facades\GAMP::class,
+		'LaravelAnalytics' => Spatie\LaravelAnalytics\LaravelAnalyticsFacade::class,
 	],
 
 ];

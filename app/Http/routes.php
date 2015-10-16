@@ -77,6 +77,14 @@ Route::group(['prefix' => 'notifications'], function() {
 	});
 });
 
+Route::group(['prefix' => 'analytics'], function(){
+	Route::group(['middleware' => 'auth'], function() {
+		Route::get('/events', 'GapiController@events');
+		Route::get('/visitedpages', 'GapiController@mostVisitedPages');
+		Route::get('/visitorviews', 'GapiController@visitorsAndPageViews');
+	});
+});
+
 Route::group(['prefix' => 'comments'], function(){
 	Route::group(['middleware' => 'auth'], function() {
 		Route::get('/', 'CommentController@index');
