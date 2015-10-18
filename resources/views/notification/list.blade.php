@@ -16,9 +16,14 @@
 					<i class="fa fa-user"></i> {{HTML::actionlink($url = array('action' => 'UserController@show', 'params' => array($notification->sender->username)), $notification->sender->username)}}
 					<i class="fa fa-calendar"></i> {{$notification->created_at}}
 				</p>
-				<p class="float-right"><i class="fa fa-trash-o"></i> {{HTML::actionlink($url = array('action' => 'NotificationController@delete', 'params' => array($notification->id)), 'Delete')}}</p>
+				<p class="float-right">
+					@if($notification->type == \App\NotificationType::MESSAGE && Auth::user()->id !== $notification->from_id)
+						<i class="fa fa-mail-reply"></i> {{HTML::actionlink($url = array('action' => 'NotificationController@create', 'params' => array($notification->id)), 'Reply')}}
+					@endif
+					<i class="fa fa-trash-o"></i> {{HTML::actionlink($url = array('action' => 'NotificationController@delete', 'params' => array($notification->id)), 'Delete')}}
+				</p>
 			</div>
-			<p class="text-center">{{$notification->body}}</p>
+			<p class="text-center">{{HTML::markdown($notification->body)}}</p>
 			<div class="horizontalRule"></div>
 		@endforeach
 	@else

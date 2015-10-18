@@ -1,5 +1,6 @@
 <?php namespace App\Repositories\Notification;
 
+use App\Exceptions\NotANumberException;
 use App\Notification;
 use App\NotificationType;
 use App\Repositories\CRepository;
@@ -13,8 +14,11 @@ class EloquentNotificationRepository extends CRepository implements Notification
 
 	private $user;
 
+	private $replyId;
+
 	public function __construct(UserRepository $user){
 		$this->user = $user;
+		$this->replyId = 0;
 	}
 
 	// hämtar en eller alla notifikationer.
@@ -23,6 +27,15 @@ class EloquentNotificationRepository extends CRepository implements Notification
 			return CollectionService::filter($this->get(), 'id', $id, 'first');
 		}
 		return $this->cache('all', Notification::where('id', '!=', 0));
+	}
+
+	public function setReply($id){
+		if(!is_numeric($id) && $id <= 0){
+			$this->replyId = 0;
+			return false;
+		}
+		$this->replyId = $id;
+		return true;
 	}
 
 	public function setRead($user_id){
@@ -55,19 +68,22 @@ class EloquentNotificationRepository extends CRepository implements Notification
 
 	// Sätter vilken model notifikationen tillhör.
 	public function setObject($object, $note){
-		if(is_object($object)){
+		if(is_object($object) && !is_null($object)){
 			$namespaces = explode('\\', get_class($object));
 			$object_type = $namespaces[count($namespaces)-1];
 			if(class_exists('App\\'.$object_type)) {
 				$note->object_id = $object->id;
 				$note->object_type = $object_type;
 			}
+		}else{
+			$note->object_id = 0;
+			$note->object_type = '';
 		}
 		return $note;
 	}
 
 	// Sätter notifikationens innehåll.
-	public function setcontent($subject, $body, $type, $note){
+	public function setContent($subject, $body, $type, $note){
 		if(!is_null($subject) && !is_null($body)){
 			$note->subject = $this->stripTrim($subject);
 			$note->body = $this->stripTrim($body);
@@ -109,8 +125,9 @@ class EloquentNotificationRepository extends CRepository implements Notification
 
 		$note = $this->setType($type, $note);
 		$note = $this->setObject($object, $note);
-		$note = $this->setcontent($subject, $body, $type, $note);
+		$note = $this->setContent($subject, $body, $type, $note);
 
+		$note->reply_id = $this->replyId;
 
 		if($note->save()){
 			return $this->sendNotification($note);
