@@ -41,7 +41,6 @@
 				{{HTML::menulink($url = array('action' => 'UserController@backup'), '<i class="fa fa-save"></i>Backup')}}
 			</ul>
 		</li>
-		{{HTML::menulink($url = array('action' => 'NotificationController@listNotification'), '<i class="fa fa-envelope"></i>Notifications')}}
 		{{HTML::menulink($url = array('action' => 'TeamController@listTeams'), '<i class="fa fa-group"></i>Teams')}}
 		{{HTML::menulink($url = array('action' => 'UserController@show'), '<i class="fa fa-user"></i>Profile')}}
 		{{HTML::menulink($url = array('action' => 'UserController@logout'), '<i class="fa fa-sign-out"></i>Logout')}}

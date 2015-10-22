@@ -4,8 +4,6 @@ interface NotificationRepository {
 
 	public function get($id = 0);
 
-	public function setReply($id);
-
 	public function setUserId($user_id, $note);
 
 	public function setType($type, $note);

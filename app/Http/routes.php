@@ -73,8 +73,6 @@ Route::group(['prefix' => 'team'], function(){
 Route::group(['prefix' => 'notifications'], function() {
 	Route::group(['middleware' => 'auth'], function() {
 		Route::get('/', 'NotificationController@listNotification');
-		Route::get('/create/{id?}', 'NotificationController@create');
-		Route::post('/create', 'NotificationController@createOrUpdate');
 		Route::get('/delete/{id}', 'NotificationController@delete');
 	});
 });

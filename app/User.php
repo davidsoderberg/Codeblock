@@ -96,10 +96,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return $this->inbox()->where('is_read', '=', 0);
 	}
 
-	public function messages() {
-		return$this->inbox()->where('type', '=', NotificationType::MESSAGE);
-	}
-
 	public function outbox() {
 		return $this->hasMany('App\Notification', 'from_id', 'id');
 	}

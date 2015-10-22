@@ -14,8 +14,6 @@ class EloquentNotificationRepository extends CRepository implements Notification
 
 	private $user;
 
-	private $replyId;
-
 	public function __construct(UserRepository $user){
 		$this->user = $user;
 		$this->replyId = 0;
@@ -27,15 +25,6 @@ class EloquentNotificationRepository extends CRepository implements Notification
 			return CollectionService::filter($this->get(), 'id', $id, 'first');
 		}
 		return $this->cache('all', Notification::where('id', '!=', 0));
-	}
-
-	public function setReply($id){
-		if(!is_numeric($id) && $id <= 0){
-			$this->replyId = 0;
-			return false;
-		}
-		$this->replyId = $id;
-		return true;
 	}
 
 	public function setRead($user_id){
@@ -68,16 +57,13 @@ class EloquentNotificationRepository extends CRepository implements Notification
 
 	// Sätter vilken model notifikationen tillhör.
 	public function setObject($object, $note){
-		if(is_object($object) && !is_null($object)){
+		if(is_object($object)){
 			$namespaces = explode('\\', get_class($object));
 			$object_type = $namespaces[count($namespaces)-1];
 			if(class_exists('App\\'.$object_type)) {
 				$note->object_id = $object->id;
 				$note->object_type = $object_type;
 			}
-		}else{
-			$note->object_id = 0;
-			$note->object_type = '';
 		}
 		return $note;
 	}
@@ -126,8 +112,6 @@ class EloquentNotificationRepository extends CRepository implements Notification
 		$note = $this->setType($type, $note);
 		$note = $this->setObject($object, $note);
 		$note = $this->setContent($subject, $body, $type, $note);
-
-		$note->reply_id = $this->replyId;
 
 		if($note->save()){
 			return $this->sendNotification($note);
