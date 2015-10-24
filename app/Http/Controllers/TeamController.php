@@ -103,7 +103,7 @@ class TeamController extends Controller {
 		$team   = $this->teamRepository->get( $this->request->get( 'id' ) );
 		$user   = $user->get( $userId );
 
-		if($user->id == $team->owner_id){
+		if($user->id === $team->owner_id){
 			return Redirect::back()->with( 'error', 'You can not invite yourself to your own team.');
 		}
 
@@ -128,7 +128,7 @@ class TeamController extends Controller {
 	 * @param $token
 	 * @return mixed
 	 */
-	public function respondInvite($token) {
+	public function respondInvite(UserRepository $userRepository, $token) {
 		$action = 'accepted';
 
 		$invite = $this->inviteRepository->getInviteFromAcceptToken( $token );
@@ -142,7 +142,14 @@ class TeamController extends Controller {
 		}
 
 		if ( $action == 'accepted' ) {
-			$inviteResponded = $this->inviteRepository->acceptInvite( $invite );
+			$user = null;
+
+			if(!Auth::check()){
+				$user = $userRepository->getIdByEmail($invite->email);
+				$user = $userRepository->get($user);
+			}
+
+			$inviteResponded = $this->inviteRepository->acceptInvite( $invite, $user );
 		} else {
 			$inviteResponded = $this->inviteRepository->denyInvite( $invite );
 		}
@@ -165,6 +172,6 @@ class TeamController extends Controller {
 			return Redirect::back()->with( 'success', 'Your team has been deleted.' );
 		}
 
-		return Redirect::back();
+		return Redirect::back()->with( 'error', 'Your team could not be deleted.' );
 	}
 }

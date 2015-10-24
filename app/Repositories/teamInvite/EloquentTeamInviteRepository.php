@@ -55,8 +55,11 @@ class EloquentTeamInviteRepository extends CRepository implements TeamInviteRepo
 		return TeamInvite::where('accept_token', '=', $token)->first();
 	}
 
-	public function acceptInvite(TeamInvite $invite) {
-		Auth::user()->attachTeam($invite->team);
+	public function acceptInvite(TeamInvite $invite, User $user = null) {
+		if(is_null($user)){
+			$user = Auth::user();
+		}
+		$user->attachTeam($invite->team);
 		return $this->deleteInvite($invite);
 	}
 

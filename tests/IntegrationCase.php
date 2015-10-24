@@ -13,6 +13,7 @@ class IntegrationCase extends TestCase {
 
 	public function setUp(){
 		parent::setUp();
+		Session::flush();
 		\Illuminate\Support\Facades\Cache::flush();
 		$this->resetEvents();
 	}
@@ -45,6 +46,11 @@ class IntegrationCase extends TestCase {
 			->submitForm('Login', $this->user)
 			->see('You have logged in.')
 			->onPage('/user');
+	}
+
+	public function flush_flash(){
+		Session::forget('success');
+		Session::forget('error');
 	}
 
 }
