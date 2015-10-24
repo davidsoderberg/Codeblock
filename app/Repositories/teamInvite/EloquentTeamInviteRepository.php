@@ -1,7 +1,6 @@
 <?php namespace App\Repositories\TeamInvite;
 
 use App\Repositories\CRepository;
-use App\Repositories\Team\TeamRepository;
 use App\Team;
 use App\TeamInvite;
 use App\User;
@@ -22,26 +21,28 @@ class EloquentTeamInviteRepository extends CRepository implements TeamInviteRepo
 		$invite->accept_token = md5(uniqid(microtime()));
 		$invite->deny_token = md5(uniqid(microtime()));
 
-		if($invite->save()) {
-			$data = array(
-				'subject' => 'Team Invite',
-				'invite' => $invite,
-				'user' => $user,
-				'team' => $team
-			);
-			$emailInfo = array(
-				'toEmail' => $user->email,
-				'toName' => $user->username,
-				'subject' => $data['subject'],
-			);
-			if(!$this->sendEmail('emails.invite', $emailInfo, $data)) {
-				$this->deleteInvite($invite);
+		try {
+			if($invite->save()) {
+				$data = array(
+					'subject' => 'Team Invite',
+					'invite' => $invite,
+					'user' => $user,
+					'team' => $team
+				);
+				$emailInfo = array(
+					'toEmail' => $user->email,
+					'toName' => $user->username,
+					'subject' => $data['subject'],
+				);
+				if(!$this->sendEmail('emails.invite', $emailInfo, $data)) {
+					$this->deleteInvite($invite);
+				} else {
+					return true;
+				}
 			} else {
-				return true;
+				$this->errors = $invite::$errors;
 			}
-		} else {
-			$this->errors = $invite::$errors;
-		}
+		} catch(\PDOException $e){}
 
 		return false;
 	}
@@ -68,7 +69,11 @@ class EloquentTeamInviteRepository extends CRepository implements TeamInviteRepo
 	}
 
 	private function deleteInvite(TeamInvite $invite) {
-		return $invite->delete();
+		$delete = $invite->delete();
+		if(is_null($delete)){
+			return false;
+		}
+		return $delete;
 	}
 
 }

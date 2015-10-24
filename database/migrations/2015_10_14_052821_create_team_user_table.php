@@ -17,7 +17,6 @@ class CreateTeamUserTable extends Migration
             $table->increments( 'id' )->unsigned();
             $table->integer( 'user_id' );
             $table->integer( 'team_id' );
-            $table->timestamps();
         });
     }
 
