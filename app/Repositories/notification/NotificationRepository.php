@@ -10,7 +10,7 @@ interface NotificationRepository {
 
 	public function setObject($object, $note);
 
-	public function setcontent($subject, $body, $type, $note);
+	public function setContent($subject, $body, $type, $note);
 
 	public function setFromId($from_id, $note);
 

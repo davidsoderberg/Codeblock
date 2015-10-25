@@ -14,6 +14,7 @@
 			'<i class="fa fa-group"></i>Admin <i class="fa fa-bars only-small display-inline"></i>',
 			array(
 				array(array('action' => 'UserController@index'), 'Users'),
+				array(array('action' => 'TeamController@index'), 'Teams'),
 				array(array('action' => 'PostController@index'), 'Codeblocks'),
 				array(array('action' => 'TagController@index'), 'Tags'),
 				array(array('action' => 'CategoryController@index'), 'Categories'),
@@ -23,6 +24,14 @@
 				array(array('action' => 'RoleController@editRolePermission'), 'Permissions')
 			)
 		)}}
+		{{HTML::submenu(
+					'<i class="fa fa-bar-chart"></i>Analytics <i class="fa fa-bars only-small display-inline"></i>',
+					array(
+						array(array('action' => 'GapiController@mostVisitedPages'), 'Most visited pages'),
+						array(array('action' => 'GapiController@visitorsAndPageViews'), 'Visitors and views'),
+						array(array('action' => 'GapiController@events'), 'Events'),
+					)
+				)}}
 		<li class="dropdown">
 			{{HTML::actionlink($url = array('action' => 'UserController@listUserBlock'), '<i class="fa fa-code"></i>My Codeblocks <i class="fa fa-bars only-small display-inline"></i>', array('class' => 'hideUl'))}}
 			<ul>
@@ -32,6 +41,7 @@
 				{{HTML::menulink($url = array('action' => 'UserController@backup'), '<i class="fa fa-save"></i>Backup')}}
 			</ul>
 		</li>
+		{{HTML::menulink($url = array('action' => 'TeamController@listTeams'), '<i class="fa fa-group"></i>Teams')}}
 		{{HTML::menulink($url = array('action' => 'UserController@show'), '<i class="fa fa-user"></i>Profile')}}
 		{{HTML::menulink($url = array('action' => 'UserController@logout'), '<i class="fa fa-sign-out"></i>Logout')}}
 	@else

@@ -16,10 +16,8 @@ class RoleTest extends UnitCase {
 	public function testCreateOrUpdate(){
 		$input = ['name' => 'test'];
 		$this->assertTrue($this->repo->createOrUpdate($input));
-		/*
-			$this->assertfalse($this->repo->createOrUpdate(['name' => ''],1));
-			$this->assertTrue(is_object($this->repo->getErrors()));
-		*/
+		$this->assertfalse($this->repo->createOrUpdate(['name' => ''],1));
+		$this->assertTrue(is_object($this->repo->getErrors()));
 		$this->assertTrue($this->repo->createOrUpdate(['name' => 'hej'],1));
 		$this->repo->createOrUpdate(['name' => 'test'],1);
 	}

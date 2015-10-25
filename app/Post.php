@@ -23,7 +23,7 @@ class Post extends Model {
 
 	protected $revisionEnabled = true;
 
-	protected $fillable = array('name', 'cat_id', 'description', 'code', 'user_id', 'org', 'slug');
+	protected $fillable = array('name', 'cat_id', 'description', 'code', 'user_id', 'org', 'slug', 'team_id');
 
 	protected $guarded = array('id');
 
@@ -35,11 +35,16 @@ class Post extends Model {
 	    'description' => 'required|min:3',
 	    'code' => 'required|min:3',
 	    'user_id' => 'integer',
+		'team_id' => 'integer',
 		'slug' => 'required|min:3|unique:posts,slug,:id:',
 	);
 
 	public function category() {
 		return $this->belongsTo( 'App\Category', 'cat_id' );
+	}
+
+	public function team() {
+		return $this->belongsTo( 'App\Team', 'team_id' );
 	}
 
 	public function tags() {

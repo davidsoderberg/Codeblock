@@ -20,8 +20,16 @@
 				{{ Form::select('private', array(0 => 'No', 1 => 'Yes'), 0) }}
 			</div>
 		</div>
-		{{ Form::label('', 'Tags:') }}
-		{{ Form::select('tags[]', $tags, '', array('multiple', 'class' => 'chosen-select', 'data-placeholder' => 'Choose some tags')) }}
+		<div class="verticalRule">
+			<div class="float-left">
+				{{ Form::label('', 'Tags:') }}
+				{{ Form::select('tags[]', $tags, '', array('multiple', 'class' => 'chosen-select', 'data-placeholder' => 'Choose some tags')) }}
+			</div>
+			<div class="float-right">
+				{{ Form::label('team_id', 'Codeblock belongs to team:') }}<br />
+				{{ Form::select('team_id', $teams, 0) }}
+			</div>
+		</div>
 
 		{{ Form::label('blockCode', 'Code:') }}
 		{{ Form::textarea('code', Input::old('code'), array('class'=> 'code-editor', 'data-lang' => 'php' ,'id' => 'blockCode', 'placeholder' => 'Code goes here...', 'data-validator' => 'required|min:3')) }}

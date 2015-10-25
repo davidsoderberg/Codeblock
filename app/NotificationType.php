@@ -7,7 +7,7 @@ class NotificationType{
 	const STAR = 'Star';
 	const ROLE = 'Role';
 	const BANNED = 'Banned';
-	const FAVOURITE = 'favourite';
+	const FAVOURITE = 'Favourite';
 
 	public static function isType($type){
 		$type = strtoupper($type);

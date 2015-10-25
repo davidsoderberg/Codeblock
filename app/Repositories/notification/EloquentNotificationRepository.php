@@ -1,5 +1,6 @@
 <?php namespace App\Repositories\Notification;
 
+use App\Exceptions\NotANumberException;
 use App\Notification;
 use App\NotificationType;
 use App\Repositories\CRepository;
@@ -15,6 +16,7 @@ class EloquentNotificationRepository extends CRepository implements Notification
 
 	public function __construct(UserRepository $user){
 		$this->user = $user;
+		$this->replyId = 0;
 	}
 
 	// hämtar en eller alla notifikationer.
@@ -67,7 +69,7 @@ class EloquentNotificationRepository extends CRepository implements Notification
 	}
 
 	// Sätter notifikationens innehåll.
-	public function setcontent($subject, $body, $type, $note){
+	public function setContent($subject, $body, $type, $note){
 		if(!is_null($subject) && !is_null($body)){
 			$note->subject = $this->stripTrim($subject);
 			$note->body = $this->stripTrim($body);
@@ -109,8 +111,7 @@ class EloquentNotificationRepository extends CRepository implements Notification
 
 		$note = $this->setType($type, $note);
 		$note = $this->setObject($object, $note);
-		$note = $this->setcontent($subject, $body, $type, $note);
-
+		$note = $this->setContent($subject, $body, $type, $note);
 
 		if($note->save()){
 			return $this->sendNotification($note);
