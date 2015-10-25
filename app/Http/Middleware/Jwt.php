@@ -20,7 +20,7 @@ class Jwt
      */
     public function handle($request, Closure $next)
     {
-		if(\App\Services\Jwt::auth($request->get('token'))) {
+		if(\App\Services\Jwt::auth($request->headers->get('X-Auth-Token'))) {
 			return $next($request);
 		}
 		return Response::json(array('message' => 'We could not authenticate you.'), 401);
