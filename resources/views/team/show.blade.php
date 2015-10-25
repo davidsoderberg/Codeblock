@@ -51,11 +51,15 @@
 		</div>
 		<div class="float-right clearfix">
 			<h3>Codeblocks</h3>
-			@foreach($team->posts as $post)
-				<div class="clearfix margin-bottom-half">
-					{{HTML::actionlink($url = array('action' => 'PostController@show', 'params' => array($post->slug)), $post->name)}}
-				</div>
-			@endforeach
+			@if(count($team->posts) > 0)
+				@foreach($team->posts as $post)
+					<div class="clearfix margin-bottom-half">
+						{{HTML::actionlink($url = array('action' => 'PostController@show', 'params' => array($post->slug)), $post->name)}}
+					</div>
+				@endforeach
+			@else
+				<div class="alert info">You team have no Codeblocks yet.</div>
+			@endif
 		</div>
 	</div>
 @stop
