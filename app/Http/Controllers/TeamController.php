@@ -63,7 +63,7 @@ class TeamController extends Controller {
 	private function show( $id ) {
 		$team = $this->teamRepository->get( $id );
 
-		return View::make( 'team.show' )->with( 'title', 'Team: ' . $team->title )->with( 'team', $team );
+		return View::make( 'team.show' )->with( 'title', 'Team: ' . $team->name )->with( 'team', $team );
 	}
 
 	/**
