@@ -12,7 +12,7 @@ class TeamInviteTest extends UnitCase {
 
 	private $team;
 
-	private $user;
+	protected $user;
 
 	public function setUp()
 	{

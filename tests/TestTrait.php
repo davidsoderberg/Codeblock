@@ -4,6 +4,25 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Artisan;
 
 trait TestTrait {
+
+	protected $user;
+
+	private $users = [
+		['username' => 'david', 'password' => 'test'],
+		['username' => 'codeblock', 'password' => 'test']
+	];
+
+	protected function setUser($position = 0){
+		if($position > count($this->users) || $position < 0){
+			if($position < 0){
+				$position = 0;
+			}else{
+				$position = count($this->users) - 1;
+			}
+		}
+		$this->user = $this->users[$position];
+	}
+
 	/**
 	 * Creates the application.
 	 *
@@ -13,7 +32,7 @@ trait TestTrait {
 		$app = require __DIR__ . '/../bootstrap/app.php';
 
 		$app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
-
+		$this->setUser();
 		return $app;
 	}
 
@@ -61,6 +80,21 @@ trait TestTrait {
 			call_user_func(array($model, 'flushEventListeners'));
 			call_user_func(array($model, 'boot'));
 		}
+	}
+
+	public function removeField(array $data, $fields){
+		if(!is_array($fields)){
+			$fields = array($fields);
+		}
+
+		foreach($fields as $field){
+			unset($data[$field]);
+		}
+		return $data;
+	}
+
+	public function create($model, array $overrides = [], $numbers = 1){
+		return factory($model)->times($numbers)->create($overrides);
 	}
 
 }

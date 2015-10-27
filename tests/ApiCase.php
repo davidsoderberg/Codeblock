@@ -17,23 +17,6 @@ class ApiCase extends TestCase {
 		$this->setUpDb();
 	}
 
-	protected $user = ['username' => 'david', 'password' => 'test'];
-
-	public function removeField(array $data, $fields){
-		if(!is_array($fields)){
-			$fields = array($fields);
-		}
-
-		foreach($fields as $field){
-			unset($data[$field]);
-		}
-		return $data;
-	}
-
-	public function create($model, array $overrides = [], $numbers = 1){
-		return factory($model)->times($numbers)->create($overrides);
-	}
-
 	private function get_token(){
 		$response = $this->post('/api/auth', $this->user)->seeStatusCode(200);
 		$response = json_decode($response->response->getContent());

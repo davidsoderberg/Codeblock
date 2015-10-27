@@ -85,7 +85,7 @@ class TeamControllerTest extends \IntegrationCase {
 		$this->create_team();
 		$user->attachTeam(Team::find(1));
 
-		Auth::loginUsingId(2);
+		Auth::loginUsingId(3);
 
 		$this->visit('team')->visit('team/leave/1')->see('You have leaved that team now.');
 	}
