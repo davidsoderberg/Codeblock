@@ -26,7 +26,9 @@ $factory->define(App\Notification::class, function ($faker) {
 
 $factory->define(App\Comment::class, function ($faker) {
 	return [
-		'comment' => $faker->sentence()
+		'comment' => $faker->sentence(),
+		'post_id' => 1,
+		'user_id' => 1
 	];
 });
 
@@ -39,12 +41,15 @@ $factory->define(App\Forum::class, function ($faker) {
 
 $factory->define(App\Topic::class, function ($faker) {
 	return [
-		'title' => $faker->sentence(3)
+		'title' => $faker->sentence(3),
+		'forum_id' => 1
 	];
 });
 
 $factory->define(App\Reply::class, function ($faker) {
 	return [
-		'reply' => $faker->sentence()
+		'reply' => $faker->sentence(),
+		'topic_id' => 1,
+		'user_id' => 1
 	];
 });

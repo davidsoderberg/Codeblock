@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\Category;
 use App\Model;
 use App\Repositories\Comment\CommentRepository;
 use App\Repositories\CRepository;
@@ -7,6 +8,7 @@ use App\Repositories\Forum\ForumRepository;
 use App\Repositories\Post\PostRepository;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Reply\ReplyRepository;
+use App\Repositories\Star\StarRepository;
 use App\Repositories\Tag\TagRepository;
 use App\Repositories\Rate\RateRepository;
 use App\Repositories\Topic\TopicRepository;
@@ -240,7 +242,12 @@ class ApiController extends Controller {
 				return $this->response(array($this->stringErrors => array($this->stringUser => 'You have not that created that codeblock')), 400);
 			}
 		}
-		if($post->createOrUpdate($this->request->all(), $id)){
+		$inputs = $this->request->all();
+		if(isset($inputs['category'])) {
+			$inputs['cat_id'] = $inputs['category'];
+			unset($inputs['category']);
+		}
+		if($post->createOrUpdate($inputs, $id)){
 			return $this->response(array($this->stringMessage => 'Your block has been saved'), 201);
 		}
 		return $this->response(array($this->stringErrors => $post->getErrors()), 400);
@@ -256,7 +263,7 @@ class ApiController extends Controller {
 		if(!is_null($id)){
 			$user_id = $comment->get($id)->user_id;
 			if($user_id != Auth::user()->id ||!Auth::user()->hasPermission('edit_comments', false)){
-				return $this->response(array($this->stringErrors => array($this->stringUser => 'You have not that created that comment')), 400);
+				return $this->response(array($this->stringErrors => array($this->stringUser => 'You have not created that comment')), 400);
 			}
 		}
 		if($comment->createOrUpdate($this->request->all(), $id)){
@@ -296,7 +303,7 @@ class ApiController extends Controller {
 	public function createOrUpdateReply(ReplyRepository $reply, $id = null){
 		if(!is_null($id)){
 			$user_id = $reply->get($id)->user_id;
-			if($user_id != Auth::user()->id || !Auth::user()->hasPermission('create_reply', false)){
+			if($user_id != Auth::user()->id && !Auth::user()->hasPermission('create_reply', false)){
 				return $this->response(array($this->stringErrors => array($this->stringUser => 'You have not that created that reply')), 400);
 			}
 		}
@@ -318,7 +325,7 @@ class ApiController extends Controller {
 			$currentTopic = $topic->get($id);
 			$replies = $currentTopic->replies;
 			$user_id = $replies[0]->user_id;
-			if($user_id != Auth::user()->id || !Auth::user()->hasPermission('create_topic', false)){
+			if($user_id != Auth::user()->id && !Auth::user()->hasPermission('create_topic', false)){
 				return $this->response(array($this->stringErrors => array($this->stringUser => 'You have not that created that topic')), 400);
 			}
 		}
@@ -340,20 +347,20 @@ class ApiController extends Controller {
 	 * @param $id
 	 * @return mixed
 	 */
-	public function deleteTopic($id) {
+	public function deleteTopic(TopicRepository $topicRepository, $id) {
 		try {
-			$topic = $this->topic->get($id);
+			$topic = $topicRepository->get($id);
 			if(!is_null($topic)) {
 				$reply = $topic->replies()->first();
 				if(Auth::user()->hasPermission($this->getPermission(), false) || Auth::user()->id == $reply->user_id) {
-					if($this->topic->delete($id)) {
-						return $this->response(array($this->stringMessage => 'Your topic has been deleted.'));
+					if($topicRepository->delete($id)) {
+						return $this->response(array($this->stringMessage => 'Your topic has been deleted.'), 200);
 					}
 				}
 			}
 
 		} catch(\Exception $e){}
-		return $this->response(array($this->stringErrors => 'That topic could not be deleted.'));
+		return $this->response(array($this->stringErrors => 'That topic could not be deleted.'), 204);
 	}
 
 	/**
@@ -362,11 +369,11 @@ class ApiController extends Controller {
 	 * @param  int $id id för ettiketen som skall tas bort.
 	 * @return object     med värden dit användaren skall skickas.
 	 */
-	public function deleteTag($id){
-		if($this->tag->delete($id)){
-			return $this->response(array($this->stringMessage => 'The tag has been deleted.'));
+	public function deleteTag(TagRepository $tagRepository, $id){
+		if($tagRepository->delete($id)){
+			return $this->response(array($this->stringMessage => 'The tag has been deleted.'), 200);
 		}
-		return $this->response(array($this->stringErrors => 'The tag could not be deleted.'));
+		return $this->response(array($this->stringErrors => 'The tag could not be deleted.'), 204);
 	}
 
 	/**
@@ -375,19 +382,19 @@ class ApiController extends Controller {
 	 * @param  int $id Id för blocket som skall tas bort.
 	 * @return array     Typ av medelande och meddelande
 	 */
-	public function deletePost($id)
+	public function deletePost(PostRepository $postRepository, $id)
 	{
-		$post = $this->post->get($id);
+		$post = $postRepository->get($id);
 		if(!is_null($post)) {
 			if(Auth::check() && Auth::user()->id == $post->user_id || Auth::user()->hasPermission($this->getPermission(), false)) {
-				if($this->post->delete($id)) {
-					return $this->response(array($this->stringMessage => 'Your codeblock has been deleted.'));
+				if($postRepository->delete($id)) {
+					return $this->response(array($this->stringMessage => 'Your codeblock has been deleted.'), 200);
 				}
 			}else{
-				return $this->response(array($this->stringErrors => 'You do not have permission to delete that codeblock.'));
+				return $this->response(array($this->stringErrors => 'You do not have permission to delete that codeblock.'), 204);
 			}
 		}
-		return $this->response(array($this->stringErrors => 'We could not delete that codeblock.'));
+		return $this->response(array($this->stringErrors => 'We could not delete that codeblock.'), 204);
 	}
 
 	/**
@@ -396,11 +403,11 @@ class ApiController extends Controller {
 	 * @param $id
 	 * @return mixed
 	 */
-	public function deleteForum($id) {
-		if($this->forum->delete($id)) {
-			return $this->response(array($this->stringMessage => 'Your forum has been deleted.'));
+	public function deleteForum(ForumRepository $forumRepository, $id) {
+		if($forumRepository->delete($id)) {
+			return $this->response(array($this->stringMessage => 'Your forum has been deleted.'), 200);
 		}
-		return $this->response(array($this->stringErrors => 'We could not delete that forum.'));
+		return $this->response(array($this->stringErrors => 'We could not delete that forum.'), 204);
 	}
 
 	/**
@@ -409,11 +416,11 @@ class ApiController extends Controller {
 	 * @param  int $id id för kategori som skall tas bort.
 	 * @return object     med värden dit användaren skall skickas.
 	 */
-	public function deleteCategory($id){
-		if($this->category->delete($id)){
-			return $this->response(array($this->stringMessage => 'The category has been deleted.'));
+	public function deleteCategory(CategoryRepository $categoryRepository, $id){
+		if($categoryRepository->delete($id)){
+			return $this->response(array($this->stringMessage => 'The category has been deleted.'), 200);
 		}
-		return $this->response(array($this->stringErrors => 'The category could not be deleted.'));
+		return $this->response(array($this->stringErrors => 'The category could not be deleted.'), 204);
 	}
 
 	/**
@@ -422,18 +429,18 @@ class ApiController extends Controller {
 	 * @param $id
 	 * @return mixed
 	 */
-	public function deleteReply($id) {
-		if(count($this->reply->get()) > 1) {
-			$reply = $this->reply->get($id);
+	public function deleteReply(ReplyRepository $replyRepository, $id) {
+		if(count($replyRepository->get()) > 1) {
+			$reply = $replyRepository->get($id);
 			if(!is_null($reply)) {
 				if(Auth::user()->hasPermission($this->getPermission(), false) || Auth::user()->id == $reply->user_id) {
-					if($this->reply->delete($id)) {
-						return $this->response(array($this->stringMessage => 'Your reply has been deleted.'));
+					if($replyRepository->delete($id)) {
+						return $this->response(array($this->stringMessage => 'Your reply has been deleted.'), 200);
 					}
 				}
 			}
 		}
-		return $this->response(array($this->stringErrors => 'Your reply could not be deleted.'));
+		return $this->response(array($this->stringErrors => 'Your reply could not be deleted.'), 204);
 	}
 
 	/**
@@ -442,18 +449,18 @@ class ApiController extends Controller {
 	 * @param  int $id id för kommentaren som skall tas bort.
 	 * @return object     med värden dit användaren skall skickas.
 	 */
-	public function deleteComment($id){
+	public function deleteComment(CommentRepository $commentRepository, $id){
 		try {
-			$comment = $this->comment->get($id);
+			$comment = $commentRepository->get($id);
 			if(Auth::check() && Auth::user()->id == $comment->user_id || Auth::user()->hasPermission($this->getPermission(), false)) {
-				if($this->comment->delete($id)) {
-					return $this->response(array($this->stringMessage => 'That comment has now been deleted.'));
+				if($commentRepository->delete($id)) {
+					return $this->response(array($this->stringMessage => 'That comment has now been deleted.'), 200);
 				}
 			} else {
-				return $this->response(array($this->stringErrors => 'You do not have permission to delete that comment.'));
+				return $this->response(array($this->stringErrors => 'You do not have permission to delete that comment.'), 204);
 			}
 		} catch(\Exception $e){}
-		return $this->response(array($this->stringErrors => 'We could not delete that comment.'));
+		return $this->response(array($this->stringErrors => 'We could not delete that comment.'), 204);
 	}
 
 	/**
@@ -474,8 +481,8 @@ class ApiController extends Controller {
 	 * @param $id
 	 * @return mixed
 	 */
-	public function Star(PostRepository $post, $id){
-		$star = $post->createOrDeleteStar($id);
+	public function Star(PostRepository $post, StarRepository $starRepository, $id){
+		$star = $post->createOrDeleteStar($starRepository, $id);
 		if($star[0]){
 			if($star[1] == 'create'){
 				return $this->response(array($this->stringMessage, 'You have now add a star to this codblock.'), 201);

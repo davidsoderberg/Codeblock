@@ -50,6 +50,8 @@ Class CRepository {
 	}
 
 	public static function flush($model = null){
-		Self::$self->flushCache($model);
+		if(!is_null(Self::$self)) {
+			Self::$self->flushCache($model);
+		}
 	}
 }

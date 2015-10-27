@@ -43,7 +43,8 @@
 		"classmap": [
           "tests/TestTrait.php",
           "tests/UnitCase.php",
-          "tests/IntegrationCase.php"
+          "tests/IntegrationCase.php",
+		  "tests/ApiCase.php"
 		]
 	},
 	"scripts": {
