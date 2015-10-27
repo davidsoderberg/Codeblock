@@ -262,7 +262,7 @@ class ApiController extends Controller {
 	public function createOrUpdateComment(CommentRepository $comment, $id = null){
 		if(!is_null($id)){
 			$user_id = $comment->get($id)->user_id;
-			if($user_id != Auth::user()->id ||!Auth::user()->hasPermission('edit_comments', false)){
+			if($user_id != Auth::user()->id && !Auth::user()->hasPermission('edit_comments', false)){
 				return $this->response(array($this->stringErrors => array($this->stringUser => 'You have not created that comment')), 400);
 			}
 		}
@@ -280,7 +280,7 @@ class ApiController extends Controller {
 	 */
 	public function createOrUpdateUser(UserRepository $user, $id = null){
 		if(!is_null($id)){
-			if($id != Auth::user()->id || !Auth::user()->hasPermission('update_users', false)){
+			if($id != Auth::user()->id && !Auth::user()->hasPermission('update_users', false)){
 				return $this->response(array($this->stringErrors => array($this->stringUser => 'You are not that user')), 400);
 			}
 		}

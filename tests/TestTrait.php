@@ -12,13 +12,15 @@ trait TestTrait {
 		['username' => 'codeblock', 'password' => 'test']
 	];
 
-	protected function setUser($position = 0){
-		if($position > count($this->users) || $position < 0){
-			if($position < 0){
+	protected function setUser($position = 1){
+		if($position >= count($this->users) || $position < 1){
+			if($position < 1){
 				$position = 0;
 			}else{
 				$position = count($this->users) - 1;
 			}
+		}else{
+			$position -= 1;
 		}
 		$this->user = $this->users[$position];
 	}

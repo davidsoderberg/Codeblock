@@ -21,6 +21,10 @@ class PostTest extends \ApiCase {
 	public function test_update() {
 		$post = $this->create(Post::class, ['name' => 'testar', 'user_id' => 1]);
 		$this->post('/api/posts/'.$post->id, ['_method' => 'put', 'name' => 'testa'], $this->get_headers())->seeStatusCode(201);
+
+		$this->setUser(2);
+		$post = $this->create(Post::class, ['name' => 'testar', 'user_id' => 2]);
+		$this->post('/api/posts/'.$post->id, ['_method' => 'put', 'name' => 'testa2'], $this->get_headers())->seeStatusCode(201);
 	}
 
 	/*
@@ -28,6 +32,10 @@ class PostTest extends \ApiCase {
 	 */
 	public function test_delete() {
 		$post = $this->create(Post::class, ['user_id' => 1]);
+		$this->post('/api/posts/'.$post->id, ['_method' => 'delete'], $this->get_headers())->seeStatusCode(200);
+
+		$this->setUser(2);
+		$post = $this->create(Post::class, ['user_id' => 2]);
 		$this->post('/api/posts/'.$post->id, ['_method' => 'delete'], $this->get_headers())->seeStatusCode(200);
 	}
 
