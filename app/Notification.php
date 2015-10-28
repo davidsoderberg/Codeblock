@@ -14,6 +14,8 @@ class Notification extends Model {
 		'from_id'
 	);
 
+	protected $addHidden = array('object_id', 'object_type');
+
 	protected $guarded = array('id');
 
 	public static $rules = array(

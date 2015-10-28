@@ -218,6 +218,15 @@ Route::group(['prefix' => 'api', 'middleware' => 'api'],function(){
 
 	Route::get('', 'ApiController@index');
 
+	Route::group(['prefix' => 'articles'], function(){
+		Route::get('{id?}', 'ApiController@articles');
+	});
+
+	Route::group(['prefix' => 'notifications', 'middleware' => 'jwt'], function(){
+		Route::get('{id?}', 'ApiController@notifications');
+		Route::delete('/{id}', 'ApiController@deleteNotification');
+	});
+
 	Route::group(['prefix' => 'posts'], function(){
 		Route::get('{id?}', 'ApiController@Posts');
 		Route::group(['middleware' =>  'jwt'], function() {
