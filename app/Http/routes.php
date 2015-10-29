@@ -227,6 +227,16 @@ Route::group(['prefix' => 'api', 'middleware' => 'api'],function(){
 		Route::delete('/{id}', 'ApiController@deleteNotification');
 	});
 
+	Route::group(['prefix' => 'teams', 'middleware' => 'jwt'], function(){
+		Route::get('{id?}', 'ApiController@teams');
+		Route::post('', 'ApiController@createOrUpdateTeam');
+		Route::put('/{id}', 'ApiController@createOrUpdateTeam');
+		Route::post('/invite', 'ApiController@invite');
+		Route::post('/leave/{id}', 'ApiController@leave');
+		Route::post('/{token}', 'ApiController@respondInvite');
+		Route::delete('/{id}', 'ApiController@deleteTeam');
+	});
+
 	Route::group(['prefix' => 'posts'], function(){
 		Route::get('{id?}', 'ApiController@Posts');
 		Route::group(['middleware' =>  'jwt'], function() {

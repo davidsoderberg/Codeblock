@@ -1,6 +1,8 @@
 <?php namespace App\Repositories\TeamInvite;
 
+use App\Exceptions\NullPointerException;
 use App\Repositories\CRepository;
+use App\Repositories\User\UserRepository;
 use App\Team;
 use App\TeamInvite;
 use App\User;
@@ -69,6 +71,37 @@ class EloquentTeamInviteRepository extends CRepository implements TeamInviteRepo
 
 	public function denyInvite(TeamInvite $invite) {
 		return $this->deleteInvite($invite);
+	}
+
+	public function respondInvite(UserRepository $userRepository, $token, &$action){
+
+		$action = 'accepted';
+		$invite = $this->getInviteFromAcceptToken( $token );
+		if ( ! $invite instanceof TeamInvite ) {
+			$invite = $this->getInviteFromDenyToken( $token );
+			$action = 'denied';
+		}
+
+		if(is_null($invite)){
+			throw new NullPointerException('Invalid invite.');
+			return;
+		}
+
+		if ( $action == 'accepted' ) {
+			$user = null;
+
+			if(!Auth::check()){
+				$user = $userRepository->getIdByEmail($invite->email);
+				$user = $userRepository->get($user);
+			}
+
+			$inviteResponded = $this->acceptInvite( $invite, $user );
+		} else {
+			$inviteResponded = $this->denyInvite( $invite );
+		}
+
+		return $inviteResponded;
+
 	}
 
 	private function deleteInvite(TeamInvite $invite) {

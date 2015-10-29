@@ -26,7 +26,7 @@ class IntegrationCase extends TestCase {
 
 	protected function sign_in(){
 		$this->visit('login')
-			->submitForm('Login', $this->user)
+			->submitForm('Login', ['loginUsername' => $this->user['username'], 'loginpassword' => $this->user['password']])
 			->see('You have logged in.')
 			->onPage('/user');
 	}

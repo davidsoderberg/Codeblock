@@ -17,7 +17,7 @@ class ReplyTest extends \ApiCase {
 	 */
 	public function test_create() {
 		$topic = $this->create_topic();
-		//$this->post('/api/replies', ['topic_id' => $topic->id, 'reply' => 'hej'], $this->get_headers())->seeStatusCode(201);
+		$this->post('/api/replies', ['topic_id' => $topic->id, 'reply' => 'hej'], $this->get_headers())->seeStatusCode(201);
 	}
 
 	/*

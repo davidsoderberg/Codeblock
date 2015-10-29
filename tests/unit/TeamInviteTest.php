@@ -63,4 +63,29 @@ class TeamInviteTest extends UnitCase {
 		$this->assertTrue($this->repo->denyInvite($this->repo->getInviteFromDenyToken($invite->deny_token)));
 	}
 
+	public function testRespondInviteAccept(){
+		$repo = new \App\Repositories\User\EloquentUserRepository();
+		$this->createDummy();
+		$invite = TeamInvite::find(1);
+		$action = '';
+		$this->assertTrue($this->repo->respondInvite($repo, $invite->accept_token,$action));
+		$this->assertEquals('accepted', $action);
+	}
+
+	public function testRespondInviteDeny(){
+		$repo = new \App\Repositories\User\EloquentUserRepository();
+		$this->createDummy();
+		$invite = TeamInvite::find(1);
+		$action = '';
+		$this->assertTrue($this->repo->respondInvite($repo, $invite->deny_token,$action));
+		$this->assertEquals('denied', $action);
+	}
+
+	public function testRspondInviteException(){
+		$repo = new \App\Repositories\User\EloquentUserRepository();
+		$action = '';
+		$this->setExpectedException('App\Exceptions\NullPointerException');
+		$this->repo->respondInvite($repo, '',$action);
+	}
+
 }
