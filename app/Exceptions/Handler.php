@@ -45,10 +45,14 @@ class Handler extends ExceptionHandler {
 				return parent::render($request, $e);
 			}
 		} else {
-			if(view()->exists('errors.' . $e->getStatusCode())) {
-				return response()->view('errors.' . $e->getStatusCode(), [], $e->getStatusCode());
+			if(method_exists($e, 'getStatusCode')){
+				if ( view()->exists( 'errors.' . $e->getStatusCode() ) ) {
+					return response()->view( 'errors.' . $e->getStatusCode(), [], $e->getStatusCode() );
+				} else {
+					return ( new SymfonyDisplayer( config( 'app.debug' ) ) )->createResponse( $e );
+				}
 			} else {
-				return (new SymfonyDisplayer(config('app.debug')))->createResponse($e);
+				return response()->view('errors.404', ['message' => $e->getMessage()]);
 			}
 		}
 	}
