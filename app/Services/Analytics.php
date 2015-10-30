@@ -1,6 +1,7 @@
 <?php namespace App\Services;
 
 
+use Illuminate\Support\Facades\Session;
 use Irazasyed\LaravelGAMP\Facades\GAMP;
 
 class Analytics{
@@ -54,20 +55,23 @@ class Analytics{
 	}
 
 	public static function track($category, $action, $label = null){
-		if(!env('APP_DEBUG')) {
-			$analytics = GAMP::setClientId(Self::$clientId);
-			try {
-				$analytics->setEventCategory(Self::getCategory($category))->setEventAction(Self::getAction($action));
-				if(!is_null($label)){
-					$analytics->setEventLabel(Self::parseLabel($label));
+		if( !is_null(env('TRACKING_ID', null))) {
+			if(!env('APP_DEBUG')) {
+				$analytics = GAMP::setClientId(Self::$clientId);
+				try {
+					$analytics->setEventCategory(Self::getCategory($category))
+					          ->setEventAction(Self::getAction($action));
+					if(!is_null($label)) {
+						$analytics->setEventLabel(Self::parseLabel($label));
+					}
+					$analytics->sendEvent();
+				} catch(\OutOfRangeException $e) {
+					$analytics->setEventCategory(Self::getCategory(Self::CATEGORY_ERROR))
+					          ->setEventAction(Self::getAction(Self::ACTION_CREATE))
+					          ->setEventLabel('Track event')
+					          ->setEventValue($e->getMessage())
+					          ->sendEvent();
 				}
-				$analytics->sendEvent();
-			} catch(\OutOfRangeException $e) {
-				$analytics->setEventCategory(Self::getCategory(Self::CATEGORY_ERROR))
-					->setEventAction(Self::getAction(Self::ACTION_CREATE))
-					->setEventLabel('Track event')
-					->setEventValue($e->getMessage())
-					->sendEvent();
 			}
 		}
 	}
