@@ -52,7 +52,7 @@ class Handler extends ExceptionHandler {
 					return ( new SymfonyDisplayer( config( 'app.debug' ) ) )->createResponse( $e );
 				}
 			} else {
-				return response()->view('errors.404');
+				return response()->view('errors.404', ['message' => $e->getMessage()]);
 			}
 		}
 	}
