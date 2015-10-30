@@ -1,6 +1,7 @@
 <?php namespace App\Services;
 
 
+use Illuminate\Support\Facades\Session;
 use Irazasyed\LaravelGAMP\Facades\GAMP;
 
 class Analytics{
@@ -54,7 +55,7 @@ class Analytics{
 	}
 
 	public static function track($category, $action, $label = null){
-		if( env('APP_ENV') === 'testing' || !env('APP_DEBUG')) {
+		if( !is_null(env('TRACKING_ID', null)) || !env('APP_DEBUG')) {
 			$analytics = GAMP::setClientId(Self::$clientId);
 			try {
 				$analytics->setEventCategory(Self::getCategory($category))->setEventAction(Self::getAction($action));
