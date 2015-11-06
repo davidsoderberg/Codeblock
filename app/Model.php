@@ -79,8 +79,15 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	// From: https://laracasts.com/discuss/channels/general-discussion/how-to-validate-a-slug-unique-in-laravel-5
 	public function getSlug($value, $column = 'slug') {
 		$slug = Str::slug($value);
-		$slugCount = count($this->whereRaw($column." LIKE '^{$slug}(-[0-9]+)?$' and id != '{$this->id}'")->get());
-		return ($slugCount > 0) ? "{$slug}-{$slugCount}" : $slug;
+		$latestSlug = $this->whereRaw($column." LIKE '^{$slug}(-[0-9]+)?$' and id != '{$this->id}'")->latest('id')->pluck($column);
+
+		if($latestSlug){
+			$slugPieces = explode('-', $latestSlug);
+			$number = intval(end($slugPieces));
+			$slug .= '-' . ($number + 1);
+		}
+
+		return $slug;
 	}
 
 	// validerings metoden som kör rule variablen från alla modeller när det modell objektet sparas.
