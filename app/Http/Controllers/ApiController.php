@@ -370,13 +370,16 @@ class ApiController extends Controller {
 	 * @param ReplyRepository $reply
 	 * @param null $id
 	 *
+	 * @exclude
+	 * @permission create_reply:optional
+	 *
 	 * @return mixed
 	 */
 	public function createOrUpdateReply(ReplyRepository $reply, $id = null) {
 		if(!is_null($id)) {
 			$user_id = $reply->get($id)->user_id;
 			if($user_id != Auth::user()->id && !Auth::user()->hasPermission('create_reply', false)) {
-				return $this->response([$this->stringErrors => [$this->stringUser => 'You have not that created that reply']], 400);
+				return $this->response([$this->stringErrors => [$this->stringUser => 'You have not created that reply']], 400);
 			}
 		}
 		if($reply->createOrUpdate($this->request->all(), $id)) {
