@@ -2,7 +2,7 @@
 
 use App\Repositories\Star\EloquentStarRepository;
 
-class CommentTest extends UnitCase {
+class StarTest extends UnitCase {
 
 	public $repo;
 
@@ -13,7 +13,7 @@ class CommentTest extends UnitCase {
 		$this->repo = new EloquentStarRepository();
 	}
 
-	public function testGetComment(){
+	public function testGetStars(){
 		$this->assertTrue(count($this->repo->get()) == 0);
 
 		$input = ['post_id' => 1, 'user_id' => 1];
