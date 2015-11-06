@@ -90,7 +90,9 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 			if(!str_contains($model, 'App\\')){
 				$model = 'App\\'+$model;
 			}
-			CRepository::flush(new $model());
+			if(class_exists($model)) {
+				CRepository::flush(new $model());
+			}
 		}
 	}
 
