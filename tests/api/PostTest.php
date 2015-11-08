@@ -12,7 +12,7 @@ class PostTest extends \ApiCase {
 	 * Needs token.
 	 */
 	public function test_create() {
-		$this->post('/api/posts', ['name' => 'testar', 'category' => 1, 'description' => 'testar', 'code' => 'testar', 'private' => 1], $this->get_headers())->seeStatusCode(201);
+		$this->post('/api/posts', ['name' => 'testar', 'cat_id' => 1, 'description' => 'testar', 'code' => 'testar', 'private' => 1], $this->get_headers())->seeStatusCode(201);
 	}
 
 	/*

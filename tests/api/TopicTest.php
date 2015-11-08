@@ -4,7 +4,6 @@ use App\Forum;
 use App\Reply;
 use App\Topic;
 
-// 4
 class TopicTest extends \ApiCase {
 
 	public function create_forum(){

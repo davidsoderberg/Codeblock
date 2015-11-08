@@ -1,6 +1,5 @@
 <?php namespace api;
 
-// 2
 class UserTest extends \ApiCase {
 
 	public function test_get() {

@@ -3,7 +3,6 @@
 use App\Model;
 use App\NotificationType;
 use App\Repositories\Notification\NotificationRepository;
-use App\Services\Jwt;
 use App\Services\PaginationPresenter;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -13,8 +12,6 @@ use Illuminate\Support\Facades\Log;
 use App\Services\Annotation\Permission;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Response;
 use App\Services\Client;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Request;
@@ -79,17 +76,6 @@ abstract class Controller extends BaseController {
 		$action = debug_backtrace()[1];
 		$permissionAnnotation = New Permission($action['class']);
 		return $permissionAnnotation->getPermission($action['function']);
-	}
-
-	/**
-	 * Skapar json web token.
-	 * @return mixed
-	 */
-	public function getJwt(){
-		if(Auth::check()) {
-			return Response::json(array('token' => Jwt::encode(array('id' => Auth::user()->id))), 200);
-		}
-		return Response::json(array('message', 'You could not get your auth token, please try agian'), 400);
 	}
 
 	protected function getSelectArray($objects, $key = 'id', $value = 'name'){

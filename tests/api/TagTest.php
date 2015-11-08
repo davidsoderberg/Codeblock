@@ -1,6 +1,5 @@
 <?php namespace api;
 
-// 4
 class TagTest extends \ApiCase {
 
 	public function test_get() {
