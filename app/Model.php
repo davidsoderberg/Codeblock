@@ -1,18 +1,24 @@
 <?php namespace App;
 
-use App\Repositories\CRepository;
 use App\Services\HateoasTrait;
 use Venturecraft\Revisionable\RevisionableTrait;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use App\Services\CacheTrait;
 
 class Model extends \Illuminate\Database\Eloquent\Model {
 	use RevisionableTrait;
 	use HateoasTrait;
+	use CacheTrait;
 
-	public function __construct(array $attributes = []){
-		parent::__construct($attributes);
-		if(Self::$append){
+	public static $self;
+
+	public function __construct( array $attributes = [] ) {
+		parent::__construct( $attributes );
+
+		Self::$self = $this;
+
+		if ( Self::$append ) {
 			$this->addLinks();
 		}
 	}
@@ -21,125 +27,129 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
 	public static $errors;
 
-	protected $addHidden = array();
+	protected $addHidden = [];
 
-	protected $hidden = array("updated_at");
+	protected $hidden = ["updated_at"];
 
 	protected $revisionEnabled = false;
 
-	public function setRevisionEnabled(){
+	public function setRevisionEnabled() {
 		$this->revisionEnabled = !$this->revisionEnabled;
 	}
 
-	public function addToHidden(){
-		$this->addHidden($this->addHidden);
+	public function addToHidden() {
+		$this->addHidden( $this->addHidden );
 	}
 
-	public function addLinks(){
+	public function addLinks() {
 		$this->appends[] = 'links';
 	}
 
-	public function getlinksAttribute(){
+	public function getlinksAttribute() {
 		return [];
 	}
 
 	protected $modelsToReload = [];
 
-	public function getModelsToReload(){
+	public function getModelsToReload() {
 		return $this->modelsToReload;
 	}
 
-	public function getAnswer($boolean){
-		if(
-			$boolean === true || $boolean === false ||
-			$boolean === 0 || $boolean === 1 ||
-			$boolean === "1" || $boolean === "0"
-		) {
-			if($boolean == 1 || $boolean == true) {
+	public function getAnswer( $boolean ) {
+		if ( $boolean === true || $boolean === false || $boolean === 0 || $boolean === 1 || $boolean === "1" || $boolean === "0" ) {
+			if ( $boolean == 1 || $boolean == true ) {
 				return 'Yes';
 			}
+
 			return 'No';
 		}
+
 		return $boolean;
 	}
 
-	public static function boot()
-	{
+	public static function boot() {
 		parent::boot();
 		// körs på alla modell object som sparas.
-		static::saving(function($object){
-			return $object::isValid($object);
-		});
+		static::saving( function ( $object ) {
+			return $object::isValid( $object );
+		} );
 
-		static::saved(function($object){
-			Self::reloadModels($object);
-			return true;
-		});
+		static::saved( function ( $object ) {
+			Self::reloadModels( $object );
 
-		static::deleted(function($object){
-			Self::reloadModels($object);
 			return true;
-		});
+		} );
+
+		static::deleted( function ( $object ) {
+			Self::reloadModels( $object );
+
+			return true;
+		} );
 	}
 
-	protected static function reloadModels(\App\Model $object){
+	protected static function reloadModels( \App\Model $object ) {
 		$models = $object->getModelsToReload();
-		$models[] = get_class($object);
-		$models = array_unique($models);
-		foreach($models as $model){
-			if(!str_contains($model, 'App\\')){
-				$model = 'App\\'+$model;
+		$models[] = get_class( $object );
+		$models = array_unique( $models );
+		foreach( $models as $model ) {
+			if ( !str_contains( $model, 'App\\' ) ) {
+				$model = 'App\\' + $model;
 			}
-			if(class_exists($model)) {
-				CRepository::flush(new $model());
+			if ( class_exists( $model ) ) {
+				Model::flush( new $model() );
 			}
 		}
 	}
 
-	// From: https://laracasts.com/discuss/channels/general-discussion/how-to-validate-a-slug-unique-in-laravel-5
-	public function getSlug($value, $column = 'slug') {
-		$slug = Str::slug($value);
-		$latestSlug = $this->whereRaw($column." LIKE '^{$slug}(-[0-9]+)?$' and id != '{$this->id}'")->latest('id')->pluck($column);
+	public static function flush( $model = null ) {
+		Self::$self->flushCache( $model );
+	}
 
-		if($latestSlug){
-			$slugPieces = explode('-', $latestSlug);
-			$number = intval(end($slugPieces));
-			$slug .= '-' . ($number + 1);
+	// From: https://laracasts.com/discuss/channels/general-discussion/how-to-validate-a-slug-unique-in-laravel-5
+	public function getSlug( $value, $column = 'slug' ) {
+		$slug = Str::slug( $value );
+		$latestSlug = $this->whereRaw( $column . " LIKE '^{$slug}(-[0-9]+)?$' and id != '{$this->id}'" )
+		                   ->latest( 'id' )
+		                   ->pluck( $column );
+
+		if ( $latestSlug ) {
+			$slugPieces = explode( '-', $latestSlug );
+			$number = intval( end( $slugPieces ) );
+			$slug .= '-' . ( $number + 1 );
 		}
 
 		return $slug;
 	}
 
 	// validerings metoden som kör rule variablen från alla modeller när det modell objektet sparas.
-	public static function isValid($data, $rules = array())
-	{
+	public static function isValid( $data, $rules = [] ) {
 		$id = null;
-		if(is_object($data)){
+		if ( is_object( $data ) ) {
 			$data = $data->toArray();
-			if(isset($data['id'])){
+			if ( isset( $data['id'] ) ) {
 				$id = $data['id'];
 			}
 		}
 
-		if(count($rules) == 0) {
+		if ( count( $rules ) == 0 ) {
 			$rules = static::$rules;
 		}
 
-		if(is_numeric($id)){
+		if ( is_numeric( $id ) ) {
 			// found on: http://forumsarchive.laravel.io/viewtopic.php?pid=46571
-			array_walk($rules, function(&$item) use ($id)
-			{
-				if(stripos($item, ':id:') !== false){
-					$item = str_ireplace(':id:', $id, $item);
+			array_walk( $rules, function ( &$item ) use ( $id ) {
+				if ( stripos( $item, ':id:' ) !== false ) {
+					$item = str_ireplace( ':id:', $id, $item );
 				}
-			});
+			} );
 		}
 
-		$v = Validator::make($data, $rules);
-		if ($v->passes()) {
+		$v = Validator::make( $data, $rules );
+		if ( $v->passes() ) {
 			return true;
-		}else{
+		} else {
 			static::$errors = $v->messages();
+
 			return false;
 		}
 	}
