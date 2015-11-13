@@ -5,7 +5,7 @@ use App\Forum;
 class ForumTest extends \ApiCase {
 
 	public function test_get() {
-		$this->get('/api/forums')->seeStatusCode(200);
+		$this->get('/api/v1/forums')->seeStatusCode(200);
 	}
 
 	/*
@@ -13,7 +13,7 @@ class ForumTest extends \ApiCase {
 	 */
 	public function test_delete() {
 		$forum = $this->create(Forum::class);
-		$this->post('/api/forums/'.$forum->id, ['_method' => 'delete'], $this->get_headers())->seeStatusCode(200);
+		$this->post('/api/v1/forums/'.$forum->id, ['_method' => 'delete'], $this->get_headers())->seeStatusCode(200);
 	}
 
 }

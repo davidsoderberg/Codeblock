@@ -11,7 +11,7 @@ class TopicTest extends \ApiCase {
 	}
 
 	public function test_get() {
-		$this->get('/api/topics')->seeStatusCode(200);
+		$this->get('/api/v1/topics')->seeStatusCode(200);
 	}
 
 	/*
@@ -19,7 +19,7 @@ class TopicTest extends \ApiCase {
 	 */
 	public function test_create() {
 		$forum = $this->create_forum();
-		$this->post('/api/topics', ['forum_id' => $forum->id, 'title' => 'hej', 'reply' => 'hej'], $this->get_headers())->seeStatusCode(201);
+		$this->post('/api/v1/topics', ['forum_id' => $forum->id, 'title' => 'hej', 'reply' => 'hej'], $this->get_headers())->seeStatusCode(201);
 	}
 
 	/*
@@ -29,12 +29,12 @@ class TopicTest extends \ApiCase {
 		$forum = $this->create_forum();
 		$topic = $this->create(Topic::class, ['forum_id' => $forum->id]);
 		$this->create(Reply::class, ['topic_id' => $topic->id]);
-		$this->post('/api/topics/'.$topic->id, ['_method' => 'put', 'title' => 'test' ], $this->get_headers())->seeStatusCode(201);
+		$this->post('/api/v1/topics/'.$topic->id, ['_method' => 'put', 'title' => 'test' ], $this->get_headers())->seeStatusCode(201);
 
 		$this->setUser(2);
 		$topic = $this->create(Topic::class, ['forum_id' => $forum->id]);
 		$this->create(Reply::class, ['topic_id' => $topic->id, 'user_id' => 2]);
-		$this->post('/api/topics/'.$topic->id, ['_method' => 'put', 'title' => 'test' ], $this->get_headers())->seeStatusCode(201);
+		$this->post('/api/v1/topics/'.$topic->id, ['_method' => 'put', 'title' => 'test' ], $this->get_headers())->seeStatusCode(201);
 	}
 
 	/*
@@ -44,12 +44,12 @@ class TopicTest extends \ApiCase {
 		$forum = $this->create_forum();
 		$topic = $this->create(Topic::class, ['forum_id' => $forum->id]);
 		$this->create(Reply::class, ['topic_id' => $topic->id]);
-		$this->post('/api/topics/'.$topic->id, ['_method' => 'delete'], $this->get_headers())->seeStatusCode(200);
+		$this->post('/api/v1/topics/'.$topic->id, ['_method' => 'delete'], $this->get_headers())->seeStatusCode(200);
 
 		$this->setUser(2);
 		$topic = $this->create(Topic::class, ['forum_id' => $forum->id]);
 		$this->create(Reply::class, ['topic_id' => $topic->id, 'user_id' => 2]);
-		$this->post('/api/topics/'.$topic->id, ['_method' => 'delete'], $this->get_headers())->seeStatusCode(200);
+		$this->post('/api/v1/topics/'.$topic->id, ['_method' => 'delete'], $this->get_headers())->seeStatusCode(200);
 	}
 
 }

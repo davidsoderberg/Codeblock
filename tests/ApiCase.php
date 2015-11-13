@@ -18,7 +18,7 @@ class ApiCase extends TestCase {
 	}
 
 	private function get_token(){
-		$response = $this->post('/api/auth', $this->user)->seeStatusCode(200);
+		$response = $this->post('/api/v1/auth', $this->user)->seeStatusCode(200);
 		$response = json_decode($response->response->getContent());
 		return $response->token;
 	}

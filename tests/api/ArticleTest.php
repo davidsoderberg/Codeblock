@@ -3,7 +3,7 @@
 class ArticleTest extends \ApiCase {
 
 	public function test_get(){
-		$this->get('/api/articles')->seeStatusCode(200);
+		$this->get('/api/v1/articles')->seeStatusCode(200);
 	}
 
 }

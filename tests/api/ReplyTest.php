@@ -16,7 +16,7 @@ class ReplyTest extends \ApiCase {
 	 */
 	public function test_create() {
 		$topic = $this->create_topic();
-		$this->post('/api/replies', ['topic_id' => $topic->id, 'reply' => 'hej'], $this->get_headers())->seeStatusCode(201);
+		$this->post('/api/v1/replies', ['topic_id' => $topic->id, 'reply' => 'hej'], $this->get_headers())->seeStatusCode(201);
 	}
 
 	/*
@@ -25,11 +25,11 @@ class ReplyTest extends \ApiCase {
 	public function test_update() {
 		$topic = $this->create_topic();
 		$reply = $this->create(Reply::class, ['topic_id' => $topic->id]);
-		$this->post('/api/replies/'.$reply->id, ['_method' => 'put', 'reply' => 'hej'], $this->get_headers())->seeStatusCode(201);
+		$this->post('/api/v1/replies/'.$reply->id, ['_method' => 'put', 'reply' => 'hej'], $this->get_headers())->seeStatusCode(201);
 
 		$this->setUser(2);
 		$reply = $this->create(Reply::class, ['topic_id' => $topic->id, 'user_id' => 2]);
-		$this->post('/api/replies/'.$reply->id, ['_method' => 'put', 'reply' => 'hej'], $this->get_headers())->seeStatusCode(201);
+		$this->post('/api/v1/replies/'.$reply->id, ['_method' => 'put', 'reply' => 'hej'], $this->get_headers())->seeStatusCode(201);
 	}
 
 	/*
@@ -39,11 +39,11 @@ class ReplyTest extends \ApiCase {
 		$topic = $this->create_topic();
 		$this->create(Reply::class, ['topic_id' => $topic->id]);
 		$reply = $this->create(Reply::class, ['topic_id' => $topic->id]);
-		$this->post('/api/replies/'.$reply->id, ['_method' => 'delete'], $this->get_headers())->seeStatusCode(200);
+		$this->post('/api/v1/replies/'.$reply->id, ['_method' => 'delete'], $this->get_headers())->seeStatusCode(200);
 
 		$this->setUser(2);
 		$reply = $this->create(Reply::class, ['topic_id' => $topic->id, 'user_id' => 2]);
-		$this->post('/api/replies/'.$reply->id, ['_method' => 'delete'], $this->get_headers())->seeStatusCode(200);
+		$this->post('/api/v1/replies/'.$reply->id, ['_method' => 'delete'], $this->get_headers())->seeStatusCode(200);
 	}
 
 }
