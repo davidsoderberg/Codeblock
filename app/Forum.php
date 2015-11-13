@@ -29,6 +29,8 @@ class Forum extends Model
 		'description' => 'required|min:3',
 	);
 
+	protected $modelsToReload = ['App\Topic', 'App\Reply'];
+
 	public function topics()
 	{
 		return $this->hasMany('App\Topic', 'forum_id', 'id');

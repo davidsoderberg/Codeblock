@@ -27,6 +27,8 @@ class Comment extends Model {
 		'status' => 'integer'
 	);
 
+	protected $modelsToReload = ['App\Post', 'App\User', 'App\Rate'];
+
 	public function user() {
 		return $this->belongsTo( 'App\User', 'user_id', 'id');
 	}

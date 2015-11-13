@@ -34,6 +34,8 @@ class Topic extends Model
 		'forum_id' => 'required|integer',
 	);
 
+	protected $modelsToReload = ['App\Rpely', 'App\Forum', 'App\Read'];
+
 	public function replies()
 	{
 		return $this->hasMany('App\Reply', 'topic_id', 'id');

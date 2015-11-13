@@ -28,6 +28,8 @@ class Notification extends Model {
 		'from_id' => 'required|integer',
 	);
 
+	protected $modelsToReload = ['App\User'];
+
 	public function sender() {
 		return $this->hasOne('App\User', 'id', 'from_id');
 	}

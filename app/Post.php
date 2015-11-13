@@ -17,6 +17,8 @@ class Post extends Model {
 	    });
 	}
 
+	protected $modelsToReload = ['App\Tag', 'App\Star', 'App\Comment'];
+
 	protected $table = 'posts';
 
 	protected $revisionEnabled = true;

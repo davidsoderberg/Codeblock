@@ -11,4 +11,6 @@ class Social extends Model
 		'social_id' => 'required',
 		'user_id' => 'required|integer'
 	);
+
+	protected $modelsToReload = ['App\User'];
 }

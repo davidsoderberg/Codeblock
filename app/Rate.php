@@ -11,5 +11,7 @@ class Rate extends Model {
 
 	public static $rules = array();
 
+	protected $modelsToReload = ['App\Comment'];
+
 	protected $fillable = array('user_id', 'comment_id', 'type');
 }

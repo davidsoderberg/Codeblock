@@ -17,6 +17,8 @@ class Category extends Model {
 	    'name' => 'required|min:3|unique:categories,name,:id:',
 	);
 
+	protected $modelsToReload = ['App\Post'];
+
 	public function posts() {
 		return $this->hasMany( 'App\Post' );
 	}
