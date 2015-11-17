@@ -35,6 +35,7 @@ class ReplyController extends ApiController {
 	 * Tar bort ett svar.
 	 * @permission delete_reply:optional
 	 *
+	 * @param ReplyRepository $replyRepository
 	 * @param $id
 	 *
 	 * @return mixed

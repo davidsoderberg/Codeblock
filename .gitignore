@@ -4,3 +4,6 @@
 tests/_output/*
 .idea/*
 tests/logs
+/storage/coverage/*
+/storage/doc/*
+/storage/phpdoc/*

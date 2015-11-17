@@ -29,6 +29,7 @@ abstract class Annotation {
 
 	/**
 	 * @param $class
+	 * @param boolean $exclude
 	 */
 	public function __construct($class, $exclude = true) {
 		$this->values = [];

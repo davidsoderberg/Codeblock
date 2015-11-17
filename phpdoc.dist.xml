@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdocumentor>
+    <parser>
+        <default-package-name>Codeblock api</default-package-name>
+        <target>./storage/phpdoc/cache</target>
+    </parser>
+    <transformer>
+        <target>./storage/phpdoc/</target>
+    </transformer>
+    <files>
+        <directory>./app</directory>
+    </files>
+    <plugins>
+        <plugin path="Core" />
+    </plugins>
+    <transformations>
+        <template name="responsive-twig" />
+    </transformations>
+</phpdocumentor>

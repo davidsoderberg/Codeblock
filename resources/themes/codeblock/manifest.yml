@@ -1,0 +1,8 @@
+name:   codeblock
+parent: default
+
+global:
+    'layout/base.twig': 'layout/base.twig'
+
+static:
+    'style.css': 'css/style.css'

@@ -71,6 +71,7 @@ class PostController extends ApiController {
 	/**
 	 * Star a post.
 	 *
+	 * @param StarRepository $starRepository
 	 * @param PostRepository $post
 	 * @param $id
 	 *

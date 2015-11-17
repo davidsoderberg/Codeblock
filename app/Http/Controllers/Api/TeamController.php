@@ -32,6 +32,9 @@ class TeamController extends ApiController {
 	}
 
 	/**
+	 *
+	 * @param TeamRepository $teamRepository
+	 * @param TeamInviteRepository $teamInviteRepository
 	 * @param UserRepository $user
 	 *
 	 * @return mixed
@@ -60,6 +63,9 @@ class TeamController extends ApiController {
 	}
 
 	/**
+	 *
+	 * @param TeamInviteRepository $teamInviteRepository
+	 * @param UserRepository $userRepository
 	 * @param $token
 	 *
 	 * @return mixed
@@ -78,6 +84,8 @@ class TeamController extends ApiController {
 	}
 
 	/**
+	 *
+	 * @param TeamRepository $teamRepository
 	 * @param $id
 	 *
 	 * @permission delete_team:optional

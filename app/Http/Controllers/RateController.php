@@ -20,44 +20,56 @@ class RateController extends Controller {
 	|
 	*/
 
-	public function __construct(RateRepository $rate)
-	{
+	/**
+	 * @param RateRepository $rate
+	 */
+	public function __construct( RateRepository $rate ) {
 		parent::__construct();
 		$this->rate = $rate;
 	}
 
 	/**
 	 * lägger till en + på en kommentar
+	 *
+	 * @param CommentRepository $comment
 	 * @param  int $id id på kommentaren som skall få +.
+	 *
 	 * @return object     med värden dit användaren skall skickas.
 	 */
-	public function plus(CommentRepository $comment, $id){
+	public function plus( CommentRepository $comment, $id ) {
 		try {
-			$user_id = $comment->get($id)->user_id;
-			if($user_id != Auth::user()->id) {
-				if($this->rate->rate($id, '+')) {
-					return Redirect::back()->with('success', 'You have now + rated a comment.');
+			$user_id = $comment->get( $id )->user_id;
+			if ( $user_id != Auth::user()->id ) {
+				if ( $this->rate->rate( $id, '+' ) ) {
+					return Redirect::back()->with( 'success', 'You have now + rated a comment.' );
 				}
 			}
-		} catch (\Exception $e){}
-		return Redirect::back()->with('error', 'You could not rate that comment, please try agian.');
+		} catch( \Exception $e ) {
+		}
+
+		return Redirect::back()->with( 'error', 'You could not rate that comment, please try agian.' );
 	}
 
 	/**
 	 * lägger till en - på en kommentar
-	 * @param  [type] $id id på kommentaren som skall få -.
+	 *
+	 * @param CommentRepository $comment
+	 * @param  int $id id på kommentaren som skall få -.
+	 *
 	 * @return object     med värden dit användaren skall skickas.
 	 */
-	public function minus(CommentRepository $comment,$id){
+	public function minus( CommentRepository $comment, $id ) {
 		try {
-			$user_id = $comment->get($id)->user_id;
-			if($user_id != Auth::user()->id) {
-				if($this->rate->rate($id, '-')) {
-					return Redirect::back()->with('success', 'You have now - rated a comment.');
+			$user_id = $comment->get( $id )->user_id;
+			if ( $user_id != Auth::user()->id ) {
+				if ( $this->rate->rate( $id, '-' ) ) {
+					return Redirect::back()->with( 'success', 'You have now - rated a comment.' );
 				}
 			}
-		} catch (\Exception $e){}
-		return Redirect::back()->with('error', 'You could not rate that comment, please try agian.');
+		} catch( \Exception $e ) {
+		}
+
+		return Redirect::back()->with( 'error', 'You could not rate that comment, please try agian.' );
 	}
 
 }

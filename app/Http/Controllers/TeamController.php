@@ -125,6 +125,8 @@ class TeamController extends Controller {
 	}
 
 	/**
+	 *
+	 * @param UserRepository $userRepository
 	 * @param $token
 	 *
 	 * @return mixed

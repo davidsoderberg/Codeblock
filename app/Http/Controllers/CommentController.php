@@ -53,6 +53,9 @@ class CommentController extends Controller {
 
 	/**
 	 * Skapa och uppdatera en kommentar.
+	 *
+	 * @param NotificationRepository $notification
+	 * @param PostRepository $post
 	 * @param  int $id id för kommentar som skall uppdateras
 	 * @return object     med värden dit användaren skall skickas.
 	 */
