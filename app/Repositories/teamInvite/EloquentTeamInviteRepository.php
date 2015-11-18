@@ -8,11 +8,30 @@ use App\TeamInvite;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Class EloquentTeamInviteRepository
+ * @package App\Repositories\TeamInvite
+ */
 class EloquentTeamInviteRepository extends CRepository implements TeamInviteRepository {
 
+	/**
+	 * Constant for string invite.
+	 */
 	const INVITE = 'invite';
+	/**
+	 * Constant for string request.
+	 */
 	const REQUEST = 'request';
 
+	/**
+	 * Invites user to team.
+	 *
+	 * @param User $user
+	 * @param Team $team
+	 * @param string $type
+	 *
+	 * @return bool
+	 */
 	public function inviteToTeam(User $user, Team $team, $type = Self::INVITE) {
 
 		$invite = new TeamInvite();
@@ -49,14 +68,37 @@ class EloquentTeamInviteRepository extends CRepository implements TeamInviteRepo
 		return false;
 	}
 
+	/**
+	 * Checks if user has pending invite.
+	 *
+	 * @param $email
+	 * @param Team $team
+	 *
+	 * @return bool
+	 */
 	public function hasPendingInvite($email, Team $team) {
 		return TeamInvite::where('email', "=", $email)->where('team_id', "=", $team->getKey())->first() ? true : false;
 	}
 
+	/**
+	 * Fetch invite from accept token.
+	 *
+	 * @param $token
+	 *
+	 * @return mixed
+	 */
 	public function getInviteFromAcceptToken($token) {
 		return TeamInvite::where('accept_token', '=', $token)->first();
 	}
 
+	/**
+	 * Accept invite for user.
+	 *
+	 * @param TeamInvite $invite
+	 * @param User|null $user
+	 *
+	 * @return bool|null
+	 */
 	public function acceptInvite(TeamInvite $invite, User $user = null) {
 		if(is_null($user)){
 			$user = Auth::user();
@@ -65,14 +107,38 @@ class EloquentTeamInviteRepository extends CRepository implements TeamInviteRepo
 		return $this->deleteInvite($invite);
 	}
 
+	/**
+	 * Fetch invite from deny token.
+	 *
+	 * @param $token
+	 *
+	 * @return mixed
+	 */
 	public function getInviteFromDenyToken($token) {
 		return TeamInvite::where('deny_token', '=', $token)->first();
 	}
 
+	/**
+	 * Deny invite for user.
+	 *
+	 * @param TeamInvite $invite
+	 *
+	 * @return bool|null
+	 */
 	public function denyInvite(TeamInvite $invite) {
 		return $this->deleteInvite($invite);
 	}
 
+	/**
+	 * Responds invite for user.
+	 *
+	 * @param UserRepository $userRepository
+	 * @param $token
+	 * @param $action
+	 *
+	 * @return bool|null|void
+	 * @throws NullPointerException
+	 */
 	public function respondInvite(UserRepository $userRepository, $token, &$action){
 
 		$action = 'accepted';
@@ -104,6 +170,14 @@ class EloquentTeamInviteRepository extends CRepository implements TeamInviteRepo
 
 	}
 
+	/**
+	 * Deletes invite.
+	 *
+	 * @param TeamInvite $invite
+	 *
+	 * @return bool|null
+	 * @throws \Exception
+	 */
 	private function deleteInvite(TeamInvite $invite) {
 		$delete = $invite->delete();
 		if(is_null($delete)){

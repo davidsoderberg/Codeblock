@@ -3,6 +3,10 @@
 use App\Http\Controllers\ApiController;
 Use App\Repositories\Forum\ForumRepository;
 
+/**
+ * Class ForumController
+ * @package App\Http\Controllers\Api
+ */
 class ForumController extends ApiController {
 
 	/**

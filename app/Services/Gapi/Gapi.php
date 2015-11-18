@@ -4,28 +4,79 @@ use Spatie\LaravelAnalytics\LaravelAnalyticsFacade;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 
+/**
+ * Class Gapi
+ * @package App\Services\Gapi
+ */
 class Gapi implements GapiInterface{
 
+	/**
+	 * Fetch top keywords.
+	 *
+	 * @param int $numberOfDays
+	 * @param int $maxResults
+	 *
+	 * @return mixed
+	 */
 	public function getTopKeywords($numberOfDays = 365, $maxResults = 20){
 		return LaravelAnalyticsFacade::getTopKeywords($numberOfDays, $maxResults);
 	}
 
+	/**
+	 * Fetch top referrers
+	 *
+	 * @param int $numberOfDays
+	 * @param int $maxResults
+	 *
+	 * @return mixed
+	 */
 	public function getTopReferrers($numberOfDays = 365, $maxResults = 20){
 		return LaravelAnalyticsFacade::getTopReferrers($numberOfDays, $maxResults);
 	}
 
+	/**
+	 * Fetch top used browsers.
+	 *
+	 * @param int $numberOfDays
+	 * @param int $maxResults
+	 *
+	 * @return mixed
+	 */
 	public function getTopBrowsers($numberOfDays = 365, $maxResults = 6){
 		return LaravelAnalyticsFacade::getTopBrowsers($numberOfDays, $maxResults);
 	}
 
+	/**
+	 * Fetch most visisted pages.
+	 *
+	 * @param int $numberOfDays
+	 * @param int $maxResults
+	 *
+	 * @return mixed
+	 */
 	public function getMostVisitedPages($numberOfDays = 365, $maxResults = 20){
 		return LaravelAnalyticsFacade::getMostVisitedPages($numberOfDays, $maxResults);
 	}
 
+	/**
+	 * Fetch all active users.
+	 *
+	 * @param array $others
+	 *
+	 * @return mixed
+	 */
 	public function getActiveUsers($others = array()){
 		return LaravelAnalyticsFacade::getActiveUsers($others);
 	}
 
+	/**
+	 * Fetch all visitors and page views.
+	 *
+	 * @param int $numberOfDays
+	 * @param string $groupBy
+	 *
+	 * @return mixed
+	 */
 	public function getVisitorsAndPageViews($numberOfDays = 365, $groupBy = 'date'){
 		$Collection = LaravelAnalyticsFacade::getVisitorsAndPageViews($numberOfDays, $groupBy);
 
@@ -36,6 +87,14 @@ class Gapi implements GapiInterface{
 		});
 	}
 
+	/**
+	 * Fetch all events.
+	 *
+	 * @param int $numberOfDays
+	 * @param int $maxResults
+	 *
+	 * @return Collection
+	 */
 	public function getEvents($numberOfDays = 365, $maxResults = 0){
 		$others = ['dimensions' => 'ga:eventCategory, ga:eventAction, ga:eventLabel'];
 		$totalEvents = $this->performQuery($numberOfDays, "ga:totalEvents", $others);
@@ -73,6 +132,15 @@ class Gapi implements GapiInterface{
 		return $Collection;
 	}
 
+	/**
+	 * Runs query.
+	 *
+	 * @param int $numberOfDays
+	 * @param $metrics
+	 * @param array $others
+	 *
+	 * @return mixed
+	 */
 	private function performQuery($numberOfDays = 365, $metrics, $others = array()){
 		return LaravelAnalyticsFacade::performQuery(
 			Carbon::today()->subDays($numberOfDays),

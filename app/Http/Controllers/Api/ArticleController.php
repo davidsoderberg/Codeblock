@@ -4,6 +4,10 @@ use App\Http\Controllers\ApiController;
 use App\Repositories\Article\ArticleRepository;
 
 
+/**
+ * Class ArticleController
+ * @package App\Http\Controllers\Api
+ */
 class ArticleController extends ApiController {
 
 	/**

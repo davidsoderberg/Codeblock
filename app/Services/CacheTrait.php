@@ -32,13 +32,15 @@ trait CacheTrait {
 	protected $cacheIndexKey = 'cache-index';
 
 	/**
-	 * model used to get cache key.
+	 * Model used to get cache key.
 	 *
 	 * @var string
 	 */
 	protected $model = null;
 
 	/**
+	 * Propety to store Cache key in.
+	 *
 	 * @var
 	 */
 	protected $cacheKey = '';
@@ -145,6 +147,8 @@ trait CacheTrait {
 	}
 
 	/**
+	 * Fetch class for current object.
+	 *
 	 * @param $object
 	 *
 	 * @return string
@@ -221,6 +225,8 @@ trait CacheTrait {
 
 	/**
 	 * Flush the cache for the concrete service
+	 *
+	 * @param null $model
 	 *
 	 * @return void
 	 */

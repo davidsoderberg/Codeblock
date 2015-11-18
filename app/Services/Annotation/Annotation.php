@@ -11,23 +11,43 @@ use Illuminate\Support\Str;
 abstract class Annotation {
 
 	/**
+	 * Property to store current class.
+	 *
 	 * @var ReflectionClass
 	 */
 	private $class;
+
 	/**
+	 * Property to store class values in.
+	 *
 	 * @var array
 	 */
 	private $values;
+
 	/**
+	 * Propety to store current annotation in.
+	 *
 	 * @var
 	 */
 	protected $annotation;
 
+	/**
+	 * Property to store bool if some values should be excluded.
+	 *
+	 * @var bool
+	 */
 	private $shouldExclude = true;
 
+	/**
+	 * Property to store exclude annotation.
+	 *
+	 * @var string
+	 */
 	private $exclude = '@exclude';
 
 	/**
+	 *
+	 * Constructor for Annotation.
 	 * @param $class
 	 * @param boolean $exclude
 	 */
@@ -39,6 +59,8 @@ abstract class Annotation {
 	}
 
 	/**
+	 * Setter for shouldExclude.
+	 *
 	 * @param $boolean
 	 */
 	public function setExclude($boolean) {
@@ -95,6 +117,7 @@ abstract class Annotation {
 
 	/**
 	 * Fetches all method names.
+	 *
 	 * @return array
 	 */
 	public function getMethods() {
@@ -104,6 +127,8 @@ abstract class Annotation {
 
 	/**
 	 * Gets all classes that should be walked through.
+	 *
+	 * @param string $path path for where controllers are stored.
 	 *
 	 * @return array
 	 */
@@ -120,6 +145,11 @@ abstract class Annotation {
 		return $classes;
 	}
 
+	/**
+	 * Deletes an annotation.
+	 *
+	 * @param IRepository $repo
+	 */
 	public function delete(IRepository $repo) {
 		$models = $repo->get();
 		foreach($models as $model) {
@@ -128,6 +158,8 @@ abstract class Annotation {
 	}
 
 	/**
+	 * Checks if permission is excluded.
+	 *
 	 * @param $comment
 	 *
 	 * @return bool

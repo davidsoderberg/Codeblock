@@ -10,16 +10,31 @@ use Carbon\Carbon;
 use App\Repositories\CRepository;
 use App\Services\CollectionService;
 
+/**
+ * Class EloquentPostRepository
+ * @package App\Repositories\Post
+ */
 class EloquentPostRepository extends CRepository implements PostRepository {
 
+	/**
+	 * @var
+	 */
 	public $id;
 
 	// getter för id.
+	/**
+	 * @return mixed
+	 */
 	public function getId(){
 		return $this->id;
 	}
 
 	// hämtar ett eller alla block.
+	/**
+	 * @param null $id
+	 *
+	 * @return \App\Services\Model|array|Collection|null|static
+	 */
 	public function get($id = null)
 	{
 		if(is_null($id)){
@@ -36,6 +51,11 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	}
 
 	// hämtar block som har en vis kategori eller är skapade den senaste veckan.
+	/**
+	 * @param $id
+	 *
+	 * @return Collection
+	 */
 	public function getByCategory($id)
 	{
 		$posts = $this->get();
@@ -72,6 +92,12 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 		return $postsCollection;
 	}
 
+	/**
+	 * @param int $limit
+	 * @param int $min
+	 *
+	 * @return Collection
+	 */
 	public function getPopular($limit = 10, $min = 0){
 		$posts =  $this->sort($this->get()->take($limit),'stars');
 		$postsCollection = new Collection();
@@ -83,6 +109,11 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 		return $postsCollection;
 	}
 
+	/**
+	 * @param int $limit
+	 *
+	 * @return Collection
+	 */
 	public function getNewest($limit = 10){
 		$posts = $this->get();
 		$postsCollection = new Collection();
@@ -108,6 +139,11 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	}
 
 	// hämtar block som har en viss ettiket.
+	/**
+	 * @param $id
+	 *
+	 * @return Collection
+	 */
 	public function getByTag($id){
 		$posts = $this->get();
 		$postsCollection = new Collection();
@@ -124,6 +160,12 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 		return $postsCollection;
 	}
 
+	/**
+	 * @param $posts
+	 * @param string $sort
+	 *
+	 * @return mixed
+	 */
 	public function sort($posts, $sort = "date"){
 		$sort = strtolower($sort);
 		$posts = $posts->sortByDesc(function ($item) use ($sort) {
@@ -153,6 +195,11 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	}
 
 	// duplicerar ett kodblock.
+	/**
+	 * @param $id
+	 *
+	 * @return bool|mixed
+	 */
 	public function duplicate($id){
 		$post = $this->get($id);
 		$input = array();
@@ -174,10 +221,21 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	}
 
 	// hämtar vilka kodblock som är skapade ur ett visst kodblock.
+	/**
+	 * @param $id
+	 *
+	 * @return Collection|static
+	 */
 	public function getForked($id){
 		return CollectionService::filter($this->get(), 'org', $id);
 	}
 
+	/**
+	 * @param $input
+	 * @param $id
+	 *
+	 * @return bool
+	 */
 	public function undo($input, $id){
 		if(is_numeric($id)){
 			$post = $this->get($id);
@@ -192,6 +250,12 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 		return false;
 	}
 
+	/**
+	 * @param $input
+	 * @param $Post
+	 *
+	 * @return bool
+	 */
 	private function save($input, $Post){
 		$except = array('tags', '_token', '_url', 'token', '_method', 'honeyName');
 
@@ -222,6 +286,12 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	}
 
 	// sparar eller uppdarerar ett block.
+	/**
+	 * @param $input
+	 * @param null $id
+	 *
+	 * @return bool
+	 */
 	public function createOrUpdate($input, $id = null)
 	{
 		if(!is_numeric($id)) {
@@ -240,6 +310,11 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	}
 
 	// tar bort ett block.
+	/**
+	 * @param $id
+	 *
+	 * @return bool|mixed
+	 */
 	public function delete($id){
 		$Post = $this->get($id);
 		if(!is_null($Post)) {
@@ -249,6 +324,12 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	}
 
 	// skapar och tar bort en stjärna för ett block.
+	/**
+	 * @param StarRepository $starRepository
+	 * @param $post_id
+	 *
+	 * @return array
+	 */
 	public function createOrDeleteStar(StarRepository $starRepository, $post_id){
 		$stars = CollectionService::filter($starRepository->get(), 'user_id', Auth::user()->id);
 		$star = CollectionService::filter($stars, 'post_id', $post_id, 'first');
@@ -267,6 +348,12 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	}
 
 	// söker bland blocken och skickar tillbaka de blocken den hittar en match hos.
+	/**
+	 * @param $term
+	 * @param array $filter
+	 *
+	 * @return static
+	 */
 	public function search($term, $filter = array('tag' => null, 'category' => null, 'only' => 0)){
 
 		// Kollar om blocket innehåller söktermern i namn eller beskrvining

@@ -16,9 +16,15 @@ use Illuminate\Support\Facades\Session;
 use App\Services\Analytics;
 use Laravel\Socialite\Contracts\Factory as Socialite;
 
+/**
+ * Class UserController
+ * @package App\Http\Controllers
+ */
 class UserController extends Controller {
 
 	/**
+	 * Constructor for UserController.
+	 *
 	 * @param UserRepository $user
 	 */
 	public function __construct( UserRepository $user ) {
@@ -26,6 +32,11 @@ class UserController extends Controller {
 		$this->user = $user;
 	}
 
+	/**
+	 * Sets if user only would like to view there own codeblocks.
+	 *
+	 * @return mixed
+	 */
 	public function setOnly() {
 		if ( Auth::check() ) {
 			Auth::user()->setOnly();
@@ -35,22 +46,29 @@ class UserController extends Controller {
 	}
 
 	/**
-	 * Visar index vyn för användare
+	 * Render index view for user.
+	 *
 	 * @permission view_users
-	 * @return objekt     objekt som innehåller allt som behövs i vyn
+	 * @return object     view object.
 	 */
 	public function index() {
 		return View::make( 'user.index' )->with( 'title', 'Users' )->with( 'users', $this->user->get() );
 	}
 
 	/**
-	 * Visar vyn för att skapa en användare
-	 * @return objekt     objekt som innehåller allt som behövs i vyn
+	 * Render view for create user.
+	 *
+	 * @return object     view object.
 	 */
 	public function create() {
 		return View::make( 'user.create' )->with( 'title', Lang::get( 'app.userCreate' ) );
 	}
 
+	/**
+	 * Render backup view.
+	 *
+	 * @return mixed
+	 */
 	public function backup() {
 		return View::make( 'user.backup' )
 		           ->with( 'title', 'Backup codeblocks' )
@@ -58,6 +76,8 @@ class UserController extends Controller {
 	}
 
 	/**
+	 * Stores user.
+	 *
 	 * @param RoleRepository $role
 	 * @param null $id
 	 *
@@ -91,11 +111,11 @@ class UserController extends Controller {
 	}
 
 	/**
-	 * Visar vyn för en användare
+	 * Render view to display a user.
 	 *
-	 * @param  int $id id för användaren som skall visas.
+	 * @param  int $id id for user to display.
 	 *
-	 * @return objekt     objekt som innehåller allt som behövs i vyn
+	 * @return object     view object.
 	 */
 	public function show( $id = 0 ) {
 		if ( Auth::check() && $id === 0 ) {
@@ -120,6 +140,11 @@ class UserController extends Controller {
 		return Redirect::action( 'UserController@listUserBlock', [$user->username] );
 	}
 
+	/**
+	 * Lists codeblocks starred by current user.
+	 *
+	 * @return mixed
+	 */
 	public function listStarred() {
 		$user = Auth::user();
 
@@ -130,13 +155,13 @@ class UserController extends Controller {
 	}
 
 	/**
-	 * Visar en lista användaren block.
+	 * Lists all codeblocks by choosen user.
 	 *
 	 * @param PostRepository $post
-	 * @param int $id id på anvädaren vars block skall listas.
-	 * @param int $sort
+	 * @param int $id id for user who codeblocks to display.
+	 * @param string $sort
 	 *
-	 * @return mixed objekt som innehåller allt som behövs i vyn
+	 * @return mixed view object.
 	 */
 	public function listUserBlock( PostRepository $post, $id = 0, $sort = 'date' ) {
 		$parameters = Route::getCurrentRoute()->parameters();
@@ -183,13 +208,13 @@ class UserController extends Controller {
 	}
 
 	/**
-	 * Visar vyn för att redigera en användare.
+	 * Render view to edit a user.
 	 * @permission update_users
 	 *
 	 * @param RoleRepository $role
-	 * @param  int $id id för användaren som skall redigeras.
+	 * @param  int $id id for user to edit.
 	 *
-	 * @return objekt     objekt som innehåller allt som behövs i vyn
+	 * @return object     view object.
 	 */
 	public function edit( RoleRepository $role, $id ) {
 		return View::make( 'user.edit' )
@@ -199,13 +224,13 @@ class UserController extends Controller {
 	}
 
 	/**
-	 * Uppdaterar användaren
+	 * Updates a user.
 	 * @permission update_users
 	 *
 	 * @param NotificationRepository $notification
-	 * @param  int $id id på användaren som skall uppdateras.
+	 * @param  int $id id for user to update.
 	 *
-	 * @return object     med värden dit användaren skall skickas.
+	 * @return object     redirect object.
 	 */
 	public function update( NotificationRepository $notification, $id ) {
 		if ( $this->user->update( $this->request->all(), $id ) ) {
@@ -224,12 +249,12 @@ class UserController extends Controller {
 	}
 
 	/**
-	 * ta bort användaren
+	 * Delete a user.
 	 * @permission delete_users
 	 *
-	 * @param  int $id id på användaren som skall tas bort.
+	 * @param  int $id id for user to delete.
 	 *
-	 * @return object     med värden dit användaren skall skickas.
+	 * @return object     redirect object.
 	 */
 	public function delete( $id ) {
 		if ( is_numeric( $id ) && $id != 1 ) {
@@ -242,16 +267,16 @@ class UserController extends Controller {
 	}
 
 	/**
-	 * Visar vyn för inloggning.
-	 * @return objekt     objekt som innehåller allt som behövs i vyn
+	 * Render login view.
+	 * @return object     view object.
 	 */
 	public function login() {
 		return View::make( 'login' )->with( 'title', 'Login / Sign up' );
 	}
 
 	/**
-	 * Loggar in användaren
-	 * @return object     med värden dit användaren skall skickas.
+	 * Logging in user.
+	 * @return object     redirect object.
 	 */
 	public function Usersession() {
 		if ( $this->user->login( $this->request->all() ) ) {
@@ -264,8 +289,8 @@ class UserController extends Controller {
 	}
 
 	/**
-	 * Loggar ut användaren
-	 * @return object     med värden dit användaren skall skickas.
+	 * Logging out user.
+	 * @return object     redirect user.
 	 */
 	public function logout() {
 		Auth::logout();
@@ -274,8 +299,8 @@ class UserController extends Controller {
 	}
 
 	/**
-	 * Skickar ett nytt lösnord till användaren
-	 * @return object     med värden dit användaren skall skickas.
+	 * Sends a new password to user.
+	 * @return object     redirect object.
 	 */
 	public function forgotPassword() {
 		if ( $this->user->forgotPassword( $this->request->all() ) ) {
@@ -286,12 +311,12 @@ class UserController extends Controller {
 	}
 
 	/**
-	 * Aktiverar användaren
+	 * Activates a user.
 	 *
-	 * @param  int $id id på användaren som skall aktiveras
-	 * @param  string $token nycklen för att aktivera användaren.
+	 * @param  int $id id for user to activate.
+	 * @param  string $token token for user to activate.
 	 *
-	 * @return object     med värden dit användaren skall skickas.
+	 * @return object     redirect object.
 	 */
 	public function activate( $id, $token ) {
 		if ( $this->user->activateUser( $id, $token ) ) {
@@ -308,7 +333,7 @@ class UserController extends Controller {
 
 
 	/**
-	 * Loggar in användaren via sociala medier.
+	 * Log in user with help of social media.
 	 *
 	 * @param $social
 	 * @param Socialite $socialite
@@ -378,9 +403,9 @@ class UserController extends Controller {
 					if ( $id > 0 ) {
 						Auth::loginUsingId( $id );
 						Analytics::track( Analytics::CATEGORY_SOCIAL, Analytics::ACTION_LOGIN, [
-								'social' => $social,
-								'username' => Auth::user()->username,
-							] );
+							'social' => $social,
+							'username' => Auth::user()->username,
+						] );
 
 						return Redirect::to( '/user' )->with( 'success', 'You have logged in.' );
 					}

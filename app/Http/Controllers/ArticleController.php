@@ -6,21 +6,17 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
 
+/**
+ * Class ArticleController
+ * @package App\Http\Controllers
+ */
 class ArticleController extends Controller {
 
-	/*
-	|--------------------------------------------------------------------------
-	| Default Home Controller
-	|--------------------------------------------------------------------------
-	|
-	| You may wish to use controllers instead of, or in addition to, Closure
-	| based routes. That's great! Here is an example controller method to
-	| get you started. To route to this controller, just add the route:
-	|
-	|	Route::get('/', 'PostController@index');
-	|
-	*/
-
+	/**
+	 * Constructor for ArticleController.
+	 *
+	 * @param ArticleRepository $Article
+	 */
 	public function __construct(ArticleRepository $Article)
 	{
 		parent::__construct();
@@ -28,9 +24,9 @@ class ArticleController extends Controller {
 	}
 
 	/**
-	 * Visar index vyn för artikel
-	 * @param  int $id id för artikel som skall redigera
-	 * @return objekt     objekt som innehåller allt som behövs i vyn
+	 * Shows index view for article.
+	 * @param  int $id id for article to show.
+	 * @return objekt     with value where user should be redirected to.
 	 */
 	public function index($id = null)
 	{
@@ -58,9 +54,9 @@ class ArticleController extends Controller {
 	}
 
 	/**
-	 * Skapa en artikel.
+	 * Creates an article.
 	 * @permission create_article
-	 * @return object     med värden dit användaren skall skickas.
+	 * @return object    with value where user should be redirected to.
 	 */
 	public function create()
 	{
@@ -72,10 +68,10 @@ class ArticleController extends Controller {
 	}
 
 	/**
-	 * Uppdaterar en artikel.
+	 * Updates an article.
 	 * @permission update_article
-	 * @param  int $id id för kategorin som skall uppdateras
-	 * @return object     med värden dit användaren skall skickas.
+	 * @param  int $id id for article to update.
+	 * @return object     with value where user should be redirected to.
 	 */
 	public function update($id)
 	{
@@ -87,10 +83,10 @@ class ArticleController extends Controller {
 	}
 
 	/**
-	 * Ta bort en artikel
+	 * Deletes an article.
 	 * @permission delete_article
-	 * @param  int $id id för kategori som skall tas bort.
-	 * @return object     med värden dit användaren skall skickas.
+	 * @param  int $id id for article to delete.
+	 * @return object     with value where user should be redirected to.
 	 */
 	public function delete($id){
 		$article = $this->Article->get($id);

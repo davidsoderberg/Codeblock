@@ -4,11 +4,26 @@ use App\Topic;
 use App\Repositories\CRepository;
 use App\Services\CollectionService;
 
+/**
+ * Class EloquentTopicRepository
+ * @package App\Repositories\Topic
+ */
 class EloquentTopicRepository extends CRepository implements TopicRepository {
 
+	/**
+	 * Property to store topic in.
+	 *
+	 * @var
+	 */
 	public $topic;
 
-	// hämtar en eller alla trådar.
+	/**
+	 * Fetch one or all topics.
+	 *
+	 * @param null $id
+	 *
+	 * @return \App\Services\Model|array|\Illuminate\Database\Eloquent\Collection|null|static
+	 */
 	public function get($id = null)
 	{
 		if(is_null($id)){
@@ -18,7 +33,14 @@ class EloquentTopicRepository extends CRepository implements TopicRepository {
 		}
 	}
 
-	// skapar och uppdaterar en tråd.
+	/**
+	 * Creates or update a topic.
+	 *
+	 * @param $input
+	 * @param null $id
+	 *
+	 * @return bool
+	 */
 	public function createOrUpdate($input, $id = null)
 	{
 		if(!is_numeric($id)) {
@@ -44,7 +66,13 @@ class EloquentTopicRepository extends CRepository implements TopicRepository {
 		}
 	}
 
-	// tar bort en tråd.
+	/**
+	 * Deletes a topic.
+	 *
+	 * @param $id
+	 *
+	 * @return bool
+	 */
 	public function delete($id){
 		$Topic = $this->get($id);
 		if($Topic == null){

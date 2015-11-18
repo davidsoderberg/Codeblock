@@ -5,21 +5,17 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 
+/**
+ * Class CategoryController
+ * @package App\Http\Controllers
+ */
 class CategoryController extends Controller {
 
-	/*
-	|--------------------------------------------------------------------------
-	| Default Home Controller
-	|--------------------------------------------------------------------------
-	|
-	| You may wish to use controllers instead of, or in addition to, Closure
-	| based routes. That's great! Here is an example controller method to
-	| get you started. To route to this controller, just add the route:
-	|
-	|	Route::get('/', 'PostController@index');
-	|
-	*/
-
+	/**
+	 * Constructor for CategoryController.
+	 *
+	 * @param CategoryRepository $category
+	 */
 	public function __construct(CategoryRepository $category)
 	{
 		parent::__construct();

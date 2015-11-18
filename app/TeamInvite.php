@@ -2,6 +2,10 @@
 
 use App\ModelTraits\TeamInviteTrait;
 
+/**
+ * Class TeamInvite
+ * @package App
+ */
 class TeamInvite extends Model {
 
 	use TeamInviteTrait;
@@ -13,17 +17,32 @@ class TeamInvite extends Model {
 	 */
 	protected $table = 'teaminvites';
 
-	protected $fillable = array('user_id', 'team_id', 'type', 'email', 'accept_token', 'deny_token');
+	/**
+	 * Array with fields that user are allowed to fill.
+	 *
+	 * @var array
+	 */
+	protected $fillable = ['user_id', 'team_id', 'type', 'email', 'accept_token', 'deny_token'];
 
-	protected $guarded = array('id');
+	/**
+	 * Array with fields that are guarded.
+	 *
+	 * @var array
+	 */
+	protected $guarded = ['id'];
 
-	public static $rules = array(
-		'email'  => 'required|email',
+	/**
+	 * Array with rules for fields.
+	 *
+	 * @var array
+	 */
+	public static $rules = [
+		'email' => 'required|email',
 		'type' => 'in:invite, request',
 		'accept_token' => 'required',
 		'deny_token' => 'required',
 		'user_id' => 'integer',
-		'team_id' => 'integer'
-	);
+		'team_id' => 'integer',
+	];
 
 }

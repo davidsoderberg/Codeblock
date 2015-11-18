@@ -3,7 +3,10 @@
 use App\Http\Controllers\ApiController;
 use App\Repositories\Category\CategoryRepository;
 
-
+/**
+ * Class CategoryController
+ * @package App\Http\Controllers\Api
+ */
 class CategoryController extends ApiController {
 
 	/**
@@ -14,12 +17,13 @@ class CategoryController extends ApiController {
 	 *
 	 * @return mixed
 	 */
-	public function Categories(CategoryRepository $category, $id = null) {
-		return $this->response([$this->stringData => $this->getCollection($category, $id)], 200);
+	public function Categories( CategoryRepository $category, $id = null ) {
+		return $this->response( [$this->stringData => $this->getCollection( $category, $id )], 200 );
 	}
 
 	/**
 	 * Creating or updating a category.
+	 *
 	 * @permission create_update_categories
 	 *
 	 * @param CategoryRepository $category
@@ -27,28 +31,29 @@ class CategoryController extends ApiController {
 	 *
 	 * @return mixed
 	 */
-	public function createOrUpdateCategory(CategoryRepository $category, $id = null) {
-		if($category->createOrUpdate($this->request->all(), $id)) {
-			return $this->response([$this->stringMessage => 'Your category has been saved'], 201);
+	public function createOrUpdateCategory( CategoryRepository $category, $id = null ) {
+		if ( $category->createOrUpdate( $this->request->all(), $id ) ) {
+			return $this->response( [$this->stringMessage => 'Your category has been saved'], 201 );
 		}
 
-		return $this->response([$this->stringErrors => $category->getErrors()], 400);
+		return $this->response( [$this->stringErrors => $category->getErrors()], 400 );
 	}
 
+
 	/**
-	 * Ta bort en kategori
-	 * @permission delete_categories
+	 * Deletes a category.
 	 *
-	 * @param  int $id id för kategori som skall tas bort.
+	 * @param CategoryRepository $categoryRepository
+	 * @param $id
 	 *
-	 * @return object     med värden dit användaren skall skickas.
+	 * @return mixed
 	 */
-	public function deleteCategory(CategoryRepository $categoryRepository, $id) {
-		if($categoryRepository->delete($id)) {
-			return $this->response([$this->stringMessage => 'The category has been deleted.'], 200);
+	public function deleteCategory( CategoryRepository $categoryRepository, $id ) {
+		if ( $categoryRepository->delete( $id ) ) {
+			return $this->response( [$this->stringMessage => 'The category has been deleted.'], 200 );
 		}
 
-		return $this->response([$this->stringErrors => 'The category could not be deleted.'], 204);
+		return $this->response( [$this->stringErrors => 'The category could not be deleted.'], 204 );
 	}
 
 }
