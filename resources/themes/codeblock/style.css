@@ -52,9 +52,12 @@ body {
 #page-content {
 	width: 90%;
 	margin: 30px auto;
-	margin-top: 0;
 	background: #ffffff;
 	padding: 30px;
+}
+
+.namespace-breadcrumbs + #page-content {
+	margin-top: 0px !important;
 }
 
 .navbar-default {
@@ -100,7 +103,8 @@ h2 {
 .table > tfoot > tr > th,
 .table > thead > tr > td,
 .table > tbody > tr > td,
-.table > tfoot > tr > td {
+.table > tfoot > tr > td,
+.underlined > .row {
 	border-color: #272822;
 }
 
@@ -123,6 +127,11 @@ h2 {
 	color: #ffffff;
 	text-decoration: underline;
 	border-radius: 0;
+}
+
+.namespace-list a:hover {
+	color: #ffffff;
+	text-decoration: none;
 }
 
 .btn-default {
@@ -174,6 +183,6 @@ a:hover {
 	box-shadow: none;
 }
 
-#site-nav.navbar-default .navbar-brand{
+#site-nav.navbar-default .navbar-brand {
 	text-decoration: none;
 }
