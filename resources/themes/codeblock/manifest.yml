@@ -3,6 +3,7 @@ parent: default
 
 global:
     'layout/base.twig': 'layout/base.twig'
+    'sami.js.twig':    'sami.js'
 
 static:
     'style.css': 'css/style.css'

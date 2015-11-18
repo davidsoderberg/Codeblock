@@ -186,3 +186,20 @@ a:hover {
 #site-nav.navbar-default .navbar-brand {
 	text-decoration: none;
 }
+
+@media screen and (max-width: 991px) {
+
+	#right-column {
+		width: 100%;
+	}
+
+	#page-content {
+		width: 100%;
+		margin: 15px 0;
+	}
+
+	.namespace-breadcrumbs{
+		width: 100%;
+		margin: 15px 0 0 0 !important;
+	}
+}
