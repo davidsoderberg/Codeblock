@@ -6,6 +6,10 @@ use App\Repositories\User\UserRepository;
 use Illuminate\Support\Facades\Auth;
 
 
+/**
+ * Class AuthController
+ * @package App\Http\Controllers\Api
+ */
 class AuthController extends ApiController {
 
 	/**
@@ -14,11 +18,11 @@ class AuthController extends ApiController {
 	 */
 	public function Auth() {
 		try {
-			Auth::attempt([
-				'username' => trim(strip_tags($this->request->get('username'))),
-				'password' => trim(strip_tags($this->request->get('password'))),
-			]);
-		} catch(\Exception $e) {
+			Auth::attempt( [
+				'username' => trim( strip_tags( $this->request->get( 'username' ) ) ),
+				'password' => trim( strip_tags( $this->request->get( 'password' ) ) ),
+			] );
+		} catch( \Exception $e ) {
 		}
 
 		return $this->getJwt();
@@ -31,23 +35,24 @@ class AuthController extends ApiController {
 	 *
 	 * @return mixed
 	 */
-	public function forgotPassword(UserRepository $user) {
-		if($user->forgotPassword($this->request->all())) {
-			return $this->response([$this->stringMessage => 'A new password have been sent to you.'], 200);
+	public function forgotPassword( UserRepository $user ) {
+		if ( $user->forgotPassword( $this->request->all() ) ) {
+			return $this->response( [$this->stringMessage => 'A new password have been sent to you.'], 200 );
 		}
 
-		return $this->response([$this->stringMessage => "Your email don't exists in our database."], 400);
+		return $this->response( [$this->stringMessage => "Your email don't exists in our database."], 400 );
 	}
 
 	/**
 	 * Skapar json web token.
 	 * @return mixed
 	 */
-	public function getJwt(){
-		if(Auth::check()) {
-			return $this->response(['token' => Jwt::encode(array('id' => Auth::user()->id))], 200);
+	public function getJwt() {
+		if ( Auth::check() ) {
+			return $this->response( ['token' => Jwt::encode( ['id' => Auth::user()->id] )], 200 );
 		}
-		return $this->response(['message', 'You could not get your auth token, please try agian'], 400);
+
+		return $this->response( ['message', 'You could not get your auth token, please try agian'], 400 );
 	}
 
 }

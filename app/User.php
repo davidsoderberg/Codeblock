@@ -8,10 +8,17 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
+/**
+ * Class User
+ * @package App
+ */
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
 	use Authenticatable, CanResetPassword, UserHasTeamsTrait;
 
+	/**
+	 * Boot method for User model.
+	 */
 	public static function boot() {
 	    parent::boot();
 	    static::deleting(function($object) {
@@ -36,6 +43,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	    });
 	}
 
+	/**
+	 * Array with models to reload on save.
+	 *
+	 * @var array
+	 */
 	protected $modelsToReload = [
 		'App\Post',
 		'App\Comment',
@@ -61,12 +73,32 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
 	//protected $hidden = array('password');
 
+	/**
+	 * Array with fields that user are allowed to fill.
+	 *
+	 * @var array
+	 */
 	protected $fillable = array('username', 'email', 'role', 'active');
 
+	/**
+	 * Array with fields that are guarded.
+	 *
+	 * @var array
+	 */
 	protected $guarded = array('id', 'password');
 
+	/**
+	 * Array with fields to add to hidden array.
+	 *
+	 * @var array
+	 */
 	protected $addHidden = array('password', 'remember_token', 'role', 'isactive');
 
+	/**
+	 * Array with rules for fields.
+	 *
+	 * @var array
+	 */
 	public static $rules = array(
 	    'email'  => 'required|email|unique:users,email,:id:',
 	    'username' => 'required|alpha_dash|unique:users,username,:id:',
@@ -102,38 +134,85 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return $this->email;
 	}
 
+	/**
+	 * Fetch unread notification this user have.
+	 *
+	 * @return mixed
+	 */
 	public function unread() {
 		return $this->inbox()->where('is_read', '=', 0);
 	}
 
+	/**
+	 * Fetch sended notification this user have.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
 	public function outbox() {
 		return $this->hasMany('App\Notification', 'from_id', 'id');
 	}
 
+	/**
+	 * Fetch recieved notification this user have.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
 	public function inbox() {
 		return $this->hasMany('App\Notification', 'user_id', 'id');
 	}
 
+	/**
+	 * Fetch posts this user has many of.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
 	public function posts() {
 		return $this->hasMany('App\Post', 'user_id', 'id');
 	}
 
+	/**
+	 * Fetch stars this user has many of.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
 	public function stars() {
 		return $this->hasMany('App\Star', 'user_id', 'id');
 	}
 
+	/**
+	 * Fetch comments this user has many of.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
 	public function comments() {
 		return $this->hasMany('App\Comment', 'user_id', 'id');
 	}
 
+	/**
+	 * Fetch posts this user has one.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
+	 */
 	public function roles() {
 		return $this->hasOne('App\Role', 'id', 'role');
 	}
 
+	/**
+	 * Fetch reads this user has many of.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
 	public function reads() {
 		return $this->hasMany('App\Read', 'user_id', 'id');
 	}
 
+	/**
+	 * Checks if user has reads.
+	 *
+	 * @param $topic_id
+	 *
+	 * @return bool
+	 */
 	public function hasRead($topic_id){
 		foreach($this->reads as $read){
 			if($read->topic_id == $topic_id){
@@ -143,14 +222,29 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return false;
 	}
 
+	/**
+	 * Fetch rates this user has many of.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
 	public function rates() {
 		return $this->hasMany('App\Rate', 'user_id', 'id');
 	}
 
+	/**
+	 * Fetch socials this user has many of.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
 	public function socials() {
 		return $this->hasMany('App\Social', 'user_id', 'id');
 	}
 
+	/**
+	 * Fetch role name for the role this user has.
+	 *
+	 * @return mixed
+	 */
 	public function getrolenameAttribute()
 	{
 		if(!is_null($this->roles)) {
@@ -158,16 +252,38 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		}
 	}
 
+	/**
+	 * Fetch yes and no for active.
+	 *
+	 * @return string
+	 */
 	public function getisactiveAttribute(){
 		return $this->getAnswer($this->active);
 	}
 
+	/**
+	 * Fetch hateoas link for api.
+	 *
+	 * @return array
+	 */
 	public function getlinksAttribute(){
 		return $this->hateoas($this->id, 'users');
 	}
 
+	/**
+	 * Appends an array of attributes on model.
+	 *
+	 * @var array
+	 */
 	protected $appends = array('rolename', 'isactive');
 
+	/**
+	 * Checks if social is connected with user.
+	 *
+	 * @param $social
+	 *
+	 * @return bool
+	 */
 	public function hasSocial($social) {
 		$socials = $this->socials;
 		foreach($socials as $soc){
@@ -178,6 +294,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return false;
 	}
 
+	/**
+	 * Checks if use has role.
+	 *
+	 * @param $roles
+	 *
+	 * @return bool
+	 */
 	public function hasRole($roles) {
 
 		if(!is_array($roles)){
@@ -191,6 +314,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return in_array(strtolower(Auth::user()->role), $roles);
 	}
 
+	/**
+	 * Checks if user has permission.
+	 *
+	 * @param $permission
+	 * @param bool|true $empty
+	 *
+	 * @return bool
+	 */
 	public function hasPermission($permission, $empty = true) {
 		if($permission != '') {
 			$permissions_array = array();
@@ -207,6 +338,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return $empty;
 	}
 
+	/**
+	 * Checks if user has starred posts.
+	 *
+	 * @return bool
+	 */
 	public function hasStarMarkedPosts(){
 		foreach($this->posts as $post) {
 			if($post->starcount > 0) {
@@ -216,10 +352,18 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return false;
 	}
 
+	/**
+	 * Checks if user only would like to see it owns codeblocks.
+	 *
+	 * @return mixed
+	 */
 	public function showOnly(){
 		return Session::has('only');
 	}
 
+	/**
+	 * Setter for only session.
+	 */
 	public function setOnly(){
 		if(Session::has('only')){
 			Session::forget('only');

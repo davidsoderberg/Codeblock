@@ -17,21 +17,21 @@ use Venturecraft\Revisionable\Revision;
 use Illuminate\Support\Facades\Lang;
 use App\Services\Analytics;
 
+/**
+ * Class PostController
+ * @package App\Http\Controllers
+ */
 class PostController extends Controller {
 
-	/*
-	|--------------------------------------------------------------------------
-	| Default Home Controller
-	|--------------------------------------------------------------------------
-	|
-	| You may wish to use controllers instead of, or in addition to, Closure
-	| based routes. That's great! Here is an example controller method to
-	| get you started. To route to this controller, just add the route:
-	|
-	|	Route::get('/', 'PostController@index');
-	|
-	*/
-
+	/**
+	 * Constructor for PostController.
+	 * Setter for alot of repository properties.
+	 *
+	 * @param PostRepository $post
+	 * @param CategoryRepository $category
+	 * @param TagRepository $tag
+	 * @param RateRepository $rate
+	 */
 	public function __construct( PostRepository $post, CategoryRepository $category, TagRepository $tag, RateRepository $rate ) {
 		parent::__construct();
 		$this->post = $post;
@@ -43,7 +43,8 @@ class PostController extends Controller {
 	}
 
 	/**
-	 * vissar index vyn.
+	 * Render index view for posts.
+	 *
 	 * @permission view_posts
 	 * @return objekt objekt med allt som skall skickas till index vyn
 	 */
@@ -52,6 +53,13 @@ class PostController extends Controller {
 	}
 
 
+	/**
+	 * Render embed view for choosen post.
+	 *
+	 * @param $id
+	 *
+	 * @return mixed
+	 */
 	public function embed( $id ) {
 		$post = $this->post->get( $id );
 		if ( $post->private != 1 ) {
@@ -61,14 +69,14 @@ class PostController extends Controller {
 		}
 	}
 
+
 	/**
-	 * Visar enstaka blocks vy
+	 * Render choosen post view.
 	 *
-	 * @param  int $id id på blocket som skall vissas
-	 * @param  int $comment_id
+	 * @param $id
+	 * @param null $comment_id
 	 *
-	 * @permission view_private_post:optional
-	 * @return array     Typ av medelande och meddelande
+	 * @return mixed
 	 */
 	public function show( $id, $comment_id = null ) {
 		$post = $this->post->get( $id );
@@ -107,6 +115,13 @@ class PostController extends Controller {
 		}
 	}
 
+	/**
+	 * Undo choosen post action.
+	 *
+	 * @param $id
+	 *
+	 * @return mixed
+	 */
 	public function undo( $id ) {
 		$revision = Revision::find( $id );
 		if ( !is_null( $revision ) ) {
@@ -127,9 +142,13 @@ class PostController extends Controller {
 		return Redirect::back()->with( 'error', 'We could not undo that change.' );
 	}
 
+
 	/**
-	 * Visar vyn för att skapa block.
-	 * @return objekt objekt med allt som skall skickas till create vyn
+	 * Creates a post.
+	 *
+	 * @param Github $github
+	 *
+	 * @return mixed
 	 */
 	public function create( Github $github ) {
 		return View::make( 'post.create' )
@@ -142,11 +161,11 @@ class PostController extends Controller {
 	}
 
 	/**
-	 * Är vyn skapa och redigera anropa för att lägga till/ uppdatera blocket i databasen.
+	 * Creates or updates a post.
 	 *
-	 * @param  int $id Id på det blocket som skall redigeras
+	 * @param  int $id
 	 *
-	 * @return array     Typ av medelande och meddelande
+	 * @return object
 	 */
 	public function createOrUpdate( $id = null ) {
 		if ( $this->post->createOrUpdate( $this->request->all(), $id ) ) {
@@ -161,13 +180,13 @@ class PostController extends Controller {
 		return Redirect::back()->withErrors( $this->post->getErrors() )->withInput();
 	}
 
+
 	/**
-	 * Visar vyn för det blocket som skall redigeras
-	 * @permission admin_edit_post:optional
+	 * Render edit view for post.
 	 *
-	 * @param  int $id Id på det blocket som skall redigeras
+	 * @param $id
 	 *
-	 * @return objekt objekt med allt som skall skickas till edit vyn
+	 * @return mixed
 	 */
 	public function edit( $id ) {
 		$post = $this->post->get( $id );
@@ -189,8 +208,9 @@ class PostController extends Controller {
 	}
 
 	/**
-	 * Skapa en array med kategorier för select elementen i vyerna
-	 * @return array  en associstiv array. (id => name)
+	 * Creats an array with id as key and category name as value.
+	 *
+	 * @return array
 	 */
 	private function selectCategories() {
 		$selectArray = [];
@@ -202,6 +222,11 @@ class PostController extends Controller {
 		return $selectArray;
 	}
 
+	/**
+	 * Creats an array with id as key and team name as value.
+	 *
+	 * @return array
+	 */
 	private function selectTeams() {
 		$selectArray = [];
 		$selectArray[''] = 'Select Team';
@@ -214,8 +239,9 @@ class PostController extends Controller {
 	}
 
 	/**
-	 * Skapa en array med ettiketer för select elementen i vyerna
-	 * @return array  en associstiv array. (id => name)
+	 * Creats an array with id as key and tag name as value.
+	 *
+	 * @return array
 	 */
 	private function selectTags() {
 		$selectArray = [];
@@ -226,13 +252,13 @@ class PostController extends Controller {
 		return $selectArray;
 	}
 
+
 	/**
-	 * Ta bort ett block.
-	 * @permission delete_post:optional
+	 * Deletes a post.
 	 *
-	 * @param  int $id Id för blocket som skall tas bort.
+	 * @param $id
 	 *
-	 * @return array     Typ av medelande och meddelande
+	 * @return mixed
 	 */
 	public function delete( $id ) {
 		$post = $this->post->get( $id );
@@ -257,9 +283,11 @@ class PostController extends Controller {
 		return Redirect::back()->with( 'error', 'We could not delete that codeblock.' );
 	}
 
+
 	/**
-	 * Visar en vy med alla block.
-	 * @return objekt objekt med alla block som skall visas.
+	 * Render a list with all posts.
+	 *
+	 * @return mixed
 	 */
 	public function listPosts() {
 		return View::make( 'post.list' )->with( 'title', 'All Codeblocks' )->with( 'posts', $this->post->get()
@@ -267,8 +295,9 @@ class PostController extends Controller {
 	}
 
 	/**
-	 * Visar vyn för sökresultatet
-	 * @return objekt med vyn som skall vissas med alla variabler som behövs.
+	 * Render searchresult view.
+	 *
+	 * @return mixed
 	 */
 	public function search() {
 		$categories = $this->selectCategories();
@@ -292,6 +321,13 @@ class PostController extends Controller {
 		           ->with( 'tags', $tags );
 	}
 
+	/**
+	 * Fetch posts bu logged in user only.
+	 *
+	 * @param $posts
+	 *
+	 * @return Collection
+	 */
 	private function only( $posts ) {
 		if ( Auth::check() ) {
 			if ( Auth::user()->showOnly() && $posts instanceof Collection ) {
@@ -310,12 +346,12 @@ class PostController extends Controller {
 	}
 
 	/**
-	 * Vissar alla block i en kategori.
+	 * Render list of posts with choosen category.
 	 *
-	 * @param  int $id id på kategorin som blocken skall tillhöra.
-	 * @param  string $sort
+	 * @param $id
+	 * @param string $sort
 	 *
-	 * @return objekt med vyn som skall vissas med alla variabler som behövs.
+	 * @return mixed
 	 */
 	public function category( $id, $sort = 'date' ) {
 		$id = urldecode( $id );
@@ -348,12 +384,12 @@ class PostController extends Controller {
 	}
 
 	/**
-	 * Vissar alla block som tillhör en ettiket.
+	 * Render list of posts with choosen tag.
 	 *
-	 * @param  int $id id på ettiketen som blocken skall tillhöra.
+	 * @param $id
 	 * @param string $sort
 	 *
-	 * @return objekt med vyn som skall vissas med alla variabler som behövs.
+	 * @return mixed
 	 */
 	public function tag( $id, $sort = 'date' ) {
 		$id = urldecode( $id );
@@ -376,14 +412,15 @@ class PostController extends Controller {
 		           ->with( 'paginator', $paginator );
 	}
 
+
 	/**
-	 * stjärnmärker ett block
+	 * Adds a star to choosen post.
 	 *
 	 * @param NotificationRepository $notification
 	 * @param StarRepository $starRepository
-	 * @param  int $id id för blocket som skall stjärnmärka.
+	 * @param $id
 	 *
-	 * @return array     Typ av medelande och meddelande
+	 * @return mixed
 	 */
 	public function star( NotificationRepository $notification, StarRepository $starRepository, $id ) {
 		$star = $this->post->createOrDeleteStar( $starRepository, $id );
@@ -402,11 +439,11 @@ class PostController extends Controller {
 	}
 
 	/**
-	 * Duplicerar ett kodblock
+	 * Forks a post.
 	 *
-	 * @param  int $id id för blocket som skall dupliceras.
+	 * @param $id
 	 *
-	 * @return array     Typ av medelande och meddelande
+	 * @return mixed
 	 */
 	public function fork( $id ) {
 		if ( $this->post->duplicate( $id ) ) {
@@ -424,11 +461,11 @@ class PostController extends Controller {
 	}
 
 	/**
-	 * Visar en lista med kodblock som har fokats.
+	 * Render a list with all forks from choosen post.
 	 *
-	 * @param  int $id id för det blocket som har forkats
+	 * @param $id
 	 *
-	 * @return objekt med vyn som skall vissas med alla variabler som behövs.
+	 * @return mixed
 	 */
 	public function forked( $id ) {
 		$post = $this->post->get( $id );
@@ -438,6 +475,13 @@ class PostController extends Controller {
 		           ->with( 'posts', $this->post->getForked( $id ) );
 	}
 
+	/**
+	 * Creates a post from selected gist from github.
+	 *
+	 * @param Github $github
+	 *
+	 * @return mixed
+	 */
 	public function forkGist( Github $github ) {
 		if ( $github->hasRequestLeft() ) {
 			$id = $this->request->get( 'id' );

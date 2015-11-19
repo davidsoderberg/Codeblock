@@ -4,6 +4,10 @@ use App\Http\Controllers\ApiController;
 use App\Repositories\Tag\TagRepository;
 
 
+/**
+ * Class TagController
+ * @package App\Http\Controllers\Api
+ */
 class TagController extends ApiController {
 
 	/**
@@ -36,12 +40,13 @@ class TagController extends ApiController {
 	}
 
 	/**
-	 * Ta bort en ettiket
+	 * Deletes a tag.
 	 * @permission delete_tags
 	 *
-	 * @param  int $id id för ettiketen som skall tas bort.
+	 * @param  TagRepository $tagRepository
+	 * @param  int $id
 	 *
-	 * @return object     med värden dit användaren skall skickas.
+	 * @return object
 	 */
 	public function deleteTag(TagRepository $tagRepository, $id) {
 		if($tagRepository->delete($id)) {

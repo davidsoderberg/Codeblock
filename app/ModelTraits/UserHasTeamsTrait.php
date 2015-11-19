@@ -2,24 +2,46 @@
 
 use App\Team;
 
+/**
+ * Class UserHasTeamsTrait
+ * @package App\ModelTraits
+ */
 trait UserHasTeamsTrait
 {
 
+	/**
+	 * Fetch teams this user belongs to many.
+	 *
+	 * @return mixed
+	 */
 	public function teams()
 	{
 		return $this->belongsToMany( 'App\Team','team_user', 'user_id', 'team_id' );
 	}
 
+	/**
+	 * Fetch teams this user owns many of.
+	 *
+	 * @return mixed
+	 */
 	public function ownedTeams()
 	{
 		return $this->hasMany( 'App\Team', 'owner_id', 'id' );
 	}
 
+	/**
+	 * Fetch invites this user has many of.
+	 *
+	 * @return mixed
+	 */
 	public function invites()
 	{
 		return $this->hasMany( 'App\TeamInvite', 'email', 'email' );
 	}
 
+	/**
+	 * Boot method for this trait.
+	 */
 	public static function bootUserHasTeams()
 	{
 		static::deleting( function ( Model $user )
@@ -29,6 +51,13 @@ trait UserHasTeamsTrait
 		} );
 	}
 
+	/**
+	 * Attach team to this user.
+	 *
+	 * @param $team
+	 *
+	 * @return $this
+	 */
 	public function attachTeam( $team )
 	{
 		$teamId = $this->retrieveTeamId( $team );
@@ -39,6 +68,13 @@ trait UserHasTeamsTrait
 		return $this;
 	}
 
+	/**
+	 * Fetch team id.
+	 *
+	 * @param $team
+	 *
+	 * @return mixed
+	 */
 	protected function retrieveTeamId( $team )
 	{
 		if ( is_object( $team ) )
@@ -52,6 +88,13 @@ trait UserHasTeamsTrait
 		return $team;
 	}
 
+	/**
+	 * Checks if this user is owner of team.
+	 *
+	 * @param $team
+	 *
+	 * @return bool
+	 */
 	public function isOwnerOfTeam( $team )
 	{
 		$teamId        = $this->retrieveTeamId( $team );
@@ -62,6 +105,11 @@ trait UserHasTeamsTrait
 		) ? true : false;
 	}
 
+	/**
+	 * Attach teams to this user.
+	 *
+	 * @param $teams
+	 */
 	public function attachTeams( $teams )
 	{
 		foreach ( $teams as $team )
@@ -70,6 +118,13 @@ trait UserHasTeamsTrait
 		}
 	}
 
+	/**
+	 * Detach team to this user.
+	 *
+	 * @param $team
+	 *
+	 * @return bool
+	 */
 	public function detachTeam( $team )
 	{
 		$teamId = $this->retrieveTeamId( $team );
@@ -77,6 +132,11 @@ trait UserHasTeamsTrait
 		return $detaches > 0;
 	}
 
+	/**
+	 * Detach teams to this user.
+	 *
+	 * @param $teams
+	 */
 	public function detachTeams( $teams )
 	{
 		foreach ( $teams as $team )

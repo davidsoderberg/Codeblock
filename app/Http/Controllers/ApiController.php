@@ -14,19 +14,79 @@ use Illuminate\Support\Facades\Route;
  */
 class ApiController extends Controller {
 
+	/**
+	 * Property to store current page in.
+	 *
+	 * @var int
+	 */
 	private $page = 1;
+
+	/**
+	 * Property to store limit of posts in.
+	 *
+	 * @var int
+	 */
 	private $limit = 0;
+
+	/**
+	 * Property to store sort field in.
+	 *
+	 * @var string
+	 */
 	private $sort = '';
+
+	/**
+	 * Property to store current collection in.
+	 *
+	 * @var
+	 */
 	private $collection;
 
+	/**
+	 * Propety to store errors string in.
+	 *
+	 * @var string
+	 */
 	protected $stringErrors = 'errors';
+
+	/**
+	 * Propety to store messsage string in.
+	 *
+	 * @var string
+	 */
 	protected $stringMessage = 'messsage';
+
+	/**
+	 * Propety to store data string in.
+	 *
+	 * @var string
+	 */
 	protected $stringData = 'data';
+
+	/**
+	 * Propety to store user string in.
+	 *
+	 * @var string
+	 */
 	protected $stringUser = 'user';
 
+	/**
+	 * Property to store routes in.
+	 *
+	 * @var array
+	 */
 	protected $routes = [];
+
+	/**
+	 * Property to store keys in.
+	 *
+	 * @var array
+	 */
 	protected $keys = [];
 
+	/**
+	 * Constructor for ApiController.
+	 */
 	public function __construct() {
 		parent::__construct();
 		Model::$append = true;
@@ -34,6 +94,9 @@ class ApiController extends Controller {
 		$this->setRoutes();
 	}
 
+	/**
+	 * Setter for routes.
+	 */
 	private function setRoutes() {
 		$routeCollection = Route::getRoutes(); // RouteCollection object
 		$routes = $this->getRoutesByPrefix($routeCollection->getRoutes(), 'api');
@@ -43,10 +106,23 @@ class ApiController extends Controller {
 		}
 	}
 
+	/**
+	 * Checks if requesting browser accepts html.
+	 *
+	 * @return bool
+	 */
 	private function acceptsHtml() {
 		return str_contains($this->request->headers->get('Accept'), 'xhtml');
 	}
 
+	/**
+	 * Response with correct format.
+	 *
+	 * @param $response
+	 * @param $code
+	 *
+	 * @return mixed
+	 */
 	protected function response($response, $code) {
 		$response = Response::json($response, $code);
 		if(str_contains($this->request->headers->get('Accept'), '/xml') && !$this->acceptsHtml()) {
@@ -58,6 +134,9 @@ class ApiController extends Controller {
 		return $response;
 	}
 
+	/**
+	 * Setter for params.
+	 */
 	private function setParams() {
 		if(isset($_GET['pagination'])) {
 			if(is_numeric($_GET['pagination'])) {
@@ -87,6 +166,9 @@ class ApiController extends Controller {
 		}
 	}
 
+	/**
+	 * Paginates collection.
+	 */
 	private function paginate() {
 		if($this->perPage > 0) {
 			$this->collection = $this->collection->slice((($this->page - 1) * $this->perPage), $this->perPage, true)
@@ -99,6 +181,9 @@ class ApiController extends Controller {
 		}
 	}
 
+	/**
+	 * Sorts collection.
+	 */
 	private function sort() {
 		if($this->sort != '') {
 			if(in_array($this->sort, array_keys($this->collection[0]->toArray()))) {
@@ -108,6 +193,9 @@ class ApiController extends Controller {
 		}
 	}
 
+	/**
+	 * Limit collection to correct number of items.
+	 */
 	private function limit() {
 		if($this->limit > 0) {
 			$this->collection = $this->collection->slice($this->limit, $this->limit, true)->all();
@@ -119,6 +207,9 @@ class ApiController extends Controller {
 		}
 	}
 
+	/**
+	 * Regenerates new keys for collection.
+	 */
 	private function createNewCollection() {
 		if($this->collection instanceof Collection) {
 			/*
@@ -132,6 +223,14 @@ class ApiController extends Controller {
 		}
 	}
 
+	/**
+	 * Fetch collection.
+	 *
+	 * @param CRepository $repository
+	 * @param null $id
+	 *
+	 * @return mixed
+	 */
 	protected function getCollection(CRepository $repository, $id = null) {
 		$this->collection = $this->addHidden($repository->get($id));
 		if(is_null($id)) {
@@ -145,6 +244,11 @@ class ApiController extends Controller {
 	}
 
 
+	/**
+	 * Render index view for api.
+	 *
+	 * @return mixed
+	 */
 	public function index() {
 		if($this->acceptsHtml()) {
 			return View::make('api')->with('title', 'api');
@@ -154,6 +258,8 @@ class ApiController extends Controller {
 	}
 
 	/**
+	 * Fetch routes by selected prefix.
+	 *
 	 * @param $routes
 	 * @param $name
 	 *
@@ -178,6 +284,13 @@ class ApiController extends Controller {
 		return array_values($routes);
 	}
 
+	/**
+	 * Grouping routes by uri.
+	 *
+	 * @param $routes
+	 *
+	 * @return array
+	 */
 	private function groupByUri($routes) {
 		$grouped = [];
 
@@ -261,6 +374,13 @@ class ApiController extends Controller {
 		return $grouped;
 	}
 
+	/**
+	 * Grouping routes by version.
+	 *
+	 * @param $routes
+	 *
+	 * @return array
+	 */
 	private function groupByVersion($routes){
 		$groupedByVersion = [];
 
@@ -276,6 +396,15 @@ class ApiController extends Controller {
 		return $groupedByVersion;
 	}
 
+	/**
+	 * Creates hateoas for selected route.
+	 *
+	 * @param $key
+	 * @param string $match
+	 * @param int $value
+	 *
+	 * @return array
+	 */
 	protected function hateoas($key, $match = '', $value = 0) {
 		$routes = $this->routes[$key];
 		$hateoas = [];

@@ -4,6 +4,10 @@ use Closure;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
 
+/**
+ * Class RedirectIfAuthenticated
+ * @package App\Http\Middleware
+ */
 class RedirectIfAuthenticated {
 
 	/**
@@ -17,7 +21,6 @@ class RedirectIfAuthenticated {
 	 * Create a new filter instance.
 	 *
 	 * @param  Guard  $auth
-	 * @return void
 	 */
 	public function __construct(Guard $auth)
 	{

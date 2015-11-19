@@ -2,8 +2,15 @@
 
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Class Forum
+ * @package App
+ */
 class Forum extends Model
 {
+	/**
+	 * Boot method for forum model.
+	 */
 	public static function boot() {
 		parent::boot();
 		static::deleting(function($object) {
@@ -20,22 +27,52 @@ class Forum extends Model
 	 */
 	protected $table = 'forums';
 
+	/**
+	 * Array with fields that user are allowed to fill.
+	 *
+	 * @var array
+	 */
 	protected $fillable = array('title', 'description');
 
+	/**
+	 * Array with fields that are guarded.
+	 *
+	 * @var array
+	 */
 	protected $guarded = array('id');
 
+	/**
+	 * Array with fields that are guarded.
+	 *
+	 * @var array
+	 */
 	public static $rules = array(
 		'title'  => 'required|min:3',
 		'description' => 'required|min:3',
 	);
 
+	/**
+	 * Array with models to reload on save.
+	 *
+	 * @var array
+	 */
 	protected $modelsToReload = ['App\Topic', 'App\Reply'];
 
+	/**
+	 * Fetch topics this forum has many of.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
 	public function topics()
 	{
 		return $this->hasMany('App\Topic', 'forum_id', 'id');
 	}
 
+	/**
+	 * Count replies for this forum.
+	 *
+	 * @return int
+	 */
 	public function replies(){
 		$topics = $this->topics;
 		$replies = 0;
@@ -45,6 +82,11 @@ class Forum extends Model
 		return $replies;
 	}
 
+	/**
+	 * Fetch the last reply for this forum.
+	 *
+	 * @return null
+	 */
 	public function lastReply(){
 		$topics = $this->topics;
 		$latestReply = null;
@@ -59,6 +101,11 @@ class Forum extends Model
 		return $latestReply;
 	}
 
+	/**
+	 * Checks if this forum has unread topic.
+	 *
+	 * @return bool
+	 */
 	public function hasUnreadTopics(){
 		if(Auth::check()){
 			$hasread = array();
@@ -72,6 +119,11 @@ class Forum extends Model
 		return true;
 	}
 
+	/**
+	 * Fetch hateoas link for api.
+	 *
+	 * @return array
+	 */
 	public function getlinksAttribute(){
 		return $this->hateoas($this->id, 'forums');
 	}

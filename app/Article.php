@@ -1,5 +1,9 @@
 <?php namespace App;
 
+/**
+ * Class Article
+ * @package App
+ */
 class Article extends Model {
 
 	/**
@@ -9,10 +13,25 @@ class Article extends Model {
 	 */
 	protected $table = 'articles';
 
+	/**
+	 * Array with fields that user are allowed to fill.
+	 *
+	 * @var array
+	 */
 	protected $fillable = array('title', 'body', 'slug');
 
+	/**
+	 * Array with fields that are guarded.
+	 *
+	 * @var array
+	 */
 	protected $guarded = array('id');
 
+	/**
+	 * Array with rules for fields.
+	 *
+	 * @var array
+	 */
 	public static $rules = array(
 	    'title'  => 'required|unique:articles,title,:id:',
 	    'body' => 'required|min:3',

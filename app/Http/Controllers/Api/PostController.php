@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Auth;
 
 
+/**
+ * Class PostController
+ * @package App\Http\Controllers\Api
+ */
 class PostController extends ApiController {
 
 	/**
@@ -44,12 +48,13 @@ class PostController extends ApiController {
 	}
 
 	/**
-	 * Ta bort ett block.
+	 * Deletes a post.
 	 * @permission delete_post:optional
 	 *
-	 * @param  int $id Id för blocket som skall tas bort.
+	 * @param  PostRepository $postRepository
+	 * @param  int $id
 	 *
-	 * @return array     Typ av medelande och meddelande
+	 * @return array
 	 */
 	public function deletePost(PostRepository $postRepository, $id) {
 		$post = $postRepository->get($id);

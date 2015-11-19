@@ -4,19 +4,39 @@ use App\Services\CacheTrait;
 use Illuminate\Support\Facades\Mail;
 
 // bas klassen för repon
+/**
+ * Class CRepository
+ * @package App\Repositories
+ */
 Class CRepository {
 
 	use CacheTrait;
 
-	// fel behållaren för fel
+	/**
+	 * Property to store errors in.
+	 *
+	 * @var
+	 */
 	public $errors;
 
-	// get metod för felen
+	/**
+	 * Getter for errors property.
+	 *
+	 * @return mixed
+	 */
 	public function getErrors() {
 		return $this->errors;
 	}
 
-	// skickar alla mejl som skickas från applikationen.
+	/**
+	 * Sending all mails from this application.
+	 *
+	 * @param $template
+	 * @param $emailInfo
+	 * @param $data
+	 *
+	 * @return bool
+	 */
 	public function sendEmail( $template, $emailInfo, $data ) {
 		Mail::send( $template, $data, function ( $message ) use ( $emailInfo ) {
 			$message->from( env( 'FROM_ADRESS' ), env( 'FROM_NAME' ) );
@@ -28,12 +48,24 @@ Class CRepository {
 		}
 	}
 
-	// används för att ta bort alla html elment från input från användaren.
+	/**
+	 * Secures input from user.
+	 *
+	 * @param $input
+	 *
+	 * @return string
+	 */
 	public function stripTrim( $input ) {
 		return trim( strip_tags( $input ) );
 	}
 
-	// kollar om arrayen är en assosiativ array.
+	/**
+	 * Checks if array is an assoc array.
+	 *
+	 * @param $array
+	 *
+	 * @return bool
+	 */
 	public function is_assoc( $array ) {
 		foreach( array_keys( $array ) as $key ) {
 			if ( !is_int( $key ) ) {

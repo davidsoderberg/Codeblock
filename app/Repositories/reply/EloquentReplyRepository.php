@@ -5,11 +5,26 @@ use Illuminate\Support\Facades\Auth;
 use App\Repositories\CRepository;
 use App\Services\CollectionService;
 
+/**
+ * Class EloquentReplyRepository
+ * @package App\Repositories\Reply
+ */
 class EloquentReplyRepository extends CRepository implements ReplyRepository {
 
+	/**
+	 * Property to store reply object in.
+	 *
+	 * @var
+	 */
 	public $Reply;
 
-	// hämtar en eller alla svar.
+	/**
+	 * Fetch one or all replies.
+	 *
+	 * @param null $id
+	 *
+	 * @return \App\Services\Model|array|\Illuminate\Database\Eloquent\Collection|null|static
+	 */
 	public function get($id = null)
 	{
 		if(is_null($id)){
@@ -19,7 +34,14 @@ class EloquentReplyRepository extends CRepository implements ReplyRepository {
 		}
 	}
 
-	// skapar och uppdaterar ett svar.
+	/**
+	 * Creates or updates a reply.
+	 *
+	 * @param $input
+	 * @param null $id
+	 *
+	 * @return bool
+	 */
 	public function createOrUpdate($input, $id = null)
 	{
 		if(!is_numeric($id)) {
@@ -49,7 +71,13 @@ class EloquentReplyRepository extends CRepository implements ReplyRepository {
 		}
 	}
 
-	// tar bort ett svar.
+	/**
+	 * Deletes a reply.
+	 *
+	 * @param $id
+	 *
+	 * @return bool|mixed
+	 */
 	public function delete($id){
 		$Reply = $this->get($id);
 		if($Reply == null){

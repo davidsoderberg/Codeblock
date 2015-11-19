@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Redirect;
 class TagController extends Controller {
 
 	/**
-	 * Constructor for TagController
+	 * Constructor for TagController.
 	 *
 	 * @param TagRepository $tag
 	 */

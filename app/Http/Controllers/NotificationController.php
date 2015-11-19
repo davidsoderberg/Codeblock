@@ -4,6 +4,7 @@ use App\Repositories\Notification\NotificationRepository;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+
 /**
  * Class NotificationController
  * @package App\Http\Controllers
@@ -11,11 +12,15 @@ use Illuminate\Support\Facades\Redirect;
 class NotificationController extends Controller {
 
 	/**
+	 * Property to store NotificationRepository.
+	 *
 	 * @var
 	 */
 	private $notification;
 
 	/**
+	 * Constructor for NotificationController.
+	 *
 	 * @param NotificationRepository $notification
 	 */
 	public function __construct(NotificationRepository $notification) {
@@ -24,7 +29,7 @@ class NotificationController extends Controller {
 	}
 
 	/**
-	 * Listar alla notifikationer.
+	 * Lists all notifications.
 	 * @return mixed
 	 */
 	public function index() {
@@ -32,7 +37,7 @@ class NotificationController extends Controller {
 	}
 
 	/**
-	 * Listar alla notifikationer för en specifik användare.
+	 * Lists all notifications for a user.
 	 * @return mixed
 	 */
 	public function listNotification(){
@@ -41,7 +46,7 @@ class NotificationController extends Controller {
 	}
 
 	/**
-	 * Visar en specifik notifikation.
+	 * Render a choosen notification.
 	 * @param $id
 	 * @return mixed
 	 */
@@ -51,7 +56,7 @@ class NotificationController extends Controller {
 	}
 
 	/**
-	 * Tar bort en notifikation.
+	 * Deletes a notification.
 	 * @param $id
 	 * @return mixed
 	 */

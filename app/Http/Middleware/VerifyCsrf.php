@@ -4,9 +4,15 @@ use Closure;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Session\TokenMismatchException;
 
+/**
+ * Class VerifyCsrf
+ * @package App\Http\Middleware
+ */
 class VerifyCsrf extends VerifyCsrfToken {
 
 	/**
+	 * Handle for VerifyCsrf.
+	 *
 	 * @param \Illuminate\Http\Request $request
 	 * @param callable $next
 	 * @return \Illuminate\Http\Response

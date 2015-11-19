@@ -8,6 +8,16 @@ use Illuminate\Database\Eloquent\Collection;
  */
 Class CollectionService {
 
+	/**
+	 * Filter collection.
+	 *
+	 * @param Collection $collection
+	 * @param $property
+	 * @param $matching
+	 * @param null $verb
+	 *
+	 * @return Collection|static
+	 */
 	public static function filter(Collection $collection, $property, $matching, $verb = null){
 		$collection = $collection->filter(function($item) use ($property, $matching){
 			if($item->$property == $matching ){

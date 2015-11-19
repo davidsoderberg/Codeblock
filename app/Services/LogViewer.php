@@ -5,14 +5,25 @@ use Illuminate\Support\Facades\File;
 use Psr\Log\LogLevel;
 use ReflectionClass;
 
+/**
+ * Class LogViewer
+ * @package App\Services
+ */
 class LogViewer
 {
 
 	/**
+	 * Property to store file in.
+	 *
 	 * @var string file
 	 */
 	private static $file;
 
+	/**
+	 * Log levels for classes
+	 *
+	 * @var array
+	 */
 	private static $levels_classes = [
 		'debug' => 'info',
 		'info' => 'info',
@@ -23,6 +34,11 @@ class LogViewer
 		'alert' => 'danger',
 	];
 
+	/**
+	 * Log levels for images.
+	 *
+	 * @var array
+	 */
 	private static $levels_imgs = [
 		'debug' => 'info',
 		'info' => 'info',
@@ -33,9 +49,14 @@ class LogViewer
 		'alert' => 'warning',
 	];
 
-	const MAX_FILE_SIZE = 52428800; // Why? Uh... Sorry
+	/**
+	 * Constant for maximum file size.
+	 */
+	const MAX_FILE_SIZE = 52428800;
 
 	/**
+	 * Setter for file.
+	 *
 	 * @param string $file
 	 */
 	public static function setFile($file)
@@ -46,6 +67,8 @@ class LogViewer
 	}
 
 	/**
+	 * Fetch filename.
+	 *
 	 * @return string
 	 */
 	public static function getFileName()
@@ -54,6 +77,8 @@ class LogViewer
 	}
 
 	/**
+	 * Fetch all log messages.
+	 *
 	 * @return array
 	 */
 	public static function all()
@@ -113,6 +138,8 @@ class LogViewer
 	}
 
 	/**
+	 * Fetch log files.
+	 *
 	 * @param bool $basename
 	 * @return array
 	 */
@@ -130,6 +157,8 @@ class LogViewer
 	}
 
 	/**
+	 * Fetch log levels.
+	 *
 	 * @return array
 	 */
 	private static function getLogLevels()

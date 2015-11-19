@@ -14,6 +14,8 @@ class Permission
 {
 
 	/**
+	 * Constructor for Permission.
+	 *
 	 * @param Router $router
 	 */
 	public function __construct(Router $router){

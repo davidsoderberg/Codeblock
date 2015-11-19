@@ -28,7 +28,7 @@ class InsertPermission extends Command {
 	protected $description = 'Inserts permissions from all controllers to database.';
 
 	/**
-	 *
+	 * Constructor for InserPermission.
 	 */
 	public function __construct() {
 		parent::__construct();
@@ -36,6 +36,8 @@ class InsertPermission extends Command {
 
 	/**
 	 * Execute the console command.
+	 *
+	 * @param PermissionRepository $permissionRepository
 	 *
 	 * @return mixed
 	 */
@@ -114,6 +116,13 @@ class InsertPermission extends Command {
 		return $classes;
 	}
 
+	/**
+	 * Fetch all files from selected folder and its subfolders.
+	 *
+	 * @param $path
+	 *
+	 * @return array
+	 */
 	private function getFilesFromFolder( $path ) {
 		if ( !Str::contains( $path, app_path() ) ) {
 			$path = app_path() . $path;

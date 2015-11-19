@@ -5,6 +5,10 @@ use App\Repositories\Notification\NotificationRepository;
 use Illuminate\Support\Facades\Auth;
 
 
+/**
+ * Class NotificationController
+ * @package App\Http\Controllers\Api
+ */
 class NotificationController extends ApiController {
 
 	/**

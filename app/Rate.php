@@ -1,5 +1,9 @@
 <?php namespace App;
 
+/**
+ * Class Rate
+ * @package App
+ */
 class Rate extends Model {
 
 	/**
@@ -9,9 +13,24 @@ class Rate extends Model {
 	 */
 	protected $table = 'rates';
 
+	/**
+	 * Array with rules for fields.
+	 *
+	 * @var array
+	 */
 	public static $rules = array();
 
+	/**
+	 * Array with models to reload on save.
+	 *
+	 * @var array
+	 */
 	protected $modelsToReload = ['App\Comment'];
 
+	/**
+	 * Array with fields that user are allowed to fill.
+	 *
+	 * @var array
+	 */
 	protected $fillable = array('user_id', 'comment_id', 'type');
 }

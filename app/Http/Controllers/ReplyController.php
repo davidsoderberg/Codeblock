@@ -14,6 +14,8 @@ use App\Repositories\Read\ReadRepository;
 class ReplyController extends Controller {
 
 	/**
+	 * Constructor for ReplyController.
+	 *
 	 * @param ReplyRepository $Reply
 	 */
 	public function __construct( ReplyRepository $Reply ) {

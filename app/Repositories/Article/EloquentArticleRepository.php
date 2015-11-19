@@ -4,9 +4,18 @@ use App\Article;
 use App\Repositories\CRepository;
 use App\Services\CollectionService;
 
+/**
+ * Class EloquentArticleRepository
+ * @package App\Repositories\Article
+ */
 class EloquentArticleRepository extends CRepository implements ArticleRepository {
 
-	// hämtar en eller alla artikel.
+	/**
+	 * Fetch on or all articles.
+	 * @param null $id
+	 *
+	 * @return \App\Services\Model|array|\Illuminate\Database\Eloquent\Collection|null|static
+	 */
 	public function get($id = null)
 	{
 		if(is_null($id)){
@@ -20,7 +29,14 @@ class EloquentArticleRepository extends CRepository implements ArticleRepository
 		}
 	}
 
-	// skapar och uppdaterar en artikel.
+	/**
+	 * Creates or updates a article.
+	 *
+	 * @param $input
+	 * @param null $id
+	 *
+	 * @return bool
+	 */
 	public function createOrUpdate($input, $id = null)
 	{
 		if(is_null($id)) {
@@ -46,7 +62,13 @@ class EloquentArticleRepository extends CRepository implements ArticleRepository
 		}
 	}
 
-	// tar bort en artikel.
+	/**
+	 * Delets a article.
+	 *
+	 * @param $id
+	 *
+	 * @return bool|mixed
+	 */
 	public function delete($id){
 		$Article = $this->get($id);
 		if($Article != null) {

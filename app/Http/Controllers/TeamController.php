@@ -16,15 +16,22 @@ use App\Repositories\Team\TeamRepository;
 class TeamController extends Controller {
 
 	/**
+	 * Property to store TeamRepository in.
+	 *
 	 * @var TeamRepository
 	 */
 	private $teamRepository;
+
 	/**
+	 * Property to store TeamInviteRepository in.
+	 *
 	 * @var TeamInviteRepository
 	 */
 	private $inviteRepository;
 
 	/**
+	 * Constructor for TeamController.
+	 *
 	 * @param TeamRepository $team
 	 * @param TeamInviteRepository $invite
 	 */
@@ -36,6 +43,8 @@ class TeamController extends Controller {
 	}
 
 	/**
+	 * Render index view for teams.
+	 *
 	 * @param null $id
 	 *
 	 * @permission view_team
@@ -55,6 +64,8 @@ class TeamController extends Controller {
 	}
 
 	/**
+	 * Render choosen team.
+	 *
 	 * @param $id
 	 *
 	 * @return mixed
@@ -66,6 +77,10 @@ class TeamController extends Controller {
 	}
 
 	/**
+	 * Render list teams.
+	 *
+	 * @param int id
+	 *
 	 * @return mixed
 	 */
 	public function listTeams($id = null) {
@@ -77,6 +92,8 @@ class TeamController extends Controller {
 	}
 
 	/**
+	 * Creates or update a team.
+	 *
 	 * @param null $id
 	 *
 	 * @permission create_team:optional
@@ -95,6 +112,8 @@ class TeamController extends Controller {
 	}
 
 	/**
+	 * Invite user to team.
+	 *
 	 * @param UserRepository $user
 	 *
 	 * @return mixed
@@ -116,6 +135,13 @@ class TeamController extends Controller {
 		               ->withInput($this->request->all());
 	}
 
+	/**
+	 * Make user leave team.
+	 *
+	 * @param $id
+	 *
+	 * @return mixed
+	 */
 	public function leave($id) {
 		if($this->teamRepository->leave($id)) {
 			return Redirect::back()->with('success', 'You have leaved that team now.');
@@ -125,6 +151,7 @@ class TeamController extends Controller {
 	}
 
 	/**
+	 * Responds to team invite.
 	 *
 	 * @param UserRepository $userRepository
 	 * @param $token
@@ -145,6 +172,8 @@ class TeamController extends Controller {
 	}
 
 	/**
+	 * Delets a team.
+	 *
 	 * @param $id
 	 *
 	 * @permission delete_team:optional

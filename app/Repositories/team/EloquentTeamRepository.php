@@ -5,9 +5,19 @@ use App\Repositories\CRepository;
 use App\Services\CollectionService;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Class EloquentTeamRepository
+ * @package App\Repositories\Team
+ */
 class EloquentTeamRepository extends CRepository implements TeamRepository {
 
-	// hämtar en eller alla team.
+	/**
+	 * Fetch one or all teams.
+	 *
+	 * @param null $id
+	 *
+	 * @return \App\Services\Model|array|\Illuminate\Database\Eloquent\Collection|null|static
+	 */
 	public function get($id = null)
 	{
 		if(is_null($id)){
@@ -21,7 +31,14 @@ class EloquentTeamRepository extends CRepository implements TeamRepository {
 		}
 	}
 
-	// skapar och uppdaterar ett team.
+	/**
+	 * Creates or updates a team.
+	 *
+	 * @param $input
+	 * @param null $id
+	 *
+	 * @return bool
+	 */
 	public function createOrUpdate($input, $id = null)
 	{
 		if(is_null($id)) {
@@ -43,7 +60,13 @@ class EloquentTeamRepository extends CRepository implements TeamRepository {
 		}
 	}
 
-	// tar bort ett team.
+	/**
+	 * Deletes a team.
+	 *
+	 * @param $id
+	 *
+	 * @return bool|mixed
+	 */
 	public function delete($id){
 		$Team = $this->get($id);
 		if($Team != null) {
@@ -52,6 +75,13 @@ class EloquentTeamRepository extends CRepository implements TeamRepository {
 		return false;
 	}
 
+	/**
+	 * Make user leave a team.
+	 *
+	 * @param $id
+	 *
+	 * @return mixed
+	 */
 	public function leave($id){
 		return Auth::user()->detachTeam($id);
 	}
