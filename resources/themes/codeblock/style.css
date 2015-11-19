@@ -187,6 +187,24 @@ a:hover {
 	text-decoration: none;
 }
 
+.no-description{
+	color: #F72727;
+}
+
+.tt-dropdown-menu{
+	border-radius: 0;
+	border: none;
+	box-shadow: none;
+	margin-top: 5px !important;
+	width: 250%;
+	border-bottom: 5px solid #ffffff;
+}
+
+.tt-suggestion.tt-cursor {
+	color: #ffffff;
+	background-color: #272822;
+}
+
 @media screen and (max-width: 991px) {
 
 	#right-column {

@@ -7,3 +7,4 @@ global:
 
 static:
     'style.css': 'css/style.css'
+    'favicon.png': 'favicon.png'
