@@ -44,7 +44,7 @@ class AuthController extends ApiController {
 	}
 
 	/**
-	 * Skapar json web token.
+	 * Creates a json web token.
 	 * @return mixed
 	 */
 	public function getJwt() {

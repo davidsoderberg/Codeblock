@@ -22,12 +22,12 @@ class RateController extends Controller {
 	}
 
 	/**
-	 * lägger till en + på en kommentar
+	 * Adds one on comment rate.
 	 *
 	 * @param CommentRepository $comment
-	 * @param  int $id id på kommentaren som skall få +.
+	 * @param  int $id
 	 *
-	 * @return object     med värden dit användaren skall skickas.
+	 * @return object
 	 */
 	public function plus( CommentRepository $comment, $id ) {
 		try {
@@ -44,12 +44,12 @@ class RateController extends Controller {
 	}
 
 	/**
-	 * lägger till en - på en kommentar
+	 * Substract one for comment rate.
 	 *
 	 * @param CommentRepository $comment
-	 * @param  int $id id på kommentaren som skall få -.
+	 * @param  int $id
 	 *
-	 * @return object     med värden dit användaren skall skickas.
+	 * @return object
 	 */
 	public function minus( CommentRepository $comment, $id ) {
 		try {

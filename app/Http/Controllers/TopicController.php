@@ -27,7 +27,7 @@ class TopicController extends Controller {
 	}
 
 	/**
-	 * Visar en tråd.
+	 * Render selected topic.
 	 *
 	 * @param ReadRepository $read
 	 * @param $id
@@ -55,7 +55,7 @@ class TopicController extends Controller {
 	}
 
 	/**
-	 * Skapar eller uppdaterar en tråd.
+	 * Creates or updates a topic.
 	 * @permission create_topic:optional
 	 *
 	 * @param ReadRepository $read
@@ -94,7 +94,7 @@ class TopicController extends Controller {
 	}
 
 	/**
-	 * Tar bort en tråd.
+	 * Deletes a topic.
 	 * @permission delete_topic:optional
 	 *
 	 * @param $id

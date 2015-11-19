@@ -26,7 +26,7 @@ class NotificationController extends ApiController {
 	}
 
 	/**
-	 * Tar bort en notification.
+	 * Deletes a notification.
 	 *
 	 * @param NotificationRepository $notification
 	 * @param $id

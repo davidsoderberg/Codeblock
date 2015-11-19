@@ -22,7 +22,7 @@ class ForumController extends ApiController {
 	}
 
 	/**
-	 * Tar bort ett forum.
+	 * Deletes a forum.
 	 * @permission delete_forums
 	 *
 	 * @param $forumRepository

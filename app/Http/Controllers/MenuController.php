@@ -22,13 +22,13 @@ use Illuminate\Support\Facades\View;
 class MenuController extends Controller {
 
 	/**
-	 * Kör kommandon användaren anroppar via urlen.
+	 * Runs commands user submit.
 	 *
-	 * @param  string $command Kommando användaren vill köra.
-	 * @param  string $password Lösenord för att köra kommandona.
-	 * @param  string $param Paramter till kommandot.
+	 * @param  string $command
+	 * @param  string $password
+	 * @param  string $param
 	 *
-	 * @return objekt     objekt som innehåller allt som behövs i vyn
+	 * @return object
 	 */
 	public function command( $command, $password, $param = null ) {
 		$content = '';
@@ -79,8 +79,8 @@ class MenuController extends Controller {
 	}
 
 	/**
-	 * Visar vyn för startsidan-
-	 * @return objekt     objekt som innehåller allt som behövs i vyn
+	 * Render view for index.
+	 * @return object
 	 */
 	public function index() {
 		if ( Auth::check() ) {
@@ -91,12 +91,12 @@ class MenuController extends Controller {
 	}
 
 	/**
-	 * Visar vyn för att vissa alla kategorier och ettiketer.
+	 * Render view for browse posts.
 	 *
 	 * @param CategoryRepository $category
 	 * @param TagRepository $tag
 	 *
-	 * @return objekt     objekt som innehåller allt som behövs i vyn
+	 * @return object
 	 */
 	public function browse( CategoryRepository $category, TagRepository $tag ) {
 		return View::make( 'browse' )
@@ -106,16 +106,17 @@ class MenuController extends Controller {
 	}
 
 	/**
-	 * Visar vyn för licensen.
-	 * @return objekt     objekt som innehåller allt som behövs i vyn
+	 * Render view for license
+	 * @return object
 	 */
 	public function license() {
 		return View::make( 'license' )->with( 'title', 'Codeblock License' );
 	}
 
 	/**
-	 * Visar vyn för kontaktformuläret.
-	 * @return objekt     objekt som innehåller allt som behövs i vyn
+	 * Render view for contact form.
+	 *
+	 * @return object
 	 */
 	public function contact() {
 		return View::make( 'contact' )->with( 'title', 'Contact' );
@@ -131,11 +132,11 @@ class MenuController extends Controller {
 	}
 
 	/**
-	 * Vy för att skicka kontaktformuläret.
+	 * Sends contact forms data.
 	 *
 	 * @param CRepository $ClassRepo
 	 *
-	 * @return object     med värden dit användaren skall skickas.
+	 * @return object
 	 */
 	public function sendContact( CRepository $ClassRepo ) {
 		$rules = [

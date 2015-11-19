@@ -3,7 +3,6 @@
 use App\Services\CacheTrait;
 use Illuminate\Support\Facades\Mail;
 
-// bas klassen för repon
 /**
  * Class CRepository
  * @package App\Repositories

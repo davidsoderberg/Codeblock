@@ -23,10 +23,10 @@ class CategoryController extends Controller {
 	}
 
 	/**
-	 * Visar index vyn för kategorier
+	 * Render index view for categories.
 	 * @permission view_categories
-	 * @param  int $id id för kategorin som skall redigera
-	 * @return objekt     objekt som innehåller allt som behövs i vyn
+	 * @param  int $id id
+	 * @return object
 	 */
 	public function index($id = null)
 	{
@@ -40,10 +40,10 @@ class CategoryController extends Controller {
 	}
 
 	/**
-	 * Skapa och uppdatera en kategorin.
+	 * Creates or updates a category.
 	 * @permission create_update_categories
-	 * @param  int $id id för kategorin som skall uppdateras
-	 * @return object     med värden dit användaren skall skickas.
+	 * @param  int $id
+	 * @return object
 	 */
 	public function createOrUpdate($id = null)
 	{
@@ -58,10 +58,10 @@ class CategoryController extends Controller {
 	}
 
 	/**
-	 * Ta bort en kategori
+	 * Deletes a category
 	 * @permission delete_categories
-	 * @param  int $id id för kategori som skall tas bort.
-	 * @return object     med värden dit användaren skall skickas.
+	 * @param  int $id
+	 * @return object
 	 */
 	public function delete($id){
 		if($this->category->delete($id)){

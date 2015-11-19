@@ -24,7 +24,7 @@ class ReplyController extends Controller {
 	}
 
 	/**
-	 * Skapar eller uppdaterar ett svar.
+	 * Creates or updates a reply.
 	 * @permission create_reply:optional
 	 *
 	 * @param ReadRepository $read
@@ -63,7 +63,7 @@ class ReplyController extends Controller {
 	}
 
 	/**
-	 * Tar bort ett svar.
+	 * Deletes a reply.
 	 * @permission delete_reply:optional
 	 *
 	 * @param $id

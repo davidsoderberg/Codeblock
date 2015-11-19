@@ -24,7 +24,7 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 	public $id;
 
 	/**
-	 * Getter för id.
+	 * Getter for id.
 	 *
 	 * @return mixed
 	 */
@@ -78,14 +78,14 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 					}
 				}
 			} else {
-				// Skapar carbon objekt och sätter rätt tidszon
+				// Creates an carbon object with correct timezone.
 				$now = Carbon::now();
 				$now->timezone = 'Europe/Stockholm';
-				// Skapa en tidsstämpel på nu
+				// Creates a timestamp for now.
 				$nowTimestamp = strtotime( $now );
-				//Skapar en tidsstämpel som va för en vecka sedan;
+				// Creates a timestamp for a week ago.
 				$weekAgoTimestamp = strtotime( $now->subWeek() );
-				// kollar om blocket är skapat mellan dessa två tidsstämplar och lägger till det i post arrayen.
+				// Checks if post created at timestamp is in beteewen now and a week ago.
 				if ( strtotime( $post->created_at ) >= $weekAgoTimestamp && strtotime( $post->created_at ) <= $nowTimestamp ) {
 					if ( $post->private != 1 ) {
 						$postsCollection->add( $post );
@@ -128,14 +128,14 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 		$posts = $this->get();
 		$postsCollection = new Collection();
 		foreach( $posts as $post ) {
-			// Skapar carbon objekt och sätter rätt tidszon
+			// Creates a cabon object with correct timezone.
 			$now = Carbon::now();
 			$now->timezone = 'Europe/Stockholm';
-			// Skapa en tidsstämpel på nu
+			// Creates a timestamp with now.
 			$nowTimestamp = strtotime( $now );
-			//Skapar en tidsstämpel som va för en vecka sedan;
+			// Creates a timestamp with a week ago.
 			$weekAgoTimestamp = strtotime( $now->subWeek() );
-			// kollar om blocket är skapat mellan dessa två tidsstämplar och lägger till det i post arrayen.
+			// Checks if post created at timestamp is beteewen now and a week ago.
 			if ( strtotime( $post->created_at ) >= $weekAgoTimestamp && strtotime( $post->created_at ) <= $nowTimestamp ) {
 				if ( $post->private != 1 ) {
 					$postsCollection->add( $post );
