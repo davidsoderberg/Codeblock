@@ -1,5 +1,9 @@
 <?php namespace App;
 
+/**
+ * Class Star
+ * @package App
+ */
 class Star extends Model {
 
 	/**
@@ -9,17 +13,42 @@ class Star extends Model {
 	 */
 	protected $table = 'stars';
 
-	protected $fillable = array('post_id', 'user_id');
+	/**
+	 * Array with fields that user are allowed to fill.
+	 *
+	 * @var array
+	 */
+	protected $fillable = ['post_id', 'user_id'];
 
-	protected $guarded = array('id');
+	/**
+	 * Array with fields that are guarded.
+	 *
+	 * @var array
+	 */
+	protected $guarded = ['id'];
 
-	public static $rules = array(
-		'post_id'  => 'required|integer',
-		'user_id'  => 'required|integer'
-	);
+	/**
+	 * Array with rules for fields.
+	 *
+	 * @var array
+	 */
+	public static $rules = [
+		'post_id' => 'required|integer',
+		'user_id' => 'required|integer',
+	];
 
+	/**
+	 * Array with models to reload on save.
+	 *
+	 * @var array
+	 */
 	protected $modelsToReload = ['App\Post', 'App\User'];
 
+	/**
+	 * Fetch post this star belongs to.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
 	public function post() {
 		return $this->belongsTo( 'App\Post', 'post_id' );
 	}

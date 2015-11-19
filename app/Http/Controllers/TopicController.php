@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\View;
 class TopicController extends Controller {
 
 	/**
+	 * Constructor for TopicController.
+	 *
 	 * @param TopicRepository $topic
 	 * @param ReplyRepository $reply
 	 */

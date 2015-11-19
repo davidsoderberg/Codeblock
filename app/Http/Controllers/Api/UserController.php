@@ -4,6 +4,10 @@ use App\Http\Controllers\ApiController;
 use App\Repositories\User\UserRepository;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Class UserController
+ * @package App\Http\Controllers\Api
+ */
 class UserController extends ApiController {
 
 	/**

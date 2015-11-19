@@ -8,8 +8,20 @@ use App\Repositories\User\UserRepository;
 use Illuminate\Support\Facades\Auth;
 
 
+/**
+ * Class TeamController
+ * @package App\Http\Controllers\Api
+ */
 class TeamController extends ApiController {
 
+	/**
+	 * Fetch one or all teams.
+	 *
+	 * @param TeamRepository $teamRepository
+	 * @param null $id
+	 *
+	 * @return mixed
+	 */
 	public function teams(TeamRepository $teamRepository, $id = null){
 		if(is_null($id)) {
 			$teams = Auth::user()->teams->merge(Auth::user()->ownedTeams);
@@ -19,6 +31,14 @@ class TeamController extends ApiController {
 		return $this->response([$this->stringData => $teams], 200);
 	}
 
+	/**
+	 * Creates or updates a team.
+	 *
+	 * @param TeamRepository $teamRepository
+	 * @param null $id
+	 *
+	 * @return mixed
+	 */
 	public function createOrUpdateTeam(TeamRepository $teamRepository, $id = null) {
 		if($teamRepository->createOrUpdate($this->request->all(), $id)) {
 			if(is_null($id)) {
@@ -32,6 +52,7 @@ class TeamController extends ApiController {
 	}
 
 	/**
+	 * Invites a user to team.
 	 *
 	 * @param TeamRepository $teamRepository
 	 * @param TeamInviteRepository $teamInviteRepository
@@ -54,6 +75,14 @@ class TeamController extends ApiController {
 		return $this->response([$this->stringErrors => 'You could not invite ' . $user->username . ' to ' . $team->name . '.'], 400);
 	}
 
+	/**
+	 * Make user leave a team.
+	 *
+	 * @param TeamRepository $teamRepository
+	 * @param $id
+	 *
+	 * @return mixed
+	 */
 	public function leave(TeamRepository $teamRepository, $id) {
 		if($teamRepository->leave($id)) {
 			return $this->response([$this->stringMessage => 'You have leaved that team now.'], 200);
@@ -63,6 +92,7 @@ class TeamController extends ApiController {
 	}
 
 	/**
+	 * Respondes invite for user.
 	 *
 	 * @param TeamInviteRepository $teamInviteRepository
 	 * @param UserRepository $userRepository
@@ -84,6 +114,7 @@ class TeamController extends ApiController {
 	}
 
 	/**
+	 * Deletes a team.
 	 *
 	 * @param TeamRepository $teamRepository
 	 * @param $id

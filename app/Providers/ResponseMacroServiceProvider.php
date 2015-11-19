@@ -3,6 +3,10 @@
 use Response;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Class ResponseMacroServiceProvider
+ * @package App\Providers
+ */
 class ResponseMacroServiceProvider extends ServiceProvider {
 
 	/**
@@ -32,6 +36,9 @@ class ResponseMacroServiceProvider extends ServiceProvider {
 		});
 	}
 
+	/**
+	 * Register method for ResponseMacroServiceProvider
+	 */
 	public function register() {}
 
 }

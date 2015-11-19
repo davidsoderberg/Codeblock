@@ -5,6 +5,10 @@ use App\Repositories\Comment\CommentRepository;
 use App\Repositories\Rate\RateRepository;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Class CommentController
+ * @package App\Http\Controllers\Api
+ */
 class CommentController extends ApiController {
 
 	/**
@@ -30,12 +34,13 @@ class CommentController extends ApiController {
 	}
 
 	/**
-	 * Ta bort en kommentar
+	 * Deletes a comment.
 	 * @permission delete_comments:optional
 	 *
-	 * @param  int $id id för kommentaren som skall tas bort.
+	 * @param CommentRepository $commentRepository
+	 * @param  int $id
 	 *
-	 * @return object     med värden dit användaren skall skickas.
+	 * @return object
 	 */
 	public function deleteComment(CommentRepository $commentRepository, $id) {
 		try {

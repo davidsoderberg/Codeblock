@@ -9,6 +9,8 @@ use Illuminate\Html\FormFacade;
 class FormBuilder extends \Illuminate\Html\FormBuilder{
 
 	/**
+	 * Render honeypot.
+	 *
 	 * @return string
 	 */
 	public function Honeypot(){
@@ -16,6 +18,10 @@ class FormBuilder extends \Illuminate\Html\FormBuilder{
 	}
 
 	/**
+	 * Close form tag.
+	 *
+	 * @param boolean $honeypot
+	 *
 	 * @return string
 	 */
 	public function close($honeypot = true){

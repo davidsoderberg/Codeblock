@@ -17,164 +17,179 @@ use App\Services\CollectionService;
 class EloquentPostRepository extends CRepository implements PostRepository {
 
 	/**
+	 * Property to store current id in.
+	 *
 	 * @var
 	 */
 	public $id;
 
-	// getter för id.
 	/**
+	 * Getter för id.
+	 *
 	 * @return mixed
 	 */
-	public function getId(){
+	public function getId() {
 		return $this->id;
 	}
 
-	// hämtar ett eller alla block.
 	/**
+	 * Fetch one or all posts.
+	 *
 	 * @param null $id
 	 *
 	 * @return \App\Services\Model|array|Collection|null|static
 	 */
-	public function get($id = null)
-	{
-		if(is_null($id)){
-			$posts = $this->cache('all', Post::where('id', '!=', 0));
-		}else{
-			if(is_numeric($id)) {
-				$post = CollectionService::filter($this->get(), 'id', $id, 'first');
-			}else{
-				$post =  CollectionService::filter($this->get(), 'slug', $id, 'first');
+	public function get( $id = null ) {
+		if ( is_null( $id ) ) {
+			$posts = $this->cache( 'all', Post::where( 'id', '!=', 0 ) );
+		} else {
+			if ( is_numeric( $id ) ) {
+				$post = CollectionService::filter( $this->get(), 'id', $id, 'first' );
+			} else {
+				$post = CollectionService::filter( $this->get(), 'slug', $id, 'first' );
 			}
 			$posts = $post;
 		}
+
 		return $posts;
 	}
 
-	// hämtar block som har en vis kategori eller är skapade den senaste veckan.
 	/**
+	 * Fetch all posts in selected category.
+	 *
 	 * @param $id
 	 *
 	 * @return Collection
 	 */
-	public function getByCategory($id)
-	{
+	public function getByCategory( $id ) {
 		$posts = $this->get();
 		$postsCollection = new Collection();
-		foreach ($posts as $post) {
-			if($id != 0){
-				if($post->category->id == $id){
-					if($post->private != 1){
-						$postsCollection->add($post);
-					}else{
-						if(Auth::check()){
-							if(Auth::user()->id == $post->user_id){
-								$postsCollection->add($post);
+		foreach( $posts as $post ) {
+			if ( $id != 0 ) {
+				if ( $post->category->id == $id ) {
+					if ( $post->private != 1 ) {
+						$postsCollection->add( $post );
+					} else {
+						if ( Auth::check() ) {
+							if ( Auth::user()->id == $post->user_id ) {
+								$postsCollection->add( $post );
 							}
 						}
 					}
 				}
-			}else{
+			} else {
 				// Skapar carbon objekt och sätter rätt tidszon
 				$now = Carbon::now();
 				$now->timezone = 'Europe/Stockholm';
 				// Skapa en tidsstämpel på nu
-				$nowTimestamp = strtotime($now);
+				$nowTimestamp = strtotime( $now );
 				//Skapar en tidsstämpel som va för en vecka sedan;
-				$weekAgoTimestamp = strtotime($now->subWeek());
+				$weekAgoTimestamp = strtotime( $now->subWeek() );
 				// kollar om blocket är skapat mellan dessa två tidsstämplar och lägger till det i post arrayen.
-				if(strtotime($post->created_at) >= $weekAgoTimestamp && strtotime($post->created_at) <= $nowTimestamp){
-					if($post->private != 1){
-						$postsCollection->add($post);
+				if ( strtotime( $post->created_at ) >= $weekAgoTimestamp && strtotime( $post->created_at ) <= $nowTimestamp ) {
+					if ( $post->private != 1 ) {
+						$postsCollection->add( $post );
 					}
 				}
 			}
 		}
+
 		return $postsCollection;
 	}
 
 	/**
+	 * Fetch popular posts.
+	 *
 	 * @param int $limit
 	 * @param int $min
 	 *
 	 * @return Collection
 	 */
-	public function getPopular($limit = 10, $min = 0){
-		$posts =  $this->sort($this->get()->take($limit),'stars');
+	public function getPopular( $limit = 10, $min = 0 ) {
+		$posts = $this->sort( $this->get()->take( $limit ), 'stars' );
 		$postsCollection = new Collection();
-		foreach($posts as $post){
-			if($post->starcount > $min){
-				$postsCollection->add($post);
+		foreach( $posts as $post ) {
+			if ( $post->starcount > $min ) {
+				$postsCollection->add( $post );
 			}
 		}
+
 		return $postsCollection;
 	}
 
 	/**
+	 * Fetch newest posts.
+	 *
 	 * @param int $limit
 	 *
 	 * @return Collection
 	 */
-	public function getNewest($limit = 10){
+	public function getNewest( $limit = 10 ) {
 		$posts = $this->get();
 		$postsCollection = new Collection();
-		foreach ($posts as $post) {
+		foreach( $posts as $post ) {
 			// Skapar carbon objekt och sätter rätt tidszon
 			$now = Carbon::now();
 			$now->timezone = 'Europe/Stockholm';
 			// Skapa en tidsstämpel på nu
-			$nowTimestamp = strtotime($now);
+			$nowTimestamp = strtotime( $now );
 			//Skapar en tidsstämpel som va för en vecka sedan;
-			$weekAgoTimestamp = strtotime($now->subWeek());
+			$weekAgoTimestamp = strtotime( $now->subWeek() );
 			// kollar om blocket är skapat mellan dessa två tidsstämplar och lägger till det i post arrayen.
-			if(strtotime($post->created_at) >= $weekAgoTimestamp && strtotime($post->created_at) <= $nowTimestamp){
-				if($post->private != 1){
-					$postsCollection->add($post);
+			if ( strtotime( $post->created_at ) >= $weekAgoTimestamp && strtotime( $post->created_at ) <= $nowTimestamp ) {
+				if ( $post->private != 1 ) {
+					$postsCollection->add( $post );
 				}
 			}
-			if($postsCollection->count() == 10){
+			if ( $postsCollection->count() == 10 ) {
 				break;
 			}
 		}
+
 		return $postsCollection;
 	}
 
-	// hämtar block som har en viss ettiket.
 	/**
+	 * Fetch all posts with same tag.
+	 *
 	 * @param $id
 	 *
 	 * @return Collection
 	 */
-	public function getByTag($id){
+	public function getByTag( $id ) {
 		$posts = $this->get();
 		$postsCollection = new Collection();
-		foreach ($posts as $post) {
-			foreach ($post->tags as $tag) {
-				if($id == $tag->id){
-					if($post->private != 1){
-						$postsCollection->add($post);
+		foreach( $posts as $post ) {
+			foreach( $post->tags as $tag ) {
+				if ( $id == $tag->id ) {
+					if ( $post->private != 1 ) {
+						$postsCollection->add( $post );
 					}
 					break;
 				}
 			}
 		}
+
 		return $postsCollection;
 	}
 
 	/**
+	 * Sort posts.
+	 *
 	 * @param $posts
 	 * @param string $sort
 	 *
 	 * @return mixed
 	 */
-	public function sort($posts, $sort = "date"){
-		$sort = strtolower($sort);
-		$posts = $posts->sortByDesc(function ($item) use ($sort) {
-			switch($sort) {
+	public function sort( $posts, $sort = "date" ) {
+		$sort = strtolower( $sort );
+		$posts = $posts->sortByDesc( function ( $item ) use ( $sort ) {
+			switch( $sort ) {
 				case 'stars':
 					return $item->starcount;
 					break;
 				case 'comments':
-					return count($item->comments);
+					return count( $item->comments );
 					break;
 				case 'name':
 					return $item->name;
@@ -186,226 +201,247 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 					return $item->created_at;
 					break;
 			}
-		});
+		} );
 
-		if(in_array($sort, array('name', 'category'))){
+		if ( in_array( $sort, ['name', 'category'] ) ) {
 			$posts = $posts->reverse();
 		}
+
 		return $posts;
 	}
 
-	// duplicerar ett kodblock.
 	/**
+	 * Fork a post.
+	 *
 	 * @param $id
 	 *
 	 * @return bool|mixed
 	 */
-	public function duplicate($id){
-		$post = $this->get($id);
-		$input = array();
-		$input['tags'] = array();
-		foreach ($post->tags as $tag) {
+	public function duplicate( $id ) {
+		$post = $this->get( $id );
+		$input = [];
+		$input['tags'] = [];
+		foreach( $post->tags as $tag ) {
 			$input['tags'][] = $tag->id;
 		}
-		$existingPost = CollectionService::filter($this->get(), 'name', $post->name . ' ' . Auth::user()->id);
-		if(count($existingPost) < 1){
-			$input['name'] = $post->name.' '.Auth::user()->id;
+		$existingPost = CollectionService::filter( $this->get(), 'name', $post->name . ' ' . Auth::user()->id );
+		if ( count( $existingPost ) < 1 ) {
+			$input['name'] = $post->name . ' ' . Auth::user()->id;
 			$input['cat_id'] = $post->cat_id;
 			$input['description'] = $post->description;
-			$input['code'] = html_entity_decode($post->code);
+			$input['code'] = html_entity_decode( $post->code );
 			$input['private'] = 1;
 			$input['org'] = $post->id;
-			return $this->createOrUpdate($input);
+
+			return $this->createOrUpdate( $input );
 		}
+
 		return false;
 	}
 
-	// hämtar vilka kodblock som är skapade ur ett visst kodblock.
 	/**
+	 * Fetch original post selected post has been forked from.
+	 *
 	 * @param $id
 	 *
 	 * @return Collection|static
 	 */
-	public function getForked($id){
-		return CollectionService::filter($this->get(), 'org', $id);
+	public function getForked( $id ) {
+		return CollectionService::filter( $this->get(), 'org', $id );
 	}
 
 	/**
+	 * Undo action on post.
+	 *
 	 * @param $input
 	 * @param $id
 	 *
 	 * @return bool
 	 */
-	public function undo($input, $id){
-		if(is_numeric($id)){
-			$post = $this->get($id);
+	public function undo( $input, $id ) {
+		if ( is_numeric( $id ) ) {
+			$post = $this->get( $id );
 			//$post->setRevisionEnabled();
-			if(isset($input['code'])){
-				$input['code'] = html_entity_decode($input['code']);
+			if ( isset( $input['code'] ) ) {
+				$input['code'] = html_entity_decode( $input['code'] );
 			}
-			$return = $this->save($input, $post);
+			$return = $this->save( $input, $post );
+
 			//$post->setRevisionEnabled();
 			return $return;
 		}
+
 		return false;
 	}
 
 	/**
+	 * Saves post.
+	 *
 	 * @param $input
 	 * @param $Post
 	 *
 	 * @return bool
 	 */
-	private function save($input, $Post){
-		$except = array('tags', '_token', '_url', 'token', '_method', 'honeyName');
+	private function save( $input, $Post ) {
+		$except = ['tags', '_token', '_url', 'token', '_method', 'honeyName'];
 
-		foreach ($input as $key => $value) {
-			if(!in_array($key, $except)){
-				if($key != 'code'){
-					$Post[$key] = $this->stripTrim($input[$key]);
-				}else{
-					$Post[$key] = htmlentities($input[$key]);
+		foreach( $input as $key => $value ) {
+			if ( !in_array( $key, $except ) ) {
+				if ( $key != 'code' ) {
+					$Post[$key] = $this->stripTrim( $input[$key] );
+				} else {
+					$Post[$key] = htmlentities( $input[$key] );
 				}
 			}
 		}
 
-		if($Post->slug == ''){
-			$Post['slug'] = $Post->getSlug($Post->name);
+		if ( $Post->slug == '' ) {
+			$Post['slug'] = $Post->getSlug( $Post->name );
 		}
 
-		if($Post->save()){
+		if ( $Post->save() ) {
 			$this->id = $Post->id;
-			if(isset($input['tags'])){
-				$Post->tags()->sync($input['tags']);
+			if ( isset( $input['tags'] ) ) {
+				$Post->tags()->sync( $input['tags'] );
 			}
+
 			return true;
-		}else{
+		} else {
 			$this->errors = $Post::$errors;
+
 			return false;
 		}
 	}
 
-	// sparar eller uppdarerar ett block.
 	/**
+	 * Creates or updates post.
+	 *
 	 * @param $input
 	 * @param null $id
 	 *
 	 * @return bool
 	 */
-	public function createOrUpdate($input, $id = null)
-	{
-		if(!is_numeric($id)) {
+	public function createOrUpdate( $input, $id = null ) {
+		if ( !is_numeric( $id ) ) {
 			$Post = new Post;
-			if(is_object(Auth::user())){
+			if ( is_object( Auth::user() ) ) {
 				$Post->user_id = Auth::user()->id;
-			}else{
-				Session::flash('error', 'You have not logged in');
+			} else {
+				Session::flash( 'error', 'You have not logged in' );
+
 				return false;
 			}
 		} else {
-			$Post = $this->get($id);
+			$Post = $this->get( $id );
 		}
 
-		return $this->save($input, $Post);
+		return $this->save( $input, $Post );
 	}
 
-	// tar bort ett block.
 	/**
+	 * Deletes a post.
+	 *
 	 * @param $id
 	 *
 	 * @return bool|mixed
 	 */
-	public function delete($id){
-		$Post = $this->get($id);
-		if(!is_null($Post)) {
+	public function delete( $id ) {
+		$Post = $this->get( $id );
+		if ( !is_null( $Post ) ) {
 			return $Post->delete();
 		}
+
 		return false;
 	}
 
-	// skapar och tar bort en stjärna för ett block.
 	/**
+	 * Adds or removes a star from post.
+	 *
 	 * @param StarRepository $starRepository
 	 * @param $post_id
 	 *
 	 * @return array
 	 */
-	public function createOrDeleteStar(StarRepository $starRepository, $post_id){
-		$stars = CollectionService::filter($starRepository->get(), 'user_id', Auth::user()->id);
-		$star = CollectionService::filter($stars, 'post_id', $post_id, 'first');
+	public function createOrDeleteStar( StarRepository $starRepository, $post_id ) {
+		$stars = CollectionService::filter( $starRepository->get(), 'user_id', Auth::user()->id );
+		$star = CollectionService::filter( $stars, 'post_id', $post_id, 'first' );
 		$boolean = false;
 		$action = 'delete';
-		if($star != null){
+		if ( $star != null ) {
 			$boolean = $star->delete();
-		}else{
+		} else {
 			$action = 'create';
 			$star = new Star;
 			$star->post_id = $post_id;
 			$star->user_id = Auth::user()->id;
 			$boolean = $star->save();
 		}
-		return array($boolean, $action);
+
+		return [$boolean, $action];
 	}
 
-	// söker bland blocken och skickar tillbaka de blocken den hittar en match hos.
 	/**
+	 * Search and returns posts that is matching search query.
+	 *
 	 * @param $term
 	 * @param array $filter
 	 *
 	 * @return static
 	 */
-	public function search($term, $filter = array('tag' => null, 'category' => null, 'only' => 0)){
+	public function search( $term, $filter = ['tag' => null, 'category' => null, 'only' => 0] ) {
 
-		// Kollar om blocket innehåller söktermern i namn eller beskrvining
-		$posts = Post::where('name', 'LIKE', '%'.$term.'%')->get()->merge(Post::where('description', 'LIKE', '%'.$term.'%')->get());
+		// Checks if post contains search query.
+		$posts = Post::where( 'name', 'LIKE', '%' . $term . '%' )
+		             ->get()
+		             ->merge( Post::where( 'description', 'LIKE', '%' . $term . '%' )->get() );
 
-		// loopar igen alla inlägg och kollar om termen stämmer överens med ettiket, kategori eller användar-namn.
-		foreach ($this->get() as $post) {
-			if(strtolower($post->category->name) == strtolower($term) || strtolower($post->user->username) == strtolower($term)){
-				$posts->add($post);
+		// Checks if posts has selected category name or tag name.
+		foreach( $this->get() as $post ) {
+			if ( strtolower( $post->category->name ) == strtolower( $term ) || strtolower( $post->user->username ) == strtolower( $term ) ) {
+				$posts->add( $post );
 				break;
 			}
-			foreach ($post->tags as $tag) {
-				if(strtolower($tag->name) == strtolower($term)){
-					$posts->add($post);
+			foreach( $post->tags as $tag ) {
+				if ( strtolower( $tag->name ) == strtolower( $term ) ) {
+					$posts->add( $post );
 					break;
 				}
 			}
 		}
 
-		if(!is_null($filter['category']) && $filter['category'] != '') {
+		if ( !is_null( $filter['category'] ) && $filter['category'] != '' ) {
 			$category = $filter['category'];
-			$posts = $posts->filter(function ($item) use ($category) {
-				if($item->category->id == $category){
+			$posts = $posts->filter( function ( $item ) use ( $category ) {
+				if ( $item->category->id == $category ) {
 					return $item;
 				}
-			});
+			} );
 		}
 
-		if(!is_null($filter['tag']) && $filter['tag'] != '') {
+		if ( !is_null( $filter['tag'] ) && $filter['tag'] != '' ) {
 			$tag = $filter['tag'];
-			$posts = $posts->filter(function ($item) use ($tag) {
-				foreach($item->tags as $posttag){
-					if($posttag->id == $tag){
+			$posts = $posts->filter( function ( $item ) use ( $tag ) {
+				foreach( $item->tags as $posttag ) {
+					if ( $posttag->id == $tag ) {
 						return $item;
 					}
 				}
-			});
+			} );
 		}
 
-		if(!is_null($filter['only']) && $filter['only'] != 0) {
-			$posts = $posts->filter(function ($item){
-				if($item->user_id == Auth::user()->id){
+		if ( !is_null( $filter['only'] ) && $filter['only'] != 0 ) {
+			$posts = $posts->filter( function ( $item ) {
+				if ( $item->user_id == Auth::user()->id ) {
 					return $item;
 				}
-			});
+			} );
 		}
 
-		// hämtar dem igen och nu med alla relationer intakta.
+		// Fetch all posts agian with all relations eagerloaded.
 		$postCollection = new Collection();
-		foreach ($posts as $post) {
-			if($post['private'] != 1) {
-				$postCollection->add($this->get($post['id']));
+		foreach( $posts as $post ) {
+			if ( $post['private'] != 1 ) {
+				$postCollection->add( $this->get( $post['id'] ) );
 			}
 		}
 

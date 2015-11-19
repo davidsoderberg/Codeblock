@@ -6,13 +6,27 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Services\CacheTrait;
 
+/**
+ * Class Model
+ * @package App
+ */
 class Model extends \Illuminate\Database\Eloquent\Model {
 	use RevisionableTrait;
 	use HateoasTrait;
 	use CacheTrait;
 
+	/**
+	 * Property to store $this in.
+	 *
+	 * @var
+	 */
 	public static $self;
 
+	/**
+	 * Constructor for model.
+	 *
+	 * @param array $attributes
+	 */
 	public function __construct( array $attributes = [] ) {
 		parent::__construct( $attributes );
 
@@ -23,38 +37,94 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 		}
 	}
 
+	/**
+	 * Property to store if attributes should be appended.
+	 *
+	 * @var bool
+	 */
 	public static $append = false;
 
+	/**
+	 * Property to store errors in.
+	 *
+	 * @var
+	 */
 	public static $errors;
 
+	/**
+	 * Array with fields to add to hidden array.
+	 *
+	 * @var array
+	 */
 	protected $addHidden = [];
 
+	/**
+	 * Array with hidden fields for user.
+	 *
+	 * @var array
+	 */
 	protected $hidden = ["updated_at"];
 
+	/**
+	 * Enables revision for this model.
+	 *
+	 * @var bool
+	 */
 	protected $revisionEnabled = false;
 
+	/**
+	 * Setter for revisionEnabled.
+	 */
 	public function setRevisionEnabled() {
 		$this->revisionEnabled = !$this->revisionEnabled;
 	}
 
+	/**
+	 * Add more fields to hidden array.
+	 */
 	public function addToHidden() {
 		$this->addHidden( $this->addHidden );
 	}
 
+	/**
+	 * Appends links to model.
+	 */
 	public function addLinks() {
 		$this->appends[] = 'links';
 	}
 
+	/**
+	 * Fetch hateoas link for api.
+	 *
+	 * @return array
+	 */
 	public function getlinksAttribute() {
 		return [];
 	}
 
+	/**
+	 * Array with models to reload on save.
+	 *
+	 * @var array
+	 */
 	protected $modelsToReload = [];
 
+	/**
+	 * Fetch models to reload.
+	 *
+	 * @return array
+	 */
 	public function getModelsToReload() {
 		return $this->modelsToReload;
 	}
 
+	/**
+	 * Fetch answer based on boolean.
+	 *
+	 * @param $boolean
+	 *
+	 * @return string
+	 */
 	public function getAnswer( $boolean ) {
 		if ( $boolean === true || $boolean === false || $boolean === 0 || $boolean === 1 || $boolean === "1" || $boolean === "0" ) {
 			if ( $boolean == 1 || $boolean == true ) {
@@ -67,9 +137,12 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 		return $boolean;
 	}
 
+	/**
+	 * Boot method form model
+	 */
 	public static function boot() {
 		parent::boot();
-		// körs på alla modell object som sparas.
+
 		static::saving( function ( $object ) {
 			return $object::isValid( $object );
 		} );
@@ -87,6 +160,11 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 		} );
 	}
 
+	/**
+	 * Flush models cache.
+	 *
+	 * @param Model $object
+	 */
 	protected static function reloadModels( \App\Model $object ) {
 		$models = $object->getModelsToReload();
 		$models[] = get_class( $object );
@@ -96,16 +174,20 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 				$model = 'App\\' + $model;
 			}
 			if ( class_exists( $model ) ) {
-				Model::flush( new $model() );
+				Self::$self->flushCache( new $model() );
 			}
 		}
 	}
 
-	public static function flush( $model = null ) {
-		Self::$self->flushCache( $model );
-	}
-
-	// From: https://laracasts.com/discuss/channels/general-discussion/how-to-validate-a-slug-unique-in-laravel-5
+	/**
+	 * Creates slug.
+	 * From: https://laracasts.com/discuss/channels/general-discussion/how-to-validate-a-slug-unique-in-laravel-5
+	 *
+	 * @param $value
+	 * @param string $column
+	 *
+	 * @return string
+	 */
 	public function getSlug( $value, $column = 'slug' ) {
 		$slug = Str::slug( $value );
 		$latestSlug = $this->whereRaw( $column . " LIKE '^{$slug}(-[0-9]+)?$' and id != '{$this->id}'" )
@@ -121,7 +203,14 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 		return $slug;
 	}
 
-	// validerings metoden som kör rule variablen från alla modeller när det modell objektet sparas.
+	/**
+	 * Validates model.
+	 *
+	 * @param $data
+	 * @param array $rules
+	 *
+	 * @return bool
+	 */
 	public static function isValid( $data, $rules = [] ) {
 		$id = null;
 		if ( is_object( $data ) ) {

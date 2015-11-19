@@ -1,5 +1,9 @@
 <?php namespace App;
 
+/**
+ * Class Role
+ * @package App
+ */
 class Role extends Model {
 
 	/**
@@ -9,16 +13,41 @@ class Role extends Model {
 	 */
 	protected $table = 'roles';
 
+	/**
+	 * Array with fields that user are allowed to fill.
+	 *
+	 * @var array
+	 */
 	protected $fillable = array('name', 'default');
 
+	/**
+	 * Array with fields that are guarded.
+	 *
+	 * @var array
+	 */
 	protected $guarded = array('id');
 
+	/**
+	 * Array with rules for fields.
+	 *
+	 * @var array
+	 */
 	public static $rules = array(
 		'name' => 'required|min:3|unique:roles,name,:id:'
 	);
 
+	/**
+	 * Array with models to reload on save.
+	 *
+	 * @var array
+	 */
 	protected $modelsToReload = ['App\Permission', 'App\User'];
 
+	/**
+	 * Fetch permissions this role has many of.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	 */
 	public function permissions()
 	{
 		return $this->belongsToMany('App\Permission');

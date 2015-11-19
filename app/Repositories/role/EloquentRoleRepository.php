@@ -11,6 +11,8 @@ use App\Services\CollectionService;
 class EloquentRoleRepository extends CRepository implements RoleRepository {
 
 	/**
+	 * Property to store current role in.
+	 *
 	 * @var
 	 */
 	public $role;
