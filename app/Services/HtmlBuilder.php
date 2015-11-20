@@ -59,12 +59,13 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder {
 	/**
 	 * Adding link to mentioned user.
 	 *
+	 * @link http://granades.com/2009/04/06/using-regular-expressions-to-match-twitter-users-and-hashtags/
+	 *
 	 * @param $text
 	 *
 	 * @return mixed
 	 */
 	public function mention( $text ) {
-		// Found at: http://granades.com/2009/04/06/using-regular-expressions-to-match-twitter-users-and-hashtags/
 		return preg_replace( '/(^|\s)@(\w+)/', ' <a class="mention" target="_blank" href="' . action( 'MenuController@index' ) . '/user/\2">@\2</a>', $text );
 	}
 

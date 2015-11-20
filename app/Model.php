@@ -181,7 +181,8 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
 	/**
 	 * Creates slug.
-	 * From: https://laracasts.com/discuss/channels/general-discussion/how-to-validate-a-slug-unique-in-laravel-5
+	 *
+	 * @link https://laracasts.com/discuss/channels/general-discussion/how-to-validate-a-slug-unique-in-laravel-5
 	 *
 	 * @param $value
 	 * @param string $column
@@ -206,6 +207,8 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	/**
 	 * Validates model.
 	 *
+	 * @link http://forumsarchive.laravel.io/viewtopic.php?pid=46571
+	 *
 	 * @param $data
 	 * @param array $rules
 	 *
@@ -225,7 +228,6 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 		}
 
 		if ( is_numeric( $id ) ) {
-			// found on: http://forumsarchive.laravel.io/viewtopic.php?pid=46571
 			array_walk( $rules, function ( &$item ) use ( $id ) {
 				if ( stripos( $item, ':id:' ) !== false ) {
 					$item = str_ireplace( ':id:', $id, $item );
