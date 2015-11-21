@@ -1,8 +1,8 @@
-<?php namespace App\ModelTraits;
+<?php namespace App\Models\Traits;
 
 /**
  * Class TeamInviteTrait
- * @package App\ModelTraits
+ * @package App\Models\Traits
  */
 trait TeamInviteTrait
 {
@@ -14,7 +14,7 @@ trait TeamInviteTrait
 	 */
 	public function team()
 	{
-		return $this->hasOne( 'App\Team', 'id', 'team_id' );
+		return $this->hasOne( 'App\Models\Team', 'id', 'team_id' );
 	}
 
 	/**
@@ -24,7 +24,7 @@ trait TeamInviteTrait
 	 */
 	public function user()
 	{
-		return $this->hasOne( 'App\User', 'email', 'email' );
+		return $this->hasOne( 'App\Models\User', 'email', 'email' );
 	}
 
 }

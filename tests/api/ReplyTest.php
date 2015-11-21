@@ -1,8 +1,8 @@
 <?php namespace api;
 
-use App\Forum;
-use App\Reply;
-use App\Topic;
+use App\Models\Forum;
+use App\Models\Reply;
+use App\Models\Topic;
 
 class ReplyTest extends \ApiCase {
 

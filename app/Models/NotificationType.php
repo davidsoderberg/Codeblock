@@ -1,8 +1,8 @@
-<?php namespace App;
+<?php namespace App\Models;
 
 /**
  * Class NotificationType
- * @package App
+ * @package App\Models
  */
 class NotificationType{
 
@@ -50,7 +50,7 @@ class NotificationType{
 	 */
 	public static function isType($type){
 		$type = strtoupper($type);
-		$rc = new \ReflectionClass('App\NotificationType');
+		$rc = new \ReflectionClass('App\Models\NotificationType');
 		return array_key_exists($type, $rc->getConstants());
 	}
 }

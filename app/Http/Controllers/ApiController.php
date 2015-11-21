@@ -1,6 +1,6 @@
 <?php namespace App\Http\Controllers;
 
-use App\Model;
+use App\Models\Model;
 use App\Repositories\CRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Response;

@@ -1,8 +1,8 @@
 <?php namespace App\Repositories\Post;
 
-use App\Post;
+use App\Models\Post;
 use App\Repositories\Star\StarRepository;
-use App\Star;
+use App\Models\Star;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;

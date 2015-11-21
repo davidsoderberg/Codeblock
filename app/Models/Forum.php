@@ -1,10 +1,10 @@
-<?php namespace App;
+<?php namespace App\Models;
 
 use Illuminate\Support\Facades\Auth;
 
 /**
  * Class Forum
- * @package App
+ * @package App\Models
  */
 class Forum extends Model
 {
@@ -56,7 +56,7 @@ class Forum extends Model
 	 *
 	 * @var array
 	 */
-	protected $modelsToReload = ['App\Topic', 'App\Reply'];
+	protected $modelsToReload = ['App\Models\Topic', 'App\Models\Reply'];
 
 	/**
 	 * Fetch topics this forum has many of.
@@ -65,7 +65,7 @@ class Forum extends Model
 	 */
 	public function topics()
 	{
-		return $this->hasMany('App\Topic', 'forum_id', 'id');
+		return $this->hasMany('App\Models\Topic', 'forum_id', 'id');
 	}
 
 	/**

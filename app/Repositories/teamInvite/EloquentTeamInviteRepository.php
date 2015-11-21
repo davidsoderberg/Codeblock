@@ -3,9 +3,9 @@
 use App\Exceptions\NullPointerException;
 use App\Repositories\CRepository;
 use App\Repositories\User\UserRepository;
-use App\Team;
-use App\TeamInvite;
-use App\User;
+use App\Models\Team;
+use App\Models\TeamInvite;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -26,7 +26,7 @@ class EloquentTeamInviteRepository extends CRepository implements TeamInviteRepo
 	/**
 	 * Invites user to team.
 	 *
-	 * @param User $user
+	 * @param \App\Models\User $user
 	 * @param Team $team
 	 * @param string $type
 	 *
@@ -173,7 +173,7 @@ class EloquentTeamInviteRepository extends CRepository implements TeamInviteRepo
 	/**
 	 * Deletes invite.
 	 *
-	 * @param TeamInvite $invite
+	 * @param \App\Models\TeamInvite $invite
 	 *
 	 * @return bool|null
 	 * @throws \Exception

@@ -1,7 +1,7 @@
 <?php
 
 use App\Repositories\Team\EloquentTeamRepository;
-use App\User;
+use App\Models\User;
 
 class TeamTest extends UnitCase {
 

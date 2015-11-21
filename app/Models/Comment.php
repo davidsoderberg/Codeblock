@@ -1,8 +1,8 @@
-<?php namespace App;
+<?php namespace App\Models;
 
 /**
  * Class Comment
- * @package App
+ * @package App\Models
  */
 class Comment extends Model {
 
@@ -47,7 +47,7 @@ class Comment extends Model {
 	 *
 	 * @var array
 	 */
-	protected $modelsToReload = ['App\Post', 'App\User', 'App\Rate'];
+	protected $modelsToReload = ['App\Models\Post', 'App\Models\User', 'App\Models\Rate'];
 
 	/**
 	 * Array with rules for fields.
@@ -67,7 +67,7 @@ class Comment extends Model {
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function user() {
-		return $this->belongsTo( 'App\User', 'user_id', 'id');
+		return $this->belongsTo( 'App\Models\User', 'user_id', 'id');
 	}
 
 	/**
@@ -76,7 +76,7 @@ class Comment extends Model {
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function post() {
-		return $this->belongsTo( 'App\Post', 'post_id', 'id');
+		return $this->belongsTo( 'App\Models\Post', 'post_id', 'id');
 	}
 
 	/**
@@ -85,7 +85,7 @@ class Comment extends Model {
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function children() {
-		return $this->hasMany( 'App\Comment', 'parent', 'id');
+		return $this->hasMany( 'App\Models\Comment', 'parent', 'id');
 	}
 
 	/**
@@ -95,7 +95,7 @@ class Comment extends Model {
 	 */
 	public function rates()
 	{
-		return $this->hasMany('App\Rate', 'comment_id', 'id');
+		return $this->hasMany('App\Models\Rate', 'comment_id', 'id');
 	}
 
 	/**

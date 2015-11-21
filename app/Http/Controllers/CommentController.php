@@ -1,6 +1,6 @@
 <?php namespace App\Http\Controllers;
 
-use App\NotificationType;
+use App\Models\NotificationType;
 use App\Repositories\Comment\CommentRepository;
 use App\Repositories\Notification\NotificationRepository;
 use App\Repositories\Post\PostRepository;

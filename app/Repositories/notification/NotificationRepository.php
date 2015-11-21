@@ -31,11 +31,11 @@ interface NotificationRepository {
 	/**
 	 * Fetch subject and body for notification
 	 *
-	 * @param \App\Notification $notification
+	 * @param \App\Models\Notification $notification
 	 *
 	 * @return mixed
 	 */
-	public function getSubjectAndBody(\App\Notification $notification);
+	public function getSubjectAndBody( \App\Models\Notification $notification);
 
 	/**
 	 * Deletes a notification.

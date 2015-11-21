@@ -1,8 +1,8 @@
-<?php namespace App;
+<?php namespace App\Models;
 
 /**
  * Class Rate
- * @package App
+ * @package App\Models
  */
 class Rate extends Model {
 
@@ -25,7 +25,7 @@ class Rate extends Model {
 	 *
 	 * @var array
 	 */
-	protected $modelsToReload = ['App\Comment'];
+	protected $modelsToReload = ['App\Models\Comment'];
 
 	/**
 	 * Array with fields that user are allowed to fill.

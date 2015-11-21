@@ -1,6 +1,6 @@
-<?php namespace App;
+<?php namespace App\Models;
 
-use App\ModelTraits\UserHasTeamsTrait;
+use App\Models\Traits\UserHasTeamsTrait;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Session;
 
 /**
  * Class User
- * @package App
+ * @package App\Models
  */
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
@@ -49,13 +49,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @var array
 	 */
 	protected $modelsToReload = [
-		'App\Post',
-		'App\Comment',
-		'App\Star',
-		'App\Rate',
-		'App\Social',
-		'App\Read',
-		'App\Notification'
+		'App\Models\Post',
+		'App\Models\Comment',
+		'App\Models\Star',
+		'App\Models\Rate',
+		'App\Models\Social',
+		'App\Models\Read',
+		'App\Models\Notification'
 	];
 
 	/**
@@ -149,7 +149,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function outbox() {
-		return $this->hasMany('App\Notification', 'from_id', 'id');
+		return $this->hasMany('App\Models\Notification', 'from_id', 'id');
 	}
 
 	/**
@@ -158,7 +158,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function inbox() {
-		return $this->hasMany('App\Notification', 'user_id', 'id');
+		return $this->hasMany('App\Models\Notification', 'user_id', 'id');
 	}
 
 	/**
@@ -167,7 +167,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function posts() {
-		return $this->hasMany('App\Post', 'user_id', 'id');
+		return $this->hasMany('App\Models\Post', 'user_id', 'id');
 	}
 
 	/**
@@ -176,7 +176,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function stars() {
-		return $this->hasMany('App\Star', 'user_id', 'id');
+		return $this->hasMany('App\Models\Star', 'user_id', 'id');
 	}
 
 	/**
@@ -185,7 +185,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function comments() {
-		return $this->hasMany('App\Comment', 'user_id', 'id');
+		return $this->hasMany('App\Models\Comment', 'user_id', 'id');
 	}
 
 	/**
@@ -194,7 +194,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
 	 */
 	public function roles() {
-		return $this->hasOne('App\Role', 'id', 'role');
+		return $this->hasOne('App\Models\Role', 'id', 'role');
 	}
 
 	/**
@@ -203,7 +203,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function reads() {
-		return $this->hasMany('App\Read', 'user_id', 'id');
+		return $this->hasMany('App\Models\Read', 'user_id', 'id');
 	}
 
 	/**
@@ -228,7 +228,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function rates() {
-		return $this->hasMany('App\Rate', 'user_id', 'id');
+		return $this->hasMany('App\Models\Rate', 'user_id', 'id');
 	}
 
 	/**
@@ -237,7 +237,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function socials() {
-		return $this->hasMany('App\Social', 'user_id', 'id');
+		return $this->hasMany('App\Models\Social', 'user_id', 'id');
 	}
 
 	/**

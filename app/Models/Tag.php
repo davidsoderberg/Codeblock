@@ -1,8 +1,8 @@
-<?php namespace App;
+<?php namespace App\Models;
 
 /**
  * Class Tag
- * @package App
+ * @package App\Models
  */
 class Tag extends Model {
 
@@ -48,7 +48,7 @@ class Tag extends Model {
 	 *
 	 * @var array
 	 */
-	protected $modelsToReload = ['App\Post'];
+	protected $modelsToReload = ['App\Models\Post'];
 
 	/**
 	 * Fetch posts this tag belongs to many.
@@ -56,7 +56,7 @@ class Tag extends Model {
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
 	 */
 	public function Posts() {
-		return $this->belongsToMany('App\Post','post_tag');
+		return $this->belongsToMany('App\Models\Post','post_tag');
 	}
 
 	/**

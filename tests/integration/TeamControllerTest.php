@@ -1,8 +1,8 @@
 <?php namespace integration;
 
-use App\Team;
-use App\TeamInvite;
-use App\User;
+use App\Models\Team;
+use App\Models\TeamInvite;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class TeamControllerTest extends \IntegrationCase {

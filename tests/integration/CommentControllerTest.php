@@ -11,7 +11,7 @@ class CommentControllerTest extends \IntegrationCase {
 	}
 
 	public function create_post() {
-		$this->create('App\Post', ['user_id' => 1]);
+		$this->create('App\Models\Post', ['user_id' => 1]);
 	}
 
 	public function create_comment(){

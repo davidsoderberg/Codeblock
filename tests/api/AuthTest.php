@@ -1,6 +1,6 @@
 <?php namespace api;
 
-use App\User;
+use App\Models\User;
 
 class AuthTest extends \ApiCase {
 

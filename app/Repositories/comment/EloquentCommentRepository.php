@@ -1,6 +1,6 @@
 <?php namespace App\Repositories\Comment;
 
-use App\Comment;
+use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\CRepository;
 use App\Services\CollectionService;

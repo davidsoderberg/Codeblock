@@ -1,6 +1,6 @@
 <?php namespace App\Repositories\Permission;
 
-use App\Permission;
+use App\Models\Permission;
 use App\Repositories\CRepository;
 use App\Services\CollectionService;
 

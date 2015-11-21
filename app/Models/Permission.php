@@ -1,8 +1,8 @@
-<?php namespace App;
+<?php namespace App\Models;
 
 /**
  * Class Permission
- * @package App
+ * @package App\Models
  */
 class Permission extends Model {
 
@@ -41,7 +41,7 @@ class Permission extends Model {
 	 *
 	 * @var array
 	 */
-	protected $modelsToReload = ['App\Role'];
+	protected $modelsToReload = ['App\Models\Role'];
 
 	/**
 	 * Fetch roles this permission belongs to many of.
@@ -50,7 +50,7 @@ class Permission extends Model {
 	 */
 	public function roles()
 	{
-		return $this->belongsToMany('App\Role');
+		return $this->belongsToMany('App\Models\Role');
 	}
 
 	/**

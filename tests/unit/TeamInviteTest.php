@@ -2,9 +2,9 @@
 
 use App\Repositories\TeamInvite\EloquentTeamInviteRepository;
 use App\Repositories\Team\EloquentTeamRepository;
-use App\User;
-use App\Team;
-use App\TeamInvite;
+use App\Models\User;
+use App\Models\Team;
+use App\Models\TeamInvite;
 
 class TeamInviteTest extends UnitCase {
 

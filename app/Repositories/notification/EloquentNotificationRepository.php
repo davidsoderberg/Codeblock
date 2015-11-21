@@ -1,8 +1,8 @@
 <?php namespace App\Repositories\Notification;
 
 use App\Exceptions\NotANumberException;
-use App\Notification;
-use App\NotificationType;
+use App\Models\Notification;
+use App\Models\NotificationType;
 use App\Repositories\CRepository;
 use App\Repositories\User\UserRepository;
 use App\Services\CollectionService;
@@ -111,7 +111,7 @@ class EloquentNotificationRepository extends CRepository implements Notification
 		if ( is_object( $object ) ) {
 			$namespaces = explode( '\\', get_class( $object ) );
 			$object_type = $namespaces[count( $namespaces ) - 1];
-			if ( class_exists( 'App\\' . $object_type ) ) {
+			if ( class_exists( 'App\\Models\\' . $object_type ) ) {
 				$note->object_id = $object->id;
 				$note->object_type = $object_type;
 			}
@@ -128,7 +128,7 @@ class EloquentNotificationRepository extends CRepository implements Notification
 	 * @param $type
 	 * @param $note
 	 *
-	 * @return Notification
+	 * @return \App\Models\Notification
 	 */
 	private function setContent( $subject, $body, $type, $note ) {
 		if ( !is_null( $subject ) && !is_null( $body ) ) {
@@ -207,7 +207,7 @@ class EloquentNotificationRepository extends CRepository implements Notification
 	 *
 	 * @param Notification $notification
 	 *
-	 * @return Notification|mixed
+	 * @return \App\Models\Notification|mixed
 	 */
 	public function getSubjectAndBody( Notification $notification ) {
 
@@ -237,9 +237,9 @@ class EloquentNotificationRepository extends CRepository implements Notification
 	/**
 	 * Setter for subject and body property on notification object.
 	 *
-	 * @param Notification $notification
+	 * @param \App\Models\Notification $notification
 	 *
-	 * @return Notification
+	 * @return \App\Models\Notification
 	 */
 	private function setSubjectAndBody( Notification $notification ) {
 		$object = $notification->object;
@@ -302,7 +302,7 @@ class EloquentNotificationRepository extends CRepository implements Notification
 	/**
 	 * Sends a notification by mail.
 	 *
-	 * @param Notification $notification
+	 * @param \App\Models\Notification $notification
 	 *
 	 * @return bool
 	 */

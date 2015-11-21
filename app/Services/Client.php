@@ -117,7 +117,7 @@ class Client extends PubSub {
 		if ( is_object( $object ) ) {
 			$namespaces = explode( '\\', get_class( $object ) );
 			$object_type = $namespaces[count( $namespaces ) - 1];
-			if ( class_exists( 'App\\' . $object_type ) ) {
+			if ( class_exists( 'App\\Models\\' . $object_type ) ) {
 				return $object_type;
 			}
 		}

@@ -158,7 +158,7 @@ trait CacheTrait {
 			$object = get_class( $object );
 		}
 
-		return strtolower( str_replace( 'App\\', '', $object ) );
+		return strtolower( str_replace( 'App\\Models\\', '', $object ) );
 	}
 
 	/**

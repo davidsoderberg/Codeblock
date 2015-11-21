@@ -1,10 +1,10 @@
-<?php namespace App;
+<?php namespace App\Models;
 
 /**
  * Class read
- * @package App
+ * @package App\Models
  */
-class read extends Model {
+class Read extends Model {
 
 	/**
 	 * The database table used by the model.
@@ -42,6 +42,6 @@ class read extends Model {
 	 *
 	 * @var array
 	 */
-	protected $modelsToReload = ['App\User', 'App\Topic'];
+	protected $modelsToReload = ['App\Models\User', 'App\Models\Topic'];
 
 }

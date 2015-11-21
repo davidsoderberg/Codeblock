@@ -1,7 +1,7 @@
 <?php namespace App\Http\Controllers;
 
-use App\Model;
-use App\NotificationType;
+use App\Models\Model;
+use App\Models\NotificationType;
 use App\Repositories\Notification\NotificationRepository;
 use App\Services\PaginationPresenter;
 use Illuminate\Foundation\Bus\DispatchesJobs;

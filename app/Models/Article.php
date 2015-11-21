@@ -1,8 +1,8 @@
-<?php namespace App;
+<?php namespace App\Models;
 
 /**
  * Class Article
- * @package App
+ * @package App\Models
  */
 class Article extends Model {
 

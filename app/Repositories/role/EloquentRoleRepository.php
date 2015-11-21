@@ -1,6 +1,6 @@
 <?php namespace App\Repositories\Role;
 
-use App\Role;
+use App\Models\Role;
 use App\Repositories\CRepository;
 use App\Services\CollectionService;
 

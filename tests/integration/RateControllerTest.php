@@ -11,8 +11,8 @@ class RateControllerTest extends \IntegrationCase {
 	}
 
 	public function create_comment(){
-		$this->create('App\Post', ['user_id' => 1]);
-		$this->create('App\Comment', ['user_id' => 2, 'post_id' => 1]);
+		$this->create('App\Models\Post', ['user_id' => 1]);
+		$this->create('App\Models\Comment', ['user_id' => 2, 'post_id' => 1]);
 	}
 
 

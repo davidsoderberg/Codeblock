@@ -1,8 +1,8 @@
-<?php namespace App;
+<?php namespace App\Models;
 
 /**
  * Class Reply
- * @package App
+ * @package App\Models
  */
 class Reply extends Model
 {
@@ -32,7 +32,7 @@ class Reply extends Model
 	 *
 	 * @var array
 	 */
-	protected $modelsToReload = ['App\Topic', 'App\User', 'App\Forum'];
+	protected $modelsToReload = ['App\Models\Topic', 'App\Models\User', 'App\Models\Forum'];
 
 	/**
 	 * Array with hidden fields for user.
@@ -58,7 +58,7 @@ class Reply extends Model
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function user(){
-		return $this->belongsTo( 'App\User', 'user_id' );
+		return $this->belongsTo( 'App\Models\User', 'user_id' );
 	}
 
 	/**
@@ -67,7 +67,7 @@ class Reply extends Model
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function topic(){
-		return $this->belongsTo( 'App\Topic', 'topic_id' );
+		return $this->belongsTo( 'App\Models\Topic', 'topic_id' );
 	}
 
 	/**

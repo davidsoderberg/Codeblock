@@ -1,8 +1,8 @@
 <?php namespace api;
 
-use App\Team;
-use App\TeamInvite;
-use App\User;
+use App\Models\Team;
+use App\Models\TeamInvite;
+use App\Models\User;
 
 class TeamTest extends \ApiCase {
 

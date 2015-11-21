@@ -1,6 +1,6 @@
 <?php namespace App\Repositories\Star;
 
-use App\Star;
+use App\Models\Star;
 use App\Repositories\CRepository;
 
 /**

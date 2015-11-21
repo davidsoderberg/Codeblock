@@ -1,6 +1,6 @@
 <?php namespace api;
 
-use App\Notification;
+use App\Models\Notification;
 
 class NotificationTest extends \ApiCase {
 

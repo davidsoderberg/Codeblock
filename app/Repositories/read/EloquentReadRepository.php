@@ -1,6 +1,6 @@
 <?php namespace App\Repositories\Read;
 
-use App\Read;
+use App\Models\Read;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\CRepository;
 use App\Services\CollectionService;

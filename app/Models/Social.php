@@ -1,8 +1,8 @@
-<?php namespace App;
+<?php namespace App\Models;
 
 /**
  * Class Social
- * @package App
+ * @package App\Models
  */
 class Social extends Model
 {
@@ -36,5 +36,5 @@ class Social extends Model
 	 *
 	 * @var array
 	 */
-	protected $modelsToReload = ['App\User'];
+	protected $modelsToReload = ['App\Models\User'];
 }

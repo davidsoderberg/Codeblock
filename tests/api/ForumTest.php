@@ -1,6 +1,6 @@
 <?php namespace api;
 
-use App\Forum;
+use App\Models\Forum;
 
 class ForumTest extends \ApiCase {
 

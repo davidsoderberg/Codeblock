@@ -4,7 +4,7 @@ use App\Repositories\Reply\ReplyRepository;
 use Illuminate\Support\Facades\Redirect;
 use App\Repositories\Notification\NotificationRepository;
 use Illuminate\Support\Facades\Auth;
-use App\NotificationType;
+use App\Models\NotificationType;
 use App\Repositories\Read\ReadRepository;
 
 /**

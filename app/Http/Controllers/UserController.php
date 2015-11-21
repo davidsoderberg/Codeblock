@@ -1,12 +1,12 @@
 <?php namespace App\Http\Controllers;
 
-use App\NotificationType;
+use App\Models\NotificationType;
 use App\Repositories\Notification\NotificationRepository;
 use App\Repositories\Post\PostRepository;
 use App\Repositories\Role\RoleRepository;
 use App\Repositories\User\UserRepository;
 use App\Services\CollectionService;
-use App\Social;
+use App\Models\Social;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;

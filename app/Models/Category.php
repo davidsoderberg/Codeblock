@@ -1,8 +1,8 @@
-<?php namespace App;
+<?php namespace App\Models;
 
 /**
  * Class Category
- * @package App
+ * @package App\Models
  */
 class Category extends Model {
 
@@ -41,7 +41,7 @@ class Category extends Model {
 	 *
 	 * @var array
 	 */
-	protected $modelsToReload = ['App\Post'];
+	protected $modelsToReload = ['App\Models\Post'];
 
 	/**
 	 * Fetch posts this category has many of.
@@ -49,7 +49,7 @@ class Category extends Model {
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function posts() {
-		return $this->hasMany( 'App\Post' );
+		return $this->hasMany( 'App\Models\Post' );
 	}
 
 	/**

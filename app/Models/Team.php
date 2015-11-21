@@ -1,10 +1,10 @@
-<?php namespace App;
+<?php namespace App\Models;
 
-use App\ModelTraits\TeamTrait;
+use App\Models\Traits\TeamTrait;
 
 /**
  * Class Team
- * @package App
+ * @package App\Models
  */
 class Team extends Model {
 

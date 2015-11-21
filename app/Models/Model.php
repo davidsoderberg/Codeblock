@@ -1,4 +1,4 @@
-<?php namespace App;
+<?php namespace App\Models;
 
 use App\Services\HateoasTrait;
 use Venturecraft\Revisionable\RevisionableTrait;
@@ -8,7 +8,7 @@ use App\Services\CacheTrait;
 
 /**
  * Class Model
- * @package App
+ * @package App\Models
  */
 class Model extends \Illuminate\Database\Eloquent\Model {
 	use RevisionableTrait;
@@ -28,7 +28,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	 * @param array $attributes
 	 */
 	public function __construct( array $attributes = [] ) {
-		parent::__construct( $attributes );
+		\Illuminate\Database\Eloquent\Model::__construct( $attributes );
 
 		Self::$self = $this;
 
@@ -141,7 +141,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	 * Boot method form model
 	 */
 	public static function boot() {
-		parent::boot();
+		\Illuminate\Database\Eloquent\Model::boot();
 
 		static::saving( function ( $object ) {
 			return $object::isValid( $object );
@@ -165,13 +165,13 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	 *
 	 * @param Model $object
 	 */
-	protected static function reloadModels( \App\Model $object ) {
+	protected static function reloadModels( \App\Models\Model $object ) {
 		$models = $object->getModelsToReload();
 		$models[] = get_class( $object );
 		$models = array_unique( $models );
 		foreach( $models as $model ) {
-			if ( !str_contains( $model, 'App\\' ) ) {
-				$model = 'App\\' + $model;
+			if ( !str_contains( $model, 'App\\Models\\' ) ) {
+				$model = 'App\\Models\\' + $model;
 			}
 			if ( class_exists( $model ) ) {
 				Self::$self->flushCache( new $model() );

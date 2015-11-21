@@ -76,7 +76,7 @@ class UserTest extends UnitCase {
 	public function testLogin(){
 		$input = ['username' => 'test', 'password' => 'test', 'email' => 'test@test.com', 'active' => 1, 'role' => 1];
 		$this->assertTrue($this->repo->createOrUpdate($input));
-		$user = App\User::find(3);
+		$user = \App\Models\User::find(3);
 		$user->active = 1;
 		$user->save();
 		$input = ['loginUsername' => 'test', 'loginpassword' => 'test'];

@@ -1,6 +1,6 @@
 <?php namespace api;
 
-use App\Post;
+use App\Models\Post;
 
 class PostTest extends \ApiCase {
 

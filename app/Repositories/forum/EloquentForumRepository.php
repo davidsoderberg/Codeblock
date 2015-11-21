@@ -1,6 +1,6 @@
 <?php namespace App\Repositories\Forum;
 
-use App\Forum;
+use App\Models\Forum;
 use App\Repositories\CRepository;
 use App\Services\CollectionService;
 

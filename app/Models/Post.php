@@ -1,8 +1,8 @@
-<?php namespace App;
+<?php namespace App\Models;
 
 /**
  * Class Post
- * @package App
+ * @package App\Models
  */
 class Post extends Model {
 
@@ -29,7 +29,7 @@ class Post extends Model {
 	 *
 	 * @var array
 	 */
-	protected $modelsToReload = ['App\Tag', 'App\Star', 'App\Comment'];
+	protected $modelsToReload = ['App\Models\Tag', 'App\Models\Star', 'App\Models\Comment'];
 
 	/**
 	 * The database table used by the model.
@@ -87,7 +87,7 @@ class Post extends Model {
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function category() {
-		return $this->belongsTo( 'App\Category', 'cat_id' );
+		return $this->belongsTo( 'App\Models\Category', 'cat_id' );
 	}
 
 	/**
@@ -96,7 +96,7 @@ class Post extends Model {
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function team() {
-		return $this->belongsTo( 'App\Team', 'team_id' );
+		return $this->belongsTo( 'App\Models\Team', 'team_id' );
 	}
 
 	/**
@@ -105,7 +105,7 @@ class Post extends Model {
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
 	 */
 	public function tags() {
-		return $this->belongsToMany('App\Tag','post_tag');
+		return $this->belongsToMany('App\Models\Tag','post_tag');
 	}
 
 	/**
@@ -115,7 +115,7 @@ class Post extends Model {
 	 */
 	public function stars()
 	{
-		return $this->hasMany('App\Star', 'post_id', 'id');
+		return $this->hasMany('App\Models\Star', 'post_id', 'id');
 	}
 
 	/**
@@ -124,7 +124,7 @@ class Post extends Model {
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function user(){
-		return $this->belongsTo( 'App\User', 'user_id' );
+		return $this->belongsTo( 'App\Models\User', 'user_id' );
 	}
 
 	/**
@@ -134,7 +134,7 @@ class Post extends Model {
 	 */
 	public function comments()
 	{
-		return $this->hasMany('App\Comment', 'post_id', 'id');
+		return $this->hasMany('App\Models\Comment', 'post_id', 'id');
 	}
 
 	/**
@@ -143,7 +143,7 @@ class Post extends Model {
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function original(){
-		return $this->belongsTo( 'App\Post', 'org' );
+		return $this->belongsTo( 'App\Models\Post', 'org' );
 	}
 
 	/**

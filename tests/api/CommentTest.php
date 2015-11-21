@@ -1,7 +1,7 @@
 <?php namespace api;
 
-use App\Comment;
-use App\Post;
+use App\Models\Comment;
+use App\Models\Post;
 
 class CommentTest extends \ApiCase {
 

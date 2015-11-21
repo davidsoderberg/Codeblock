@@ -1,10 +1,10 @@
-<?php namespace App;
+<?php namespace App\Models;
 
-use App\ModelTraits\TeamInviteTrait;
+use App\Models\Traits\TeamInviteTrait;
 
 /**
  * Class TeamInvite
- * @package App
+ * @package App\Models
  */
 class TeamInvite extends Model {
 

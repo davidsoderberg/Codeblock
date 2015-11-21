@@ -1,10 +1,10 @@
-<?php namespace App\ModelTraits;
+<?php namespace App\Models\Traits;
 
-use App\Team;
+use App\Models\Team;
 
 /**
  * Class UserHasTeamsTrait
- * @package App\ModelTraits
+ * @package App\Models\Traits
  */
 trait UserHasTeamsTrait
 {
@@ -16,7 +16,7 @@ trait UserHasTeamsTrait
 	 */
 	public function teams()
 	{
-		return $this->belongsToMany( 'App\Team','team_user', 'user_id', 'team_id' );
+		return $this->belongsToMany( 'App\Models\Team','team_user', 'user_id', 'team_id' );
 	}
 
 	/**
@@ -26,7 +26,7 @@ trait UserHasTeamsTrait
 	 */
 	public function ownedTeams()
 	{
-		return $this->hasMany( 'App\Team', 'owner_id', 'id' );
+		return $this->hasMany( 'App\Models\Team', 'owner_id', 'id' );
 	}
 
 	/**
@@ -36,7 +36,7 @@ trait UserHasTeamsTrait
 	 */
 	public function invites()
 	{
-		return $this->hasMany( 'App\TeamInvite', 'email', 'email' );
+		return $this->hasMany( 'App\Models\TeamInvite', 'email', 'email' );
 	}
 
 	/**

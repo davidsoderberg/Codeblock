@@ -1,8 +1,8 @@
-<?php namespace App;
+<?php namespace App\Models;
 
 /**
  * Class Topic
- * @package App
+ * @package App\Models
  */
 class Topic extends Model
 {
@@ -71,7 +71,7 @@ class Topic extends Model
 	 *
 	 * @var array
 	 */
-	protected $modelsToReload = ['App\Rpely', 'App\Forum', 'App\Read'];
+	protected $modelsToReload = ['App\Rpely', 'App\Models\Forum', 'App\Models\Read'];
 
 	/**
 	 * Fetch replies this topic has many of.
@@ -80,7 +80,7 @@ class Topic extends Model
 	 */
 	public function replies()
 	{
-		return $this->hasMany('App\Reply', 'topic_id', 'id');
+		return $this->hasMany('App\Models\Reply', 'topic_id', 'id');
 	}
 
 	/**
@@ -89,7 +89,7 @@ class Topic extends Model
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function forum(){
-		return $this->belongsTo( 'App\Forum', 'forum_id' );
+		return $this->belongsTo( 'App\Models\Forum', 'forum_id' );
 	}
 
 	/**
@@ -98,7 +98,7 @@ class Topic extends Model
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function reads(){
-		return $this->hasMany('App\Read', 'topic_id', 'id');
+		return $this->hasMany('App\Models\Read', 'topic_id', 'id');
 	}
 
 	/**

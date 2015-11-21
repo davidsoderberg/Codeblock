@@ -1,8 +1,8 @@
-<?php namespace App;
+<?php namespace App\Models;
 
 /**
  * Class Notification
- * @package App
+ * @package App\Models
  */
 class Notification extends Model {
 
@@ -62,7 +62,7 @@ class Notification extends Model {
 	 *
 	 * @var array
 	 */
-	protected $modelsToReload = ['App\User'];
+	protected $modelsToReload = ['App\Models\User'];
 
 	/**
 	 * Fetch sending user this notification has one of.
@@ -70,7 +70,7 @@ class Notification extends Model {
 	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
 	 */
 	public function sender() {
-		return $this->hasOne('App\User', 'id', 'from_id');
+		return $this->hasOne('App\Models\User', 'id', 'from_id');
 	}
 
 	/**
@@ -79,7 +79,7 @@ class Notification extends Model {
 	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
 	 */
 	public function receiver(){
-		return $this->hasOne('App\User', 'id', 'user_id');
+		return $this->hasOne('App\Models\User', 'id', 'user_id');
 	}
 
 	/**
@@ -88,7 +88,7 @@ class Notification extends Model {
 	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
 	 */
 	public function object() {
-		return $this->hasOne('App\\'.$this->object_type, 'id', 'object_id');
+		return $this->hasOne('App\\Models\\'.$this->object_type, 'id', 'object_id');
 	}
 
 }

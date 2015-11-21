@@ -1,6 +1,6 @@
 <?php namespace App\Repositories\Reply;
 
-use App\Reply;
+use App\Models\Reply;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\CRepository;
 use App\Services\CollectionService;

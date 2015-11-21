@@ -1,8 +1,8 @@
-<?php namespace App\ModelTraits;
+<?php namespace App\Models\Traits;
 
 /**
  * Class TeamTrait
- * @package App\ModelTraits
+ * @package App\Models\Traits
  */
 trait TeamTrait
 {
@@ -14,7 +14,7 @@ trait TeamTrait
 	 */
 	public function invites()
 	{
-		return $this->hasMany( 'App\TeamInvite', 'team_id', 'id');
+		return $this->hasMany( 'App\Models\TeamInvite', 'team_id', 'id');
 	}
 
 	/**
@@ -23,7 +23,7 @@ trait TeamTrait
 	 * @return mixed
 	 */
 	public function posts(){
-		return $this->hasMany( 'App\Post', 'team_id', 'id');
+		return $this->hasMany( 'App\Models\Post', 'team_id', 'id');
 	}
 
 	/**
@@ -33,7 +33,7 @@ trait TeamTrait
 	 */
 	public function users()
 	{
-		return $this->belongsToMany('App\User', 'team_user', 'team_id','user_id');
+		return $this->belongsToMany('App\Models\User', 'team_user', 'team_id','user_id');
 	}
 
 	/**
@@ -43,7 +43,7 @@ trait TeamTrait
 	 */
 	public function owner()
 	{
-		return $this->hasOne('App\User', 'id', "owner_id");
+		return $this->hasOne('App\Models\User', 'id', "owner_id");
 	}
 
 	/**

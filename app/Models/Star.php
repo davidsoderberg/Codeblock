@@ -1,8 +1,8 @@
-<?php namespace App;
+<?php namespace App\Models;
 
 /**
  * Class Star
- * @package App
+ * @package App\Models
  */
 class Star extends Model {
 
@@ -42,7 +42,7 @@ class Star extends Model {
 	 *
 	 * @var array
 	 */
-	protected $modelsToReload = ['App\Post', 'App\User'];
+	protected $modelsToReload = ['App\Models\Post', 'App\Models\User'];
 
 	/**
 	 * Fetch post this star belongs to.
@@ -50,7 +50,7 @@ class Star extends Model {
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function post() {
-		return $this->belongsTo( 'App\Post', 'post_id' );
+		return $this->belongsTo( 'App\Models\Post', 'post_id' );
 	}
 
 }

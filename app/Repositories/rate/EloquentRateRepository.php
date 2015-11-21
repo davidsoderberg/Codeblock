@@ -1,6 +1,6 @@
 <?php namespace App\Repositories\Rate;
 
-use App\Rate;
+use App\Models\Rate;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\CRepository;
 use App\Services\CollectionService;
