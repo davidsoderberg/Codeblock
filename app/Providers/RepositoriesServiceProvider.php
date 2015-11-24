@@ -29,6 +29,7 @@ class RepositoriesServiceProvider extends ServiceProvider {
 		$this->app->bind('App\Repositories\Star\StarRepository', 'App\Repositories\Star\EloquentStarRepository');
 		$this->app->bind('App\Repositories\TeamInvite\TeamInviteRepository', 'App\Repositories\TeamInvite\EloquentTeamInviteRepository');
 		$this->app->bind('App\Repositories\Team\TeamRepository', 'App\Repositories\Team\EloquentTeamRepository');
+		$this->app->bind('App\Repositories\Message\MessageRepository', 'App\Repositories\Message\EloquentMessageRepository');
 	}
 
 }

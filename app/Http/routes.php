@@ -63,6 +63,13 @@ Route::group(['prefix' => 'teams'], function () {
 	});
 });
 
+Route::group(['prefix' => 'messages'], function () {
+	Route::group(['middleware' => 'auth'], function () {
+		Route::get('/{id?}', 'MessageController@index');
+		Route::post('/store/{id?}', 'MessageController@createOrUpdate');
+	});
+});
+
 Route::group(['prefix' => 'team'], function () {
 	Route::group(['middleware' => 'auth'], function () {
 		Route::post('/store/{id?}', 'TeamController@createOrUpdate');

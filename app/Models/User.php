@@ -1,5 +1,6 @@
 <?php namespace App\Models;
 
+use App\Models\Traits\Messagable;
 use App\Models\Traits\UserHasTeamsTrait;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Session;
  */
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
-	use Authenticatable, CanResetPassword, UserHasTeamsTrait;
+	use Authenticatable, CanResetPassword, UserHasTeamsTrait, Messagable;
 
 	/**
 	 * Boot method for User model.
