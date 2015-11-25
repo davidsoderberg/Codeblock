@@ -51,11 +51,19 @@ class MessageController extends Controller {
 				$threads = $thread;
 			}
 
-			$userId = Auth::user()->id;
-			$users = User::whereNotIn( 'id', $threads->participantsUserIds( $userId ) )->get();
+			$user_id = Auth::user()->id;
+			$users = User::whereNotIn( 'id', $this->repo->participantsUserIds( $user_id ) )->get();
 
-			$threads->markAsRead( $userId );
+			$this->repo->markAsRead( $user_id );
 		}
+
+		$users = $users->toArray();
+
+		$users = array_reduce( $users, function ( $result, $item ) {
+			$result[$item['id']] = $item['username'];
+
+			return $result;
+		}, [] );
 
 		return View::make( 'message.index' )
 		           ->with( 'title', 'Threads' )
@@ -78,9 +86,7 @@ class MessageController extends Controller {
 
 		if ( !is_null( $id ) && is_numeric( $id ) ) {
 			$thread = $this->repo->getThread( $id );
-			$this->repo->setThread( $thread );
-
-			$thread->activateAllParticipants();
+			$this->repo->activateAllParticipants();
 		}
 
 		if ( is_null( $thread ) ) {
