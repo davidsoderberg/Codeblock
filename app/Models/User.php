@@ -20,27 +20,27 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * Boot method for User model.
 	 */
 	public static function boot() {
-	    parent::boot();
-	    static::deleting(function($object) {
-	    	foreach ($object->posts as $post) {
+		parent::boot();
+		static::deleting( function ( $object ) {
+			foreach( $object->posts as $post ) {
 				$post->delete();
 			}
-	        foreach ($object->comments as $comment) {
+			foreach( $object->comments as $comment ) {
 				$comment->delete();
 			}
-			foreach ($object->stars as $star) {
+			foreach( $object->stars as $star ) {
 				$star->delete();
 			}
-	        foreach ($object->rates as $rate) {
+			foreach( $object->rates as $rate ) {
 				$rate->delete();
 			}
-			foreach($object->socials as $social){
+			foreach( $object->socials as $social ) {
 				$social->delete();
 			}
-			foreach($object->reads as $read){
+			foreach( $object->reads as $read ) {
 				$read->delete();
 			}
-	    });
+		} );
 	}
 
 	/**
@@ -55,7 +55,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		'App\Models\Rate',
 		'App\Models\Social',
 		'App\Models\Read',
-		'App\Models\Notification'
+		'App\Models\Notification',
 	];
 
 	/**
@@ -71,41 +71,41 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @var array
 	 */
 
-	//protected $hidden = array('password');
+	protected $hidden = ['password', 'remember_token'];
 
 	/**
 	 * Array with fields that user are allowed to fill.
 	 *
 	 * @var array
 	 */
-	protected $fillable = array('username', 'email', 'role', 'active');
+	protected $fillable = ['username', 'email', 'role', 'active'];
 
 	/**
 	 * Array with fields that are guarded.
 	 *
 	 * @var array
 	 */
-	protected $guarded = array('id', 'password');
+	protected $guarded = ['id', 'password'];
 
 	/**
 	 * Array with fields to add to hidden array.
 	 *
 	 * @var array
 	 */
-	protected $addHidden = array('password', 'remember_token', 'role', 'isactive');
+	protected $addHidden = ['password', 'remember_token', 'role', 'isactive'];
 
 	/**
 	 * Array with rules for fields.
 	 *
 	 * @var array
 	 */
-	public static $rules = array(
-	    'email'  => 'required|email|unique:users,email,:id:',
-	    'username' => 'required|alpha_dash|unique:users,username,:id:',
-	    'password' => 'required',
-	    'role' => 'integer',
-	    'active' => 'integer'
-	);
+	public static $rules = [
+		'email' => 'required|email|unique:users,email,:id:',
+		'username' => 'required|alpha_dash|unique:users,username,:id:',
+		'password' => 'required',
+		'role' => 'integer',
+		'active' => 'integer',
+	];
 
 	/**
 	 * Get the unique identifier for the user.
@@ -140,7 +140,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @return mixed
 	 */
 	public function unread() {
-		return $this->inbox()->where('is_read', '=', 0);
+		return $this->inbox()->where( 'is_read', '=', 0 );
 	}
 
 	/**
@@ -149,7 +149,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function outbox() {
-		return $this->hasMany('App\Models\Notification', 'from_id', 'id');
+		return $this->hasMany( 'App\Models\Notification', 'from_id', 'id' );
 	}
 
 	/**
@@ -158,7 +158,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function inbox() {
-		return $this->hasMany('App\Models\Notification', 'user_id', 'id');
+		return $this->hasMany( 'App\Models\Notification', 'user_id', 'id' );
 	}
 
 	/**
@@ -167,7 +167,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function posts() {
-		return $this->hasMany('App\Models\Post', 'user_id', 'id');
+		return $this->hasMany( 'App\Models\Post', 'user_id', 'id' );
 	}
 
 	/**
@@ -176,7 +176,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function stars() {
-		return $this->hasMany('App\Models\Star', 'user_id', 'id');
+		return $this->hasMany( 'App\Models\Star', 'user_id', 'id' );
 	}
 
 	/**
@@ -185,7 +185,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function comments() {
-		return $this->hasMany('App\Models\Comment', 'user_id', 'id');
+		return $this->hasMany( 'App\Models\Comment', 'user_id', 'id' );
 	}
 
 	/**
@@ -194,7 +194,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
 	 */
 	public function roles() {
-		return $this->hasOne('App\Models\Role', 'id', 'role');
+		return $this->hasOne( 'App\Models\Role', 'id', 'role' );
 	}
 
 	/**
@@ -203,7 +203,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function reads() {
-		return $this->hasMany('App\Models\Read', 'user_id', 'id');
+		return $this->hasMany( 'App\Models\Read', 'user_id', 'id' );
 	}
 
 	/**
@@ -213,12 +213,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 *
 	 * @return bool
 	 */
-	public function hasRead($topic_id){
-		foreach($this->reads as $read){
-			if($read->topic_id == $topic_id){
+	public function hasRead( $topic_id ) {
+		foreach( $this->reads as $read ) {
+			if ( $read->topic_id == $topic_id ) {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
@@ -228,7 +229,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function rates() {
-		return $this->hasMany('App\Models\Rate', 'user_id', 'id');
+		return $this->hasMany( 'App\Models\Rate', 'user_id', 'id' );
 	}
 
 	/**
@@ -237,7 +238,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function socials() {
-		return $this->hasMany('App\Models\Social', 'user_id', 'id');
+		return $this->hasMany( 'App\Models\Social', 'user_id', 'id' );
 	}
 
 	/**
@@ -245,9 +246,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 *
 	 * @return mixed
 	 */
-	public function getrolenameAttribute()
-	{
-		if(!is_null($this->roles)) {
+	public function getrolenameAttribute() {
+		if ( !is_null( $this->roles ) ) {
 			return $this->roles->name;
 		}
 	}
@@ -257,8 +257,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 *
 	 * @return string
 	 */
-	public function getisactiveAttribute(){
-		return $this->getAnswer($this->active);
+	public function getisactiveAttribute() {
+		return $this->getAnswer( $this->active );
 	}
 
 	/**
@@ -266,8 +266,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 *
 	 * @return array
 	 */
-	public function getlinksAttribute(){
-		return $this->hateoas($this->id, 'users');
+	public function getlinksAttribute() {
+		return $this->hateoas( $this->id, 'users' );
 	}
 
 	/**
@@ -275,7 +275,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 *
 	 * @var array
 	 */
-	protected $appends = array('rolename', 'isactive');
+	protected $appends = ['rolename', 'isactive'];
 
 	/**
 	 * Checks if social is connected with user.
@@ -284,13 +284,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 *
 	 * @return bool
 	 */
-	public function hasSocial($social) {
+	public function hasSocial( $social ) {
 		$socials = $this->socials;
-		foreach($socials as $soc){
-			if($social == $soc->social) {
+		foreach( $socials as $soc ) {
+			if ( $social == $soc->social ) {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
@@ -301,17 +302,17 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 *
 	 * @return bool
 	 */
-	public function hasRole($roles) {
+	public function hasRole( $roles ) {
 
-		if(!is_array($roles)){
-			$roles = array(strtolower($roles));
-		}else{
-			foreach($roles as $key => $value){
-				$roles[$key] = strtolower($value);
+		if ( !is_array( $roles ) ) {
+			$roles = [strtolower( $roles )];
+		} else {
+			foreach( $roles as $key => $value ) {
+				$roles[$key] = strtolower( $value );
 			}
 		}
 
-		return in_array(strtolower(Auth::user()->role), $roles);
+		return in_array( strtolower( Auth::user()->role ), $roles );
 	}
 
 	/**
@@ -322,19 +323,21 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 *
 	 * @return bool
 	 */
-	public function hasPermission($permission, $empty = true) {
-		if($permission != '') {
-			$permissions_array = array();
-			foreach(Auth::user()->roles->permissions as $user_permission) {
-				$permissions_array[] = strtolower($user_permission->permission);
+	public function hasPermission( $permission, $empty = true ) {
+		if ( $permission != '' ) {
+			$permissions_array = [];
+			foreach( Auth::user()->roles->permissions as $user_permission ) {
+				$permissions_array[] = strtolower( $user_permission->permission );
 			}
-			if(is_array($permission)){
+			if ( is_array( $permission ) ) {
 				$permission = $permission[0];
 			}
 
-			$permission = explode(':', $permission);
-			return in_array(strtolower($permission[0]), $permissions_array);
+			$permission = explode( ':', $permission );
+
+			return in_array( strtolower( $permission[0] ), $permissions_array );
 		}
+
 		return $empty;
 	}
 
@@ -343,12 +346,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 *
 	 * @return bool
 	 */
-	public function hasStarMarkedPosts(){
-		foreach($this->posts as $post) {
-			if($post->starcount > 0) {
+	public function hasStarMarkedPosts() {
+		foreach( $this->posts as $post ) {
+			if ( $post->starcount > 0 ) {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
@@ -357,19 +361,20 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 *
 	 * @return mixed
 	 */
-	public function showOnly(){
-		return Session::has('only');
+	public function showOnly() {
+		return Session::has( 'only' );
 	}
 
 	/**
 	 * Setter for only session.
 	 */
-	public function setOnly(){
-		if(Session::has('only')){
-			Session::forget('only');
+	public function setOnly() {
+		if ( Session::has( 'only' ) ) {
+			Session::forget( 'only' );
+
 			return;
 		}
-		Session::put('only', 'yes');
+		Session::put( 'only', 'yes' );
 	}
 
 }

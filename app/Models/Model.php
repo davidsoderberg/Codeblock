@@ -59,7 +59,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	protected $addHidden = [];
 
 	/**
-	 * Array with hidden fields for user.
+	 * Array with hidden fields for model.
 	 *
 	 * @var array
 	 */
@@ -204,6 +204,15 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 		return $slug;
 	}
 
+	private static function getHiddenFields( $object ) {
+		$hiddenFields = [];
+		if ( $object instanceof User ) {
+			$hiddenFields['password'] = $object->getAuthPassword();
+		}
+
+		return $hiddenFields;
+	}
+
 	/**
 	 * Validates model.
 	 *
@@ -217,10 +226,13 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	public static function isValid( $data, $rules = [] ) {
 		$id = null;
 		if ( is_object( $data ) ) {
+			$hiddenFields = self::getHiddenFields( $data );
 			$data = $data->toArray();
 			if ( isset( $data['id'] ) ) {
 				$id = $data['id'];
 			}
+
+			$data += $hiddenFields;
 		}
 
 		if ( count( $rules ) == 0 ) {
