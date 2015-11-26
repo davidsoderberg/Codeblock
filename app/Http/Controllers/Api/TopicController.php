@@ -20,7 +20,17 @@ class TopicController extends ApiController {
 	 * @return mixed
 	 */
 	public function topics( TopicRepository $topic, $id = null ) {
-		return $this->response( [$this->stringData => $this->getCollection( $topic, $id )], 200 );
+
+		$topics = $this->getCollection( $topic, $id );
+		$topics = $this->hideFields( $topics, [
+			'user_id',
+			'updated_at',
+			'topic_id',
+			'role',
+			'active'
+		] );
+
+		return $this->response( [$this->stringData => $topics], 200 );
 	}
 
 	/**

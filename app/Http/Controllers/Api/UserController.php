@@ -19,7 +19,7 @@ class UserController extends ApiController {
 	 * @return mixed
 	 */
 	public function Users(UserRepository $user, $id = null) {
-		return $this->response([$this->stringData => $this->getCollection($user, $id)], 200);
+		return $this->response( [$this->stringData => $this->getCollection( $user, $id )], 200 );
 	}
 
 	/**

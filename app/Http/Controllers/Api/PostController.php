@@ -34,9 +34,21 @@ class PostController extends ApiController {
 						return $this->response( [$this->stringMessage => 'This codeblock is private, please authenticate.'], 400 );
 					}
 				}
+			}else{
+				if ( is_array( $posts ) ) {
+					foreach($posts as $key => $post){
+						if($post->private === 1 && Auth::user()->id != $post->user_id){
+							unset($posts[$key]);
+						}
+					}
+				} else {
+					if ( $posts->private === 1 && Auth::user()->id != $posts->user_id ) {
+						return $this->response( [$this->stringMessage => 'This codeblock is private, please authenticate.'], 400 );
+					}
+				}
 			}
 
-			$posts = $this->hideFields( $posts, ['user_id', 'cat_id', 'role', 'active'] );
+			$posts = $this->hideFields( $posts, ['user_id', 'cat_id', 'role', 'active', 'categoryname', 'team_id'] );
 		}
 
 		return $this->response( [$this->stringData => $posts], 200 );

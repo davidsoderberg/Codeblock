@@ -4,21 +4,20 @@
  * Class Topic
  * @package App\Models
  */
-class Topic extends Model
-{
+class Topic extends Model {
 	/**
 	 * Boot method for Topic model.
 	 */
 	public static function boot() {
 		parent::boot();
-		static::deleting(function($object) {
-			foreach ($object->replies as $reply) {
+		static::deleting( function ( $object ) {
+			foreach( $object->replies as $reply ) {
 				$reply->delete();
 			}
-			foreach($object->reads as $read){
+			foreach( $object->reads as $read ) {
 				$read->delete();
 			}
-		});
+		} );
 	}
 
 	/**
@@ -33,21 +32,21 @@ class Topic extends Model
 	 *
 	 * @var array
 	 */
-	protected $fillable = array('title', 'forum_id');
+	protected $fillable = ['title', 'forum_id'];
 
 	/**
 	 * Array with fields that are guarded.
 	 *
 	 * @var array
 	 */
-	protected $guarded = array('id');
+	protected $guarded = ['id'];
 
 	/**
 	 *  Array with hidden fields for user.
 	 *
 	 * @var array
 	 */
-	protected $hidden = array('forum', 'updated_at');
+	protected $hidden = ['forum', 'updated_at'];
 
 	/**
 	 * Array with related models that should be eagerloaded.
@@ -61,26 +60,25 @@ class Topic extends Model
 	 *
 	 * @var array
 	 */
-	public static $rules = array(
-		'title'  => 'required|min:3',
+	public static $rules = [
+		'title' => 'required|min:3',
 		'forum_id' => 'required|integer',
-	);
+	];
 
 	/**
 	 * Array with models to reload on save.
 	 *
 	 * @var array
 	 */
-	protected $modelsToReload = ['App\Rpely', 'App\Models\Forum', 'App\Models\Read'];
+	protected $modelsToReload = ['App\Models\Reply', 'App\Models\Forum', 'App\Models\Read'];
 
 	/**
 	 * Fetch replies this topic has many of.
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
-	public function replies()
-	{
-		return $this->hasMany('App\Models\Reply', 'topic_id', 'id');
+	public function replies() {
+		return $this->hasMany( 'App\Models\Reply', 'topic_id', 'id' );
 	}
 
 	/**
@@ -88,7 +86,7 @@ class Topic extends Model
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function forum(){
+	public function forum() {
 		return $this->belongsTo( 'App\Models\Forum', 'forum_id' );
 	}
 
@@ -97,8 +95,8 @@ class Topic extends Model
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
-	public function reads(){
-		return $this->hasMany('App\Models\Read', 'topic_id', 'id');
+	public function reads() {
+		return $this->hasMany( 'App\Models\Read', 'topic_id', 'id' );
 	}
 
 	/**
@@ -106,10 +104,11 @@ class Topic extends Model
 	 *
 	 * @return string
 	 */
-	public function getforumtitleAttribute(){
-		if($this->forum) {
+	public function getforumtitleAttribute() {
+		if ( $this->forum ) {
 			return $this->forum->title;
 		}
+
 		return "";
 	}
 
@@ -118,8 +117,8 @@ class Topic extends Model
 	 *
 	 * @return array
 	 */
-	public function getlinksAttribute(){
-		return $this->hateoas($this->id, 'topics');
+	public function getlinksAttribute() {
+		return $this->hateoas( $this->id, 'topics' );
 	}
 
 	/**
@@ -127,5 +126,5 @@ class Topic extends Model
 	 *
 	 * @var array
 	 */
-	protected $appends = array('forumtitle');
+	protected $appends = ['forumtitle'];
 }

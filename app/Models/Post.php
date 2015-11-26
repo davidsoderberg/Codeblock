@@ -10,18 +10,18 @@ class Post extends Model {
 	 * Boot method for model.
 	 */
 	public static function boot() {
-	    parent::boot();
-	    static::deleting(function($object) {
-	    	if(!empty($object->tags[0])){
+		parent::boot();
+		static::deleting( function ( $object ) {
+			if ( !empty( $object->tags[0] ) ) {
 				$object->tags()->detach();
 			}
-			foreach ($object->stars as $star) {
+			foreach( $object->stars as $star ) {
 				$star->delete();
 			}
-			foreach ($object->comments as $comment) {
+			foreach( $object->comments as $comment ) {
 				$comment->delete();
 			}
-	    });
+		} );
 	}
 
 	/**
@@ -50,36 +50,36 @@ class Post extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = array('name', 'cat_id', 'description', 'code', 'user_id', 'org', 'slug', 'team_id');
+	protected $fillable = ['name', 'cat_id', 'description', 'code', 'user_id', 'org', 'slug', 'team_id'];
 
 	/**
 	 * Array with fields that are guarded.
 	 *
 	 * @var array
 	 */
-	protected $guarded = array('id');
+	protected $guarded = ['id'];
 
 	/**
 	 * Array with models that should be eagerloaded.
 	 *
 	 * @var array
 	 */
-	protected $with = ['tags', 'category', 'user'];
+	protected $with = ['tags', 'category', 'user', 'team'];
 
 	/**
 	 * Array with rules for fields.
 	 *
 	 * @var array
 	 */
-	public static $rules = array(
-	    'name' => 'required|min:3|unique:posts,name,:id:',
-	    'cat_id'  => 'required|integer',
-	    'description' => 'required|min:3',
-	    'code' => 'required|min:3',
-	    'user_id' => 'integer',
+	public static $rules = [
+		'name' => 'required|min:3|unique:posts,name,:id:',
+		'cat_id' => 'required|integer',
+		'description' => 'required|min:3',
+		'code' => 'required|min:3',
+		'user_id' => 'integer',
 		'team_id' => 'integer',
 		'slug' => 'required|min:3|unique:posts,slug,:id:',
-	);
+	];
 
 	/**
 	 * Fetch category this post belongs to.
@@ -105,7 +105,7 @@ class Post extends Model {
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
 	 */
 	public function tags() {
-		return $this->belongsToMany('App\Models\Tag','post_tag');
+		return $this->belongsToMany( 'App\Models\Tag', 'post_tag' );
 	}
 
 	/**
@@ -113,9 +113,8 @@ class Post extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
-	public function stars()
-	{
-		return $this->hasMany('App\Models\Star', 'post_id', 'id');
+	public function stars() {
+		return $this->hasMany( 'App\Models\Star', 'post_id', 'id' );
 	}
 
 	/**
@@ -123,7 +122,7 @@ class Post extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function user(){
+	public function user() {
 		return $this->belongsTo( 'App\Models\User', 'user_id' );
 	}
 
@@ -132,9 +131,8 @@ class Post extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
-	public function comments()
-	{
-		return $this->hasMany('App\Models\Comment', 'post_id', 'id');
+	public function comments() {
+		return $this->hasMany( 'App\Models\Comment', 'post_id', 'id' );
 	}
 
 	/**
@@ -142,7 +140,7 @@ class Post extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function original(){
+	public function original() {
 		return $this->belongsTo( 'App\Models\Post', 'org' );
 	}
 
@@ -151,8 +149,8 @@ class Post extends Model {
 	 *
 	 * @return int
 	 */
-	public function getstarcountAttribute(){
-		return count($this->stars()->getResults());
+	public function getstarcountAttribute() {
+		return count( $this->stars()->getResults() );
 	}
 
 	/**
@@ -162,13 +160,14 @@ class Post extends Model {
 	 *
 	 * @return bool
 	 */
-	public function StaredByUser($user_id){
+	public function StaredByUser( $user_id ) {
 		$stars = $this->stars()->getResults();
-		$userArray = array();
-		foreach ($stars as $star) {
+		$userArray = [];
+		foreach( $stars as $star ) {
 			$userArray[] = $star->user_id;
 		}
-		return in_array($user_id, $userArray);
+
+		return in_array( $user_id, $userArray );
 	}
 
 	/**
@@ -176,9 +175,8 @@ class Post extends Model {
 	 *
 	 * @return mixed
 	 */
-	public function getcategorynameAttribute()
-	{
-		if(!is_null($this->category)) {
+	public function getcategorynameAttribute() {
+		if ( !is_null( $this->category ) ) {
 			return $this->category->name;
 		}
 	}
@@ -188,8 +186,8 @@ class Post extends Model {
 	 *
 	 * @return int
 	 */
-	public function getforkedAttribute(){
-		return count(Post::where('org', '=', $this->id)->get());
+	public function getforkedAttribute() {
+		return count( Post::where( 'org', '=', $this->id )->get() );
 	}
 
 	/**
@@ -197,8 +195,8 @@ class Post extends Model {
 	 *
 	 * @return array
 	 */
-	public function getlinksAttribute(){
-		return $this->hateoas($this->id, 'posts');
+	public function getlinksAttribute() {
+		return $this->hateoas( $this->id, 'posts' );
 	}
 
 	/**
@@ -206,6 +204,6 @@ class Post extends Model {
 	 *
 	 * @var array
 	 */
-	protected $appends = array('categoryname', 'starcount', 'forked');
+	protected $appends = ['categoryname', 'starcount', 'forked'];
 
 }

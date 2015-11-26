@@ -1,6 +1,7 @@
 <?php namespace App\Models;
 
 use App\Models\Traits\TeamTrait;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class Team
@@ -22,23 +23,23 @@ class Team extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = array('name', 'owner_id');
+	protected $fillable = ['name', 'owner_id'];
 
 	/**
 	 * Array with fields that are guarded.
 	 *
 	 * @var array
 	 */
-	protected $guarded = array('id');
+	protected $guarded = ['id'];
 
 	/**
 	 * Array with rules for fields.
 	 *
 	 * @var array
 	 */
-	public static $rules = array(
-		'name'  => 'required|min:3|unique:teams,name,:id:',
-		'owner_id' => 'integer'
-	);
+	public static $rules = [
+		'name' => 'required|min:3|unique:teams,name,:id:',
+		'owner_id' => 'integer',
+	];
 
 }

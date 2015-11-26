@@ -4,8 +4,7 @@
  * Class Reply
  * @package App\Models
  */
-class Reply extends Model
-{
+class Reply extends Model {
 	/**
 	 * The database table used by the model.
 	 *
@@ -18,14 +17,14 @@ class Reply extends Model
 	 *
 	 * @var array
 	 */
-	protected $fillable = array('reply', 'topic_id', 'user_id');
+	protected $fillable = ['reply', 'topic_id', 'user_id'];
 
 	/**
 	 * Array with fields that are guarded.
 	 *
 	 * @var array
 	 */
-	protected $guarded = array('id');
+	protected $guarded = ['id'];
 
 	/**
 	 * Array with models to reload on save.
@@ -39,25 +38,32 @@ class Reply extends Model
 	 *
 	 * @var array
 	 */
-	protected $hidden = array('user', 'updated_at');
+	protected $hidden = ['updated_at'];
 
 	/**
 	 * Array with rules for fields.
 	 *
 	 * @var array
 	 */
-	public static $rules = array(
-		'reply'  => 'required|min:3',
+	public static $rules = [
+		'reply' => 'required|min:3',
 		'topic_id' => 'required|integer',
 		'user_id' => 'required|integer',
-	);
+	];
+
+	/**
+	 * Array with models that should be eagerloaded.
+	 *
+	 * @var array
+	 */
+	protected $with = ['user'];
 
 	/**
 	 * Fetch user this reply belongs to.
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function user(){
+	public function user() {
 		return $this->belongsTo( 'App\Models\User', 'user_id' );
 	}
 
@@ -66,7 +72,7 @@ class Reply extends Model
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function topic(){
+	public function topic() {
 		return $this->belongsTo( 'App\Models\Topic', 'topic_id' );
 	}
 
@@ -75,7 +81,7 @@ class Reply extends Model
 	 *
 	 * @return mixed
 	 */
-	public function getusernameAttribute(){
+	public function getusernameAttribute() {
 		return $this->user->username;
 	}
 
@@ -84,8 +90,8 @@ class Reply extends Model
 	 *
 	 * @return array
 	 */
-	public function getlinksAttribute(){
-		return $this->hateoas($this->id, 'replies');
+	public function getlinksAttribute() {
+		return $this->hateoas( $this->id, 'replies' );
 	}
 
 	/**
@@ -93,5 +99,5 @@ class Reply extends Model
 	 *
 	 * @var array
 	 */
-	protected $appends = array('username');
+	protected $appends = ['username'];
 }

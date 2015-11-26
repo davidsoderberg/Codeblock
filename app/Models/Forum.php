@@ -59,6 +59,13 @@ class Forum extends Model
 	protected $modelsToReload = ['App\Models\Topic', 'App\Models\Reply'];
 
 	/**
+	 * Array with models that should be eagerloaded.
+	 *
+	 * @var array
+	 */
+	protected $with = ['topics'];
+
+	/**
 	 * Fetch topics this forum has many of.
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany

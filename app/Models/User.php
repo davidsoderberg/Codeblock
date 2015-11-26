@@ -272,11 +272,23 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	}
 
 	/**
+	 * Fetch teams for this user.
+	 *
+	 * @return mixed
+	 */
+	public function getteamsAttribute(){
+		return $this->teams()->get()->merge($this->ownedTeams()->get());
+	}
+
+	/**
 	 * Appends an array of attributes on model.
 	 *
 	 * @var array
 	 */
-	protected $appends = ['rolename', 'isactive'];
+	protected $appends = ['rolename', 'isactive', 'teams'];
+
+
+
 
 	/**
 	 * Checks if social is connected with user.

@@ -17,8 +17,20 @@ class ForumController extends ApiController {
 	 *
 	 * @return mixed
 	 */
-	public function forums(ForumRepository $forum, $id = null) {
-		return $this->response([$this->stringData => $this->getCollection($forum, $id)], 200);
+	public function forums( ForumRepository $forum, $id = null ) {
+
+		$forums = $this->getCollection( $forum, $id );
+		$forums = $this->hideFields( $forums, [
+				'user_id',
+				'updated_at',
+				'forum_id',
+				'forumtitle',
+				'topic_id',
+				'role',
+				'active'
+			] );
+
+		return $this->response( [$this->stringData => $forums], 200 );
 	}
 
 	/**
@@ -30,12 +42,12 @@ class ForumController extends ApiController {
 	 *
 	 * @return mixed
 	 */
-	public function deleteForum(ForumRepository $forumRepository, $id) {
-		if($forumRepository->delete($id)) {
-			return $this->response([$this->stringMessage => 'Your forum has been deleted.'], 200);
+	public function deleteForum( ForumRepository $forumRepository, $id ) {
+		if ( $forumRepository->delete( $id ) ) {
+			return $this->response( [$this->stringMessage => 'Your forum has been deleted.'], 200 );
 		}
 
-		return $this->response([$this->stringErrors => 'We could not delete that forum.'], 204);
+		return $this->response( [$this->stringErrors => 'We could not delete that forum.'], 204 );
 	}
 
 }

@@ -22,6 +22,8 @@ class NotificationController extends ApiController {
 		$notificationRepository->setRead(Auth::user()->id);
 		$notifications = $this->addHidden(Auth::user()->inbox);
 
+		$notifications = $this->hideFields( $notifications, ['type'] );
+
 		return $this->response([$this->stringData => $notifications], 200);
 	}
 
