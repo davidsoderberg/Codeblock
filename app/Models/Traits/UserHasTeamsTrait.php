@@ -61,7 +61,7 @@ trait UserHasTeamsTrait
 	public function attachTeam( $team )
 	{
 		$teamId = $this->retrieveTeamId( $team );
-		if( !$this->teams->contains( $team ) )
+		if( !$this->teams()->get()->contains( $team ) )
 		{
 			$this->teams()->attach( $teamId );
 		}

@@ -2,6 +2,7 @@
 
 use App\Repositories\Team\EloquentTeamRepository;
 use App\Models\User;
+use App\Models\Team;
 
 class TeamTest extends UnitCase {
 
@@ -49,8 +50,9 @@ class TeamTest extends UnitCase {
 	public function testLeave(){
 		$this->assertFalse($this->repo->leave(1));
 		$this->createDummy();
-		User::find(1)->attachTeam(1);
-		$this->assertTrue($this->repo->leave(1));
+		$team = Team::find(1);
+		User::find(1)->attachTeam($team);
+		$this->assertTrue($this->repo->leave($team));
 	}
 
 }

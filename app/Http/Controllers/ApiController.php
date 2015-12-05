@@ -235,12 +235,14 @@ class ApiController extends Controller {
 			$data = $data->toArray();
 		}
 
-		foreach( $data as $key => $value ) {
-			if ( is_array( $value ) || is_object( $value ) ) {
-				$data[$key] = $this->hideFields( $value, $fields );
-			} else {
-				if ( in_array( $key, $fields ) ) {
-					unset( $data[$key] );
+		if ( !is_null( $data ) ) {
+			foreach( $data as $key => $value ) {
+				if ( is_array( $value ) || is_object( $value ) ) {
+					$data[$key] = $this->hideFields( $value, $fields );
+				} else {
+					if ( in_array( $key, $fields ) ) {
+						unset( $data[$key] );
+					}
 				}
 			}
 		}

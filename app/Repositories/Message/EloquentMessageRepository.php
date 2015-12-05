@@ -234,7 +234,8 @@ class EloquentMessageRepository extends CRepository implements MessageRepository
 	 * Restores all participants within a thread that has a new message
 	 */
 	public function activateAllParticipants() {
-		$participants = $this->thread->participants;
+		$participants = $this->thread->participants()->get();
+		$participants->merge($this->thread->trashedParticipants());
 		foreach( $participants as $participant ) {
 			$participant->restore();
 		}
@@ -249,6 +250,7 @@ class EloquentMessageRepository extends CRepository implements MessageRepository
 	 */
 	public function participantsUserIds( $user_id = null ) {
 		$users = $this->thread->participants()->lists( 'user_id' );
+		$users->merge($this->thread->trashedParticipants()->lists('user_id'));
 
 		if ( $user_id ) {
 			$users[] = $user_id;

@@ -64,7 +64,11 @@ class Thread extends Model {
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function participants() {
-		return $this->hasMany( 'App\Models\Participant' );
+		return $this->hasMany( 'App\Models\Participant' )->whereNull('participants.deleted_at');
+	}
+
+	public function trashedParticipants(){
+		return $this->hasMany( 'App\Models\Participant' )->whereNotNull('participants.deleted_at');
 	}
 
 	/**
