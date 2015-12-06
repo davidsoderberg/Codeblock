@@ -35,7 +35,7 @@ __This will also be bold__
 <pre><code class="markdown">![Codeblock Logo](/img/favicon.png)</code></pre>
 -->
 <h3>Links</h3>
-<pre><code class="markdown">[Codeblock](http://{{strtolower($siteName)}})</code></pre>
+<pre><code class="markdown">[Codeblock](https://{{strtolower($siteName)}})</code></pre>
 <h3>Blockquotes</h3>
 <pre><code class="markdown">As Kanye West said:
 &gt; We're living the future so
