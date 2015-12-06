@@ -5,9 +5,7 @@
 			{{HTML::actionlink($url = ['action' => 'UserController@show', 'params' => [$message->user->username]], '<img alt="Avatar for '.$message->user->username.'" src="'.HTML::avatar($message->user->id).'">', ['class' => 'avatar'])}}
 			<div class="reply">
 				<p class="font-bold">
-					{{HTML::actionlink($url = ['action' => 'UserController@show', 'params' => [$message->user->username]], $message->user->username)}}
-					,
-					{{ $message->created_at->diffForHumans() }}
+					{{HTML::actionlink($url = ['action' => 'UserController@show', 'params' => [$message->user->username]], $message->user->username)}}, {{ $message->created_at->diffForHumans() }}
 				</p>
 
 				<p>{{ $message->body }}</p>
