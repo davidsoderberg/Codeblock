@@ -43,7 +43,7 @@ abstract class Controller extends BaseController {
 	 */
 	public function __construct(){
 		$this->request = app('Illuminate\Http\Request');
-		View::share('siteName', ucfirst(str_replace('http://', '', URL::to('/'))));
+		View::share('siteName', ucfirst(str_replace('https://', '', URL::to('/'))));
 		$this->client = new Client();
 	}
 
