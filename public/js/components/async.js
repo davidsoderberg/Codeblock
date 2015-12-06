@@ -9,7 +9,7 @@ var	async = {
 		if(localStorage.getItem('token') == null){
 			this.getJWT();
 		}else{
-			this.websocket();
+			//this.websocket();
 		}
 		jQuery('.close-toast').click(this.closeToast);
 	},
@@ -39,7 +39,7 @@ var	async = {
 
 			if (data.token) {
 				localStorage.setItem('token', JSON.stringify({date: date, token: data.token}));
-				self.websocket();
+				//self.websocket();
 			}
 		});
 	},

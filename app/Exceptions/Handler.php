@@ -37,7 +37,8 @@ class Handler extends ExceptionHandler {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function render($request, Exception $e) {
-		View::share('siteName', ucfirst(str_replace('https://', '', URL::to('/'))));
+		$url = preg_replace("/https?:\/\//", "", URL::to('/'));
+		View::share('siteName', ucfirst($url));
 		if(env('APP_ENV') == 'local') {
 			if($this->isHttpException($e)) {
 				return $this->renderHttpException($e);
