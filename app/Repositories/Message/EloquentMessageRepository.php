@@ -258,4 +258,19 @@ class EloquentMessageRepository extends CRepository implements MessageRepository
 
 		return $users;
 	}
+
+	public function leave($thread_id){
+		$thread = $this->getThread($thread_id);
+		if($thread instanceof Thread){
+			$participants = $thread->participants;
+
+			foreach($participants as $participant){
+				if($participant->user_id == Auth::user()->id){
+					$participant->deleted_at = date('Y-m-d H:i:s');
+					return $participant->save();
+				}
+			}
+		}
+		return false;
+	}
 }
