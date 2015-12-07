@@ -19,7 +19,9 @@ class UserController extends ApiController {
 	 * @return mixed
 	 */
 	public function Users(UserRepository $user, $id = null) {
-		return $this->response( [$this->stringData => $this->getCollection( $user, $id )], 200 );
+		$users = $this->getCollection( $user, $id );
+		$users = $this->hideFields( $users, ['roles', 'active', 'team_id', 'email', 'paid', 'alerted'] );
+		return $this->response( [$this->stringData => $users], 200 );
 	}
 
 	/**

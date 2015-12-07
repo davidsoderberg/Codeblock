@@ -278,7 +278,7 @@ class ApiController extends Controller {
 	 */
 	public function index() {
 		if ( $this->acceptsHtml() ) {
-			return View::make( 'api' )->with( 'title', 'api' );
+			//return View::make( 'api' )->with( 'title', 'api' );
 		}
 
 		return $this->response( $this->routes, 200 );

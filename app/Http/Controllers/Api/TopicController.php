@@ -27,7 +27,11 @@ class TopicController extends ApiController {
 			'updated_at',
 			'topic_id',
 			'role',
-			'active'
+			'active',
+			'email',
+			'paid',
+			'alerted',
+			'roles'
 		] );
 
 		return $this->response( [$this->stringData => $topics], 200 );

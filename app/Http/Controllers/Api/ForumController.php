@@ -21,14 +21,18 @@ class ForumController extends ApiController {
 
 		$forums = $this->getCollection( $forum, $id );
 		$forums = $this->hideFields( $forums, [
-				'user_id',
-				'updated_at',
-				'forum_id',
-				'forumtitle',
-				'topic_id',
-				'role',
-				'active'
-			] );
+			'user_id',
+			'updated_at',
+			'forum_id',
+			'forumtitle',
+			'topic_id',
+			'role',
+			'active',
+			'email',
+			'paid',
+			'alerted',
+			'roles',
+		] );
 
 		return $this->response( [$this->stringData => $forums], 200 );
 	}

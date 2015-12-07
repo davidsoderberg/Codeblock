@@ -48,7 +48,7 @@ class PostController extends ApiController {
 				}
 			}
 
-			$posts = $this->hideFields( $posts, ['user_id', 'cat_id', 'role', 'active', 'categoryname', 'team_id'] );
+			$posts = $this->hideFields( $posts, ['user_id', 'cat_id', 'role', 'active', 'categoryname', 'team_id', 'email', 'paid', 'alerted'] );
 		}
 
 		return $this->response( [$this->stringData => $posts], 200 );
