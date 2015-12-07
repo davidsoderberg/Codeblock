@@ -5,21 +5,17 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 
+/**
+ * Class CategoryController
+ * @package App\Http\Controllers
+ */
 class CategoryController extends Controller {
 
-	/*
-	|--------------------------------------------------------------------------
-	| Default Home Controller
-	|--------------------------------------------------------------------------
-	|
-	| You may wish to use controllers instead of, or in addition to, Closure
-	| based routes. That's great! Here is an example controller method to
-	| get you started. To route to this controller, just add the route:
-	|
-	|	Route::get('/', 'PostController@index');
-	|
-	*/
-
+	/**
+	 * Constructor for CategoryController.
+	 *
+	 * @param CategoryRepository $category
+	 */
 	public function __construct(CategoryRepository $category)
 	{
 		parent::__construct();
@@ -27,10 +23,10 @@ class CategoryController extends Controller {
 	}
 
 	/**
-	 * Visar index vyn för kategorier
+	 * Render index view for categories.
 	 * @permission view_categories
-	 * @param  int $id id för kategorin som skall redigera
-	 * @return objekt     objekt som innehåller allt som behövs i vyn
+	 * @param  int $id id
+	 * @return object
 	 */
 	public function index($id = null)
 	{
@@ -44,10 +40,10 @@ class CategoryController extends Controller {
 	}
 
 	/**
-	 * Skapa och uppdatera en kategorin.
+	 * Creates or updates a category.
 	 * @permission create_update_categories
-	 * @param  int $id id för kategorin som skall uppdateras
-	 * @return object     med värden dit användaren skall skickas.
+	 * @param  int $id
+	 * @return object
 	 */
 	public function createOrUpdate($id = null)
 	{
@@ -62,10 +58,10 @@ class CategoryController extends Controller {
 	}
 
 	/**
-	 * Ta bort en kategori
+	 * Deletes a category
 	 * @permission delete_categories
-	 * @param  int $id id för kategori som skall tas bort.
-	 * @return object     med värden dit användaren skall skickas.
+	 * @param  int $id
+	 * @return object
 	 */
 	public function delete($id){
 		if($this->category->delete($id)){

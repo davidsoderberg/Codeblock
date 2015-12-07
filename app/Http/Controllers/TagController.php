@@ -5,21 +5,17 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 
+/**
+ * Class TagController
+ * @package App\Http\Controllers
+ */
 class TagController extends Controller {
 
-	/*
-	|--------------------------------------------------------------------------
-	| Default Home Controller
-	|--------------------------------------------------------------------------
-	|
-	| You may wish to use controllers instead of, or in addition to, Closure
-	| based routes. That's great! Here is an example controller method to
-	| get you started. To route to this controller, just add the route:
-	|
-	|	Route::get('/', 'PostController@index');
-	|
-	*/
-
+	/**
+	 * Constructor for TagController.
+	 *
+	 * @param TagRepository $tag
+	 */
 	public function __construct(TagRepository $tag)
 	{
 		parent::__construct();
@@ -27,10 +23,10 @@ class TagController extends Controller {
 	}
 
 	/**
-	 * Visar index vyn för ettiketer
+	 * Render index view for tags.
 	 * @permission view_tags
-	 * @param  int $id id för ettiketen som skall redigera
-	 * @return objekt     objekt som innehåller allt som behövs i vyn
+	 * @param  int $id id for tag to display.
+	 * @return object     view object.
 	 */
 	public function index($id = null)
 	{
@@ -44,10 +40,10 @@ class TagController extends Controller {
 	}
 
 	/**
-	 * Skapa och uppdatera en ettiket.
+	 * Create or update a tag.
 	 * @permission create_update_tags
-	 * @param  int $id id för ettiketen som skall uppdateras
-	 * @return object     med värden dit användaren skall skickas.
+	 * @param  int $id id for tag to update.
+	 * @return object     redirect object.
 	 */
 	public function createOrUpdate($id = null)
 	{
@@ -62,10 +58,10 @@ class TagController extends Controller {
 	}
 
 	/**
-	 * Ta bort en ettiket
+	 * Delete a tag.
 	 * @permission delete_tags
-	 * @param  int $id id för ettiketen som skall tas bort.
-	 * @return object     med värden dit användaren skall skickas.
+	 * @param  int $id id for tag to delete.
+	 * @return object     redirect object.
 	 */
 	public function delete($id){
 		if($this->tag->delete($id)){

@@ -11,12 +11,14 @@ use Illuminate\Support\Facades\View;
 class GapiController extends Controller {
 
 	/**
+	 * Property to store Gapi object in.
+	 *
 	 * @var Gapi
 	 */
 	private $gapi;
 
 	/**
-	 *
+	 * Constructor for GapiController.
 	 */
 	public function __construct() {
 		parent::__construct();
@@ -24,6 +26,8 @@ class GapiController extends Controller {
 	}
 
 	/**
+	 * Render most visited pages view.
+	 *
 	 * @permission view_analytics_pages
 	 * @return mixed
 	 */
@@ -44,6 +48,8 @@ class GapiController extends Controller {
 	}
 
 	/**
+	 * Render visitors and pageviews view.
+	 *
 	 * @permission view_analytics_visitors
 	 * @return mixed
 	 */
@@ -64,6 +70,8 @@ class GapiController extends Controller {
 	}
 
 	/**
+	 * Render events view.
+	 *
 	 * @permission view_analytics_events
 	 * @return mixed
 	 */
@@ -86,6 +94,8 @@ class GapiController extends Controller {
 	}
 
 	/**
+	 * Render view for GapiController.
+	 *
 	 * @param $chart
 	 * @param $table
 	 * @param $title

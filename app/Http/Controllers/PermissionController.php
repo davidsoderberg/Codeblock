@@ -6,26 +6,14 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 
 /**
- * Klassen användes inte just nu.
  * Class PermissionController
  * @package App\Http\Controllers
  */
 class PermissionController extends Controller {
 
-	/*
-	|--------------------------------------------------------------------------
-	| Default Home Controller
-	|--------------------------------------------------------------------------
-	|
-	| You may wish to use controllers instead of, or in addition to, Closure
-	| based routes. That's great! Here is an example controller method to
-	| get you started. To route to this controller, just add the route:
-	|
-	|	Route::get('/', 'PostController@index');
-	|
-	*/
-
 	/**
+	 * Constructor for PermissionController
+	 *
 	 * @param PermissionRepository $permission
 	 */
 	public function __construct(PermissionRepository $permission)
@@ -35,9 +23,9 @@ class PermissionController extends Controller {
 	}
 
 	/**
-	 * Visar alla rättigheter och den rättigheten som skall redigeras
-	 * @param  int $id id på den rättighet som skall redigeras
-	 * @return object     med värden dit användaren skall skickas.
+	 * Render index view for permissions.
+	 * @param  int $id
+	 * @return object
 	 */
 	public function index($id = null)
 	{
@@ -45,9 +33,9 @@ class PermissionController extends Controller {
 	}
 
 	/**
-	 * Skapar eller uppdaterar rättigheten.
-	 * @param  int $id id på rättigheten som skall uppdateras.
-	 * @return object     med värden dit användaren skall skickas.
+	 * Creates or updates a permission.
+	 * @param  int $id
+	 * @return object
 	 */
 	public function createOrUpdate($id = null){
 		if($this->permission->createOrUpdate($this->request->all(), $id)){
@@ -58,9 +46,9 @@ class PermissionController extends Controller {
 	}
 
 	/**
-	 * Ta bort en rättighet
-	 * @param  int $id id för rättigheten som skall tas bort.
-	 * @return object     med värden dit användaren skall skickas.
+	 * Deletes a permission.
+	 * @param  int $id
+	 * @return object
 	 */
 	public function delete($id)
 	{

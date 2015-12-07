@@ -2,9 +2,15 @@
 
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Class RepositoriesServiceProvider
+ * @package App\Providers
+ */
 class RepositoriesServiceProvider extends ServiceProvider {
 
-	// registerar alla repon denna funktionen binder repot till rätt version av repot.
+	/**
+	 * Register and binds all repositories.
+	 */
 	public function register() {
 		$this->app->bind('App\Repositories\User\UserRepository', 'App\Repositories\User\EloquentUserRepository');
 		$this->app->bind('App\Repositories\Post\PostRepository', 'App\Repositories\Post\EloquentPostRepository');
@@ -23,6 +29,7 @@ class RepositoriesServiceProvider extends ServiceProvider {
 		$this->app->bind('App\Repositories\Star\StarRepository', 'App\Repositories\Star\EloquentStarRepository');
 		$this->app->bind('App\Repositories\TeamInvite\TeamInviteRepository', 'App\Repositories\TeamInvite\EloquentTeamInviteRepository');
 		$this->app->bind('App\Repositories\Team\TeamRepository', 'App\Repositories\Team\EloquentTeamRepository');
+		$this->app->bind('App\Repositories\Message\MessageRepository', 'App\Repositories\Message\EloquentMessageRepository');
 	}
 
 }

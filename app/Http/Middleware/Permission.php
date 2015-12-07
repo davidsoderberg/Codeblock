@@ -14,6 +14,8 @@ class Permission
 {
 
 	/**
+	 * Constructor for Permission.
+	 *
 	 * @param Router $router
 	 */
 	public function __construct(Router $router){
@@ -33,7 +35,7 @@ class Permission
 
 		// Fetch permission for current controller method.
 		$action = explode('@', $action);
-		$permissionAnnotation = New \App\Services\Annotation\Permission($action[0]);
+		$permissionAnnotation = New \App\Services\Annotation\Permission($action[0], false);
 		$permission = $permissionAnnotation->getPermission($action[1], true);
 
 		// Checks if user has that permission.

@@ -1,7 +1,7 @@
 #!/bin/bash
 # composer.phar update
 # composer.phar dump-autoload -o
-# php artisan InsertPermissions onlyInsert
+# php artisan insertPermissions
 
 ssh $USER@$HOST -- "
  set -e

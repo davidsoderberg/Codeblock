@@ -11,7 +11,7 @@ class ReplyTest extends UnitCase {
 		parent::setUp();
 		$this->setUpDb(true);
 		$this->repo = new EloquentReplyRepository();
-		$this->be(\App\User::find(1));
+		$this->be( \App\Models\User::find(1));
 	}
 
 	public function createDummy(){

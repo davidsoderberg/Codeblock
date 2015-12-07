@@ -1,12 +1,22 @@
 <?php namespace App\Repositories\Tag;
 
-use App\Tag;
+use App\Models\Tag;
 use App\Repositories\CRepository;
 use App\Services\CollectionService;
 
+/**
+ * Class EloquentTagRepository
+ * @package App\Repositories\Tag
+ */
 class EloquentTagRepository extends CRepository implements TagRepository {
 
-	// hämtar en eller alla ettiketer.
+	/**
+	 * Fetch one or all tags.
+	 *
+	 * @param null $id
+	 *
+	 * @return \App\Services\Model|array|\Illuminate\Database\Eloquent\Collection|null|static
+	 */
 	public function get($id = null)
 	{
 		if(is_null($id)){
@@ -20,7 +30,14 @@ class EloquentTagRepository extends CRepository implements TagRepository {
 		}
 	}
 
-	// skapar eller uppdaterar en ettiket.
+	/**
+	 * Creates or updates a tag.
+	 *
+	 * @param $input
+	 * @param null $id
+	 *
+	 * @return bool
+	 */
 	public function createOrUpdate($input, $id = null)
 	{
 		if(!is_numeric($id)) {
@@ -42,7 +59,13 @@ class EloquentTagRepository extends CRepository implements TagRepository {
 		}
 	}
 
-	// tar bort en ettiket.
+	/**
+	 * Deletes a tag.
+	 *
+	 * @param $id
+	 *
+	 * @return bool|mixed
+	 */
 	public function delete($id){
 		$Tag = $this->get($id);
 		if($Tag == null){

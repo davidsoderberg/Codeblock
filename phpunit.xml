@@ -16,7 +16,19 @@
         <testsuite name="integration">
             <directory>./tests/integration</directory>
         </testsuite>
+        <testsuite name="site">
+            <directory>./tests/unit</directory>
+            <directory>./tests/integration</directory>
+        </testsuite>
+        <testsuite name="api">
+            <directory>./tests/api</directory>
+        </testsuite>
     </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./app</directory>
+        </whitelist>
+    </filter>
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="DB_DRIVER" value="sqlite"/>

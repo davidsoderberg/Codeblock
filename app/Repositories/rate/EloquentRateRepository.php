@@ -1,17 +1,32 @@
 <?php namespace App\Repositories\Rate;
 
-use App\Rate;
+use App\Models\Rate;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\CRepository;
 use App\Services\CollectionService;
 
+/**
+ * Class EloquentRateRepository
+ * @package App\Repositories\Rate
+ */
 class EloquentRateRepository extends CRepository implements RateRepository {
 
+	/**
+	 * Fetch all rates.
+	 *
+	 * @return \App\Services\Model|array|\Illuminate\Database\Eloquent\Collection|null
+	 */
 	private function get(){
 		return $this->cache('all', Rate::where('id', '!=', 0));
 	}
 
-	// metod för att kolla om en användare har get en kommentar ett omdöme.
+	/**
+	 * Checks if user has give a comment a rate.
+	 *
+	 * @param $id
+	 *
+	 * @return bool
+	 */
 	public function check($id)
 	{
 		$rate = CollectionService::filter($this->get(), 'user_id', Auth::user()->id);
@@ -23,7 +38,13 @@ class EloquentRateRepository extends CRepository implements RateRepository {
 		return false;
 	}
 
-	// räknar ut totalen av en kommetars omdöme.
+	/**
+	 * Calculates rate for comment.
+	 *
+	 * @param $id
+	 *
+	 * @return int
+	 */
 	public function calc($id){
 		$first = CollectionService::filter($this->get(), 'type', '+');
 		$first = CollectionService::filter($first, 'comment_id', $id);
@@ -32,7 +53,14 @@ class EloquentRateRepository extends CRepository implements RateRepository {
 		return count($first) - count($second);
 	}
 
-	// skapa en kommentars omdöme
+	/**
+	 * Creates a rate for a comment.
+	 *
+	 * @param $id
+	 * @param $type
+	 *
+	 * @return bool
+	 */
 	public function rate($id, $type){
 		if(!$this->delete($id, $type)){
 			$rate = new Rate;
@@ -46,7 +74,13 @@ class EloquentRateRepository extends CRepository implements RateRepository {
 		return true;
 	}
 
-	// ändrar typ från + till -
+	/**
+	 * Change rate type.
+	 *
+	 * @param $type
+	 *
+	 * @return string
+	 */
 	private function typeSwitch($type){
 		if($type == '+'){
 			return '-';
@@ -54,7 +88,14 @@ class EloquentRateRepository extends CRepository implements RateRepository {
 		return '+';
 	}
 
-	// tar bort ett omdöme.
+	/**
+	 * Deletes a rate.
+	 *
+	 * @param $id
+	 * @param $type
+	 *
+	 * @return bool
+	 */
 	private function delete($id, $type){
 		$rate = CollectionService::filter($this->get(), 'type', $this->typeSwitch($type));
 		$rate = CollectionService::filter($rate, 'user_id', Auth::user()->id);

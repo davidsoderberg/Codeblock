@@ -7,6 +7,10 @@ use Ratchet\Server\IoServer;
 use Ratchet\Http\HttpServer;
 use Ratchet\WebSocket\WsServer;
 
+/**
+ * Class Websocket
+ * @package App\Console\Commands
+ */
 class Websocket extends Command {
 
 	/**
@@ -25,8 +29,6 @@ class Websocket extends Command {
 
 	/**
 	 * Create a new command instance.
-	 *
-	 * @return void
 	 */
 	public function __construct()
 	{

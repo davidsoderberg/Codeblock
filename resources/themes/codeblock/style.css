@@ -1,0 +1,223 @@
+body {
+	background: #272822;
+	font-family: Consolas, Monaco, 'Andale Mono', monospace !important;
+	color: #272822 !important;
+}
+
+#api-tree {
+	background: #ffffff;
+	border: none;
+	padding: 0px;
+	height: auto;
+	overflow: visible;
+}
+
+#api-tree ul li {
+	background: #ffffff;
+}
+
+#site-nav.navbar-default, #control-panel {
+	background: #ffffff;
+	border: none;
+}
+
+#left-column {
+	position: relative;
+	float: left;
+}
+
+#right-column {
+	width: 80%;
+	margin-left: 0;
+	float: right;
+}
+
+#control-panel {
+	padding: 0px;
+	height: 50px;
+}
+
+#control-panel form {
+	margin-top: 11px;
+}
+
+#left-column {
+	border: none;
+}
+
+#footer {
+	display: none;
+}
+
+#page-content {
+	width: 90%;
+	margin: 30px auto;
+	background: #ffffff;
+	padding: 30px;
+}
+
+.namespace-breadcrumbs + #page-content {
+	margin-top: 0px !important;
+}
+
+.navbar-default {
+	box-shadow: none;
+}
+
+h2 {
+	background: transparent;
+	border-bottom: 1px solid #272822;
+	color: #272822;
+	display: block;
+}
+
+.form-control {
+	border: none;
+	border-radius: 0;
+	box-shadow: none;
+}
+
+.navbar-brand {
+	font-weight: bolder;
+}
+
+.namespaces .namespace-container {
+	float: none;
+}
+
+.namespace-breadcrumbs {
+	background: #ffffff;
+	width: 90%;
+	margin: 30px auto 0 auto !important;
+}
+
+.breadcrumb {
+	padding-left: 30px;
+	padding-right: 30px;
+	border-radius: 0;
+	background: #ffffff;
+}
+
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td,
+.underlined > .row {
+	border-color: #272822;
+}
+
+.label-default {
+	background: #272822;
+}
+
+#api-tree li.active > .hd {
+	background: #272822;
+}
+
+.label {
+	text-transform: uppercase;
+	border-radius: 0;
+}
+
+.namespace-list a {
+	background: #272822;
+	border: none;
+	color: #ffffff;
+	text-decoration: underline;
+	border-radius: 0;
+}
+
+.namespace-list a:hover {
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.btn-default {
+	border: none;
+	border-radius: 0;
+	background: #272822;
+	background-image: none;
+	color: #ffffff;
+	font-weight: bolder;
+}
+
+.page-header {
+	border-color: #272822;
+}
+
+.method-item h3, .method-item h3 code {
+	background: #272822;
+	color: #ffffff;
+	padding: 10px;
+}
+
+.method-item h3 a, .method-item h3 code a {
+	color: #ffffff;
+	text-decoration: underline;
+
+}
+
+a {
+	color: #272822;
+	text-decoration: underline;
+}
+
+a:hover {
+	color: #272822;
+	text-decoration: none;
+}
+
+.description {
+	background: #272822;
+	color: #ffffff;
+}
+
+.location {
+	font-size: 60%;
+}
+
+.form-control:focus {
+	border: none;
+	box-shadow: none;
+}
+
+#site-nav.navbar-default .navbar-brand {
+	text-decoration: none;
+}
+
+.no-description{
+	color: #F72727;
+}
+
+.tt-dropdown-menu{
+	border-radius: 0;
+	border: none;
+	box-shadow: none;
+	margin-top: 5px !important;
+	width: 250%;
+	border-bottom: 5px solid #ffffff;
+}
+
+.tt-suggestion.tt-cursor {
+	color: #ffffff;
+	background-color: #272822;
+}
+
+@media screen and (max-width: 991px) {
+
+	#right-column {
+		width: 100%;
+	}
+
+	#page-content {
+		width: 100%;
+		margin: 15px 0;
+	}
+
+	.namespace-breadcrumbs{
+		width: 100%;
+		margin: 15px 0 0 0 !important;
+	}
+}

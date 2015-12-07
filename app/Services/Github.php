@@ -3,9 +3,17 @@
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Class Github
+ * @package App\Services
+ */
 class Github{
 
-	// checks if current user has requests to github left.
+	/**
+	 * Checks if current user has requests to github left.
+	 *
+	 * @return bool
+	 */
 	public function hasRequestLeft() {
 		$data = $this->githubCurl('rate_limit');
 		if(is_array($data)) {
@@ -14,7 +22,13 @@ class Github{
 		return false;
 	}
 
-	// Fetch gist.
+	/**
+	 * Fetch gist.
+	 *
+	 * @param $id
+	 *
+	 * @return bool|mixed
+	 */
 	public function getGist($id){
 		$data = $this->githubCurl('gists/'. $id);
 		if($data) {
@@ -23,7 +37,13 @@ class Github{
 		return false;
 	}
 
-	// checks if token is a github token.
+	/**
+	 * Checks if token is a github token.
+	 *
+	 * @param $token
+	 *
+	 * @return bool
+	 */
 	public function isToken($token){
 		$data = $this->curl('https://api.github.com/?access_token=' . $token);
 		if(isset($data['message'])) {
@@ -32,7 +52,13 @@ class Github{
 		return true;
 	}
 
-	// Method to curl to github.
+	/**
+	 * Method to curl to github.
+	 *
+	 * @param $url
+	 *
+	 * @return bool|mixed
+	 */
 	private function githubCurl($url){
 		$access_token = env('GITHUB_TOKEN', null);
 		if(Session::has('github_access_token')) {
@@ -44,7 +70,13 @@ class Github{
 		return false;
 	}
 
-	// Method to curl to an url.
+	/**
+	 * Method to curl to an url.
+	 *
+	 * @param $url
+	 *
+	 * @return mixed
+	 */
 	private function curl($url){
 		$ch = curl_init();
 		$username = 'Codeblock';

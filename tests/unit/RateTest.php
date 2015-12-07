@@ -15,7 +15,7 @@ class RateTest extends UnitCase {
 
 	public function testRate(){
 		$this->assertEquals($this->repo->calc(1), 0);
-		$this->be(App\User::find(1));
+		$this->be( \App\Models\User::find(1));
 		$this->assertTrue($this->repo->rate(1, '+'));
 		$this->assertEquals($this->repo->calc(1), 1);
 		$this->assertTrue($this->repo->rate(1, '-'));

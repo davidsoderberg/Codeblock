@@ -1,8 +1,8 @@
 <?php namespace integration;
 
-use App\Team;
-use App\TeamInvite;
-use App\User;
+use App\Models\Team;
+use App\Models\TeamInvite;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class TeamControllerTest extends \IntegrationCase {
@@ -85,7 +85,7 @@ class TeamControllerTest extends \IntegrationCase {
 		$this->create_team();
 		$user->attachTeam(Team::find(1));
 
-		Auth::loginUsingId(2);
+		Auth::loginUsingId(3);
 
 		$this->visit('team')->visit('team/leave/1')->see('You have leaved that team now.');
 	}

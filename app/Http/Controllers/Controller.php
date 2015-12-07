@@ -1,9 +1,8 @@
 <?php namespace App\Http\Controllers;
 
-use App\Model;
-use App\NotificationType;
+use App\Models\Model;
+use App\Models\NotificationType;
 use App\Repositories\Notification\NotificationRepository;
-use App\Services\Jwt;
 use App\Services\PaginationPresenter;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -13,8 +12,6 @@ use Illuminate\Support\Facades\Log;
 use App\Services\Annotation\Permission;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Response;
 use App\Services\Client;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Request;
@@ -26,20 +23,31 @@ use Illuminate\Support\Facades\Request;
 abstract class Controller extends BaseController {
 
 	/**
+	 * Property to store current websocket client in.
+	 *
 	 * @var Client
 	 */
 	protected $client;
+
+
 	/**
+	 * Property to store current request object in.
+	 *
 	 * @var mixed
 	 */
 	protected $request;
 
+	/**
+	 * Property to store number of posts to render on each paginator page.
+	 *
+	 * @var int
+	 */
 	protected $perPage = 10;
 
 	use DispatchesJobs, ValidatesRequests;
 
 	/**
-	 *
+	 * Constructor for Controller.
 	 */
 	public function __construct(){
 		$this->request = app('Illuminate\Http\Request');
@@ -49,78 +57,94 @@ abstract class Controller extends BaseController {
 	}
 
 	/**
-	 * Skickar notifikation till nämnd användare.
+	 * Sends a notification to mentioned user.
+	 *
 	 * @param $text
 	 * @param $object
 	 * @param NotificationRepository $notification
 	 */
-	protected function mentioned($text, $object, NotificationRepository $notification){
-		$users = array();
-		preg_match_all('/(^|\s)@(\w+)/', $text, $users);
-		foreach($users as $username) {
-			if(count($username) >= 1) {
+	protected function mentioned( $text, $object, NotificationRepository $notification ) {
+		$users = [];
+		preg_match_all( '/(^|\s)@(\w+)/', $text, $users );
+		foreach( $users as $username ) {
+			if ( count( $username ) >= 1 ) {
 				$username = $username[0];
-				if(!$notification->send($username, NotificationType::MENTION, $object)){
-					$errors = array(
+				if ( !$notification->send( $username, NotificationType::MENTION, $object ) ) {
+					$errors = [
 						'username' => $username,
 						'type' => NotificationType::MENTION,
-						'errors' => $notification->errors
-					);
-					Log::error(json_encode($errors));
+						'errors' => $notification->errors,
+					];
+					Log::error( json_encode( $errors ) );
 				}
 			}
 		}
 	}
 
 	/**
-	 * Hämtar rättigheten från en viss metod.
+	 * Fetch permission for current method.
 	 * @return array|string
 	 */
-	protected function getPermission(){
+	protected function getPermission() {
 		$action = debug_backtrace()[1];
-		$permissionAnnotation = New Permission($action['class']);
-		return $permissionAnnotation->getPermission($action['function']);
+		$permissionAnnotation = New Permission( $action['class'] );
+
+		return $permissionAnnotation->getPermission( $action['function'] );
 	}
 
 	/**
-	 * Skapar json web token.
-	 * @return mixed
+	 * Fetch select array from objects.
+	 *
+	 * @param $objects
+	 * @param string $key
+	 * @param string $value
+	 *
+	 * @return array
 	 */
-	public function getJwt(){
-		if(Auth::check()) {
-			return Response::json(array('token' => Jwt::encode(array('id' => Auth::user()->id))), 200);
-		}
-		return Response::json(array('message', 'You could not get your auth token, please try agian'), 400);
-	}
-
-	protected function getSelectArray($objects, $key = 'id', $value = 'name'){
+	protected function getSelectArray( $objects, $key = 'id', $value = 'name' ) {
 		$selectArray = [];
-		foreach($objects as $object){
+		foreach( $objects as $object ) {
 			$selectArray[$object[$key]] = $object[$value];
 		}
+
 		return $selectArray;
 	}
 
-	protected function addHidden($objects){
-		if($objects instanceof Collection){
-			foreach($objects as $object){
+	/**
+	 * Adding hidden to objects.
+	 *
+	 * @param $objects
+	 *
+	 * @return mixed
+	 */
+	protected function addHidden( $objects ) {
+		if ( $objects instanceof Collection ) {
+			foreach( $objects as $object ) {
 				$object->addToHidden();
 			}
-		}else{
-			if($objects instanceof Model) {
+		} else {
+			if ( $objects instanceof Model ) {
 				$objects->addToHidden();
 			}
 		}
+
 		return $objects;
 	}
 
-	public function createPaginator(Collection  $data){
-		if(!isset($_GET['page']) || !is_numeric($_GET['page'])){
+	/**
+	 * Creates paginator.
+	 *
+	 * @param Collection $data
+	 *
+	 * @return array
+	 */
+	public function createPaginator( Collection $data ) {
+		if ( !isset( $_GET['page'] ) || !is_numeric( $_GET['page'] ) ) {
 			$_GET['page'] = 1;
 		}
-		$paginator = new LengthAwarePaginator($data, count($data), $this->perPage, $_GET['page'], array('path' => '/'.Request::path()));
-		$data = $data->slice(($_GET['page'] * $this->perPage) - $this->perPage, $this->perPage);
+		$paginator = new LengthAwarePaginator( $data, count( $data ), $this->perPage, $_GET['page'], ['path' => '/' . Request::path()] );
+		$data = $data->slice( ( $_GET['page'] * $this->perPage ) - $this->perPage, $this->perPage );
 
-		return array('data' => $data, 'paginator' => $paginator->render());
+		return ['data' => $data, 'paginator' => $paginator->render()];
 	}
 }

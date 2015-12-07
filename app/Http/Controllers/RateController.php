@@ -5,59 +5,64 @@ use App\Repositories\Rate\RateRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
+/**
+ * Class RateController
+ * @package App\Http\Controllers
+ */
 class RateController extends Controller {
 
-	/*
-	|--------------------------------------------------------------------------
-	| Default Home Controller
-	|--------------------------------------------------------------------------
-	|
-	| You may wish to use controllers instead of, or in addition to, Closure
-	| based routes. That's great! Here is an example controller method to
-	| get you started. To route to this controller, just add the route:
-	|
-	|	Route::get('/', 'PostController@index');
-	|
-	*/
-
-	public function __construct(RateRepository $rate)
-	{
+	/**
+	 * Constructor for RateController.
+	 *
+	 * @param RateRepository $rate
+	 */
+	public function __construct( RateRepository $rate ) {
 		parent::__construct();
 		$this->rate = $rate;
 	}
 
 	/**
-	 * lägger till en + på en kommentar
-	 * @param  int $id id på kommentaren som skall få +.
-	 * @return object     med värden dit användaren skall skickas.
+	 * Adds one on comment rate.
+	 *
+	 * @param CommentRepository $comment
+	 * @param  int $id
+	 *
+	 * @return object
 	 */
-	public function plus(CommentRepository $comment, $id){
+	public function plus( CommentRepository $comment, $id ) {
 		try {
-			$user_id = $comment->get($id)->user_id;
-			if($user_id != Auth::user()->id) {
-				if($this->rate->rate($id, '+')) {
-					return Redirect::back()->with('success', 'You have now + rated a comment.');
+			$user_id = $comment->get( $id )->user_id;
+			if ( $user_id != Auth::user()->id ) {
+				if ( $this->rate->rate( $id, '+' ) ) {
+					return Redirect::back()->with( 'success', 'You have now + rated a comment.' );
 				}
 			}
-		} catch (\Exception $e){}
-		return Redirect::back()->with('error', 'You could not rate that comment, please try agian.');
+		} catch( \Exception $e ) {
+		}
+
+		return Redirect::back()->with( 'error', 'You could not rate that comment, please try agian.' );
 	}
 
 	/**
-	 * lägger till en - på en kommentar
-	 * @param  [type] $id id på kommentaren som skall få -.
-	 * @return object     med värden dit användaren skall skickas.
+	 * Substract one for comment rate.
+	 *
+	 * @param CommentRepository $comment
+	 * @param  int $id
+	 *
+	 * @return object
 	 */
-	public function minus(CommentRepository $comment,$id){
+	public function minus( CommentRepository $comment, $id ) {
 		try {
-			$user_id = $comment->get($id)->user_id;
-			if($user_id != Auth::user()->id) {
-				if($this->rate->rate($id, '-')) {
-					return Redirect::back()->with('success', 'You have now - rated a comment.');
+			$user_id = $comment->get( $id )->user_id;
+			if ( $user_id != Auth::user()->id ) {
+				if ( $this->rate->rate( $id, '-' ) ) {
+					return Redirect::back()->with( 'success', 'You have now - rated a comment.' );
 				}
 			}
-		} catch (\Exception $e){}
-		return Redirect::back()->with('error', 'You could not rate that comment, please try agian.');
+		} catch( \Exception $e ) {
+		}
+
+		return Redirect::back()->with( 'error', 'You could not rate that comment, please try agian.' );
 	}
 
 }

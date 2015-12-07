@@ -2,7 +2,7 @@
 
 use App\Repositories\Post\EloquentPostRepository;
 use App\Repositories\Comment\EloquentCommentRepository;
-use App\User;
+use App\Models\User;
 
 class CommentTest extends UnitCase {
 

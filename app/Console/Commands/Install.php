@@ -12,6 +12,10 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
+/**
+ * Class Install
+ * @package App\Console\Commands
+ */
 class Install extends Command {
 
 	/**
@@ -31,7 +35,6 @@ class Install extends Command {
 	/**
 	 * Create a new command instance.
 	 *
-	 * @return void
 	 */
 	public function __construct()
 	{
@@ -40,6 +43,11 @@ class Install extends Command {
 
 	/**
 	 * Execute the console command.
+	 *
+	 * @param RoleRepository $roleRepository
+	 * @param PermissionRepository $permissionRepository
+	 * @param CategoryRepository $categoryRepository
+	 * @param UserRepository $userRepository
 	 *
 	 * @return mixed
 	 */
@@ -154,6 +162,14 @@ class Install extends Command {
 		$this->line('Codeblock: installed');
 	}
 
+	/**
+	 * Fetch user info from terminal.
+	 *
+	 * @param array $keys
+	 * @param array $old
+	 *
+	 * @return array
+	 */
 	private function getUserInfo(array $keys = array(), array $old = array()){
 		if(in_array('username', $keys)) {
 			$username = $this->ask('Your admin username');
@@ -197,6 +213,8 @@ class Install extends Command {
 	}
 
 	/**
+	 * Render errors in terminal.
+	 *
 	 * @param $repository
 	 * @return mixed
 	 */

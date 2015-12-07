@@ -2,19 +2,49 @@
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
 
+/**
+ * Class Websocket
+ * @package App\Services
+ */
 class Websocket extends PubSub implements MessageComponentInterface {
 
+	/**
+	 * Property to store clients in.
+	 *
+	 * @var array
+	 */
 	private $clients = array();
+
+	/**
+	 * Property to store connections in.
+	 *
+	 * @var array
+	 */
 	private $connections = array();
+
+	/**
+	 * Property to store topics in.
+	 *
+	 * @var array
+	 */
 	private $topics = array();
 
-	// Adding connection on connect.
+	/**
+	 * Adding connection on connect.
+	 *
+	 * @param ConnectionInterface $conn
+	 */
 	public function onOpen(ConnectionInterface $conn) {
 		$this->connections[] = $conn;
 		echo "New connection! ({$conn->resourceId})\n";
 	}
 
-	// Sending a message to a specific connection.
+	/**
+	 * Sending a message to a specific connection.
+	 *
+	 * @param ConnectionInterface $from
+	 * @param string $msg
+	 */
 	public function onMessage(ConnectionInterface $from, $msg) {
 		$msg = json_decode($msg, true);
 
@@ -55,7 +85,14 @@ class Websocket extends PubSub implements MessageComponentInterface {
 		}
 	}
 
-	// Sending a mass message to all in a specific topic.
+	/**
+	 * Sending a mass message to all in a specific topic.
+	 *
+	 * @param $msg
+	 * @param $user_id
+	 *
+	 * @return mixed
+	 */
 	private function getPublish($msg, $user_id){
 		$msg['topic'] = explode('.',$msg['topic'])[0];
 		switch($msg['topic']){
@@ -66,7 +103,12 @@ class Websocket extends PubSub implements MessageComponentInterface {
 		return $msg;
 	}
 
-	// Adding connection if a connection subscribes to a topic.
+	/**
+	 * Adding connection if a connection subscribes to a topic.
+	 *
+	 * @param $id
+	 * @param $topic
+	 */
 	private function onSubscribe($id, $topic){
 		if(!isset($this->topics[$topic])){
 			$this->topics[$topic] = array();
@@ -74,7 +116,12 @@ class Websocket extends PubSub implements MessageComponentInterface {
 		$this->topics[$topic][] = $id;
 	}
 
-	// Removes a connection from a topic on Unsubscribe.
+	/**
+	 * Removes a connection from a topic on Unsubscribe.
+	 *
+	 * @param ConnectionInterface $conn
+	 * @param string $topic
+	 */
 	private function onUnSubscribe(ConnectionInterface $conn, $topic = ''){
 		if(false !== $id = array_search($conn, $this->clients)) {
 			if($topic != '') {
@@ -87,7 +134,13 @@ class Websocket extends PubSub implements MessageComponentInterface {
 		}
 	}
 
-	// Removes connection from a topic.
+	/**
+	 * Removes connection from a topic.
+	 *
+	 * @param $topic
+	 * @param $id
+	 * @param $array
+	 */
 	private function removeFromTopic($topic, $id, $array){
 		if(false !== $key = array_search($id, $array)) {
 			unset($this->topics[$topic][$key]);
@@ -97,20 +150,33 @@ class Websocket extends PubSub implements MessageComponentInterface {
 		}
 	}
 
-	// If the connection is closed.
+	/**
+	 * If the connection is closed.
+	 *
+	 * @param ConnectionInterface $conn
+	 */
 	public function onClose(ConnectionInterface $conn) {
 		$this->onUnSubscribe($conn);
 		$this->removeConn($conn);
 		echo "Connection {$conn->resourceId} has disconnected\n";
 	}
 
-	// echo out an message in console if an error occurre.
+	/**
+	 * Echo out an message in console if an error occurre.
+	 *
+	 * @param ConnectionInterface $conn
+	 * @param \Exception $e
+	 */
 	public function onError(ConnectionInterface $conn, \Exception $e) {
 		echo "An error has occurred: {$e->getMessage()}\n";
 		$conn->close();
 	}
 
-	// Removes connection from connection arrays.
+	/**
+	 * Removes connection from connection arrays.
+	 *
+	 * @param ConnectionInterface $conn
+	 */
 	private function removeConn(ConnectionInterface $conn){
 		if(false !== $key = array_search($conn, $this->clients)){
 			unset($this->clients[$key]);

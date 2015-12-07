@@ -11,7 +11,7 @@ class NotificationControllerTest extends \IntegrationCase {
 	}
 
 	public function create_notification(){
-		$this->create('App\Notification', ['user_id' => 1]);
+		$this->create('App\Models\Notification', ['user_id' => 1]);
 	}
 
 	public function test_notification_view(){
@@ -30,7 +30,7 @@ class NotificationControllerTest extends \IntegrationCase {
 		$this->visit('notifications/delete/1')
 			->see('You can not delete that notification.');
 
-		$this->create('App\Notification', ['user_id' => 2]);
+		$this->create('App\Models\Notification', ['user_id' => 2]);
 		$this->visit('notifications/delete/1')
 			->see('You can not delete that notification.');
 	}

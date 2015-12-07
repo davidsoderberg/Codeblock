@@ -1,18 +1,43 @@
 <?php namespace App\Services;
 
+/**
+ * Class Codemirror
+ * @package App\Services
+ */
 class Codemirror {
 
+	/**
+	 * Property to store codemirror dirs.
+	 *
+	 * @var array
+	 */
 	private $dirs;
 
+	/**
+	 * Constructor for Codemirror.
+	 */
 	public function __construct(){
 		$this->dirs = scandir(public_path().'/js/codemirror/mode');
 	}
 
+	/**
+	 * Checks if mode exists.
+	 *
+	 * @param $mode
+	 *
+	 * @return bool
+	 */
 	public function modeExists($mode){
 		return in_array($mode, $this->dirs);
 	}
 
-	// bytter ut de kategorier som inte stämmer överens med javascripts kategorierna hos codemirror.
+	/**
+	 * Switch categories that does not corresponding with javascripts categories for codemirror.
+	 *
+	 * @param $category
+	 *
+	 * @return array|string
+	 */
 	public function jsSwitch($category){
 		$category = strtolower($category);
 		$CodeMirrorcategories = array(

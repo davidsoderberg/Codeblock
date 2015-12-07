@@ -11,8 +11,8 @@ class ReplyControllerTest extends \IntegrationCase {
 	}
 
 	public function create_reply(){
-		$this->create('App\Forum');
-		$this->create('App\Topic', ['forum_id' => 1]);
+		$this->create('App\Models\Forum');
+		$this->create('App\Models\Topic', ['forum_id' => 1]);
 
 		$this->visit('forum/topic/1')
 			->submitForm('Reply', ['reply' => 'test'])

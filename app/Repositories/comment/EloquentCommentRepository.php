@@ -1,13 +1,23 @@
 <?php namespace App\Repositories\Comment;
 
-use App\Comment;
+use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\CRepository;
 use App\Services\CollectionService;
 
+/**
+ * Class EloquentCommentRepository
+ * @package App\Repositories\Comment
+ */
 class EloquentCommentRepository extends CRepository implements CommentRepository {
 
-	// hämtar en eller alla kommentarer.
+	/**
+	 * Fetch on or all comments.
+	 *
+	 * @param null $id
+	 *
+	 * @return \App\Services\Model|array|\Illuminate\Database\Eloquent\Collection|null|static
+	 */
 	public function get($id = null)
 	{
 		if(!is_null($id)){
@@ -18,7 +28,14 @@ class EloquentCommentRepository extends CRepository implements CommentRepository
 		return $comment;
 	}
 
-	// skapar eller uppdaterar en kommentar.
+	/**
+	 * Creates or updates a comment.
+	 *
+	 * @param $input
+	 * @param null $id
+	 *
+	 * @return bool
+	 */
 	public function createOrUpdate($input, $id = null)
 	{
 		if(!is_numeric($id)) {
@@ -51,7 +68,13 @@ class EloquentCommentRepository extends CRepository implements CommentRepository
 		}
 	}
 
-	// tar bort en kommentar.
+	/**
+	 * Deletes a comment.
+	 *
+	 * @param $id
+	 *
+	 * @return bool|mixed
+	 */
 	public function delete($id){
 		$Comment = $this->get($id);
 		if($Comment != null) {

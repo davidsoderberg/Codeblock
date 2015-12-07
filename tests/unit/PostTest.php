@@ -2,7 +2,7 @@
 
 use App\Repositories\Post\EloquentPostRepository;
 use App\Repositories\Star\EloquentStarRepository;
-use App\User;
+use App\Models\User;
 
 class PostTest extends UnitCase {
 

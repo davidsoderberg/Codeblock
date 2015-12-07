@@ -16,10 +16,10 @@ class UserTest extends UnitCase {
 	public function testCreateOrUpdate(){
 		$input = ['username' => 'test', 'password' => 'test', 'email' => 'test@test.com', 'active' => 1, 'role' => 1];
 		$this->assertTrue($this->repo->createOrUpdate($input));
-		$this->assertFalse($this->repo->createOrUpdate(['email' => ''],2));
+		$this->assertFalse($this->repo->createOrUpdate(['email' => ''],3));
 		$this->assertTrue(is_object($this->repo->getErrors()));
-		$this->assertTrue($this->repo->createOrUpdate(['email' => 'hej@hej.com', 'oldpassword' => 'test', 'password' => 'hej'],2));
-		$this->repo->createOrUpdate(['email' => 'test@test.com'],2);
+		$this->assertTrue($this->repo->createOrUpdate(['email' => 'hej@hej.com', 'oldpassword' => 'test', 'password' => 'hej'],3));
+		$this->repo->createOrUpdate(['email' => 'test@test.com'],3);
 		$this->repo->errors = null;
 
 		$user = $input;
@@ -49,7 +49,7 @@ class UserTest extends UnitCase {
 		$this->assertTrue(count($this->repo->getErrors()) == 1);
 		$this->repo->errors = null;
 		$token = str_replace('/','', md5('test@test.com'));
-		$this->repo->activateUser(3, $token);
+		$this->repo->activateUser(4, $token);
 		$input['username'] = 'hej';
 		$input['email'] = 'test@test.com';
 		$this->assertFalse($this->repo->createOrUpdate($input));
@@ -58,25 +58,25 @@ class UserTest extends UnitCase {
 
 	public function testGet(){
 		$this->assertTrue(is_object($this->repo->get()));
-		$this->assertFalse(is_object($this->repo->get(2)));
+		$this->assertFalse(is_object($this->repo->get(3)));
 
 		$input = ['username' => 'test', 'password' => 'test', 'email' => 'test@test.com', 'active' => 1, 'role' => 1];
 		$this->assertTrue($this->repo->createOrUpdate($input));
-		$this->assertTrue(is_object($this->repo->get(2)));
+		$this->assertTrue(is_object($this->repo->get(3)));
 	}
 
 	public function testDelete(){
-		$this->assertFalse($this->repo->delete(2));
+		$this->assertFalse($this->repo->delete(3));
 		$input = ['username' => 'test', 'password' => 'test', 'email' => 'test@test.com', 'active' => 1, 'role' => 1];
 		$this->be($this->repo->get(1));
 		$this->assertTrue($this->repo->createOrUpdate($input));
-		$this->assertTrue($this->repo->delete(2));
+		$this->assertTrue($this->repo->delete(3));
 	}
 
 	public function testLogin(){
 		$input = ['username' => 'test', 'password' => 'test', 'email' => 'test@test.com', 'active' => 1, 'role' => 1];
 		$this->assertTrue($this->repo->createOrUpdate($input));
-		$user = App\User::find(2);
+		$user = \App\Models\User::find(3);
 		$user->active = 1;
 		$user->save();
 		$input = ['loginUsername' => 'test', 'loginpassword' => 'test'];
@@ -92,7 +92,7 @@ class UserTest extends UnitCase {
 	public function testForgotPassword(){
 		$input = ['username' => 'test', 'password' => 'test', 'email' => 'test@test.com', 'active' => 1, 'role' => 1];
 		$this->assertTrue($this->repo->createOrUpdate($input));
-		$user = $this->repo->get(2);
+		$user = $this->repo->get(3);
 		$this->assertTrue($this->repo->forgotPassword(array('email' => $user->email)));
 		$this->assertFalse($this->repo->forgotPassword(array('email' => '')));
 		$this->assertFalse($this->repo->forgotPassword(array('email' => 'hej@hej.hej')));
@@ -103,7 +103,7 @@ class UserTest extends UnitCase {
 	public function testActivateUser(){
 		$input = ['username' => 'test', 'password' => 'test', 'email' => 'test@test.com', 'active' => 1, 'role' => 1];
 		$this->assertTrue($this->repo->createOrUpdate($input));
-		$user = $this->repo->get(2);
+		$user = $this->repo->get(3);
 		$token = str_replace('/','', md5($user->email));
 		$this->assertTrue($this->repo->activateUser($user->id, $token));
 		$this->assertFalse($this->repo->activateUser($user->id +1, $token));

@@ -6,13 +6,14 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 
 /**
- * Den här klassen användes inte då det inte gick att lägga in miljövariabler i run time.
  * Class InstallController
  * @package App\Http\Controllers
  */
 class InstallController extends Controller {
 
 	/**
+	 * Runs install.
+	 *
 	 * @return mixed
 	 */
 	public function install(){
@@ -29,6 +30,8 @@ class InstallController extends Controller {
 	}
 
 	/**
+	 * Stores installation options.
+	 *
 	 * @return mixed
 	 */
 	public function store(){
@@ -52,6 +55,9 @@ class InstallController extends Controller {
 		}
 	}
 
+	/**
+	 * Sets env.
+	 */
 	public function setEnv(){
 		$input = $this->request->except('_token');
 		$options = array_merge($this->getEnvArray(), $input);
@@ -78,6 +84,8 @@ class InstallController extends Controller {
 	}
 
 	/**
+	 * Fetch env array.
+	 *
 	 * @param bool $comment
 	 * @return array
 	 */
@@ -102,6 +110,8 @@ class InstallController extends Controller {
 	}
 
 	/**
+	 * Saves env array.
+	 *
 	 * @param $array
 	 * @return int
 	 */

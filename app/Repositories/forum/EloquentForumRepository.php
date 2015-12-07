@@ -1,12 +1,22 @@
 <?php namespace App\Repositories\Forum;
 
-use App\Forum;
+use App\Models\Forum;
 use App\Repositories\CRepository;
 use App\Services\CollectionService;
 
+/**
+ * Class EloquentForumRepository
+ * @package App\Repositories\Forum
+ */
 class EloquentForumRepository extends CRepository implements ForumRepository {
 
-	// hämtar en eller alla forum.
+	/**
+	 * Fetch one or all forums.
+	 *
+	 * @param null $id
+	 *
+	 * @return \App\Services\Model|array|\Illuminate\Database\Eloquent\Collection|null|static
+	 */
 	public function get($id = null)
 	{
 		if(!is_null($id)){
@@ -16,7 +26,14 @@ class EloquentForumRepository extends CRepository implements ForumRepository {
 		}
 	}
 
-	// skapar och uppdaterar en forum.
+	/**
+	 * Creates or updates a forum.
+	 *
+	 * @param $input
+	 * @param null $id
+	 *
+	 * @return bool
+	 */
 	public function createOrUpdate($input, $id = null)
 	{
 		if(!is_numeric($id)) {
@@ -41,7 +58,13 @@ class EloquentForumRepository extends CRepository implements ForumRepository {
 		}
 	}
 
-	// tar bort en forum.
+	/**
+	 * Delete a forum.
+	 *
+	 * @param $id
+	 *
+	 * @return bool
+	 */
 	public function delete($id){
 		$Forum = $this->get($id);
 		if($Forum == null){

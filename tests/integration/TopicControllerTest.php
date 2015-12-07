@@ -11,7 +11,7 @@ class TopicControllerTest extends \IntegrationCase {
 	}
 
 	public function create_topic(){
-		$this->create('App\Forum');
+		$this->create('App\Models\Forum');
 
 		$this->visit('forum/1')
 			->submitForm('Create', ['title' => 'test', 'reply' => 'test'])

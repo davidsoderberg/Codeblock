@@ -4,10 +4,27 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Input;
 
+/**
+ * Class HateoasTrait
+ * @package App\Services
+ */
 trait HateoasTrait {
 
+	/**
+	 * Property to store created hateoas links in.
+	 *
+	 * @var
+	 */
 	private $created;
 
+	/**
+	 * Creates hateoas links.
+	 *
+	 * @param null $id
+	 * @param string $filterOn
+	 *
+	 * @return array
+	 */
 	public function hateoas($id = null, $filterOn = ''){
 		$this->created = [];
 		$api = 'api/';
@@ -31,6 +48,13 @@ trait HateoasTrait {
 		return $this->sort($routeArray);
 	}
 
+	/**
+	 * Sorts hateoas links on http header.
+	 *
+	 * @param array $routeArray
+	 *
+	 * @return array
+	 */
 	private function sort($routeArray = array()){
 		$routes = array("GET" => array(), "POST" => array(), "PUT" => array(), "DELETE" => array());
 
@@ -42,6 +66,8 @@ trait HateoasTrait {
 	}
 
 	/**
+	 * Fetch url from route.
+	 *
 	 * @param $id
 	 * @param $route
 	 * @return array
@@ -66,6 +92,8 @@ trait HateoasTrait {
 	}
 
 	/**
+	 * Fetch current url.
+	 *
 	 * @param $id
 	 * @param $route
 	 * @return array

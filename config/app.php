@@ -148,7 +148,11 @@ return [
 		'App\Providers\RouteServiceProvider',
 		'App\Providers\MacroServiceProvider',
 		'App\Providers\RepositoriesServiceProvider',
+		'App\Providers\ResponseMacroServiceProvider',
 
+		/*
+		 * Package Service Providers...
+		 */
 		'Orangehill\Iseed\IseedServiceProvider',
 		'Laravel\Socialite\SocialiteServiceProvider',
 		Barryvdh\Debugbar\ServiceProvider::class,

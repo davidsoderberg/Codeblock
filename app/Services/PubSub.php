@@ -1,6 +1,6 @@
 <?php namespace App\Services;
 
-use App\Reply;
+use App\Models\Reply;
 use App\Repositories\Reply\ReplyRepository;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\View;
@@ -41,7 +41,8 @@ abstract class PubSub{
 
 	/**
 	 * Format topic reply for websocket.
-	 * @param Reply $reply
+	 *
+*@param \App\Models\Reply $reply
 	 * @param $user_id
 	 */
 	public function topic($reply, $user_id){
