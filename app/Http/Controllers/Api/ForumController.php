@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ApiController;
 Use App\Repositories\Forum\ForumRepository;
+use App\Transformers\Transformer;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class ForumController
@@ -20,19 +22,14 @@ class ForumController extends ApiController {
 	public function forums( ForumRepository $forum, $id = null ) {
 
 		$forums = $this->getCollection( $forum, $id );
-		$forums = $this->hideFields( $forums, [
-			'user_id',
-			'updated_at',
-			'forum_id',
-			'forumtitle',
-			'topic_id',
-			'role',
-			'active',
-			'email',
-			'paid',
-			'alerted',
-			'roles',
-		] );
+
+		if(!is_array($forums) && !$forums instanceof Collection){
+			$forums = [$forums];
+		}
+
+		for($i = 0; $i < count($forums); $i++){
+			$forums[$i] = Transformer::forumTransformer($forums[$i]);
+		}
 
 		return $this->response( [$this->stringData => $forums], 200 );
 	}

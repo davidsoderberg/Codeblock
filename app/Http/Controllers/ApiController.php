@@ -230,26 +230,6 @@ class ApiController extends Controller {
 		return $collection;
 	}
 
-	protected function hideFields( $data, $fields ) {
-		if ( $data instanceof Collection || $data instanceof Model ) {
-			$data = $data->toArray();
-		}
-
-		if ( !is_null( $data ) ) {
-			foreach( $data as $key => $value ) {
-				if ( is_array( $value ) || is_object( $value ) ) {
-					$data[$key] = $this->hideFields( $value, $fields );
-				} else {
-					if ( in_array( $key, $fields ) ) {
-						unset( $data[$key] );
-					}
-				}
-			}
-		}
-
-		return $data;
-	}
-
 	/**
 	 * Fetch collection.
 	 *

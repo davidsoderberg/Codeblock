@@ -4,6 +4,8 @@ use App\Http\Controllers\ApiController;
 use App\Repositories\Topic\TopicRepository;
 use App\Repositories\Reply\ReplyRepository;
 use Illuminate\Support\Facades\Auth;
+use App\Transformers\Transformer;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class TopicController
@@ -22,17 +24,14 @@ class TopicController extends ApiController {
 	public function topics( TopicRepository $topic, $id = null ) {
 
 		$topics = $this->getCollection( $topic, $id );
-		$topics = $this->hideFields( $topics, [
-			'user_id',
-			'updated_at',
-			'topic_id',
-			'role',
-			'active',
-			'email',
-			'paid',
-			'alerted',
-			'roles'
-		] );
+
+		if(!is_array($topics) && !$topics instanceof Collection){
+			$topics = [$topics];
+		}
+
+		for($i = 0; $i < count($topics); $i++){
+			$topics[$i] = Transformer::topicTransformer($topics[$i]);
+		}
 
 		return $this->response( [$this->stringData => $topics], 200 );
 	}

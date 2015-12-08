@@ -6,7 +6,7 @@ use App\Repositories\Star\StarRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Auth;
-
+use App\Transformers\Transformer;
 
 /**
  * Class PostController
@@ -48,7 +48,20 @@ class PostController extends ApiController {
 				}
 			}
 
-			$posts = $this->hideFields( $posts, ['user_id', 'cat_id', 'role', 'active', 'categoryname', 'team_id', 'email', 'paid', 'alerted'] );
+			if($posts instanceof Collection) {
+				$posts = $posts->values();
+			}else{
+				if(!is_array($posts)){
+					$posts = [$posts];
+				}
+
+				$posts = array_values($posts);
+			}
+
+
+			for($i = 0; $i < count($posts); $i++){
+				$posts[$i] = Transformer::postTransformer($posts[$i]);
+			}
 		}
 
 		return $this->response( [$this->stringData => $posts], 200 );

@@ -3,7 +3,8 @@
 use App\Http\Controllers\ApiController;
 use App\Repositories\Notification\NotificationRepository;
 use Illuminate\Support\Facades\Auth;
-
+use App\Transformers\Transformer;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class NotificationController
@@ -22,7 +23,13 @@ class NotificationController extends ApiController {
 		$notificationRepository->setRead(Auth::user()->id);
 		$notifications = $this->addHidden(Auth::user()->inbox);
 
-		$notifications = $this->hideFields( $notifications, ['type'] );
+		if(!is_array($notifications) && !$notifications instanceof Collection){
+			$notifications = [$notifications];
+		}
+
+		for($i = 0; $i < count($notifications); $i++){
+			$notifications[$i] = Transformer::notificationTransformer($notifications[$i]);
+		}
 
 		return $this->response([$this->stringData => $notifications], 200);
 	}

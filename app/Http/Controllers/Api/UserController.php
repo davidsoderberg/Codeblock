@@ -3,6 +3,8 @@
 use App\Http\Controllers\ApiController;
 use App\Repositories\User\UserRepository;
 use Illuminate\Support\Facades\Auth;
+use App\Transformers\Transformer;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class UserController
@@ -20,7 +22,12 @@ class UserController extends ApiController {
 	 */
 	public function Users(UserRepository $user, $id = null) {
 		$users = $this->getCollection( $user, $id );
-		$users = $this->hideFields( $users, ['roles', 'active', 'team_id', 'email', 'paid', 'alerted'] );
+		if(!is_array($users) && !$users instanceof Collection){
+			$users = array($users);
+		}
+		for($i = 0; $i < count($users); $i++){
+			$users[$i] = Transformer::userTransformer($users[$i]);
+		}
 		return $this->response( [$this->stringData => $users], 200 );
 	}
 
