@@ -6,7 +6,7 @@ use App\Repositories\Star\StarRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Auth;
-use App\Transformers\Transformer;
+use App\Services\Transformer;
 
 /**
  * Class PostController

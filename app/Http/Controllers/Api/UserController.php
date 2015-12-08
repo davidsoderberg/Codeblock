@@ -3,7 +3,7 @@
 use App\Http\Controllers\ApiController;
 use App\Repositories\User\UserRepository;
 use Illuminate\Support\Facades\Auth;
-use App\Transformers\Transformer;
+use App\Services\Transformer;
 use Illuminate\Database\Eloquent\Collection;
 
 /**

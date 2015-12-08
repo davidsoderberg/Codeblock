@@ -1,4 +1,4 @@
-<?php namespace App\Transformers;
+<?php namespace App\Services;
 
 use App\Models\Forum;
 use App\Models\User;

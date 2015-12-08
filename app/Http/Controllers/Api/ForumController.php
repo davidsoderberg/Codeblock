@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\ApiController;
 Use App\Repositories\Forum\ForumRepository;
-use App\Transformers\Transformer;
+use App\Services\Transformer;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
