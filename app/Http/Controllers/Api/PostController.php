@@ -48,20 +48,7 @@ class PostController extends ApiController {
 				}
 			}
 
-			if($posts instanceof Collection) {
-				$posts = $posts->values();
-			}else{
-				if(!is_array($posts)){
-					$posts = [$posts];
-				}
-
-				$posts = array_values($posts);
-			}
-
-
-			for($i = 0; $i < count($posts); $i++){
-				$posts[$i] = Transformer::postTransformer($posts[$i]);
-			}
+			Transformer::walker($posts);
 		}
 
 		return $this->response( [$this->stringData => $posts], 200 );

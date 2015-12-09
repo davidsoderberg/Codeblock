@@ -22,15 +22,7 @@ class NotificationController extends ApiController {
 	public function notifications(NotificationRepository $notificationRepository) {
 		$notificationRepository->setRead(Auth::user()->id);
 		$notifications = $this->addHidden(Auth::user()->inbox);
-
-		if(!is_array($notifications) && !$notifications instanceof Collection){
-			$notifications = [$notifications];
-		}
-
-		for($i = 0; $i < count($notifications); $i++){
-			$notifications[$i] = Transformer::notificationTransformer($notifications[$i]);
-		}
-
+		Transformer::walker($notifications);
 		return $this->response([$this->stringData => $notifications], 200);
 	}
 

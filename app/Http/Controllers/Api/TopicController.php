@@ -25,13 +25,7 @@ class TopicController extends ApiController {
 
 		$topics = $this->getCollection( $topic, $id );
 
-		if(!is_array($topics) && !$topics instanceof Collection){
-			$topics = [$topics];
-		}
-
-		for($i = 0; $i < count($topics); $i++){
-			$topics[$i] = Transformer::topicTransformer($topics[$i]);
-		}
+		Transformer::walker($topics);
 
 		return $this->response( [$this->stringData => $topics], 200 );
 	}

@@ -4,7 +4,6 @@ use App\Http\Controllers\ApiController;
 use App\Repositories\User\UserRepository;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Transformer;
-use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class UserController
@@ -22,12 +21,7 @@ class UserController extends ApiController {
 	 */
 	public function Users(UserRepository $user, $id = null) {
 		$users = $this->getCollection( $user, $id );
-		if(!is_array($users) && !$users instanceof Collection){
-			$users = array($users);
-		}
-		for($i = 0; $i < count($users); $i++){
-			$users[$i] = Transformer::userTransformer($users[$i]);
-		}
+		Transformer::walker($users);
 		return $this->response( [$this->stringData => $users], 200 );
 	}
 
