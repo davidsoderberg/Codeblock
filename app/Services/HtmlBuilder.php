@@ -66,7 +66,7 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder {
 	 * @return mixed
 	 */
 	public function mention( $text ) {
-		return preg_replace( '/(^|\s)@(\w+)/', ' <a class="mention" target="_blank" href="' . action( 'MenuController@index' ) . '/user/\2">@\2</a>', $text );
+		return preg_replace( '/@(\w+)/', ' <a class="mention" target="_blank" href="' . action( 'MenuController@index' ) . '/user/\1">@\1</a>', $text );
 	}
 
 	/**
