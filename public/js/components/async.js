@@ -4,7 +4,7 @@ var	async = {
 	init: function (config) {
 		this.config = config;
 		if(jQuery('.mentionarea').length > 0) {
-			jQuery.get("/api/users", this.getUsers);
+			jQuery.get("/api/v1/users", this.getUsers);
 		}
 		if(localStorage.getItem('token') == null){
 			this.getJWT();
@@ -32,7 +32,7 @@ var	async = {
 
 	getJWT: function() {
 		var self = async;
-		jQuery.get("/api/auth", function (data) {
+		jQuery.get("/api/v1/auth", function (data) {
 			var date = new Date;
 			date.setHours(date.getHours() + 2);
 			date = date.getTime();
