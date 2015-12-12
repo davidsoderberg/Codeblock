@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Http\RedirectResponse;
 
 /**
  * Class ApiController
@@ -250,6 +252,19 @@ class ApiController extends Controller {
 		return $this->collection;
 	}
 
+	private function getVersion(){
+		$actions = $this->request->route()->getAction();
+		$actions = array_filter(explode('/', $actions['prefix']));
+		if(count($actions) == 1){
+			$keys = array_keys($this->routes);
+			$key = $keys[count($keys)-1];
+
+			return Redirect::to($this->request->url().'/'.$key);
+		}
+
+		return $actions[count($actions) - 1];
+	}
+
 
 	/**
 	 * Render index view for api.
@@ -257,11 +272,17 @@ class ApiController extends Controller {
 	 * @return mixed
 	 */
 	public function index() {
+
+		$version = $this->getVersion();
+		if($version instanceof RedirectResponse){
+			return $version;
+		}
+
 		if ( $this->acceptsHtml() ) {
 			//return View::make( 'api' )->with( 'title', 'api' );
 		}
 
-		return $this->response( $this->routes, 200 );
+		return $this->response( $this->routes[$version], 200 );
 	}
 
 	/**

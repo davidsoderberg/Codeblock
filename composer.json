@@ -20,7 +20,7 @@
         "textalk/websocket": "1.0.*",
         "cboden/ratchet": "0.3.*",
         "venturecraft/revisionable": "1.*",
-		"erusev/parsedown": "1.5.0",
+		"erusev/parsedown": "1.6.0",
 		"erusev/parsedown-extra": "0.7.0",
 		"barryvdh/laravel-debugbar": "^2.1@dev",
 		"irazasyed/laravel-gamp": "dev-master",
