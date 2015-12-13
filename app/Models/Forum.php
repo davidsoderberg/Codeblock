@@ -56,7 +56,7 @@ class Forum extends Model
 	 *
 	 * @var array
 	 */
-	protected $modelsToReload = ['App\Models\Topic', 'App\Models\Reply'];
+	protected $modelsToReload = ['App\Models\Topic', 'App\Models\Reply', 'App\Models\User'];
 
 	/**
 	 * Array with models that should be eagerloaded.

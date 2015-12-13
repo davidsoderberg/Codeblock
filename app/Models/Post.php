@@ -29,7 +29,7 @@ class Post extends Model {
 	 *
 	 * @var array
 	 */
-	protected $modelsToReload = ['App\Models\Tag', 'App\Models\Star', 'App\Models\Comment'];
+	protected $modelsToReload = ['App\Models\Tag', 'App\Models\Star', 'App\Models\Comment', 'App\Models\User'];
 
 	/**
 	 * The database table used by the model.
