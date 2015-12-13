@@ -28,7 +28,7 @@ trait HateoasTrait {
 	public function hateoas($id = null, $filterOn = ''){
 		$this->created = [];
 		$api = 'api/';
-		$filterOn = $api.$filterOn;
+		$filterOn = $api.$this->getVersion().$filterOn;
 		$routeArray = array();
 		foreach(Route::getRoutes()->getRoutes() as $route){
 			if(Str::contains($route->uri(), $filterOn)){
@@ -107,5 +107,28 @@ trait HateoasTrait {
 			return $this->getURL($id, $route);
 		}
 		return null;
+	}
+
+	/**
+	 * @return string
+	 */
+	private function getVersion() {
+		$actions = Route::getCurrentRoute()->getAction();
+		$actions = array_filter( explode( '/', $actions['prefix'] ) );
+		$version = null;
+
+		foreach($actions as $action){
+			$match = preg_match('/v[0-9]+/', $action);
+			if($match == 1){
+				$version = $action;
+				break;
+			}
+		}
+
+		if($version == null){
+			$version = 'v1';
+		}
+
+		return $version. '/';
 	}
 }

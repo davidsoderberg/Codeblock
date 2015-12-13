@@ -1,6 +1,7 @@
 <?php namespace App\Services;
 
 use App\Models\Forum;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\Model;
 use App\Models\Topic;
@@ -9,20 +10,29 @@ use App\Models\Post;
 use App\Models\Notification;
 use App\Models\Team;
 
-class Transformer{
+/**
+ * Class Transformer
+ * @package App\Services
+ */
+class Transformer {
 
-	public static function walker(&$items){
-		if(!is_array($items) && !$items instanceof Collection){
-			$items = array($items);
+	/**
+	 * Walks through an collection or array and transforms models to array.
+	 *
+	 * @param $items
+	 */
+	public static function walker( &$items ) {
+		if ( !is_array( $items ) && !$items instanceof Collection ) {
+			$items = [$items];
 		}
 
-		if($items instanceof Collection){
+		if ( $items instanceof Collection ) {
 			$items->values();
-		}else{
-			$items = array_values($items);
+		} else {
+			$items = array_values( $items );
 		}
 
-		switch(get_class($items[0])){
+		switch( get_class( $items[0] ) ) {
 			case User::class:
 				$method = 'userTransformer';
 				break;
@@ -38,165 +48,302 @@ class Transformer{
 			case Topic::class:
 				$method = 'topicTransformer';
 				break;
+			case Role::class:
+				$method = 'roleTransformer';
+				break;
 			default:
 				$method = '';
 				break;
 		}
 
-		if($method != '') {
+		if ( $method != '' ) {
 			for( $i = 0; $i < count( $items ); $i++ ) {
 				$items[$i] = self::$method( $items[$i] );
 			}
-			if(count($items) == 1){
+			if ( count( $items ) == 1 ) {
 				$items = $items[0];
 			}
 		}
 	}
 
-	private static function toArray(&$object){
-		if(!is_array($object) && $object instanceof Model){
+	/**
+	 * Transforms model to array.
+	 *
+	 * @param $object
+	 */
+	private static function toArray( &$object ) {
+		if ( !is_array( $object ) && $object instanceof Model ) {
 			$object = $object->toArray();
+		}
+
+		self::unsetKeys( $object );
+	}
+
+	/**
+	 * @param $object
+	 * @param array $keys
+	 */
+	private static function unsetKeys( &$object, $keys = [] ) {
+		if ( empty( $keys ) ) {
+			$keys = ['created_at', 'updated_at'];
+		}
+		if ( is_array( $object ) ) {
+			foreach( $keys as $key ) {
+				if ( array_key_exists( $key, $object ) ) {
+					unset( $object[$key] );
+				}
+			}
 		}
 	}
 
-	public static function userTransformer(User $user, $parent = false){
-		if(!$parent){
+	/**
+	 * @param $model
+	 * @param array $keys
+	 */
+	private static function unsetEmpty( &$model, $keys = [] ) {
+		if ( is_array( $model ) ) {
+			if ( empty( $keys ) ) {
+				$keys = array_keys( $model );
+			}
+			foreach( $keys as $key ) {
+				if ( empty( $model[$key] ) ) {
+					unset( $model[$key] );
+				}
+			}
+		}
+	}
+
+	/**
+	 * Transform user model to array.
+	 *
+	 * @param User $user
+	 * @param bool|false $parent
+	 *
+	 * @return User
+	 */
+	public static function userTransformer( User $user, $parent = false ) {
+		if ( !$parent ) {
 			$parent = 'user';
 		}
 
-		$role = $user->roles;
-		if($parent != 'team') {
+		$role = self::roleTransformer( $user->roles );
+		if ( $parent != 'team' ) {
 			$teams = $user->teams;
 			for( $i = 0; $i < count( $teams ); $i++ ) {
 				$teams[$i] = self::teamTransformer( $teams[$i] );
 			}
 		}
 
-		self::toArray($user);
+		self::toArray( $user );
 
-		if($parent == 'team') {
+		if ( $parent == 'team' || empty( $user['teams'] ) ) {
 			unset( $user['teams'] );
-		}else{
+		} else {
 			$user['teams'] = $teams;
 		}
 
-		unset($user['roles']);
-		unset($user['email']);
-		unset($user['rolename']);
-		unset($user['role']);
-		unset($user['active']);
-		unset($user['paid']);
-		unset($user['alerted']);
-		unset($user['updated_at']);
+		if ( empty( $user['links'] ) ) {
+			unset( $user['links'] );
+		}
+		unset( $user['roles'] );
+		unset( $user['email'] );
+		unset( $user['rolename'] );
+		unset( $user['role'] );
+		unset( $user['active'] );
+		unset( $user['paid'] );
+		unset( $user['alerted'] );
+		unset( $user['updated_at'] );
 		$user['role'] = $role;
 
 		return $user;
 	}
 
-	public static function forumTransformer(Forum $forum, $parent = false){
-		if(!$parent){
+	/**
+	 * Transform forum model to array.
+	 *
+	 * @param Forum $forum
+	 * @param bool|false $parent
+	 *
+	 * @return Forum
+	 */
+	public static function forumTransformer( Forum $forum, $parent = false ) {
+		if ( !$parent ) {
 			$parent = 'forum';
 		}
 
 		$topics = $forum->topics;
-		for($i = 0; $i < count($topics); $i++){
-			$topics[$i] = self::topicTransformer($topics[$i], $parent);
+		for( $i = 0; $i < count( $topics ); $i++ ) {
+			$topics[$i] = self::topicTransformer( $topics[$i], $parent );
 		}
 
-		self::toArray($forum);
+		self::toArray( $forum );
+
+		if ( empty( $forum['links'] ) ) {
+			unset( $forum['links'] );
+		}
 
 		return $forum;
 
 	}
 
-	public static function topicTransformer(Topic $topic, $parent = false){
-		if(!$parent){
+	/**
+	 * Transform topic model to array.
+	 *
+	 * @param Topic $topic
+	 * @param bool|false $parent
+	 *
+	 * @return Topic
+	 */
+	public static function topicTransformer( Topic $topic, $parent = false ) {
+		if ( !$parent ) {
 			$parent = 'topic';
 		}
 
 		$replies = $topic->replies;
-		for($i = 0; $i < count($replies); $i++){
-			$replies[$i] = self::replyTransformer($replies[$i], 'topic');
+		for( $i = 0; $i < count( $replies ); $i++ ) {
+			$replies[$i] = self::replyTransformer( $replies[$i], 'topic' );
 		}
 
-		self::toArray($topic);
+		self::toArray( $topic );
 
 		$topic['replies'] = $replies;
 
-		if($parent == 'forum'){
-			unset($topic['forumtitle']);
-			unset($topic['forum_id']);
+		if ( $parent == 'forum' ) {
+			unset( $topic['forumtitle'] );
+			unset( $topic['forum_id'] );
+		}
+
+		if ( empty( $topic['links'] ) ) {
+			unset( $topic['links'] );
 		}
 
 		return $topic;
 	}
 
-	public static function replyTransformer(Reply $reply, $parent = false){
-		if(!$parent){
+	/**
+	 * Transform reply model to array.
+	 *
+	 * @param Reply $reply
+	 * @param bool|false $parent
+	 *
+	 * @return Reply
+	 */
+	public static function replyTransformer( Reply $reply, $parent = false ) {
+		if ( !$parent ) {
 			$parent = 'reply';
 		}
 
-		$user = self::userTransformer($reply->user);
+		$user = self::userTransformer( $reply->user );
 
-		self::toArray($reply);
+		self::toArray( $reply );
 
 		$reply['user'] = $user;
 
-		if($parent == 'topic'){
-			unset($reply['topic_id']);
+		if ( $parent == 'topic' ) {
+			unset( $reply['topic_id'] );
+		}
+		if ( empty( $reply['links'] ) ) {
+			unset( $reply['links'] );
 		}
 
-		unset($reply['user_id']);
-		unset($reply['username']);
+		unset( $reply['user_id'] );
+		unset( $reply['username'] );
 
 		return $reply;
 	}
 
-	public static function postTransformer(Post $post, $parent = false){
-		if(!$parent){
+	/**
+	 * Transform post model to array.
+	 *
+	 * @param Post $post
+	 * @param bool|false $parent
+	 *
+	 * @return Post
+	 */
+	public static function postTransformer( Post $post, $parent = false ) {
+		if ( !$parent ) {
 			$parent = 'post';
 		}
 
 		$tags = $post->tags;
 		$category = $post->category;
-		$user = self::userTransformer($post->user);
+		$user = self::userTransformer( $post->user );
 
-		self::toArray($post);
+		self::toArray( $post );
 
-		unset($post['categoryname']);
-		unset($post['cat_id']);
-		unset($post['user_id']);
+		if ( empty( $post['links'] ) ) {
+			unset( $post['links'] );
+		}
+		unset( $post['categoryname'] );
+		unset( $post['cat_id'] );
+		unset( $post['user_id'] );
 		$post['user'] = $user;
 
 		return $post;
 	}
 
-	public static function notificationTransformer(Notification $notification, $parent = false){
-		self::toArray($notification);
+	/**
+	 * Transform notification model to array.
+	 *
+	 * @param Notification $notification
+	 * @param bool|false $parent
+	 *
+	 * @return Notification
+	 */
+	public static function notificationTransformer( Notification $notification, $parent = false ) {
+		self::toArray( $notification );
 
-		unset($notification['type']);
+		unset( $notification['type'] );
+		if ( empty( $notification['links'] ) ) {
+			unset( $notification['links'] );
+		}
 
 		return $notification;
 	}
 
-	public static function teamTransformer(Team $team, $parent = false){
-		if(!$parent){
+	/**
+	 * Transform team model to array.
+	 *
+	 * @param Team $team
+	 * @param bool|false $parent
+	 *
+	 * @return Team
+	 */
+	public static function teamTransformer( Team $team, $parent = false ) {
+		if ( !$parent ) {
 			$parent = 'team';
 		}
 
 		$users = $team->users;
-		for($i = 0; $i < count($users); $i++){
-			$users[$i] = self::userTransformer($users[$i], 'team');
+		for( $i = 0; $i < count( $users ); $i++ ) {
+			$users[$i] = self::userTransformer( $users[$i], 'team' );
 		}
 
-		$owner = self::userTransformer($team->owner, 'team');
+		$owner = self::userTransformer( $team->owner, 'team' );
 
-		self::toArray($team);
+		self::toArray( $team );
 
-		unset($team['owner_id']);
+		unset( $team['owner_id'] );
 		$team['owner'] = $owner;
 
+		self::unsetEmpty( $team );
+
 		return $team;
+	}
+
+	/**
+	 * @param Role $role
+	 * @param bool|false $parent
+	 *
+	 * @return Role
+	 */
+	public static function roleTransformer( Role $role, $parent = false ) {
+
+		self::toArray( $role );
+
+		self::unsetEmpty( $role, ['links'] );
+
+		return $role;
 	}
 
 }
