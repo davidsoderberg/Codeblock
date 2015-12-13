@@ -1,5 +1,6 @@
 <?php namespace App\Services;
 
+use App\Repositories\User\EloquentUserRepository;
 use App\Services\Annotation\Permission;
 use Illuminate\Html\FormFacade;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -66,7 +67,23 @@ class HtmlBuilder extends \Illuminate\Html\HtmlBuilder {
 	 * @return mixed
 	 */
 	public function mention( $text ) {
-		return preg_replace( '/@(\w+)/', ' <a class="mention" target="_blank" href="' . action( 'MenuController@index' ) . '/user/\1">@\1</a>', $text );
+
+		preg_match('/@(\w+)/', $text, $matches);
+		if(count($matches) > 0) {
+			$repo = new EloquentUserRepository();
+			$prevMatch = '';
+			foreach($matches as $match){
+				$match = trim($match, '@');
+				if($match !== $prevMatch) {
+					$user = $repo->get( $match );
+					if ( !is_null( $user ) ) {
+						$text = preg_replace( '/@(\w+)/', ' <a class="mention" target="_blank" href="' . action( 'MenuController@index' ) . '/user/\1">@\1</a>', $text );
+					}
+				}
+				$prevMatch = $match;
+			}
+		}
+		return $text;
 	}
 
 	/**
