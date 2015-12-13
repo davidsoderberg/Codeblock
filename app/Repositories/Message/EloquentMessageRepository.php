@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 /**
- * Class EloquentArticleRepository
+ * Class EloquentMessageRepository
  * @package App\Repositories\Message
  */
 class EloquentMessageRepository extends CRepository implements MessageRepository {

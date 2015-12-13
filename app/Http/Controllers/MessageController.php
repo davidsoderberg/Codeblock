@@ -22,7 +22,7 @@ class MessageController extends Controller {
 	private $repo;
 
 	/**
-	 * Constructor for ArticleController.
+	 * Constructor for MessageController.
 	 *
 	 * @param MessageRepository $repository
 	 */
