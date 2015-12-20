@@ -32,10 +32,10 @@
 		</div>
 
 		{{ Form::label('blockCode', 'Code:') }}
-        @if(is_array($post->category->lang))
+        @if(isset($post->category) && is_array($post->category->lang))
         {{ Form::textarea('code', Input::old('code'), array('class'=> 'code-editor', 'data-lang' => strtolower($post->category->name) ,'id' => 'blockCode', 'placeholder' => 'Code goes here...', 'data-validator' => 'required|min:3')) }}
         @else
-        {{ Form::textarea('code', Input::old('code'), array('class'=> 'code-editor', 'data-lang' => strtolower($post->category->name) ,'id' => 'blockCode', 'placeholder' => 'Code goes here...', 'data-validator' => 'required|min:3')) }}
+        {{ Form::textarea('code', Input::old('code'), array('class'=> 'code-editor', 'data-lang' => '' ,'id' => 'blockCode', 'placeholder' => 'Code goes here...', 'data-validator' => 'required|min:3')) }}
         @endif
 		{{ $errors->first('code', '<div class="alert error">:message</div>') }}
 

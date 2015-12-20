@@ -214,7 +214,7 @@ class PostController extends Controller {
 	 */
 	private function selectCategories() {
 		$selectArray = [];
-		$selectArray[0] = 'Codeblock category';
+		$selectArray[''] = 'Codeblock category';
 		foreach( $this->categories as $category ) {
 			$selectArray[$category->id] = $category->name;
 		}
@@ -229,7 +229,7 @@ class PostController extends Controller {
 	 */
 	private function selectTeams() {
 		$selectArray = [];
-		$selectArray[''] = 'Select Team';
+		$selectArray[0] = 'Select Team';
 		$teams = Auth::user()->teams->merge( Auth::user()->ownedTeams );
 		foreach( $teams as $team ) {
 			$selectArray[$team->id] = $team->name;

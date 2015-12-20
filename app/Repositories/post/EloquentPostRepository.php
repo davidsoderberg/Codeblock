@@ -303,6 +303,10 @@ class EloquentPostRepository extends CRepository implements PostRepository {
 			$this->id = $Post->id;
 			if ( isset( $input['tags'] ) ) {
 				$Post->tags()->sync( $input['tags'] );
+			}else{
+				if(count($Post->tags) > 0){
+					$Post->tags()->sync([]);
+				}
 			}
 
 			return true;

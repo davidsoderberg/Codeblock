@@ -9,6 +9,8 @@ use App\Models\Reply;
 use App\Models\Post;
 use App\Models\Notification;
 use App\Models\Team;
+use App\Models\Category;
+use App\Models\Tag;
 
 /**
  * Class Transformer
@@ -50,6 +52,9 @@ class Transformer {
 				break;
 			case Role::class:
 				$method = 'roleTransformer';
+				break;
+			case Tag::class:
+				$method = 'tagTransformer';
 				break;
 			default:
 				$method = '';
@@ -266,7 +271,10 @@ class Transformer {
 		}
 
 		$tags = $post->tags;
-		$category = $post->category;
+		for($i = 0; $i < count($tags); $i++){
+			$tags[$i] = self::tagTransformer($tags[$i]);
+		}
+		$category = self::categoryTransformer($post->category);
 		$user = self::userTransformer( $post->user );
 
 		self::toArray( $post );
@@ -278,6 +286,8 @@ class Transformer {
 		unset( $post['cat_id'] );
 		unset( $post['user_id'] );
 		$post['user'] = $user;
+		$post['category'] = $category;
+		$post['tags'] = $tags;
 
 		return $post;
 	}
@@ -344,6 +354,28 @@ class Transformer {
 		self::unsetEmpty( $role, ['links'] );
 
 		return $role;
+	}
+
+	public static function categoryTransformer( Category $category, $parent = false ) {
+
+		self::toArray( $category );
+
+		self::unsetEmpty( $category, ['links'] );
+
+		self::unsetKeys($category);
+
+		return $category;
+	}
+
+	public static function tagTransformer( Tag $tag, $parent = false ) {
+
+		self::toArray( $tag );
+
+		self::unsetEmpty( $tag, ['links'] );
+
+		self::unsetKeys($tag);
+
+		return $tag;
 	}
 
 }

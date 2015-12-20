@@ -68,7 +68,7 @@ trait CacheTrait {
 			return $query->$verb();
 		};
 
-		if ( env( 'CACHE' ) ) {
+		if ( env( 'CACHE', true ) ) {
 			if ( $this->cacheForMinutes > 0 ) {
 				return Cache::remember( $key, $this->cacheForMinutes, $fetchData );
 			}

@@ -173,8 +173,13 @@ class ApiController extends Controller {
 	 */
 	private function paginate() {
 		if ( $this->perPage > 0 ) {
-			$this->collection = $this->collection->slice( ( ( $this->page - 1 ) * $this->perPage ), $this->perPage, true )
-			                                     ->all();
+			if($this->collection instanceof Collection) {
+				$this->collection = $this->collection->slice( ( ( $this->page - 1 ) * $this->perPage ), $this->perPage, true )
+				                                     ->all();
+			}else{
+				$this->collection = array_slice($this->collection, ( ( $this->page - 1 ) * $this->perPage ),$this->perPage);
+			}
+
 			if ( empty( $this->collection ) ) {
 				$this->collection = null;
 			} else {
