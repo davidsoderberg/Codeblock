@@ -33,7 +33,9 @@ class EloquentMessageRepository extends CRepository implements MessageRepository
 	/**
 	 * Getter for thread.
 	 *
-	 * @param $id
+	 * @param null $id
+	 *
+	 * @return mixed
 	 */
 	public function getThread( $id = null ) {
 		if ( !is_null( $id ) && is_numeric( $id ) && $id !== 0 ) {
@@ -59,8 +61,7 @@ class EloquentMessageRepository extends CRepository implements MessageRepository
 	}
 
 	/**
-	 * Get threads with new messages for current user..
-	 *
+	 * Get threads with new messages for current user.
 	 */
 	public function getThreadsWithNewMessages() {
 		Thread::forUserWithNewMessages( Auth::user()->id )->latest( 'updated_at' )->get();
@@ -120,6 +121,10 @@ class EloquentMessageRepository extends CRepository implements MessageRepository
 
 	/**
 	 * Creates participant.
+	 *
+	 * @param null $user_id
+	 *
+	 * @return bool
 	 */
 	public function CreateParticipant( $user_id = null ) {
 
@@ -259,6 +264,13 @@ class EloquentMessageRepository extends CRepository implements MessageRepository
 		return $users;
 	}
 
+	/**
+	 * Removes user from message thread.
+	 *
+	 * @param $thread_id
+	 *
+	 * @return bool
+	 */
 	public function leave($thread_id){
 		$thread = $this->getThread($thread_id);
 		if($thread instanceof Thread){

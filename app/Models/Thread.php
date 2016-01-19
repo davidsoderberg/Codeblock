@@ -59,7 +59,7 @@ class Thread extends Model {
 	}
 
 	/**
-	 * Participants relationship
+	 * Participants relationship.
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
@@ -67,6 +67,11 @@ class Thread extends Model {
 		return $this->hasMany( 'App\Models\Participant' )->whereNull('participants.deleted_at');
 	}
 
+	/**
+	 * Trashed participants relationship.
+	 *
+	 * @return mixed
+	 */
 	public function trashedParticipants(){
 		return $this->hasMany( 'App\Models\Participant' )->whereNotNull('participants.deleted_at');
 	}

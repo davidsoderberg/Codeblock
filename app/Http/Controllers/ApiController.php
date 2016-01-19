@@ -223,6 +223,16 @@ class ApiController extends Controller {
 		}
 	}
 
+	/**
+	 * Filter collection for items that is matching given value.
+	 *
+	 * @param Collection $collection
+	 * @param $property
+	 * @param $matching
+	 * @param null $verb
+	 *
+	 * @return Collection
+	 */
 	protected function filter( Collection $collection, $property, $matching, $verb = null ) {
 		$collection = $collection->filter( function ( $item ) use ( $property, $matching ) {
 			if ( $item->$property == $matching ) {
@@ -257,6 +267,11 @@ class ApiController extends Controller {
 		return $this->collection;
 	}
 
+	/**
+	 * Get version of api to use from action prefix.
+	 *
+	 * @return mixed
+	 */
 	private function getVersion(){
 		$actions = $this->request->route()->getAction();
 		$actions = array_filter(explode('/', $actions['prefix']));

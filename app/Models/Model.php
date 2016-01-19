@@ -204,6 +204,13 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 		return $slug;
 	}
 
+	/**
+	 * Fetch hidden fields for model object.
+	 *
+	 * @param Model $object
+	 *
+	 * @return array
+	 */
 	private static function getHiddenFields( $object ) {
 		$hiddenFields = [];
 		if ( $object instanceof User ) {

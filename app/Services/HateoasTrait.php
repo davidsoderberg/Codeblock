@@ -114,6 +114,8 @@ trait HateoasTrait {
 	}
 
 	/**
+	 * Get version to use from action prefix.
+	 *
 	 * @return string
 	 */
 	private function getVersion() {

@@ -85,8 +85,10 @@ class Transformer {
 	}
 
 	/**
-	 * @param $object
-	 * @param array $keys
+	 * Remove values on given keys.
+	 *
+	 * @param array $object to remove values from.
+	 * @param array $keys for value to remove.
 	 */
 	private static function unsetKeys( &$object, $keys = [] ) {
 		if ( empty( $keys ) ) {
@@ -102,8 +104,10 @@ class Transformer {
 	}
 
 	/**
-	 * @param $model
-	 * @param array $keys
+	 * Removes empty values from given places.
+	 *
+	 * @param array $model to remove values from.
+	 * @param array $keys for values to remove.
 	 */
 	private static function unsetEmpty( &$model, $keys = [] ) {
 		if ( is_array( $model ) ) {
@@ -342,6 +346,8 @@ class Transformer {
 	}
 
 	/**
+	 * Transform role model to array.
+	 *
 	 * @param Role $role
 	 * @param bool|false $parent
 	 *
@@ -358,6 +364,14 @@ class Transformer {
 		return $role;
 	}
 
+	/**
+	 * Transform category model to array.
+	 *
+	 * @param Category $category
+	 * @param bool|false $parent
+	 *
+	 * @return Category
+	 */
 	public static function categoryTransformer( Category $category, $parent = false ) {
 
 		self::toArray( $category );
@@ -369,6 +383,14 @@ class Transformer {
 		return $category;
 	}
 
+	/**
+	 * Transform tag model to array.
+	 *
+	 * @param Tag $tag
+	 * @param bool|false $parent
+	 *
+	 * @return Tag
+	 */
 	public static function tagTransformer( Tag $tag, $parent = false ) {
 
 		self::toArray( $tag );
