@@ -353,6 +353,8 @@ class Transformer {
 
 		self::unsetEmpty( $role, ['links'] );
 
+		unset($role['grade']);
+
 		return $role;
 	}
 
