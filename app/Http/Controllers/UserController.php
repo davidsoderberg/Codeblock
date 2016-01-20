@@ -122,22 +122,28 @@ class UserController extends Controller {
 			$id = Auth::user()->id;
 		}
 		$user = $this->user->get( $id );
-		$posts = $user->posts->sortByDesc( 'created_at' );
-		if ( $posts instanceof Collection ) {
-			$collection = new Collection();
-			foreach( $posts as $item ) {
-				$collection->add( $item );
+		if ( !empty( $user ) ) {
+			$posts = $user->posts->sortByDesc( 'created_at' );
+			if ( $posts instanceof Collection ) {
+				$collection = new Collection();
+				foreach( $posts as $item ) {
+					$collection->add( $item );
+				}
+				$posts = $collection;
 			}
-			$posts = $collection;
-		}
-		if ( Auth::check() ) {
-			return View::make( 'user.show' )
-			           ->with( 'title', $user->username )
-			           ->with( 'user', $user )
-			           ->with( 'posts', $posts );
+			if ( Auth::check() ) {
+				return View::make( 'user.show' )
+				           ->with( 'title', $user->username )
+				           ->with( 'user', $user )
+				           ->with( 'posts', $posts );
+			}
+
+			return Redirect::action( 'UserController@listUserBlock', [$user->username] );
 		}
 
-		return Redirect::action( 'UserController@listUserBlock', [$user->username] );
+		return View::make( 'errors.random' )
+		           ->with( 'title', 'User does not exist' )
+		           ->with( 'content', 'The user you tried to view does not exist.' );
 	}
 
 	/**
