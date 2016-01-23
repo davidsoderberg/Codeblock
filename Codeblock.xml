@@ -1,0 +1,47 @@
+<?php xml version="1.0"?>
+<ruleset name="Codeblock">
+    <description>Codeblocks coding standard</description>
+
+    <rule ref="WordPress-Extra">
+        <exclude name="WordPress.PHP.StrictInArray" />
+        <exclude name="WordPress.WP.PreparedSQL"/>
+        <exclude name="WordPress.CSRF.NonceVerification" />
+        <exclude name="PEAR.Functions.FunctionCallSignature.EmptyLine" />
+        <exclude name="WordPress.Arrays.ArrayKeySpacingRestrictions" />
+        <exclude name="WordPress.Arrays.ArrayDeclaration" />
+        <exclude name="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterStructureOpen" />
+        <exclude name="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceBetweenStructureColon" />
+        <exclude name="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterOpenParenthesis" />
+        <exclude name="WordPress.WhiteSpace.ControlStructureSpacing.SpaceBeforeClosureOpenParenthesis" />
+        <exclude name="Squiz.ControlStructures.ControlSignature.SpaceAfterKeyword" />
+        <exclude name="Squiz.ControlStructures.ControlSignature.SpaceAfterCloseParenthesis" />
+        <exclude name="WordPress.WhiteSpace.ControlStructureSpacing.BlankLineAfterEnd" />
+        <exclude name="Squiz.ControlStructures.ControlSignature.SpaceAfterCloseBrace" />
+        <exclude name="WordPress.XSS.EscapeOutput" />
+        <exclude name="WordPress.PHP.YodaConditions" />
+        <exclude name="Generic.Files.EndFileNewline"/>
+        <exclude name="WordPress.PHP.StrictComparisons" />
+        <exclude name="Generic.PHP.LowerCaseConstant"/>
+        <exclude name="Generic.Files.LineEndings" />
+        <exclude name="WordPress.NamingConventions.ValidVariableName"/>
+        <exclude name="WordPress.PHP.DiscouragedFunctions"/>
+        <exclude name="Squiz.Strings.DoubleQuoteUsage"/>
+    </rule>
+
+    <rule ref="Generic.Arrays.DisallowLongArraySyntax" />
+    <rule ref="Squiz.WhiteSpace.OperatorSpacing" />
+
+    <rule ref="WordPress-Docs">
+        <exclude name="Squiz.Commenting.FileComment.Missing" />
+        <exclude name="Squiz.Commenting.FileComment.MissingPackageTag" />
+        <exclude name="Squiz.Commenting.FileComment.SpacingAfterComment" />
+        <exclude name="Squiz.Commenting.FileComment.SpacingAfterOpen" />
+        <exclude name="Squiz.Commenting.ClassComment.SpacingBefore" />
+        <exclude name="Generic.Commenting.DocComment.MissingShort" />
+        <exclude name="Squiz.Commenting.InlineComment.InvalidEndChar" />
+        <exclude name="Squiz.Commenting.InlineComment.SpacingAfter" />
+        <exclude name="Squiz.Commenting.FunctionComment.MissingParamComment" />
+        <exclude name="Generic.Files.LowercasedFilename"/>
+    </rule>
+
+</ruleset>
