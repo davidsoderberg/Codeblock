@@ -122,7 +122,7 @@ class TeamController extends Controller {
 		$team = $this->teamRepository->get($this->request->get('id'));
 		$user = $user->get($user->getIdByEmail($this->request->get('email')));
 
-		if($user->id === $team->owner_id) {
+		if($user->id === intval($team->owner_id)) {
 			return Redirect::back()->with('error', 'You can not invite yourself to your own team.');
 		}
 

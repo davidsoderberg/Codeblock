@@ -18,23 +18,23 @@ class RateControllerTest extends \IntegrationCase {
 
 	public function test_plus_rate(){
 		$this->create_comment();
-		$this->visit('rate/plus/1')
+		$this->visit('/')->visit('rate/plus/1')
 			->see('You have now + rated a comment.');
 	}
 
 	public function test_plus_rate_none_existing(){
-		$this->visit('rate/plus/5')
+		$this->visit('/')->visit('rate/plus/5')
 			->see('You could not rate that comment, please try agian.');
 	}
 
 	public function test_minus_rate(){
 		$this->create_comment();
-		$this->visit('rate/minus/1')
+		$this->visit('/')->visit('rate/minus/1')
 			->see('You have now - rated a comment.');
 	}
 
 	public function test_minus_rate_none_existing(){
-		$this->visit('rate/minus/1')
+		$this->visit('/')->visit('rate/minus/1')
 			->see('You could not rate that comment, please try agian.');
 	}
 

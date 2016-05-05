@@ -27,7 +27,7 @@ class NotificationControllerTest extends \IntegrationCase {
 	}
 
 	public function test_delete_none_existing_notification(){
-		$this->visit('notifications/delete/1')
+		$this->visit('/')->visit('notifications/delete/1')
 			->see('You can not delete that notification.');
 
 		$this->create('App\Models\Notification', ['user_id' => 2]);

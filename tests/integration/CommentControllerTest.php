@@ -41,7 +41,7 @@ class CommentControllerTest extends \IntegrationCase {
 	}
 
 	public function test_delete_none_existing_comment(){
-		$this->visit('comments/delete/1')
+		$this->visit('/')->visit('comments/delete/1')
 			->see('We could not delete that comment.');
 	}
 

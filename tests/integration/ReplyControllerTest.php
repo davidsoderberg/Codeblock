@@ -40,7 +40,7 @@ class ReplyControllerTest extends \IntegrationCase {
 	}
 
 	public function test_delete_none_reply(){
-		$this->visit('http://codeblock.dev/reply/delete/1')
+		$this->visit('/')->visit('/reply/delete/1')
 			->see('Your reply could not be deleted.');
 	}
 }

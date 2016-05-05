@@ -44,7 +44,7 @@ class RoleControllerTest extends \IntegrationCase {
 	}
 
 	public function test_delete_none_existing_role(){
-		$this->visit('roles/delete/3')
+		$this->visit('/')->visit('roles/delete/3')
 			->see('The role could not be deleted.');
 
 		$this->assertEquals(count( \App\Models\Role::all()), 2);

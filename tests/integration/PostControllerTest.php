@@ -55,7 +55,7 @@ class PostControllerTest extends \IntegrationCase {
 
 	public function test_star_post() {
 		$this->create( 'App\Models\Post', ['user_id' => 2] );
-		$this->visit( 'posts/star/1' )
+		$this->visit('/')->visit( 'posts/star/1' )
 		     ->see( 'You have now add a star to this codblock.' )
 		     ->visit( 'posts/star/1' )
 		     ->see( 'You have now removed a star from this codblock.' );

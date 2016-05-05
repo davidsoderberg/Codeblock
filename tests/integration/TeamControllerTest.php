@@ -4,6 +4,7 @@ use App\Models\Team;
 use App\Models\TeamInvite;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use App\Repositories\User\EloquentUserRepository;
 
 class TeamControllerTest extends \IntegrationCase {
 
@@ -14,6 +15,7 @@ class TeamControllerTest extends \IntegrationCase {
 	}
 
 	public function create_user() {
+		$repo = new EloquentUserRepository();
 		$input = [
 			'username' => 'test',
 			'password' => 'test',
@@ -23,7 +25,9 @@ class TeamControllerTest extends \IntegrationCase {
 			'active' => 1
 		];
 
-		return User::create($input);
+		$repo->createOrUpdate($input);
+
+		return $repo->get($repo->getIdByEmail($input['email']));
 	}
 
 	public function create_team() {
@@ -110,7 +114,7 @@ class TeamControllerTest extends \IntegrationCase {
 
 		$invite = TeamInvite::find(1);
 
-		$this->visit('team/' . $invite->accept_token)->see('You have now accepted that invite.');
+		$this->visit('/')->visit('team/' . $invite->accept_token)->see('You have now accepted that invite.');
 	}
 
 	public function test_respondInvite_deny() {
@@ -127,7 +131,7 @@ class TeamControllerTest extends \IntegrationCase {
 
 		$invite = TeamInvite::find(1);
 
-		$this->visit('team/' . $invite->deny_token)->see('You have now denied that invite.');
+		$this->visit('/')->visit('team/' . $invite->deny_token)->see('You have now denied that invite.');
 	}
 
 	public function test_respondInvite_invalid() {

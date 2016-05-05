@@ -40,7 +40,7 @@ class TopicControllerTest extends \IntegrationCase {
 	}
 
 	public function test_delete_none_topic(){
-		$this->visit('topics/delete/1')
+		$this->visit('/')->visit('topics/delete/1')
 			->see('That topic could not be deleted.');
 	}
 }
