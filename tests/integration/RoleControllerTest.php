@@ -18,7 +18,7 @@ class RoleControllerTest extends \IntegrationCase {
 	}
 
 	public function test_create_role(){
-		$this->create_role()->onPage('roles');
+		$this->create_role()->seePageIs('roles');
 	}
 
 	public function test_edit_role(){

@@ -28,7 +28,7 @@ class IntegrationCase extends TestCase {
 		$this->visit('login')
 			->submitForm('Login', ['loginUsername' => $this->user['username'], 'loginpassword' => $this->user['password']])
 			->see('You have logged in.')
-			->onPage('/user');
+			->seePageIs('/user');
 	}
 
 	public function flush_flash(){

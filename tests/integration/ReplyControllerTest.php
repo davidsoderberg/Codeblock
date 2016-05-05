@@ -21,7 +21,7 @@ class ReplyControllerTest extends \IntegrationCase {
 	}
 
 	public function test_create_reply(){
-		$this->create_reply()->onPage('forum/topic/1');
+		$this->create_reply()->seePageIs('forum/topic/1');
 	}
 
 	public function test_edit_reply(){

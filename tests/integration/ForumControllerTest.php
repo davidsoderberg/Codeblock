@@ -18,7 +18,7 @@ class ForumControllerTest extends \IntegrationCase {
 	}
 
 	public function test_create_forum(){
-		$this->create_forum()->onPage('forums');
+		$this->create_forum()->seePageIs('forums');
 	}
 
 	public function test_edit_forum(){

@@ -44,17 +44,17 @@ class TeamControllerTest extends \IntegrationCase {
 		     ->submitForm('Update team', ['name' => 'hej'])
 		     ->see('hej')
 		     ->see('Your team has been updated.')
-		     ->onPage('team/1');
+		     ->seePageIs('team/1');
 	}
 
 	public function test_delete_article() {
 		$this->create_team();
 
-		$this->visit('teams/delete/1')->see('Your team has been deleted.')->onPage('team');
+		$this->visit('teams/delete/1')->see('Your team has been deleted.')->seePageIs('team');
 	}
 
 	public function test_delete_none_existing_article() {
-		$this->visit('team')->visit('teams/delete/1')->see('Your team could not be deleted.')->onPage('team');
+		$this->visit('team')->visit('teams/delete/1')->see('Your team could not be deleted.')->seePageIs('team');
 	}
 
 
@@ -66,7 +66,7 @@ class TeamControllerTest extends \IntegrationCase {
 		     ->submitForm('Add member', ['email' => $user->email])
 		     ->see($user->username)
 		     ->see('You have invite ' . $user->username . ' to test.')
-		     ->onPage('team/1');
+		     ->seePageIs('team/1');
 	}
 
 	public function test_invite_owner() {
@@ -77,7 +77,7 @@ class TeamControllerTest extends \IntegrationCase {
 		     ->visit('team/1')
 		     ->submitForm('Add member', ['email' => $user->email])
 		     ->see('You can not invite yourself to your own team.')
-		     ->onPage('team/1');
+		     ->seePageIs('team/1');
 	}
 
 	public function test_leave() {

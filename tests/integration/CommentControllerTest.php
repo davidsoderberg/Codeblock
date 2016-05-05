@@ -30,7 +30,7 @@ class CommentControllerTest extends \IntegrationCase {
 
 
 	public function test_create_comment(){
-		$this->create_comment()->onPage('posts/1');
+		$this->create_comment()->seePageIs('posts/1');
 	}
 
 	public function test_delete_comment(){

@@ -19,7 +19,7 @@ class ArticleControllerTest extends \IntegrationCase {
 	}
 
 	public function test_create_article(){
-		$this->create_article()->see('test')->onPage('blog');
+		$this->create_article()->see('test')->seePageIs('blog');
 	}
 
 	public function test_edit_article(){
@@ -29,7 +29,7 @@ class ArticleControllerTest extends \IntegrationCase {
 			->submitForm('Send', ['title' => 'hej'])
 			->see('hej')
 			->see('Your article has been updated.')
-			->onPage('blog');
+			->seePageIs('blog');
 	}
 
 	public function test_delete_article(){
@@ -37,14 +37,14 @@ class ArticleControllerTest extends \IntegrationCase {
 
 		$this->visit('blog/delete/1')
 			->see('The Article has been deleted.')
-			->onPage('blog');
+			->seePageIs('blog');
 	}
 
 	public function test_delete_none_existing_article(){
 		$this->visit('blog')
 			->visit('blog/delete/5')
 			->see('The Article could not be deleted.')
-			->onPage('blog');
+			->seePageIs('blog');
 	}
 
 }

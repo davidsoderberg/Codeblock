@@ -27,7 +27,7 @@ class PostControllerTest extends \IntegrationCase {
 	}
 
 	public function test_create_post() {
-		$this->create_post()->onPage( 'posts/1' );
+		$this->create_post()->seePageIs( 'posts/1' );
 	}
 
 	public function test_view_with_tag() {
@@ -50,7 +50,7 @@ class PostControllerTest extends \IntegrationCase {
 		$this->visit( 'posts/edit/1' )
 		     ->submitForm( 'Save', ['description' => 'test'] )
 		     ->see( 'Your block has been saved.' )
-		     ->onPage( 'posts/1' );
+		     ->seePageIs( 'posts/1' );
 	}
 
 	public function test_star_post() {
@@ -63,7 +63,7 @@ class PostControllerTest extends \IntegrationCase {
 
 	public function test_fork_post() {
 		$this->create( 'App\Models\Post', ['user_id' => 2] );
-		$this->visit( 'posts/fork/1' )->see( 'Your have forked a block and can now edit.' )->onPage( '/posts/edit/2' );
+		$this->visit( 'posts/fork/1' )->see( 'Your have forked a block and can now edit.' )->seePageIs( '/posts/edit/2' );
 	}
 
 	public function test_view_forked() {
@@ -76,6 +76,6 @@ class PostControllerTest extends \IntegrationCase {
 		$this->visit( 'posts/create' )
 		     ->submitForm( 'Fork gist', ['id' => $id] )
 		     ->see( 'The requested <a href="https://gist.github.com/' . $id . '" target="_blank">gist</a> have been forked.' )
-		     ->onPage( 'posts/1' );
+		     ->seePageIs( 'posts/1' );
 	}
 }

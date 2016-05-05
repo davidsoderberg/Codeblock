@@ -15,7 +15,7 @@ class MenuControllerTest extends \IntegrationCase {
 			->submitForm('Sign up', $user)
 			->seeInDatabase('users', $this->removeField($user, 'password'))
 			->see('Your user has been created, use the link in the mail to activate your user.')
-			->onPage('/login');
+			->seePageIs('/login');
 	}
 
 	public function test_sign_in(){
@@ -28,7 +28,7 @@ class MenuControllerTest extends \IntegrationCase {
 		$this->visit('login')
 			->submitForm('Send password', ['email' => $email])
 			->see('A new password have been sent to you.')
-			->onPage('/login');
+			->seePageIs('/login');
 	}
 
 	public function test_Home_page(){
@@ -37,7 +37,7 @@ class MenuControllerTest extends \IntegrationCase {
 		$this->sign_in();
 		$this->visit('/')
 			->see('What is new?')
-			->onPage('browse');
+			->seePageIs('browse');
 
 		$this->visit('logout');
 	}
@@ -54,6 +54,6 @@ class MenuControllerTest extends \IntegrationCase {
 		$this->visit('contact')
 			->submitForm('Send', ['name' => 'test', 'email' => 'test@test.test', 'subject' => 'test', 'message' => 'test'])
 			->see('Your contact message have been send.')
-			->onPage('contact');
+			->seePageIs('contact');
 	}
 }

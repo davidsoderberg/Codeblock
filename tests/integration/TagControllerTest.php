@@ -21,7 +21,7 @@ class TagControllerTest extends \IntegrationCase {
 	}
 
 	public function test_create_tag(){
-		$this->create_tag()->onPage('tags');
+		$this->create_tag()->seePageIs('tags');
 	}
 
 	public function test_edit_tag(){
@@ -30,7 +30,7 @@ class TagControllerTest extends \IntegrationCase {
 		$this->visit('tags/1')
 			->submitForm('Send', ['name' => 'hej'])
 			->see('Your tag has been updated.')
-			->onPage('tags');
+			->seePageIs('tags');
 	}
 
 	public function test_delete_tag(){
@@ -38,14 +38,14 @@ class TagControllerTest extends \IntegrationCase {
 
 		$this->visit('tags/delete/1')
 			->see('The tag has been deleted.')
-			->onPage('tags');
+			->seePageIs('tags');
 	}
 
 	public function test_delete_none_existing_tag(){
 		$this->visit('tags')
 			->visit('tags/delete/5')
 			->see('The tag could not be deleted.')
-			->onPage('tags');
+			->seePageIs('tags');
 	}
 
 }

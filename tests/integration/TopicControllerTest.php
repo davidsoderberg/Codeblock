@@ -20,7 +20,7 @@ class TopicControllerTest extends \IntegrationCase {
 	}
 
 	public function test_creat_topic(){
-		$this->create_topic()->onPage('forum/1');
+		$this->create_topic()->seePageIs('forum/1');
 	}
 
 	public function test_edit_topic(){

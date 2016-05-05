@@ -21,7 +21,7 @@ class CategoryControllerTest extends \IntegrationCase {
 	}
 
 	public function test_create_category(){
-		$this->create_category()->onPage('categories');
+		$this->create_category()->seePageIs('categories');
 	}
 
 	public function test_edit_category(){
@@ -30,7 +30,7 @@ class CategoryControllerTest extends \IntegrationCase {
 		$this->visit('categories/1')
 			->submitForm('Send', ['name' => 'hej'])
 			->see('Your category has been updated.')
-			->onPage('categories');
+			->seePageIs('categories');
 	}
 
 	public function test_delete_category(){
@@ -38,14 +38,14 @@ class CategoryControllerTest extends \IntegrationCase {
 
 		$this->visit('categories/delete/1')
 			->see('The category has been deleted.')
-			->onPage('categories');
+			->seePageIs('categories');
 	}
 
 	public function test_delete_none_existing_category(){
 		$this->visit('categories')
 			->visit('categories/delete/5')
 			->see('The category could not be deleted.')
-			->onPage('categories');
+			->seePageIs('categories');
 	}
 
 }
