@@ -3,11 +3,11 @@
 	<div class="forum margin-bottom-one">
 		@foreach($threads as $thread)
 			<div class="item">
-				{{HTML::actionlink($url = ['action' => 'UserController@show', 'params' => [$thread->creator()->username]], '<img alt="Avatar for '.$thread->creator()->username.'" src="'.HTML::avatar($thread->creator()->id).'">', ['class' => 'avatar'])}}
+				{{HTML::actionlink($url = ['action' => 'UserController@show', 'params' => [$thread->creator()->username]], '<img alt="Avatar for '.$thread->latestMessage->user->username.'" src="'.HTML::avatar($thread->latestMessage->user->id).'">', ['class' => 'avatar'])}}
 				<div class="reply">
 					<h4>{{HTML::actionlink($url = ['action' => 'MessageController@index', 'params' => [$thread->id]], $thread->subject)}}</h4>
 					<p class="font-bold">
-						{{HTML::actionlink($url = ['action' => 'UserController@show', 'params' => [$thread->creator()->id]], $thread->creator()->username)}}
+						{{HTML::actionlink($url = ['action' => 'UserController@show', 'params' => [$thread->latestMessage->user->id]], $thread->latestMessage->user->username)}}
 					</p>
 					<p>{{ $thread->latestMessage->body }}</p>
 				</div>
