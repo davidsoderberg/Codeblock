@@ -2,7 +2,7 @@
 
 use App\Repositories\User\EloquentUserRepository;
 use App\Services\Annotation\Permission;
-use Illuminate\Html\FormFacade;
+use Collective\Html\FormFacade;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Request;
  * Class HtmlBuilder
  * @package App\Services
  */
-class HtmlBuilder extends \Illuminate\Html\HtmlBuilder {
+class HtmlBuilder extends \Collective\Html\HtmlBuilder {
 
 	/**
 	 * Creating user avatar for forum.

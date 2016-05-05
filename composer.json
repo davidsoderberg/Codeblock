@@ -1,53 +1,61 @@
 {
 	"name": "davidsoderberg/Codeblock",
 	"description": "The Codeblock application.",
-	"keywords": ["codeblock", "methods", "functions", "blocks"],
+	"keywords": [
+		"codeblock",
+		"methods",
+		"functions",
+		"blocks"
+	],
 	"license": "MIT",
 	"type": "project",
-    "repositories": [
-      {
-        "type": "vcs",
-        "url": "https://github.com/davidsoderberg/iseed"
-      }
-    ],
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/davidsoderberg/iseed"
+		}
+	],
 	"require": {
-		"laravel/framework": "5.1.4",
-        "illuminate/html": "@dev",
-        "davidsoderberg/iseed": "master",
-        "firebase/php-jwt": "1.*",
-        "laravel/socialite": "2.*",
-        "yzalis/identicon": "*",
-        "textalk/websocket": "1.0.*",
-        "cboden/ratchet": "0.3.*",
-        "venturecraft/revisionable": "1.*",
+		"laravel/framework": "5.2.*",
+		"laravelcollective/html": "5.2.*",
+		"laravelcollective/bus": "5.2.*",
+		"davidsoderberg/iseed": "master",
+		"firebase/php-jwt": "1.*",
+		"laravel/socialite": "2.*",
+		"yzalis/identicon": "*",
+		"textalk/websocket": "1.0.*",
+		"cboden/ratchet": "0.3.*",
+		"venturecraft/revisionable": "1.*",
 		"erusev/parsedown": "1.6.0",
 		"erusev/parsedown-extra": "0.7.0",
 		"barryvdh/laravel-debugbar": "^2.1@dev",
 		"irazasyed/laravel-gamp": "dev-master",
 		"spatie/laravel-analytics": "dev-master",
-	  	"khill/lavacharts": "2.5.*"
+		"khill/lavacharts": "2.5.*"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~4.4.0@stable",
-        "fzaninotto/faker": "~1.4",
-	  	"sami/sami": "3.0",
+		"fzaninotto/faker": "~1.4",
+		"sami/sami": "3.0",
 		"squizlabs/php_codesniffer": "*",
-		"wp-coding-standards/wpcs": "dev-develop"
+		"wp-coding-standards/wpcs": "dev-develop",
+		"symfony/dom-crawler": "~3.0",
+		"symfony/css-selector": "~3.0"
 	},
 	"autoload": {
 		"classmap": [
 			"database"
 		],
-        "psr-4": {
+		"psr-4": {
 			"App\\": "app/"
 		}
 	},
 	"autoload-dev": {
 		"classmap": [
-          "tests/TestTrait.php",
-          "tests/UnitCase.php",
-          "tests/IntegrationCase.php",
-		  "tests/ApiCase.php"
+			"tests/TestTrait.php",
+			"tests/UnitCase.php",
+			"tests/IntegrationCase.php",
+			"tests/ApiCase.php"
 		]
 	},
 	"scripts": {

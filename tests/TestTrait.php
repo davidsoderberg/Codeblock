@@ -41,7 +41,6 @@ trait TestTrait {
 
 	public function setUpDb( $seed = true ) {
 		Artisan::call( 'migrate' );
-		Mail::pretend( true );
 		if ( $seed ) {
 			$this->seed();
 			Artisan::call( 'db:seed', ['--class' => 'UsersTableSeeder'] );

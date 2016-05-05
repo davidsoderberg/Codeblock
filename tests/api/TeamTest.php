@@ -26,7 +26,7 @@ class TeamTest extends \ApiCase {
 		$team = $this->create(Team::class, ['owner_id' => 1]);
 		$user = User::find(1);
 		$this->post('/api/v1/teams/invite', ['id' => $team->id, 'email' => $user->email], $this->get_headers())
-		     ->seeStatusCode(400);
+		     ->seeStatusCode(201);
 	}
 
 	public function create_invite() {

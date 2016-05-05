@@ -1,12 +1,12 @@
 <?php namespace App\Services;
 
-use Illuminate\Html\FormFacade;
+use Collective\Html\FormFacade;
 
 /**
  * Class FormBuilder
  * @package App\Services
  */
-class FormBuilder extends \Illuminate\Html\FormBuilder{
+class FormBuilder extends \Collective\Html\FormBuilder{
 
 	/**
 	 * Render honeypot.

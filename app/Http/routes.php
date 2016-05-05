@@ -52,7 +52,7 @@ Route::group(['prefix' => 'posts'], function () {
 		Route::get('/history/undo/{id}', 'PostController@undo');
 	});
 	Route::get('/{slug}', 'PostController@show');
-	Route::get('/{slug}/{comment}', 'PostController@show');
+	Route::get('/{slug}/{comment?}', 'PostController@show');
 });
 
 Route::group(['prefix' => 'teams'], function () {
