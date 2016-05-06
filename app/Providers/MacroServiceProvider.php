@@ -11,6 +11,9 @@ use App\Services\FormBuilder;
 class MacroServiceProvider extends HtmlServiceProvider
 {
 
+    /**
+     * Register the service provider.
+     */
     public function register()
     {
         parent::register();
