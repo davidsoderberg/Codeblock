@@ -1,5 +1,5 @@
-Codeblock [![Build Status](https://snap-ci.com/davidsoderberg/Codeblock/branch/master/build_image)](https://snap-ci.com/davidsoderberg/Codeblock/branch/master)
-=========
+Codeblock [![Build Status](https://snap-ci.com/davidsoderberg/Codeblock/branch/master/build_image)](https://snap-ci.com/davidsoderberg/Codeblock/branch/master) [![StyleCI](https://styleci.io/repos/32723113/shield)](https://styleci.io/repos/32723113)
+===============================================================================================================================================================
 Repository for codeblock.se
 
 ## Installation instructions
