@@ -10,7 +10,8 @@ use App\Services\CacheTrait;
  * Class Model
  * @package App\Models
  */
-class Model extends \Illuminate\Database\Eloquent\Model {
+class Model extends \Illuminate\Database\Eloquent\Model
+{
 	use RevisionableTrait;
 	use HateoasTrait;
 	use CacheTrait;
@@ -27,12 +28,13 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	 *
 	 * @param array $attributes
 	 */
-	public function __construct( array $attributes = [] ) {
-		\Illuminate\Database\Eloquent\Model::__construct( $attributes );
+	public function __construct(array $attributes = [])
+	{
+		\Illuminate\Database\Eloquent\Model::__construct($attributes);
 
 		Self::$self = $this;
 
-		if ( Self::$append ) {
+		if (Self::$append) {
 			$this->addLinks();
 		}
 	}
@@ -75,21 +77,24 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	/**
 	 * Setter for revisionEnabled.
 	 */
-	public function setRevisionEnabled() {
+	public function setRevisionEnabled()
+	{
 		$this->revisionEnabled = !$this->revisionEnabled;
 	}
 
 	/**
 	 * Add more fields to hidden array.
 	 */
-	public function addToHidden() {
-		$this->addHidden( $this->addHidden );
+	public function addToHidden()
+	{
+		$this->addHidden($this->addHidden);
 	}
 
 	/**
 	 * Appends links to model.
 	 */
-	public function addLinks() {
+	public function addLinks()
+	{
 		$this->appends[] = 'links';
 	}
 
@@ -98,7 +103,8 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	 *
 	 * @return array
 	 */
-	public function getlinksAttribute() {
+	public function getlinksAttribute()
+	{
 		return [];
 	}
 
@@ -114,7 +120,8 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	 *
 	 * @return array
 	 */
-	public function getModelsToReload() {
+	public function getModelsToReload()
+	{
 		return $this->modelsToReload;
 	}
 
@@ -125,9 +132,10 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	 *
 	 * @return string
 	 */
-	public function getAnswer( $boolean ) {
-		if ( $boolean === true || $boolean === false || $boolean === 0 || $boolean === 1 || $boolean === "1" || $boolean === "0" ) {
-			if ( $boolean == 1 || $boolean == true ) {
+	public function getAnswer($boolean)
+	{
+		if ($boolean === true || $boolean === false || $boolean === 0 || $boolean === 1 || $boolean === "1" || $boolean === "0") {
+			if ($boolean == 1 || $boolean == true) {
 				return 'Yes';
 			}
 
@@ -140,24 +148,25 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	/**
 	 * Boot method form model
 	 */
-	public static function boot() {
+	public static function boot()
+	{
 		\Illuminate\Database\Eloquent\Model::boot();
 
-		static::saving( function ( $object ) {
-			return $object::isValid( $object );
-		} );
+		static::saving(function ($object) {
+			return $object::isValid($object);
+		});
 
-		static::saved( function ( $object ) {
-			Self::reloadModels( $object );
-
-			return true;
-		} );
-
-		static::deleted( function ( $object ) {
-			Self::reloadModels( $object );
+		static::saved(function ($object) {
+			Self::reloadModels($object);
 
 			return true;
-		} );
+		});
+
+		static::deleted(function ($object) {
+			Self::reloadModels($object);
+
+			return true;
+		});
 	}
 
 	/**
@@ -165,16 +174,17 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	 *
 	 * @param Model $object
 	 */
-	protected static function reloadModels( \App\Models\Model $object ) {
+	protected static function reloadModels(\App\Models\Model $object)
+	{
 		$models = $object->getModelsToReload();
-		$models[] = get_class( $object );
-		$models = array_unique( $models );
-		foreach( $models as $model ) {
-			if ( !str_contains( $model, 'App\\Models\\' ) ) {
+		$models[] = get_class($object);
+		$models = array_unique($models);
+		foreach ($models as $model) {
+			if (!str_contains($model, 'App\\Models\\')) {
 				$model = 'App\\Models\\' + $model;
 			}
-			if ( class_exists( $model ) ) {
-				Self::$self->flushCache( new $model() );
+			if (class_exists($model)) {
+				Self::$self->flushCache(new $model());
 			}
 		}
 	}
@@ -189,16 +199,17 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	 *
 	 * @return string
 	 */
-	public function getSlug( $value, $column = 'slug' ) {
-		$slug = Str::slug( $value );
-		$latestSlug = $this->whereRaw( $column . " LIKE '^{$slug}(-[0-9]+)?$' and id != '{$this->id}'" )
-		                   ->latest( 'id' )
-		                   ->pluck( $column );
+	public function getSlug($value, $column = 'slug')
+	{
+		$slug = Str::slug($value);
+		$latestSlug = $this->whereRaw($column . " LIKE '^{$slug}(-[0-9]+)?$' and id != '{$this->id}'")
+			->latest('id')
+			->pluck($column);
 
-		if ( $latestSlug ) {
-			$slugPieces = explode( '-', $latestSlug );
-			$number = intval( end( $slugPieces ) );
-			$slug .= '-' . ( $number + 1 );
+		if ($latestSlug) {
+			$slugPieces = explode('-', $latestSlug);
+			$number = intval(end($slugPieces));
+			$slug .= '-' . ($number + 1);
 		}
 
 		return $slug;
@@ -211,9 +222,10 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	 *
 	 * @return array
 	 */
-	private static function getHiddenFields( $object ) {
+	private static function getHiddenFields($object)
+	{
 		$hiddenFields = [];
-		if ( $object instanceof User ) {
+		if ($object instanceof User) {
 			$hiddenFields['password'] = $object->getAuthPassword();
 		}
 
@@ -230,32 +242,33 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	 *
 	 * @return bool
 	 */
-	public static function isValid( $data, $rules = [] ) {
+	public static function isValid($data, $rules = [])
+	{
 		$id = null;
-		if ( is_object( $data ) ) {
-			$hiddenFields = self::getHiddenFields( $data );
+		if (is_object($data)) {
+			$hiddenFields = self::getHiddenFields($data);
 			$data = $data->toArray();
-			if ( isset( $data['id'] ) ) {
+			if (isset($data['id'])) {
 				$id = $data['id'];
 			}
 
 			$data += $hiddenFields;
 		}
 
-		if ( count( $rules ) == 0 ) {
+		if (count($rules) == 0) {
 			$rules = static::$rules;
 		}
 
-		if ( is_numeric( $id ) ) {
-			array_walk( $rules, function ( &$item ) use ( $id ) {
-				if ( stripos( $item, ':id:' ) !== false ) {
-					$item = str_ireplace( ':id:', $id, $item );
+		if (is_numeric($id)) {
+			array_walk($rules, function (&$item) use ($id) {
+				if (stripos($item, ':id:') !== false) {
+					$item = str_ireplace(':id:', $id, $item);
 				}
-			} );
+			});
 		}
 
-		$v = Validator::make( $data, $rules );
-		if ( $v->passes() ) {
+		$v = Validator::make($data, $rules);
+		if ($v->passes()) {
 			return true;
 		} else {
 			static::$errors = $v->messages();

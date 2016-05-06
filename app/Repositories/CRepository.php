@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Mail;
  * Class CRepository
  * @package App\Repositories
  */
-Class CRepository {
+Class CRepository
+{
 
 	use CacheTrait;
 
@@ -23,7 +24,8 @@ Class CRepository {
 	 *
 	 * @return mixed
 	 */
-	public function getErrors() {
+	public function getErrors()
+	{
 		return $this->errors;
 	}
 
@@ -36,13 +38,14 @@ Class CRepository {
 	 *
 	 * @return bool
 	 */
-	public function sendEmail( $template, $emailInfo, $data ) {
-		Mail::send( $template, $data, function ( $message ) use ( $emailInfo ) {
-			$message->from( env( 'FROM_ADRESS' ), env( 'FROM_NAME' ) );
-			$message->to( $emailInfo['toEmail'], $emailInfo['toName'] )->subject( $emailInfo['subject'] );
-		} );
+	public function sendEmail($template, $emailInfo, $data)
+	{
+		Mail::send($template, $data, function ($message) use ($emailInfo) {
+			$message->from(env('FROM_ADRESS'), env('FROM_NAME'));
+			$message->to($emailInfo['toEmail'], $emailInfo['toName'])->subject($emailInfo['subject']);
+		});
 
-		if ( count( Mail::failures() ) <= 0 ) {
+		if (count(Mail::failures()) <= 0) {
 			return true;
 		}
 	}
@@ -54,8 +57,9 @@ Class CRepository {
 	 *
 	 * @return string
 	 */
-	public function stripTrim( $input ) {
-		return trim( strip_tags( $input ) );
+	public function stripTrim($input)
+	{
+		return trim(strip_tags($input));
 	}
 
 	/**
@@ -65,9 +69,10 @@ Class CRepository {
 	 *
 	 * @return bool
 	 */
-	public function is_assoc( $array ) {
-		foreach( array_keys( $array ) as $key ) {
-			if ( !is_int( $key ) ) {
+	public function is_assoc($array)
+	{
+		foreach (array_keys($array) as $key) {
+			if (!is_int($key)) {
 				return true;
 			}
 		}

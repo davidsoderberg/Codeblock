@@ -8,7 +8,8 @@ use App\Services\CollectionService;
  * Class EloquentArticleRepository
  * @package App\Repositories\Article
  */
-class EloquentArticleRepository extends CRepository implements ArticleRepository {
+class EloquentArticleRepository extends CRepository implements ArticleRepository
+{
 
 	/**
 	 * Fetch on or all articles.
@@ -18,12 +19,12 @@ class EloquentArticleRepository extends CRepository implements ArticleRepository
 	 */
 	public function get($id = null)
 	{
-		if(is_null($id)){
+		if (is_null($id)) {
 			return $this->cache('all', Article::where('id', '!=', 0));
-		}else{
-			if(is_numeric($id)) {
+		} else {
+			if (is_numeric($id)) {
 				return CollectionService::filter($this->get(), 'id', $id, 'first');
-			}else{
+			} else {
 				return CollectionService::filter($this->get(), 'slug', $id, 'first');
 			}
 		}
@@ -39,24 +40,24 @@ class EloquentArticleRepository extends CRepository implements ArticleRepository
 	 */
 	public function createOrUpdate($input, $id = null)
 	{
-		if(is_null($id)) {
+		if (is_null($id)) {
 			$Article = new Article();
 		} else {
 			$Article = $this->get($id);
 		}
 
-		if(isset($input['title'])){
+		if (isset($input['title'])) {
 			$Article->title = $this->stripTrim($input['title']);
 			$Article->slug = $Article->getSlug($Article->title);
 		}
 
-		if(isset($input['body'])){
+		if (isset($input['body'])) {
 			$Article->body = $this->stripTrim($input['body']);
 		}
 
-		if($Article->save()){
+		if ($Article->save()) {
 			return true;
-		}else{
+		} else {
 			$this->errors = $Article::$errors;
 			return false;
 		}
@@ -69,9 +70,10 @@ class EloquentArticleRepository extends CRepository implements ArticleRepository
 	 *
 	 * @return bool|mixed
 	 */
-	public function delete($id){
+	public function delete($id)
+	{
 		$Article = $this->get($id);
-		if($Article != null) {
+		if ($Article != null) {
 			return $Article->delete();
 		}
 		return false;

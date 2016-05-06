@@ -6,7 +6,8 @@ use Illuminate\Support\ServiceProvider;
  * Class ConfigServiceProvider
  * @package App\Providers
  */
-class ConfigServiceProvider extends ServiceProvider {
+class ConfigServiceProvider extends ServiceProvider
+{
 
 	/**
 	 * Overwrite any vendor / package configuration.

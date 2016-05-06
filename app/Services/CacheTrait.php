@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Log;
  * Class EloquentCacheTrait
  * @package App\Services
  */
-trait CacheTrait {
+trait CacheTrait
+{
 	/**
 	 * Cache duration in minutes; 0 is forever
 	 *
@@ -55,25 +56,26 @@ trait CacheTrait {
 	 *
 	 * @return Collection|Model|array|null
 	 */
-	protected function cache( $key, Builder $query, $verb = 'get' ) {
-		$this->setModel( $query->getModel() );
+	protected function cache($key, Builder $query, $verb = 'get')
+	{
+		$this->setModel($query->getModel());
 
-		$key = $this->getCacheSelector( $key );
+		$key = $this->getCacheSelector($key);
 
-		$this->indexKey( $key );
+		$this->indexKey($key);
 
-		$fetchData = function () use ( $key, $query, $verb ) {
-			$this->log( 'refreshing cache for ' . get_class( $this ) . ' (' . $key . ')' );
+		$fetchData = function () use ($key, $query, $verb) {
+			$this->log('refreshing cache for ' . get_class($this) . ' (' . $key . ')');
 
 			return $query->$verb();
 		};
 
-		if ( env( 'CACHE', false ) ) {
-			if ( $this->cacheForMinutes > 0 ) {
-				return Cache::remember( $key, $this->cacheForMinutes, $fetchData );
+		if (env('CACHE', false)) {
+			if ($this->cacheForMinutes > 0) {
+				return Cache::remember($key, $this->cacheForMinutes, $fetchData);
 			}
 
-			return Cache::rememberForever( $key, $fetchData );
+			return Cache::rememberForever($key, $fetchData);
 		}
 
 		return $fetchData();
@@ -88,14 +90,15 @@ trait CacheTrait {
 	 *
 	 * @return Collection
 	 */
-	protected function getByAttributeFromCollection( Collection $collection, $attribute, $value = null ) {
-		return $collection->filter( function ( $item ) use ( $attribute, $value ) {
-			if ( isset( $item->$attribute ) && $value ) {
+	protected function getByAttributeFromCollection(Collection $collection, $attribute, $value = null)
+	{
+		return $collection->filter(function ($item) use ($attribute, $value) {
+			if (isset($item->$attribute) && $value) {
 				return $item->$attribute == $value;
 			}
 
 			return false;
-		} );
+		});
 	}
 
 	/**
@@ -103,7 +106,8 @@ trait CacheTrait {
 	 *
 	 * @return string
 	 */
-	protected function getCacheKey() {
+	protected function getCacheKey()
+	{
 		return $this->cacheKey;
 	}
 
@@ -114,8 +118,9 @@ trait CacheTrait {
 	 *
 	 * @return string
 	 */
-	protected function getCacheSelector( $id = null ) {
-		return $this->getCacheKey() . ( $id ? '.' . $id : '' );
+	protected function getCacheSelector($id = null)
+	{
+		return $this->getCacheKey() . ($id ? '.' . $id : '');
 	}
 
 	/**
@@ -123,8 +128,9 @@ trait CacheTrait {
 	 *
 	 * @return array
 	 */
-	protected function getKeys() {
-		return Cache::get( $this->cacheIndexKey, [] );
+	protected function getKeys()
+	{
+		return Cache::get($this->cacheIndexKey, []);
 	}
 
 	/**
@@ -132,7 +138,8 @@ trait CacheTrait {
 	 *
 	 * @return Illuminate\Database\Eloquent\Model
 	 */
-	protected function getModel() {
+	protected function getModel()
+	{
 		return $this->model;
 	}
 
@@ -141,8 +148,9 @@ trait CacheTrait {
 	 *
 	 * @param $model
 	 */
-	public function setModel( $model ) {
-		$this->cacheKey = $this->getClass( $model );
+	public function setModel($model)
+	{
+		$this->cacheKey = $this->getClass($model);
 		$this->model = $model;
 	}
 
@@ -153,12 +161,13 @@ trait CacheTrait {
 	 *
 	 * @return string
 	 */
-	protected function getClass( $object ) {
-		if ( is_object( $object ) ) {
-			$object = get_class( $object );
+	protected function getClass($object)
+	{
+		if (is_object($object)) {
+			$object = get_class($object);
 		}
 
-		return strtolower( str_replace( 'App\\Models\\', '', $object ) );
+		return strtolower(str_replace('App\\Models\\', '', $object));
 	}
 
 	/**
@@ -166,13 +175,14 @@ trait CacheTrait {
 	 *
 	 * @return array
 	 */
-	protected function getServiceKeys() {
+	protected function getServiceKeys()
+	{
 		$keys = $this->getKeys();
 		$serviceKey = $this->getCacheKey();
 
-		if ( !isset( $keys[$serviceKey] ) ) {
+		if (!isset($keys[$serviceKey])) {
 			$keys[$serviceKey] = [];
-		} elseif ( !is_array( $keys[$serviceKey] ) ) {
+		} elseif (!is_array($keys[$serviceKey])) {
 			$keys[$serviceKey] = [$keys[$serviceKey]];
 		}
 
@@ -186,14 +196,15 @@ trait CacheTrait {
 	 *
 	 * @return void
 	 */
-	protected function indexKey( $key ) {
+	protected function indexKey($key)
+	{
 		$keys = $this->getServiceKeys();
 
-		array_push( $keys, $key );
+		array_push($keys, $key);
 
-		$keys = array_unique( $keys );
+		$keys = array_unique($keys);
 
-		$this->setServiceKeys( $keys );
+		$this->setServiceKeys($keys);
 	}
 
 	/**
@@ -203,9 +214,10 @@ trait CacheTrait {
 	 *
 	 * @return void
 	 */
-	protected function log( $message ) {
-		if ( $this->enableLogging ) {
-			Log::info( $message );
+	protected function log($message)
+	{
+		if ($this->enableLogging) {
+			Log::info($message);
 		}
 	}
 
@@ -214,13 +226,14 @@ trait CacheTrait {
 	 *
 	 * @param array $keys
 	 */
-	protected function setServiceKeys( $keys = [] ) {
+	protected function setServiceKeys($keys = [])
+	{
 		$allkeys = $this->getKeys();
 		$serviceKey = $this->getCacheKey();
 
 		$allkeys[$serviceKey] = $keys;
 
-		Cache::forever( $this->cacheIndexKey, $allkeys );
+		Cache::forever($this->cacheIndexKey, $allkeys);
 	}
 
 	/**
@@ -230,16 +243,17 @@ trait CacheTrait {
 	 *
 	 * @return void
 	 */
-	public function flushCache( $model = null ) {
-		if ( !is_null( $model ) ) {
-			$this->setModel( $model );
+	public function flushCache($model = null)
+	{
+		if (!is_null($model)) {
+			$this->setModel($model);
 		}
 		$keys = $this->getServiceKeys();
 
-		array_map( function ( $key ) {
-			$this->log( 'flushing cache for ' . get_class( $this ) . ' (' . $key . ')' );
+		array_map(function ($key) {
+			$this->log('flushing cache for ' . get_class($this) . ' (' . $key . ')');
 
-			Cache::forget( $key );
-		}, $keys );
+			Cache::forget($key);
+		}, $keys);
 	}
 }

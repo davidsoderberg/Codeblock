@@ -12,7 +12,8 @@ use Carbon\Carbon;
  * Class EloquentMessageRepository
  * @package App\Repositories\Message
  */
-class EloquentMessageRepository extends CRepository implements MessageRepository {
+class EloquentMessageRepository extends CRepository implements MessageRepository
+{
 
 	/**
 	 * Property to store Thread model in.
@@ -26,7 +27,8 @@ class EloquentMessageRepository extends CRepository implements MessageRepository
 	 *
 	 * @param Thread $thread
 	 */
-	public function setThread( Thread $thread ) {
+	public function setThread(Thread $thread)
+	{
 		$this->thread = $thread;
 	}
 
@@ -37,13 +39,14 @@ class EloquentMessageRepository extends CRepository implements MessageRepository
 	 *
 	 * @return mixed
 	 */
-	public function getThread( $id = null ) {
-		if ( !is_null( $id ) && is_numeric( $id ) && $id !== 0 ) {
-			$this->thread = Thread::find( $id );
+	public function getThread($id = null)
+	{
+		if (!is_null($id) && is_numeric($id) && $id !== 0) {
+			$this->thread = Thread::find($id);
 			$id = 0;
 		}
 
-		if ( $id === 0 ) {
+		if ($id === 0) {
 			return $this->thread;
 		}
 
@@ -56,15 +59,17 @@ class EloquentMessageRepository extends CRepository implements MessageRepository
 	 *
 	 * @return mixed
 	 */
-	public function getThreadsParticipatingIn() {
-		return Thread::forUser( Auth::user()->id )->latest( 'updated_at' )->get();
+	public function getThreadsParticipatingIn()
+	{
+		return Thread::forUser(Auth::user()->id)->latest('updated_at')->get();
 	}
 
 	/**
 	 * Get threads with new messages for current user.
 	 */
-	public function getThreadsWithNewMessages() {
-		Thread::forUserWithNewMessages( Auth::user()->id )->latest( 'updated_at' )->get();
+	public function getThreadsWithNewMessages()
+	{
+		Thread::forUserWithNewMessages(Auth::user()->id)->latest('updated_at')->get();
 	}
 
 	/**
@@ -74,13 +79,14 @@ class EloquentMessageRepository extends CRepository implements MessageRepository
 	 *
 	 * @return boolean
 	 */
-	public function CreateThread( $subject ) {
+	public function CreateThread($subject)
+	{
 
 		$thread = new Thread();
 
-		$thread->subject = $this->stripTrim( $subject );
+		$thread->subject = $this->stripTrim($subject);
 
-		if ( $thread->save() ) {
+		if ($thread->save()) {
 			$this->thread = $thread;
 
 			return true;
@@ -99,17 +105,18 @@ class EloquentMessageRepository extends CRepository implements MessageRepository
 	 *
 	 * @return boolean
 	 */
-	public function CreateMessage( $body ) {
+	public function CreateMessage($body)
+	{
 
 		$message = new Message();
 
-		$message->body = $this->stripTrim( $body );
+		$message->body = $this->stripTrim($body);
 
 		$message->thread_id = $this->thread->id;
 
 		$message->user_id = Auth::user()->id;
 
-		if ( $message->save() ) {
+		if ($message->save()) {
 			return true;
 		}
 
@@ -126,9 +133,10 @@ class EloquentMessageRepository extends CRepository implements MessageRepository
 	 *
 	 * @return bool
 	 */
-	public function CreateParticipant( $user_id = null ) {
+	public function CreateParticipant($user_id = null)
+	{
 
-		if ( is_null( $user_id ) ) {
+		if (is_null($user_id)) {
 			$user_id = Auth::user()->id;
 		}
 
@@ -140,7 +148,7 @@ class EloquentMessageRepository extends CRepository implements MessageRepository
 
 		$participant->user_id = $user_id;
 
-		if ( $participant->save() ) {
+		if ($participant->save()) {
 			return true;
 		}
 
@@ -155,10 +163,11 @@ class EloquentMessageRepository extends CRepository implements MessageRepository
 	 *
 	 * @param $recipients
 	 */
-	public function addParticipants( $recipients ) {
-		if ( count( $recipients ) ) {
-			foreach( $recipients as $user_id ) {
-				$this->CreateParticipant( $user_id );
+	public function addParticipants($recipients)
+	{
+		if (count($recipients)) {
+			foreach ($recipients as $user_id) {
+				$this->CreateParticipant($user_id);
 			}
 		}
 	}
@@ -171,12 +180,13 @@ class EloquentMessageRepository extends CRepository implements MessageRepository
 	 *
 	 * @return mixed
 	 */
-	public function getParticipantFromUser( $user_id ) {
+	public function getParticipantFromUser($user_id)
+	{
 		$thread = $this->thread;
-		if ( !is_null( $thread ) ) {
+		if (!is_null($thread)) {
 			$participants = $thread->participants;
-			foreach( $participants as $participant ) {
-				if ( $participant->user_id === $user_id ) {
+			foreach ($participants as $participant) {
+				if ($participant->user_id === $user_id) {
 					return $participant;
 				}
 			}
@@ -190,10 +200,11 @@ class EloquentMessageRepository extends CRepository implements MessageRepository
 	 *
 	 * @return bool
 	 */
-	public function isUnread( $userId ) {
-		$participant = $this->getParticipantFromUser( $userId );
-		if ( !is_null( $participant ) ) {
-			if ( $this->thread->updated_at > $participant->last_read ) {
+	public function isUnread($userId)
+	{
+		$participant = $this->getParticipantFromUser($userId);
+		if (!is_null($participant)) {
+			if ($this->thread->updated_at > $participant->last_read) {
 				return true;
 			}
 		}
@@ -208,9 +219,10 @@ class EloquentMessageRepository extends CRepository implements MessageRepository
 	 *
 	 * @return bool
 	 */
-	public function hasParticipant( $user_id ) {
-		$participant = $this->getParticipantFromUser( $user_id );
-		if ( !is_null( $participant ) ) {
+	public function hasParticipant($user_id)
+	{
+		$participant = $this->getParticipantFromUser($user_id);
+		if (!is_null($participant)) {
 			return true;
 		}
 
@@ -224,9 +236,10 @@ class EloquentMessageRepository extends CRepository implements MessageRepository
 	 *
 	 * @return boolean
 	 */
-	public function markAsRead( $user_id ) {
-		$participant = $this->getParticipantFromUser( $user_id );
-		if ( !is_null( $participant ) ) {
+	public function markAsRead($user_id)
+	{
+		$participant = $this->getParticipantFromUser($user_id);
+		if (!is_null($participant)) {
 			$participant->last_read = new Carbon;
 
 			return $participant->save();
@@ -238,10 +251,11 @@ class EloquentMessageRepository extends CRepository implements MessageRepository
 	/**
 	 * Restores all participants within a thread that has a new message
 	 */
-	public function activateAllParticipants() {
+	public function activateAllParticipants()
+	{
 		$participants = $this->thread->participants()->get();
 		$participants->merge($this->thread->trashedParticipants());
-		foreach( $participants as $participant ) {
+		foreach ($participants as $participant) {
 			$participant->restore();
 		}
 	}
@@ -253,11 +267,12 @@ class EloquentMessageRepository extends CRepository implements MessageRepository
 	 *
 	 * @return array
 	 */
-	public function participantsUserIds( $user_id = null ) {
-		$users = $this->thread->participants()->lists( 'user_id' );
+	public function participantsUserIds($user_id = null)
+	{
+		$users = $this->thread->participants()->lists('user_id');
 		$users->merge($this->thread->trashedParticipants()->lists('user_id'));
 
-		if ( $user_id ) {
+		if ($user_id) {
 			$users[] = $user_id;
 		}
 
@@ -271,13 +286,14 @@ class EloquentMessageRepository extends CRepository implements MessageRepository
 	 *
 	 * @return bool
 	 */
-	public function leave($thread_id){
+	public function leave($thread_id)
+	{
 		$thread = $this->getThread($thread_id);
-		if($thread instanceof Thread){
+		if ($thread instanceof Thread) {
 			$participants = $thread->participants;
 
-			foreach($participants as $participant){
-				if($participant->user_id == Auth::user()->id){
+			foreach ($participants as $participant) {
+				if ($participant->user_id == Auth::user()->id) {
 					$participant->deleted_at = date('Y-m-d H:i:s');
 					return $participant->save();
 				}

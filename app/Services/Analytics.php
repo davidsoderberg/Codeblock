@@ -8,7 +8,8 @@ use Irazasyed\LaravelGAMP\Facades\GAMP;
  * Class Analytics
  * @package App\Services
  */
-class Analytics {
+class Analytics
+{
 
 	/**
 	 * Property to store client id in.
@@ -94,11 +95,12 @@ class Analytics {
 	 *
 	 * @return mixed
 	 */
-	private static function getCategory( $int ) {
-		if ( $int <= ( count( Self::$categories ) - 1 ) ) {
+	private static function getCategory($int)
+	{
+		if ($int <= (count(Self::$categories) - 1)) {
 			return Self::$categories[$int];
 		}
-		throw new \OutOfRangeException( "That category does not exist." );
+		throw new \OutOfRangeException("That category does not exist.");
 	}
 
 	/**
@@ -108,11 +110,12 @@ class Analytics {
 	 *
 	 * @return mixed
 	 */
-	private static function getAction( $int ) {
-		if ( $int <= ( count( Self::$actions ) - 1 ) ) {
+	private static function getAction($int)
+	{
+		if ($int <= (count(Self::$actions) - 1)) {
 			return Self::$actions[$int];
 		}
-		throw new \OutOfRangeException( "That action does not exist." );
+		throw new \OutOfRangeException("That action does not exist.");
 	}
 
 	/**
@@ -122,9 +125,10 @@ class Analytics {
 	 *
 	 * @return null|string
 	 */
-	private static function parseLabel( $label = null ) {
-		if ( is_array( $label ) ) {
-			return json_encode( $label );
+	private static function parseLabel($label = null)
+	{
+		if (is_array($label)) {
+			return json_encode($label);
 		}
 
 		return $label;
@@ -137,23 +141,24 @@ class Analytics {
 	 * @param $action
 	 * @param null $label
 	 */
-	public static function track( $category, $action, $label = null ) {
-		if ( !is_null( env( 'TRACKING_ID', null ) ) ) {
-			if ( !env( 'APP_DEBUG' ) ) {
-				$analytics = GAMP::setClientId( Self::$clientId );
+	public static function track($category, $action, $label = null)
+	{
+		if (!is_null(env('TRACKING_ID', null))) {
+			if (!env('APP_DEBUG')) {
+				$analytics = GAMP::setClientId(Self::$clientId);
 				try {
-					$analytics->setEventCategory( Self::getCategory( $category ) )
-					          ->setEventAction( Self::getAction( $action ) );
-					if ( !is_null( $label ) ) {
-						$analytics->setEventLabel( Self::parseLabel( $label ) );
+					$analytics->setEventCategory(Self::getCategory($category))
+						->setEventAction(Self::getAction($action));
+					if (!is_null($label)) {
+						$analytics->setEventLabel(Self::parseLabel($label));
 					}
 					$analytics->sendEvent();
-				} catch( \OutOfRangeException $e ) {
-					$analytics->setEventCategory( Self::getCategory( Self::CATEGORY_ERROR ) )
-					          ->setEventAction( Self::getAction( Self::ACTION_CREATE ) )
-					          ->setEventLabel( 'Track event' )
-					          ->setEventValue( $e->getMessage() )
-					          ->sendEvent();
+				} catch (\OutOfRangeException $e) {
+					$analytics->setEventCategory(Self::getCategory(Self::CATEGORY_ERROR))
+						->setEventAction(Self::getAction(Self::ACTION_CREATE))
+						->setEventLabel('Track event')
+						->setEventValue($e->getMessage())
+						->sendEvent();
 				}
 			}
 		}

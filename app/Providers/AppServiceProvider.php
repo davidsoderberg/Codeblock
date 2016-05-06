@@ -7,7 +7,8 @@ use Illuminate\Support\ServiceProvider;
  * Class AppServiceProvider
  * @package App\Providers
  */
-class AppServiceProvider extends ServiceProvider {
+class AppServiceProvider extends ServiceProvider
+{
 
 	/**
 	 * Bootstrap any application services.
@@ -16,7 +17,7 @@ class AppServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		Validator::extend('honeypot', function($attribute, $value, $parameters) {
+		Validator::extend('honeypot', function ($attribute, $value, $parameters) {
 			return $value == '';
 		});
 	}

@@ -4,4 +4,6 @@
  * Interface TeamInviteRepository
  * @package App\Repositories\TeamInvite
  */
-interface TeamInviteRepository {}
+interface TeamInviteRepository
+{
+}

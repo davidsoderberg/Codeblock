@@ -16,7 +16,7 @@ trait UserHasTeamsTrait
 	 */
 	public function teams()
 	{
-		return $this->belongsToMany( 'App\Models\Team','team_user', 'user_id', 'team_id' );
+		return $this->belongsToMany('App\Models\Team', 'team_user', 'user_id', 'team_id');
 	}
 
 	/**
@@ -26,7 +26,7 @@ trait UserHasTeamsTrait
 	 */
 	public function ownedTeams()
 	{
-		return $this->hasMany( 'App\Models\Team', 'owner_id', 'id' );
+		return $this->hasMany('App\Models\Team', 'owner_id', 'id');
 	}
 
 	/**
@@ -36,7 +36,7 @@ trait UserHasTeamsTrait
 	 */
 	public function invites()
 	{
-		return $this->hasMany( 'App\Models\TeamInvite', 'email', 'email' );
+		return $this->hasMany('App\Models\TeamInvite', 'email', 'email');
 	}
 
 	/**
@@ -44,11 +44,10 @@ trait UserHasTeamsTrait
 	 */
 	public static function bootUserHasTeams()
 	{
-		static::deleting( function ( Model $user )
-		{
-			$user->teams()->sync( [ ] );
+		static::deleting(function (Model $user) {
+			$user->teams()->sync([]);
 			return true;
-		} );
+		});
 	}
 
 	/**
@@ -58,12 +57,11 @@ trait UserHasTeamsTrait
 	 *
 	 * @return $this
 	 */
-	public function attachTeam( $team )
+	public function attachTeam($team)
 	{
-		$teamId = $this->retrieveTeamId( $team );
-		if( !$this->teams()->get()->contains( $team ) )
-		{
-			$this->teams()->attach( $teamId );
+		$teamId = $this->retrieveTeamId($team);
+		if (!$this->teams()->get()->contains($team)) {
+			$this->teams()->attach($teamId);
 		}
 		return $this;
 	}
@@ -75,15 +73,13 @@ trait UserHasTeamsTrait
 	 *
 	 * @return mixed
 	 */
-	protected function retrieveTeamId( $team )
+	protected function retrieveTeamId($team)
 	{
-		if ( is_object( $team ) )
-		{
+		if (is_object($team)) {
 			$team = $team->getKey();
 		}
-		if ( is_array( $team ) && isset( $team[ "id" ] ) )
-		{
-			$team = $team[ "id" ];
+		if (is_array($team) && isset($team["id"])) {
+			$team = $team["id"];
 		}
 		return $team;
 	}
@@ -95,13 +91,13 @@ trait UserHasTeamsTrait
 	 *
 	 * @return bool
 	 */
-	public function isOwnerOfTeam( $team )
+	public function isOwnerOfTeam($team)
 	{
-		$teamId        = $this->retrieveTeamId( $team );
-		$teamKeyName = ( new Team() )->getKeyName();
-		return ( ( new Team() )
-			->where( "owner_id", "=", $this->getKey() )
-			->where( $teamKeyName, "=", $teamId )->first()
+		$teamId = $this->retrieveTeamId($team);
+		$teamKeyName = (new Team())->getKeyName();
+		return ((new Team())
+			->where("owner_id", "=", $this->getKey())
+			->where($teamKeyName, "=", $teamId)->first()
 		) ? true : false;
 	}
 
@@ -110,11 +106,10 @@ trait UserHasTeamsTrait
 	 *
 	 * @param $teams
 	 */
-	public function attachTeams( $teams )
+	public function attachTeams($teams)
 	{
-		foreach ( $teams as $team )
-		{
-			$this->attachTeam( $team );
+		foreach ($teams as $team) {
+			$this->attachTeam($team);
 		}
 	}
 
@@ -125,10 +120,10 @@ trait UserHasTeamsTrait
 	 *
 	 * @return bool
 	 */
-	public function detachTeam( $team )
+	public function detachTeam($team)
 	{
-		$teamId = $this->retrieveTeamId( $team );
-		$detaches = $this->teams()->detach( $teamId );
+		$teamId = $this->retrieveTeamId($team);
+		$detaches = $this->teams()->detach($teamId);
 		return $detaches > 0;
 	}
 
@@ -137,11 +132,10 @@ trait UserHasTeamsTrait
 	 *
 	 * @param $teams
 	 */
-	public function detachTeams( $teams )
+	public function detachTeams($teams)
 	{
-		foreach ( $teams as $team )
-		{
-			$this->detachTeam( $team );
+		foreach ($teams as $team) {
+			$this->detachTeam($team);
 		}
 	}
 

@@ -6,7 +6,8 @@ use App\Repositories\IRepository;
  * Interface RoleRepository
  * @package App\Repositories\Role
  */
-interface RoleRepository extends IRepository {
+interface RoleRepository extends IRepository
+{
 
 	/**
 	 * Fetch default role.

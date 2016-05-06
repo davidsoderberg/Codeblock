@@ -11,7 +11,8 @@ use Ratchet\WebSocket\WsServer;
  * Class Websocket
  * @package App\Console\Commands
  */
-class Websocket extends Command {
+class Websocket extends Command
+{
 
 	/**
 	 * The console command name.

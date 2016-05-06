@@ -4,7 +4,8 @@
  * Class Permission
  * @package App\Services\Annotation
  */
-class Permission extends Annotation {
+class Permission extends Annotation
+{
 
 	/**
 	 * Property to store current annotation in.
@@ -21,12 +22,13 @@ class Permission extends Annotation {
 	 *
 	 * @return array|string
 	 */
-	public function getPermission( $method, $optional = false ) {
-		$permission = $this->getValues( $method );
-		if ( $permission != '' ) {
-			$permission = explode( ':', $permission );
-			if ( $optional ) {
-				if ( isset( $permission[1] ) && strtolower( $permission[1] ) == 'optional' ) {
+	public function getPermission($method, $optional = false)
+	{
+		$permission = $this->getValues($method);
+		if ($permission != '') {
+			$permission = explode(':', $permission);
+			if ($optional) {
+				if (isset($permission[1]) && strtolower($permission[1]) == 'optional') {
 					$permission = '';
 				}
 			} else {
@@ -41,7 +43,8 @@ class Permission extends Annotation {
 	 * Returns current permissions.
 	 * @return array|string
 	 */
-	public function getPermissions() {
+	public function getPermissions()
+	{
 		return $this->getValues();
 	}
 }

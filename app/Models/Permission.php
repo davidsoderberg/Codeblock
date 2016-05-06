@@ -4,7 +4,8 @@
  * Class Permission
  * @package App\Models
  */
-class Permission extends Model {
+class Permission extends Model
+{
 
 	/**
 	 * The database table used by the model.
@@ -58,7 +59,8 @@ class Permission extends Model {
 	 *
 	 * @return string
 	 */
-	public function getNameAttribute(){
+	public function getNameAttribute()
+	{
 		return ucfirst(str_replace('_', ' ', $this->permission));
 	}
 

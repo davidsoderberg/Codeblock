@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * Class Thread
  * @package App\Models
  */
-class Thread extends Model {
+class Thread extends Model
+{
 
 	use SoftDeletes;
 
@@ -45,8 +46,9 @@ class Thread extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
-	public function messages() {
-		return $this->hasMany( 'App\Models\Message' );
+	public function messages()
+	{
+		return $this->hasMany('App\Models\Message');
 	}
 
 	/**
@@ -54,7 +56,8 @@ class Thread extends Model {
 	 *
 	 * @return \App\Models\Message
 	 */
-	public function getLatestMessageAttribute() {
+	public function getLatestMessageAttribute()
+	{
 		return $this->messages()->latest()->first();
 	}
 
@@ -63,8 +66,9 @@ class Thread extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
-	public function participants() {
-		return $this->hasMany( 'App\Models\Participant' )->whereNull('participants.deleted_at');
+	public function participants()
+	{
+		return $this->hasMany('App\Models\Participant')->whereNull('participants.deleted_at');
 	}
 
 	/**
@@ -72,8 +76,9 @@ class Thread extends Model {
 	 *
 	 * @return mixed
 	 */
-	public function trashedParticipants(){
-		return $this->hasMany( 'App\Models\Participant' )->whereNotNull('participants.deleted_at');
+	public function trashedParticipants()
+	{
+		return $this->hasMany('App\Models\Participant')->whereNotNull('participants.deleted_at');
 	}
 
 	/**
@@ -81,7 +86,8 @@ class Thread extends Model {
 	 *
 	 * @return mixed
 	 */
-	public function creator() {
+	public function creator()
+	{
 		return $this->messages()->oldest()->first()->user;
 	}
 
@@ -105,9 +111,9 @@ class Thread extends Model {
 	public function scopeForUser($query, $userId)
 	{
 		return $query->join('participants', 'threads.id', '=', 'participants.thread_id')
-		             ->where('participants.user_id', $userId)
-		             ->where('participants.deleted_at', null)
-		             ->select('threads.*');
+			->where('participants.user_id', $userId)
+			->where('participants.deleted_at', null)
+			->select('threads.*');
 	}
 
 	/**
@@ -120,13 +126,14 @@ class Thread extends Model {
 	public function scopeForUserWithNewMessages($query, $userId)
 	{
 		return $query->join('participants', 'threads.id', '=', 'participants.thread_id')
-		             ->where('participants.user_id', $userId)
-		             ->whereNull('participants.deleted_at')
-		             ->where(function ($query) {
-			             $query->where('threads.updated_at', '>', $this->getConnection()->raw($this->getConnection()->getTablePrefix() . 'participants.last_read'))
-			                   ->orWhereNull('participants.last_read');
-		             })
-		             ->select('threads.*');
+			->where('participants.user_id', $userId)
+			->whereNull('participants.deleted_at')
+			->where(function ($query) {
+				$query->where('threads.updated_at', '>',
+					$this->getConnection()->raw($this->getConnection()->getTablePrefix() . 'participants.last_read'))
+					->orWhereNull('participants.last_read');
+			})
+			->select('threads.*');
 	}
 
 	/**
@@ -140,8 +147,8 @@ class Thread extends Model {
 	{
 		$query->whereHas('participants', function ($query) use ($participants) {
 			$query->whereIn('user_id', $participants)
-			      ->groupBy('thread_id')
-			      ->havingRaw('COUNT(thread_id)='.count($participants));
+				->groupBy('thread_id')
+				->havingRaw('COUNT(thread_id)=' . count($participants));
 		});
 	}
 
@@ -152,15 +159,16 @@ class Thread extends Model {
 	 * @param array $columns
 	 * @return string
 	 */
-	public function participantsString($userId=null, $columns=['name'])
+	public function participantsString($userId = null, $columns = ['name'])
 	{
-		$columnString = implode(", ' ', " . $this->getConnection()->getTablePrefix() . $this->getUsersTable() . ".", $columns);
+		$columnString = implode(", ' ', " . $this->getConnection()->getTablePrefix() . $this->getUsersTable() . ".",
+			$columns);
 		$selectString = "concat(" . $this->getConnection()->getTablePrefix() . $this->getUsersTable() . "." . $columnString . ") as name";
 
 		$participantNames = $this->getConnection()->table($this->getUsersTable())
-		                         ->join('participants', $this->getUsersTable() . '.id', '=', 'participants.user_id')
-		                         ->where('participants.thread_id', $this->id)
-		                         ->select($this->getConnection()->raw($selectString));
+			->join('participants', $this->getUsersTable() . '.id', '=', 'participants.user_id')
+			->where('participants.thread_id', $this->id)
+			->select($this->getConnection()->raw($selectString));
 
 		if ($userId !== null) {
 			$participantNames->where($this->getUsersTable() . '.id', '!=', $userId);

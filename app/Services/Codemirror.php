@@ -4,7 +4,8 @@
  * Class Codemirror
  * @package App\Services
  */
-class Codemirror {
+class Codemirror
+{
 
 	/**
 	 * Property to store codemirror dirs.
@@ -16,8 +17,9 @@ class Codemirror {
 	/**
 	 * Constructor for Codemirror.
 	 */
-	public function __construct(){
-		$this->dirs = scandir(public_path().'/js/codemirror/mode');
+	public function __construct()
+	{
+		$this->dirs = scandir(public_path() . '/js/codemirror/mode');
 	}
 
 	/**
@@ -27,7 +29,8 @@ class Codemirror {
 	 *
 	 * @return bool
 	 */
-	public function modeExists($mode){
+	public function modeExists($mode)
+	{
 		return in_array($mode, $this->dirs);
 	}
 
@@ -38,7 +41,8 @@ class Codemirror {
 	 *
 	 * @return array|string
 	 */
-	public function jsSwitch($category){
+	public function jsSwitch($category)
+	{
 		$category = strtolower($category);
 		$CodeMirrorcategories = array(
 			'html' => 'xml',
@@ -46,14 +50,14 @@ class Codemirror {
 			'asp.net' => 'clike',
 			'php' => array('clike', 'xml', 'javascript', 'css', 'htmlmixed')
 		);
-		if(array_key_exists($category, $CodeMirrorcategories)){
+		if (array_key_exists($category, $CodeMirrorcategories)) {
 			$current = $CodeMirrorcategories[$category];
-			if(is_array($current)){
+			if (is_array($current)) {
 				$current = array_merge(array($category), $current);
 			}
 			$category = $current;
 		}
-		if(!is_array($category)){
+		if (!is_array($category)) {
 			$category = array($category);
 		}
 		return $category;

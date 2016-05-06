@@ -4,7 +4,8 @@
  * Class Reply
  * @package App\Models
  */
-class Reply extends Model {
+class Reply extends Model
+{
 	/**
 	 * The database table used by the model.
 	 *
@@ -63,8 +64,9 @@ class Reply extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function user() {
-		return $this->belongsTo( 'App\Models\User', 'user_id' );
+	public function user()
+	{
+		return $this->belongsTo('App\Models\User', 'user_id');
 	}
 
 	/**
@@ -72,8 +74,9 @@ class Reply extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function topic() {
-		return $this->belongsTo( 'App\Models\Topic', 'topic_id' );
+	public function topic()
+	{
+		return $this->belongsTo('App\Models\Topic', 'topic_id');
 	}
 
 	/**
@@ -81,7 +84,8 @@ class Reply extends Model {
 	 *
 	 * @return mixed
 	 */
-	public function getusernameAttribute() {
+	public function getusernameAttribute()
+	{
 		return $this->user->username;
 	}
 
@@ -90,8 +94,9 @@ class Reply extends Model {
 	 *
 	 * @return array
 	 */
-	public function getlinksAttribute() {
-		return $this->hateoas( $this->id, 'replies' );
+	public function getlinksAttribute()
+	{
+		return $this->hateoas($this->id, 'replies');
 	}
 
 	/**

@@ -4,24 +4,26 @@
  * Class Post
  * @package App\Models
  */
-class Post extends Model {
+class Post extends Model
+{
 
 	/**
 	 * Boot method for model.
 	 */
-	public static function boot() {
+	public static function boot()
+	{
 		parent::boot();
-		static::deleting( function ( $object ) {
-			if ( !empty( $object->tags[0] ) ) {
+		static::deleting(function ($object) {
+			if (!empty($object->tags[0])) {
 				$object->tags()->detach();
 			}
-			foreach( $object->stars as $star ) {
+			foreach ($object->stars as $star) {
 				$star->delete();
 			}
-			foreach( $object->comments as $comment ) {
+			foreach ($object->comments as $comment) {
 				$comment->delete();
 			}
-		} );
+		});
 	}
 
 	/**
@@ -86,8 +88,9 @@ class Post extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function category() {
-		return $this->belongsTo( 'App\Models\Category', 'cat_id' );
+	public function category()
+	{
+		return $this->belongsTo('App\Models\Category', 'cat_id');
 	}
 
 	/**
@@ -95,8 +98,9 @@ class Post extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function team() {
-		return $this->belongsTo( 'App\Models\Team', 'team_id' );
+	public function team()
+	{
+		return $this->belongsTo('App\Models\Team', 'team_id');
 	}
 
 	/**
@@ -104,8 +108,9 @@ class Post extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
 	 */
-	public function tags() {
-		return $this->belongsToMany( 'App\Models\Tag', 'post_tag' );
+	public function tags()
+	{
+		return $this->belongsToMany('App\Models\Tag', 'post_tag');
 	}
 
 	/**
@@ -113,8 +118,9 @@ class Post extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
-	public function stars() {
-		return $this->hasMany( 'App\Models\Star', 'post_id', 'id' );
+	public function stars()
+	{
+		return $this->hasMany('App\Models\Star', 'post_id', 'id');
 	}
 
 	/**
@@ -122,8 +128,9 @@ class Post extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function user() {
-		return $this->belongsTo( 'App\Models\User', 'user_id' );
+	public function user()
+	{
+		return $this->belongsTo('App\Models\User', 'user_id');
 	}
 
 	/**
@@ -131,8 +138,9 @@ class Post extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
-	public function comments() {
-		return $this->hasMany( 'App\Models\Comment', 'post_id', 'id' );
+	public function comments()
+	{
+		return $this->hasMany('App\Models\Comment', 'post_id', 'id');
 	}
 
 	/**
@@ -140,8 +148,9 @@ class Post extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function original() {
-		return $this->belongsTo( 'App\Models\Post', 'org' );
+	public function original()
+	{
+		return $this->belongsTo('App\Models\Post', 'org');
 	}
 
 	/**
@@ -149,8 +158,9 @@ class Post extends Model {
 	 *
 	 * @return int
 	 */
-	public function getstarcountAttribute() {
-		return count( $this->stars()->getResults() );
+	public function getstarcountAttribute()
+	{
+		return count($this->stars()->getResults());
 	}
 
 	/**
@@ -160,14 +170,15 @@ class Post extends Model {
 	 *
 	 * @return bool
 	 */
-	public function StaredByUser( $user_id ) {
+	public function StaredByUser($user_id)
+	{
 		$stars = $this->stars()->getResults();
 		$userArray = [];
-		foreach( $stars as $star ) {
+		foreach ($stars as $star) {
 			$userArray[] = $star->user_id;
 		}
 
-		return in_array( $user_id, $userArray );
+		return in_array($user_id, $userArray);
 	}
 
 	/**
@@ -175,8 +186,9 @@ class Post extends Model {
 	 *
 	 * @return mixed
 	 */
-	public function getcategorynameAttribute() {
-		if ( !is_null( $this->category ) ) {
+	public function getcategorynameAttribute()
+	{
+		if (!is_null($this->category)) {
 			return $this->category->name;
 		}
 	}
@@ -186,8 +198,9 @@ class Post extends Model {
 	 *
 	 * @return int
 	 */
-	public function getforkedAttribute() {
-		return count( Post::where( 'org', '=', $this->id )->get() );
+	public function getforkedAttribute()
+	{
+		return count(Post::where('org', '=', $this->id)->get());
 	}
 
 	/**
@@ -195,8 +208,9 @@ class Post extends Model {
 	 *
 	 * @return array
 	 */
-	public function getlinksAttribute() {
-		return $this->hateoas( $this->id, 'posts' );
+	public function getlinksAttribute()
+	{
+		return $this->hateoas($this->id, 'posts');
 	}
 
 	/**

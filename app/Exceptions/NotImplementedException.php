@@ -4,4 +4,6 @@
  * Class NotImplementedException
  * @package App\Exceptions
  */
-class NotImplementedException extends \Exception {}
+class NotImplementedException extends \Exception
+{
+}

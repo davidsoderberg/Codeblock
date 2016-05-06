@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Redirect;
  * Class NotificationController
  * @package App\Http\Controllers
  */
-class NotificationController extends Controller {
+class NotificationController extends Controller
+{
 
 	/**
 	 * Property to store NotificationRepository.
@@ -23,7 +24,8 @@ class NotificationController extends Controller {
 	 *
 	 * @param NotificationRepository $notification
 	 */
-	public function __construct(NotificationRepository $notification) {
+	public function __construct(NotificationRepository $notification)
+	{
 		parent::__construct();
 		$this->notification = $notification;
 	}
@@ -32,15 +34,18 @@ class NotificationController extends Controller {
 	 * Lists all notifications.
 	 * @return mixed
 	 */
-	public function index() {
-		return View::make('notification.index')->with('title', 'Notifications')->with('notifications', $this->notification->get());
+	public function index()
+	{
+		return View::make('notification.index')->with('title', 'Notifications')->with('notifications',
+			$this->notification->get());
 	}
 
 	/**
 	 * Lists all notifications for a user.
 	 * @return mixed
 	 */
-	public function listNotification(){
+	public function listNotification()
+	{
 		$this->notification->setRead(Auth::user()->id);
 		return View::make('notification.list')->with('title', 'Notifications');
 	}
@@ -50,9 +55,11 @@ class NotificationController extends Controller {
 	 * @param $id
 	 * @return mixed
 	 */
-	public function show($id) {
+	public function show($id)
+	{
 		$notification = $this->notification->get($id);
-		return View::make('notification.show')->with('title', 'Notification: '.$notification->subject)->with('notification', $notification);
+		return View::make('notification.show')->with('title',
+			'Notification: ' . $notification->subject)->with('notification', $notification);
 	}
 
 	/**
@@ -60,15 +67,17 @@ class NotificationController extends Controller {
 	 * @param $id
 	 * @return mixed
 	 */
-	public function delete($id) {
+	public function delete($id)
+	{
 		try {
 			$note = $this->notification->get($id);
-			if(Auth::user()->id == $note->user_id) {
-				if($this->notification->delete($id)) {
+			if (Auth::user()->id == $note->user_id) {
+				if ($this->notification->delete($id)) {
 					return Redirect::back()->with('success', 'Your notification has been deleted.');
 				}
 			}
-		} catch(\Exception $e){}
+		} catch (\Exception $e) {
+		}
 
 		return Redirect::back()->with('error', 'You can not delete that notification.');
 	}

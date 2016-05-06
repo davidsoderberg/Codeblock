@@ -8,7 +8,8 @@ use App\Services\HtmlBuilder;
  * Class Client
  * @package App\Services
  */
-class Client extends PubSub {
+class Client extends PubSub
+{
 
 	/**
 	 * Property to store current client in.
@@ -19,8 +20,9 @@ class Client extends PubSub {
 	/**
 	 * Constructo for Client.
 	 */
-	public function __construct() {
-		$this->client = new \WebSocket\Client( "ws://" . env( 'SOCKET_ADRESS' ) . ":" . env( 'SOCKET_PORT' ) );
+	public function __construct()
+	{
+		$this->client = new \WebSocket\Client("ws://" . env('SOCKET_ADRESS') . ":" . env('SOCKET_PORT'));
 	}
 
 	/**
@@ -33,21 +35,22 @@ class Client extends PubSub {
 	 *
 	 * @throws \WebSocket\BadOpcodeException
 	 */
-	public function send( $object, $user_id = 0, $channel = 'toast', $topic = '' ) {
-		if ( $user_id == 0 || !is_numeric( $user_id ) ) {
-			if ( !isset( $object->user_id ) ) {
-				Throw new \InvalidArgumentException( 'The user id is not valid' );
+	public function send($object, $user_id = 0, $channel = 'toast', $topic = '')
+	{
+		if ($user_id == 0 || !is_numeric($user_id)) {
+			if (!isset($object->user_id)) {
+				Throw new \InvalidArgumentException('The user id is not valid');
 			}
 			$user_id = $object->user_id;
 		}
 		try {
-			$this->client->send( json_encode( [
+			$this->client->send(json_encode([
 				"channel" => $channel,
 				'topic' => $topic,
 				'id' => $user_id,
-				'message' => $this->checkToast( $channel, $topic, $object ),
-			] ) );
-		} catch( ConnectionException $e ) {
+				'message' => $this->checkToast($channel, $topic, $object),
+			]));
+		} catch (ConnectionException $e) {
 		}
 	}
 
@@ -60,19 +63,20 @@ class Client extends PubSub {
 	 *
 	 * @return string
 	 */
-	private function checkToast( $channel, $topic, $object ) {
-		if ( $channel != 'toast' ) {
-			if ( $topic == '' ) {
-				Throw new \InvalidArgumentException( 'Topic is not set' );
+	private function checkToast($channel, $topic, $object)
+	{
+		if ($channel != 'toast') {
+			if ($topic == '') {
+				Throw new \InvalidArgumentException('Topic is not set');
 			}
-			if ( $channel != 'subscribe' && $channel != 'publish' ) {
-				Throw new \InvalidArgumentException( 'Channel has wrong value, value should be subscribe or publish.' );
+			if ($channel != 'subscribe' && $channel != 'publish') {
+				Throw new \InvalidArgumentException('Channel has wrong value, value should be subscribe or publish.');
 			}
 
 			return $object;
 		}
 
-		return $this->getMessage( $object );
+		return $this->getMessage($object);
 	}
 
 	/**
@@ -82,24 +86,26 @@ class Client extends PubSub {
 	 *
 	 * @return string
 	 */
-	private function getMessage( $object ) {
+	private function getMessage($object)
+	{
 		$message = 'You have a new ';
 		$html = new HtmlBuilder();
-		switch( $this->getObjectName( $object ) ) {
+		switch ($this->getObjectName($object)) {
 			case 'Notification':
-				$message .= $html->actionlink( $url = ['action' => 'NotificationController@listNotification'], 'notification' );
+				$message .= $html->actionlink($url = ['action' => 'NotificationController@listNotification'],
+					'notification');
 				break;
 			case 'Post':
-				$message .= 'comment in post: ' . $html->actionlink( $url = [
+				$message .= 'comment in post: ' . $html->actionlink($url = [
 						'action' => 'PostController@show',
 						'params' => [$object->id],
-					], $object->name );
+					], $object->name);
 				break;
 			case 'Topic':
-				$message .= 'reply in topic: ' . $html->actionlink( $url = [
+				$message .= 'reply in topic: ' . $html->actionlink($url = [
 						'action' => 'TopicController@show',
 						'params' => [$object->id],
-					], $object->title );
+					], $object->title);
 				break;
 		}
 
@@ -113,11 +119,12 @@ class Client extends PubSub {
 	 *
 	 * @return string
 	 */
-	private function getObjectName( $object ) {
-		if ( is_object( $object ) ) {
-			$namespaces = explode( '\\', get_class( $object ) );
-			$object_type = $namespaces[count( $namespaces ) - 1];
-			if ( class_exists( 'App\\Models\\' . $object_type ) ) {
+	private function getObjectName($object)
+	{
+		if (is_object($object)) {
+			$namespaces = explode('\\', get_class($object));
+			$object_type = $namespaces[count($namespaces) - 1];
+			if (class_exists('App\\Models\\' . $object_type)) {
 				return $object_type;
 			}
 		}

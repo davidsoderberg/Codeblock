@@ -4,7 +4,8 @@
  * Interface GapiInterface
  * @package App\Services\Gapi
  */
-interface GapiInterface {
+interface GapiInterface
+{
 
 	/**
 	 * Fetch top keywords.
@@ -14,7 +15,7 @@ interface GapiInterface {
 	 *
 	 * @return mixed
 	 */
-	public function getTopKeywords( $numberOfDays, $maxResults );
+	public function getTopKeywords($numberOfDays, $maxResults);
 
 	/**
 	 * Fetch top used browsers.
@@ -24,7 +25,7 @@ interface GapiInterface {
 	 *
 	 * @return mixed
 	 */
-	public function getTopBrowsers( $numberOfDays, $maxResults );
+	public function getTopBrowsers($numberOfDays, $maxResults);
 
 	/**
 	 * Fetch most visisted pages.
@@ -34,7 +35,7 @@ interface GapiInterface {
 	 *
 	 * @return mixed
 	 */
-	public function getMostVisitedPages( $numberOfDays, $maxResults );
+	public function getMostVisitedPages($numberOfDays, $maxResults);
 
 	/**
 	 * Fetch all active users.
@@ -43,7 +44,7 @@ interface GapiInterface {
 	 *
 	 * @return mixed
 	 */
-	public function getActiveUsers( $others );
+	public function getActiveUsers($others);
 
 	/**
 	 * Fetch all visitors and page views.
@@ -53,7 +54,7 @@ interface GapiInterface {
 	 *
 	 * @return mixed
 	 */
-	public function getVisitorsAndPageViews( $numberOfDays, $groupBy );
+	public function getVisitorsAndPageViews($numberOfDays, $groupBy);
 
 	/**
 	 * Fetch all events.
@@ -63,7 +64,7 @@ interface GapiInterface {
 	 *
 	 * @return mixed
 	 */
-	public function getEvents( $numberOfDays, $maxResults );
+	public function getEvents($numberOfDays, $maxResults);
 
 	/**
 	 * Fetch top referrers
@@ -73,5 +74,5 @@ interface GapiInterface {
 	 *
 	 * @return mixed
 	 */
-	public function getTopReferrers( $numberOfDays, $maxResults );
+	public function getTopReferrers($numberOfDays, $maxResults);
 }

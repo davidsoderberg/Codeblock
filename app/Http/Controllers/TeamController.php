@@ -13,7 +13,8 @@ use App\Repositories\Team\TeamRepository;
  *
  * @package App\Http\Controllers
  */
-class TeamController extends Controller {
+class TeamController extends Controller
+{
 
 	/**
 	 * Property to store TeamRepository in.
@@ -35,7 +36,8 @@ class TeamController extends Controller {
 	 * @param TeamRepository $team
 	 * @param TeamInviteRepository $invite
 	 */
-	public function __construct(TeamRepository $team, TeamInviteRepository $invite) {
+	public function __construct(TeamRepository $team, TeamInviteRepository $invite)
+	{
 		parent::__construct();
 		$this->teamRepository = $team;
 		$this->inviteRepository = $invite;
@@ -50,17 +52,18 @@ class TeamController extends Controller {
 	 * @permission view_team
 	 * @return mixed
 	 */
-	public function index($id = null) {
+	public function index($id = null)
+	{
 		$team = null;
 
-		if(is_numeric($id)) {
+		if (is_numeric($id)) {
 			$team = $this->teamRepository->get($id);
 		}
 
 		return View::make('team.index')
-		           ->with('title', 'Teams')
-		           ->with('teams', $this->teamRepository->get())
-		           ->with('team', $team);
+			->with('title', 'Teams')
+			->with('teams', $this->teamRepository->get())
+			->with('team', $team);
 	}
 
 	/**
@@ -70,7 +73,8 @@ class TeamController extends Controller {
 	 *
 	 * @return mixed
 	 */
-	private function show($id) {
+	private function show($id)
+	{
 		$team = $this->teamRepository->get($id);
 
 		return View::make('team.show')->with('title', 'Team: ' . $team->name)->with('team', $team);
@@ -83,8 +87,9 @@ class TeamController extends Controller {
 	 *
 	 * @return mixed
 	 */
-	public function listTeams($id = null) {
-		if(is_numeric($id)) {
+	public function listTeams($id = null)
+	{
+		if (is_numeric($id)) {
 			return $this->show($id);
 		}
 
@@ -99,9 +104,10 @@ class TeamController extends Controller {
 	 * @permission create_team:optional
 	 * @return mixed
 	 */
-	public function createOrUpdate($id = null) {
-		if($this->teamRepository->createOrUpdate($this->request->all(), $id)) {
-			if(is_null($id)) {
+	public function createOrUpdate($id = null)
+	{
+		if ($this->teamRepository->createOrUpdate($this->request->all(), $id)) {
+			if (is_null($id)) {
 				return Redirect::back()->with('success', 'Your team has been created.');
 			}
 
@@ -118,21 +124,22 @@ class TeamController extends Controller {
 	 *
 	 * @return mixed
 	 */
-	public function invite(UserRepository $user) {
+	public function invite(UserRepository $user)
+	{
 		$team = $this->teamRepository->get($this->request->get('id'));
 		$user = $user->get($user->getIdByEmail($this->request->get('email')));
 
-		if($this->teamRepository->isOwner($user, $team)) {
+		if ($this->teamRepository->isOwner($user, $team)) {
 			return Redirect::back()->with('error', 'You can not invite yourself to your own team.');
 		}
 
-		if($this->inviteRepository->inviteToTeam($user, $team)) {
+		if ($this->inviteRepository->inviteToTeam($user, $team)) {
 			return Redirect::back()->with('success', 'You have invite ' . $user->username . ' to ' . $team->name . '.');
 		}
 
 		return Redirect::back()
-		               ->with('error', 'You could not invite ' . $user->username . ' to ' . $team->name . '.')
-		               ->withInput($this->request->all());
+			->with('error', 'You could not invite ' . $user->username . ' to ' . $team->name . '.')
+			->withInput($this->request->all());
 	}
 
 	/**
@@ -142,8 +149,9 @@ class TeamController extends Controller {
 	 *
 	 * @return mixed
 	 */
-	public function leave($id) {
-		if($this->teamRepository->leave($id)) {
+	public function leave($id)
+	{
+		if ($this->teamRepository->leave($id)) {
 			return Redirect::back()->with('success', 'You have leaved that team now.');
 		}
 
@@ -158,15 +166,16 @@ class TeamController extends Controller {
 	 *
 	 * @return mixed
 	 */
-	public function respondInvite(UserRepository $userRepository, $token) {
+	public function respondInvite(UserRepository $userRepository, $token)
+	{
 		try {
 			$action = '';
-			if($this->inviteRepository->respondInvite($userRepository, $token, $action)) {
+			if ($this->inviteRepository->respondInvite($userRepository, $token, $action)) {
 				return Redirect::back()->with('success', 'You have now ' . $action . ' that invite.');
 			}
 
 			return Redirect::back()->with('error', 'That invite could not be ' . $action . '.');
-		} catch(NullPointerException $e) {
+		} catch (NullPointerException $e) {
 			return Redirect::to('/')->with('error', 'That invite are invalid.');
 		}
 	}
@@ -179,8 +188,9 @@ class TeamController extends Controller {
 	 * @permission delete_team:optional
 	 * @return mixed
 	 */
-	public function delete($id) {
-		if($this->teamRepository->delete($id)) {
+	public function delete($id)
+	{
+		if ($this->teamRepository->delete($id)) {
 			return Redirect::back()->with('success', 'Your team has been deleted.');
 		}
 

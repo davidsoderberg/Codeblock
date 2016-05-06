@@ -19,7 +19,8 @@ use Illuminate\Support\Facades\View;
  * Class MenuController
  * @package App\Http\Controllers
  */
-class MenuController extends Controller {
+class MenuController extends Controller
+{
 
 	/**
 	 * Runs commands user submit.
@@ -30,64 +31,66 @@ class MenuController extends Controller {
 	 *
 	 * @return object
 	 */
-	public function command( $command, $password, $param = null ) {
+	public function command($command, $password, $param = null)
+	{
 		$content = '';
 		$title = '';
-		if ( $password == env( 'APP_KEY' ) ) {
-			switch( $command ) {
+		if ($password == env('APP_KEY')) {
+			switch ($command) {
 				case 'seed':
-					Artisan::call( 'db:seed' );
-					$content = "<pre>" . Lang::get( 'app.SeedingDone' ) . "</pre>";
-					$title = Lang::get( 'app.ArtisanSeed' );
+					Artisan::call('db:seed');
+					$content = "<pre>" . Lang::get('app.SeedingDone') . "</pre>";
+					$title = Lang::get('app.ArtisanSeed');
 					break;
 				case 'migrate':
-					if ( $param != null ) {
+					if ($param != null) {
 						$call = 'migrate:' . $param;
 					} else {
 						$call = 'migrate';
 					}
-					Artisan::call( $call );
-					$content = "<pre>" . Lang::get( 'app.MigrationDone' ) . "</pre>";
-					$title = Lang::get( 'app.ArtisanMigrate' );
+					Artisan::call($call);
+					$content = "<pre>" . Lang::get('app.MigrationDone') . "</pre>";
+					$title = Lang::get('app.ArtisanMigrate');
 					break;
 				case 'iseed':
-					$title = Lang::get( 'app.ArtisanISeed' );
-					if ( $param == null ) {
+					$title = Lang::get('app.ArtisanISeed');
+					if ($param == null) {
 						$param = 'users';
 					}
 					try {
-						Iseed::generateSeed( $param );
-						$content = "<pre>" . Lang::get( 'app.ISeedingDone', ['table' => $param] ) . "</pre>";
-						$content .= "<a href='/command/seed/" . $password . "'>" . Lang::get( 'app.SeedNow' ) . "<a>";
-					} catch( Exception $e ) {
-						$content = "<pre>" . Lang::get( 'app.ISeedingError', ['table' => $param] ) . "</pre>";
+						Iseed::generateSeed($param);
+						$content = "<pre>" . Lang::get('app.ISeedingDone', ['table' => $param]) . "</pre>";
+						$content .= "<a href='/command/seed/" . $password . "'>" . Lang::get('app.SeedNow') . "<a>";
+					} catch (Exception $e) {
+						$content = "<pre>" . Lang::get('app.ISeedingError', ['table' => $param]) . "</pre>";
 					}
 					break;
 				case 'env':
-					$title = Lang::get( 'app.CheckEnvironment' );
+					$title = Lang::get('app.CheckEnvironment');
 					$content = app()->environment();
 					break;
 				default:
-					$title = Lang::get( 'app.NoCommand' );
+					$title = Lang::get('app.NoCommand');
 					break;
 			}
 		} else {
-			$title = Lang::get( 'app.WrongPassword' );
+			$title = Lang::get('app.WrongPassword');
 		}
 
-		return View::make( 'command' )->with( 'title', $title )->with( 'content', $content );
+		return View::make('command')->with('title', $title)->with('content', $content);
 	}
 
 	/**
 	 * Render view for index.
 	 * @return object
 	 */
-	public function index() {
-		if ( Auth::check() ) {
-			return Redirect::action( 'MenuController@browse' );
+	public function index()
+	{
+		if (Auth::check()) {
+			return Redirect::action('MenuController@browse');
 		}
 
-		return View::make( 'index' )->with( 'title', 'Home' );
+		return View::make('index')->with('title', 'Home');
 	}
 
 	/**
@@ -98,19 +101,21 @@ class MenuController extends Controller {
 	 *
 	 * @return object
 	 */
-	public function browse( CategoryRepository $category, TagRepository $tag ) {
-		return View::make( 'browse' )
-		           ->with( 'title', 'Browse' )
-		           ->with( 'tags', $tag->get() )
-		           ->with( 'categories', $category->get() );
+	public function browse(CategoryRepository $category, TagRepository $tag)
+	{
+		return View::make('browse')
+			->with('title', 'Browse')
+			->with('tags', $tag->get())
+			->with('categories', $category->get());
 	}
 
 	/**
 	 * Render view for license
 	 * @return object
 	 */
-	public function license() {
-		return View::make( 'license' )->with( 'title', 'Codeblock License' );
+	public function license()
+	{
+		return View::make('license')->with('title', 'Codeblock License');
 	}
 
 	/**
@@ -118,8 +123,9 @@ class MenuController extends Controller {
 	 *
 	 * @return object
 	 */
-	public function contact() {
-		return View::make( 'contact' )->with( 'title', 'Contact' );
+	public function contact()
+	{
+		return View::make('contact')->with('title', 'Contact');
 	}
 
 	/**
@@ -127,8 +133,9 @@ class MenuController extends Controller {
 	 *
 	 * @return mixed
 	 */
-	public function markdown() {
-		return View::make( 'markdown' )->with( 'title', 'Markdown' );
+	public function markdown()
+	{
+		return View::make('markdown')->with('title', 'Markdown');
 	}
 
 	/**
@@ -138,7 +145,8 @@ class MenuController extends Controller {
 	 *
 	 * @return object
 	 */
-	public function sendContact( CRepository $ClassRepo ) {
+	public function sendContact(CRepository $ClassRepo)
+	{
 		$rules = [
 			'name' => 'required|min:3',
 			'email' => 'required|email',
@@ -147,27 +155,27 @@ class MenuController extends Controller {
 		];
 		$input = $this->request->all();
 
-		foreach( $input as $key => $value ) {
-			$input[$key] = trim( strip_tags( $value ) );
+		foreach ($input as $key => $value) {
+			$input[$key] = trim(strip_tags($value));
 		}
 
-		$v = Validator::make( $input, $rules );
+		$v = Validator::make($input, $rules);
 
-		if ( $v->passes() ) {
+		if ($v->passes()) {
 			$input['Cmessage'] = $input['message'];
 			$emailInfo = [
-				'toEmail' => env( 'FROM_ADRESS' ),
-				'toName' => env( 'FROM_NAME' ),
+				'toEmail' => env('FROM_ADRESS'),
+				'toName' => env('FROM_NAME'),
 				'subject' => 'Contact message',
 			];
-			if ( $ClassRepo->sendEmail( 'emails.contact', $emailInfo, $input ) == 1 ) {
-				return Redirect::back()->with( 'success', 'Your contact message have been send.' );
+			if ($ClassRepo->sendEmail('emails.contact', $emailInfo, $input) == 1) {
+				return Redirect::back()->with('success', 'Your contact message have been send.');
 			}
 
 			return Redirect::back()
-			               ->with( 'error', 'Sorry your contact message could not been send, please try again' );
+				->with('error', 'Sorry your contact message could not been send, please try again');
 		} else {
-			return Redirect::back()->withErrors( $v->messages() )->withInput();
+			return Redirect::back()->withErrors($v->messages())->withInput();
 		}
 	}
 
@@ -177,27 +185,28 @@ class MenuController extends Controller {
 	 * @permission view_log
 	 * @return mixed
 	 */
-	public function log() {
+	public function log()
+	{
 		$logs = new Collection();
 		$count = 0;
-		foreach( LogViewer::getFiles() as $file ) {
-			LogViewer::setFile( $file );
+		foreach (LogViewer::getFiles() as $file) {
+			LogViewer::setFile($file);
 
-			foreach( LogViewer::all() as $item ) {
-				$logs->add( $item );
+			foreach (LogViewer::all() as $item) {
+				$logs->add($item);
 			}
 
 			$count++;
-			if ( $count >= 2 ) {
+			if ($count >= 2) {
 				break;
 			}
 		}
 
-		$logs = $this->createPaginator( $logs );
+		$logs = $this->createPaginator($logs);
 
-		return View::make( 'log' )
-		           ->with( 'title', 'Log' )
-		           ->with( 'logs', $logs['data'] )
-		           ->with( 'paginator', $logs['paginator'] );
+		return View::make('log')
+			->with('title', 'Log')
+			->with('logs', $logs['data'])
+			->with('paginator', $logs['paginator']);
 	}
 }

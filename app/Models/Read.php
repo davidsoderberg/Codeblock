@@ -4,7 +4,8 @@
  * Class read
  * @package App\Models
  */
-class Read extends Model {
+class Read extends Model
+{
 
 	/**
 	 * The database table used by the model.

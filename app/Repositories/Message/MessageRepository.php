@@ -6,7 +6,8 @@ use App\Models\Thread;
  * Interface MessageRepository
  * @package App\Repositories\Message
  */
-interface MessageRepository {
+interface MessageRepository
+{
 
 	/**
 	 * Setter for thread.
@@ -15,7 +16,7 @@ interface MessageRepository {
 	 *
 	 * @return mixed
 	 */
-	public function setThread( Thread $thread );
+	public function setThread(Thread $thread);
 
 	/**
 	 * Getter for thread.
@@ -24,7 +25,7 @@ interface MessageRepository {
 	 *
 	 * @return mixed
 	 */
-	public function getThread( $id = null );
+	public function getThread($id = null);
 
 	/**
 	 * Get threads current user participating in.
@@ -47,7 +48,7 @@ interface MessageRepository {
 	 *
 	 * @return mixed
 	 */
-	public function CreateThread( $subject );
+	public function CreateThread($subject);
 
 	/**
 	 * Creates a message.
@@ -56,7 +57,7 @@ interface MessageRepository {
 	 *
 	 * @return mixed
 	 */
-	public function CreateMessage( $body );
+	public function CreateMessage($body);
 
 	/**
 	 * Creates participant.
@@ -65,7 +66,7 @@ interface MessageRepository {
 	 *
 	 * @return mixed
 	 */
-	public function CreateParticipant( $user_id = null );
+	public function CreateParticipant($user_id = null);
 
 	/**
 	 * Adds participants.
@@ -74,5 +75,5 @@ interface MessageRepository {
 	 *
 	 * @return mixed
 	 */
-	public function addParticipants( $recipients );
+	public function addParticipants($recipients);
 }

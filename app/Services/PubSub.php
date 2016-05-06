@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Auth;
  * Class PubSub
  * @package App\Services
  */
-abstract class PubSub{
+abstract class PubSub
+{
 
 	/**
 	 *
@@ -26,8 +27,9 @@ abstract class PubSub{
 	 * @param $id
 	 * @return string
 	 */
-	public function getTopic($id){
-		return self::TOPIC.'.'.$id;
+	public function getTopic($id)
+	{
+		return self::TOPIC . '.' . $id;
 	}
 
 	/**
@@ -35,17 +37,19 @@ abstract class PubSub{
 	 * @param $id
 	 * @return string
 	 */
-	public function getComment($id){
-		return self::COMMENT.'.'.$id;
+	public function getComment($id)
+	{
+		return self::COMMENT . '.' . $id;
 	}
 
 	/**
 	 * Format topic reply for websocket.
 	 *
-*@param \App\Models\Reply $reply
+	 * @param \App\Models\Reply $reply
 	 * @param $user_id
 	 */
-	public function topic($reply, $user_id){
+	public function topic($reply, $user_id)
+	{
 		Auth::loginUsingId($user_id);
 		$ReplyRepository = App::make('App\Repositories\Reply\ReplyRepository');
 		$reply = $ReplyRepository->get($reply['id']);

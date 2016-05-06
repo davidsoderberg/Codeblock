@@ -30,10 +30,10 @@ Route::group(['prefix' => 'contact'], function () {
 Route::get('oauth/{social}', 'UserController@oauth');
 Route::post('search', 'PostController@search');
 Route::get('command/{command}/{password}/{param?}', 'MenuController@command')->where([
-		'command' => '[a-zA-Z]+',
-		'password' => '[a-zA-Z0-9]+',
-		'param' => '[a-zA-Z_]+',
-	]);
+	'command' => '[a-zA-Z]+',
+	'password' => '[a-zA-Z0-9]+',
+	'param' => '[a-zA-Z_]+',
+]);
 
 Route::group(['prefix' => 'posts'], function () {
 	Route::get('/list', 'PostController@listPosts');

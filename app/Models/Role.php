@@ -4,7 +4,8 @@
  * Class Role
  * @package App\Models
  */
-class Role extends Model {
+class Role extends Model
+{
 
 	/**
 	 * The database table used by the model.

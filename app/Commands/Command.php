@@ -4,7 +4,8 @@
  * Class Command
  * @package App\Commands
  */
-abstract class Command {
+abstract class Command
+{
 
 	//
 

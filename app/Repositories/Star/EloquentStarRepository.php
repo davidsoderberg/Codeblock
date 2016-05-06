@@ -7,7 +7,8 @@ use App\Repositories\CRepository;
  * Class EloquentStarRepository
  * @package App\Repositories\Star
  */
-class EloquentStarRepository extends CRepository implements StarRepository {
+class EloquentStarRepository extends CRepository implements StarRepository
+{
 
 	/**
 	 * Fetch one or all stars.

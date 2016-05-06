@@ -8,7 +8,8 @@ use App\Services\CollectionService;
  * Class EloquentRoleRepository
  * @package App\Repositories\Role
  */
-class EloquentRoleRepository extends CRepository implements RoleRepository {
+class EloquentRoleRepository extends CRepository implements RoleRepository
+{
 
 	/**
 	 * Property to store current role in.
@@ -24,12 +25,13 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 	 *
 	 * @return \App\Services\Model|array|\Illuminate\Database\Eloquent\Collection|null|static
 	 */
-	public function get( $id = null ) {
-		if ( is_null( $id ) ) {
-			return $this->cache( 'all', Role::where( 'id', '!=', 0 ) );
+	public function get($id = null)
+	{
+		if (is_null($id)) {
+			return $this->cache('all', Role::where('id', '!=', 0));
 		}
 
-		return CollectionService::filter( $this->get(), 'id', $id, 'first' );
+		return CollectionService::filter($this->get(), 'id', $id, 'first');
 	}
 
 	/**
@@ -40,19 +42,20 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 	 *
 	 * @return bool
 	 */
-	public function createOrUpdate( $input, $id = null ) {
-		if ( is_null( $id ) ) {
+	public function createOrUpdate($input, $id = null)
+	{
+		if (is_null($id)) {
 			$Role = new Role;
 		} else {
-			$Role = $this->get( $id );
+			$Role = $this->get($id);
 		}
-		if ( isset( $input['default'] ) && $input['default'] == 0 || isset( $input['default'] ) && $input['default'] == 1 ) {
+		if (isset($input['default']) && $input['default'] == 0 || isset($input['default']) && $input['default'] == 1) {
 			$Role->default = $input['default'];
 		}
-		if ( isset( $input['name'] ) ) {
-			$Role->name = $this->stripTrim( $input['name'] );
+		if (isset($input['name'])) {
+			$Role->name = $this->stripTrim($input['name']);
 		}
-		if ( $Role->save() ) {
+		if ($Role->save()) {
 			$this->role = $Role;
 
 			return true;
@@ -68,8 +71,9 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Collection|static
 	 */
-	public function getDefault() {
-		return CollectionService::filter( $this->get(), 'default', 1, 'first' );
+	public function getDefault()
+	{
+		return CollectionService::filter($this->get(), 'default', 1, 'first');
 	}
 
 	/**
@@ -79,17 +83,18 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 	 *
 	 * @return bool
 	 */
-	public function setDefault( $id ) {
-		if ( is_numeric( $id ) && $id > 0 ) {
-			$new = $this->get( $id );
-			if ( !is_null( $new ) ) {
+	public function setDefault($id)
+	{
+		if (is_numeric($id) && $id > 0) {
+			$new = $this->get($id);
+			if (!is_null($new)) {
 				$current = $this->getDefault();
-				if ( $this->createOrUpdate( ['default' => 0], $current->id ) ) {
+				if ($this->createOrUpdate(['default' => 0], $current->id)) {
 					$new->default = 1;
-					if ( $new->save() ) {
+					if ($new->save()) {
 						return true;
 					}
-					$this->createOrUpdate( ['default' => 1], $current->id );
+					$this->createOrUpdate(['default' => 1], $current->id);
 				}
 			}
 		}
@@ -102,10 +107,11 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 	 *
 	 * @return array
 	 */
-	public function getSelectList() {
+	public function getSelectList()
+	{
 		$roles = $this->get();
 		$selectArray = [];
-		foreach( $roles as $role ) {
+		foreach ($roles as $role) {
 			$selectArray[$role->id] = $role->name;
 		}
 
@@ -119,9 +125,10 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 	 *
 	 * @return bool
 	 */
-	public function delete( $id ) {
-		$Role = $this->get( $id );
-		if ( $Role == null ) {
+	public function delete($id)
+	{
+		$Role = $this->get($id);
+		if ($Role == null) {
 			return false;
 		}
 		$Role->permissions()->detach();
@@ -136,26 +143,27 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 	 *
 	 * @return array
 	 */
-	public function editRolePermission( $permissions ) {
+	public function editRolePermission($permissions)
+	{
 
 		$roles = $this->get();
 		$permissions = $permissions->toArray();
-		usort( $permissions, function ( $a, $b ) {
-			return strcmp( $a['name'], $b['name'] );
-		} );
+		usort($permissions, function ($a, $b) {
+			return strcmp($a['name'], $b['name']);
+		});
 
 		$roles_array = [];
-		foreach( $roles as $role ) {
+		foreach ($roles as $role) {
 
 			$role_permissions = [];
-			foreach( $role->permissions as $permission ) {
+			foreach ($role->permissions as $permission) {
 				$role_permissions[] = $permission->permission;
 			}
 
 			$roles_array[$role->name] = [];
-			foreach( $permissions as $permission ) {
+			foreach ($permissions as $permission) {
 				$roles_array[$role->name][$permission['permission']] = false;
-				if ( in_array( $permission['permission'], $role_permissions ) ) {
+				if (in_array($permission['permission'], $role_permissions)) {
 					$roles_array[$role->name][$permission['permission']] = true;
 				}
 			}
@@ -172,13 +180,14 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 	 *
 	 * @return bool
 	 */
-	public function updateRolePermission( $input ) {
-		foreach( $this->get() as $role ) {
-			$roleName = str_replace( ' ', '', $role->name );
-			if ( !array_key_exists( $roleName, $input ) ) {
+	public function updateRolePermission($input)
+	{
+		foreach ($this->get() as $role) {
+			$roleName = str_replace(' ', '', $role->name);
+			if (!array_key_exists($roleName, $input)) {
 				$input[$roleName] = [];
 			}
-			if ( !$this->syncPermissions( $role, $input[$roleName] ) ) {
+			if (!$this->syncPermissions($role, $input[$roleName])) {
 				return false;
 			}
 		}
@@ -194,12 +203,13 @@ class EloquentRoleRepository extends CRepository implements RoleRepository {
 	 *
 	 * @return mixed
 	 */
-	public function syncPermissions( $role, $ids ) {
-		if ( !is_array( $ids ) ) {
+	public function syncPermissions($role, $ids)
+	{
+		if (!is_array($ids)) {
 			$ids = [];
 		}
 
-		return $role->permissions()->sync( $ids );
+		return $role->permissions()->sync($ids);
 	}
 
 }

@@ -8,7 +8,8 @@ use App\Services\CollectionService;
  * Class EloquentCategoryRepository
  * @package App\Repositories\Category
  */
-class EloquentCategoryRepository extends CRepository implements CategoryRepository {
+class EloquentCategoryRepository extends CRepository implements CategoryRepository
+{
 
 	/**
 	 * Fetch one or all categories.
@@ -17,14 +18,15 @@ class EloquentCategoryRepository extends CRepository implements CategoryReposito
 	 *
 	 * @return \App\Services\Model|array|\Illuminate\Database\Eloquent\Collection|null|static
 	 */
-	public function get( $id = null ) {
-		if ( is_null( $id ) ) {
-			return $this->cache( 'all', Category::where( 'id', '!=', 0 ) );
+	public function get($id = null)
+	{
+		if (is_null($id)) {
+			return $this->cache('all', Category::where('id', '!=', 0));
 		} else {
-			if ( is_numeric( $id ) ) {
-				return CollectionService::filter( $this->get(), 'id', $id, 'first' );
+			if (is_numeric($id)) {
+				return CollectionService::filter($this->get(), 'id', $id, 'first');
 			} else {
-				return CollectionService::filter( $this->get(), 'name', $id, 'first' );
+				return CollectionService::filter($this->get(), 'name', $id, 'first');
 			}
 		}
 	}
@@ -37,18 +39,19 @@ class EloquentCategoryRepository extends CRepository implements CategoryReposito
 	 *
 	 * @return bool
 	 */
-	public function createOrUpdate( $input, $id = null ) {
-		if ( !is_numeric( $id ) ) {
+	public function createOrUpdate($input, $id = null)
+	{
+		if (!is_numeric($id)) {
 			$Category = new Category;
 		} else {
-			$Category = $this->get( $id );
+			$Category = $this->get($id);
 		}
 
-		if ( isset( $input['name'] ) ) {
-			$Category->name = $this->stripTrim( $input['name'] );
+		if (isset($input['name'])) {
+			$Category->name = $this->stripTrim($input['name']);
 		}
 
-		if ( $Category->save() ) {
+		if ($Category->save()) {
 			return true;
 		} else {
 			$this->errors = $Category::$errors;
@@ -64,9 +67,10 @@ class EloquentCategoryRepository extends CRepository implements CategoryReposito
 	 *
 	 * @return bool|mixed
 	 */
-	public function delete( $id ) {
-		$Category = $this->get( $id );
-		if ( $Category != null ) {
+	public function delete($id)
+	{
+		$Category = $this->get($id);
+		if ($Category != null) {
 			return $Category->delete();
 		}
 

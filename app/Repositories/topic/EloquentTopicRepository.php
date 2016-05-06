@@ -8,7 +8,8 @@ use App\Services\CollectionService;
  * Class EloquentTopicRepository
  * @package App\Repositories\Topic
  */
-class EloquentTopicRepository extends CRepository implements TopicRepository {
+class EloquentTopicRepository extends CRepository implements TopicRepository
+{
 
 	/**
 	 * Property to store topic in.
@@ -26,9 +27,9 @@ class EloquentTopicRepository extends CRepository implements TopicRepository {
 	 */
 	public function get($id = null)
 	{
-		if(is_null($id)){
+		if (is_null($id)) {
 			return $this->cache('all', Topic::where('id', '!=', 0));
-		}else{
+		} else {
 			return CollectionService::filter($this->get(), 'id', $id, 'first');
 		}
 	}
@@ -43,24 +44,24 @@ class EloquentTopicRepository extends CRepository implements TopicRepository {
 	 */
 	public function createOrUpdate($input, $id = null)
 	{
-		if(!is_numeric($id)) {
+		if (!is_numeric($id)) {
 			$Topic = new Topic;
 		} else {
 			$Topic = $this->get($id);
 		}
 
-		if(isset($input['title'])){
+		if (isset($input['title'])) {
 			$Topic->title = $this->stripTrim($input['title']);
 		}
 
-		if(isset($input['forum_id'])){
+		if (isset($input['forum_id'])) {
 			$Topic->forum_id = $this->stripTrim($input['forum_id']);
 		}
 
-		if($Topic->save()){
+		if ($Topic->save()) {
 			$this->topic = $Topic;
 			return true;
-		}else{
+		} else {
 			$this->errors = $Topic::$errors;
 			return false;
 		}
@@ -73,9 +74,10 @@ class EloquentTopicRepository extends CRepository implements TopicRepository {
 	 *
 	 * @return bool
 	 */
-	public function delete($id){
+	public function delete($id)
+	{
 		$Topic = $this->get($id);
-		if($Topic == null){
+		if ($Topic == null) {
 			return false;
 		}
 		return $Topic->delete();

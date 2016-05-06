@@ -8,7 +8,8 @@ use App\Services\CollectionService;
  * Class EloquentTagRepository
  * @package App\Repositories\Tag
  */
-class EloquentTagRepository extends CRepository implements TagRepository {
+class EloquentTagRepository extends CRepository implements TagRepository
+{
 
 	/**
 	 * Fetch one or all tags.
@@ -19,12 +20,12 @@ class EloquentTagRepository extends CRepository implements TagRepository {
 	 */
 	public function get($id = null)
 	{
-		if(is_null($id)){
+		if (is_null($id)) {
 			return $this->cache('all', Tag::where('id', '!=', 0));
-		}else{
-			if(is_numeric($id)) {
+		} else {
+			if (is_numeric($id)) {
 				return CollectionService::filter($this->get(), 'id', $id, 'first');
-			}else{
+			} else {
 				return CollectionService::filter($this->get(), 'name', $id, 'first');
 			}
 		}
@@ -40,20 +41,20 @@ class EloquentTagRepository extends CRepository implements TagRepository {
 	 */
 	public function createOrUpdate($input, $id = null)
 	{
-		if(!is_numeric($id)) {
+		if (!is_numeric($id)) {
 			$Tag = new Tag;
 		} else {
 			$Tag = $this->get($id);
 		}
 
-		if(isset($input['name'])){
+		if (isset($input['name'])) {
 			$Tag->name = $this->stripTrim($input['name']);
 		}
 
 
-		if($Tag->save()){
+		if ($Tag->save()) {
 			return true;
-		}else{
+		} else {
 			$this->errors = Tag::$errors;
 			return false;
 		}
@@ -66,12 +67,13 @@ class EloquentTagRepository extends CRepository implements TagRepository {
 	 *
 	 * @return bool|mixed
 	 */
-	public function delete($id){
+	public function delete($id)
+	{
 		$Tag = $this->get($id);
-		if($Tag == null){
+		if ($Tag == null) {
 			return false;
 		}
-		if(!empty($Tag->posts[0])){
+		if (!empty($Tag->posts[0])) {
 			$Tag->posts->detach();
 		}
 		return $Tag->delete();

@@ -9,7 +9,8 @@ use App\Services\CollectionService;
  * Class EloquentReplyRepository
  * @package App\Repositories\Reply
  */
-class EloquentReplyRepository extends CRepository implements ReplyRepository {
+class EloquentReplyRepository extends CRepository implements ReplyRepository
+{
 
 	/**
 	 * Property to store reply object in.
@@ -27,9 +28,9 @@ class EloquentReplyRepository extends CRepository implements ReplyRepository {
 	 */
 	public function get($id = null)
 	{
-		if(is_null($id)){
+		if (is_null($id)) {
 			return $this->cache('all', Reply::where('id', '!=', 0));
-		}else{
+		} else {
 			return CollectionService::filter($this->get(), 'id', $id, 'first');
 		}
 	}
@@ -44,28 +45,28 @@ class EloquentReplyRepository extends CRepository implements ReplyRepository {
 	 */
 	public function createOrUpdate($input, $id = null)
 	{
-		if(!is_numeric($id)) {
+		if (!is_numeric($id)) {
 			$Reply = new Reply;
 		} else {
 			$Reply = $this->get($id);
 		}
 
-		if(isset($input['reply'])){
+		if (isset($input['reply'])) {
 			$Reply->reply = $this->stripTrim($input['reply']);
 		}
 
-		if(isset($input['topic_id'])){
+		if (isset($input['topic_id'])) {
 			$Reply->topic_id = $this->stripTrim($input['topic_id']);
 		}
 
-		if(!isset($Reply->user_id)){
+		if (!isset($Reply->user_id)) {
 			$Reply->user_id = Auth::user()->id;
 		}
 
-		if($Reply->save()){
+		if ($Reply->save()) {
 			$this->Reply = $Reply;
 			return true;
-		}else{
+		} else {
 			$this->errors = $Reply::$errors;
 			return false;
 		}
@@ -78,9 +79,10 @@ class EloquentReplyRepository extends CRepository implements ReplyRepository {
 	 *
 	 * @return bool|mixed
 	 */
-	public function delete($id){
+	public function delete($id)
+	{
 		$Reply = $this->get($id);
-		if($Reply == null){
+		if ($Reply == null) {
 			return false;
 		}
 		return $Reply->delete();

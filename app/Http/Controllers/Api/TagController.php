@@ -8,7 +8,8 @@ use App\Repositories\Tag\TagRepository;
  * Class TagController
  * @package App\Http\Controllers\Api
  */
-class TagController extends ApiController {
+class TagController extends ApiController
+{
 
 	/**
 	 * Shows a tag.
@@ -18,7 +19,8 @@ class TagController extends ApiController {
 	 *
 	 * @return mixed
 	 */
-	public function Tags(TagRepository $tag, $id = null) {
+	public function Tags(TagRepository $tag, $id = null)
+	{
 		return $this->response([$this->stringData => $this->getCollection($tag, $id)], 200);
 	}
 
@@ -31,8 +33,9 @@ class TagController extends ApiController {
 	 *
 	 * @return mixed
 	 */
-	public function createOrUpdateTag(TagRepository $tag, $id = null) {
-		if($tag->createOrUpdate($this->request->all(), $id)) {
+	public function createOrUpdateTag(TagRepository $tag, $id = null)
+	{
+		if ($tag->createOrUpdate($this->request->all(), $id)) {
 			return $this->response([$this->stringMessage => 'Your tag has been saved'], 201);
 		}
 
@@ -48,8 +51,9 @@ class TagController extends ApiController {
 	 *
 	 * @return object
 	 */
-	public function deleteTag(TagRepository $tagRepository, $id) {
-		if($tagRepository->delete($id)) {
+	public function deleteTag(TagRepository $tagRepository, $id)
+	{
+		if ($tagRepository->delete($id)) {
 			return $this->response([$this->stringMessage => 'The tag has been deleted.'], 200);
 		}
 

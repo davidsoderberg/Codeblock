@@ -4,4 +4,6 @@
  * Class NotANumberException
  * @package App\Exceptions
  */
-class NotANumberException extends \Exception {}
+class NotANumberException extends \Exception
+{
+}

@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\View;
  * Class GapiController
  * @package App\Http\Controllers
  */
-class GapiController extends Controller {
+class GapiController extends Controller
+{
 
 	/**
 	 * Property to store Gapi object in.
@@ -20,7 +21,8 @@ class GapiController extends Controller {
 	/**
 	 * Constructor for GapiController.
 	 */
-	public function __construct() {
+	public function __construct()
+	{
 		parent::__construct();
 		$this->gapi = new Gapi();
 	}
@@ -31,13 +33,14 @@ class GapiController extends Controller {
 	 * @permission view_analytics_pages
 	 * @return mixed
 	 */
-	public function mostVisitedPages(){
+	public function mostVisitedPages()
+	{
 		$chartName = 'ColumnChart';
 		$tableName = 'mostVisitedPages';
 
 		$table = Lava::DataTable();
 		$table->addStringColumn('Url')->addNumberColumn('Views');
-		foreach($this->gapi->getMostVisitedPages() as $row){
+		foreach ($this->gapi->getMostVisitedPages() as $row) {
 			$table->addRow(array($row['url'], $row['pageViews']));
 		}
 
@@ -53,13 +56,14 @@ class GapiController extends Controller {
 	 * @permission view_analytics_visitors
 	 * @return mixed
 	 */
-	public function visitorsAndPageViews(){
+	public function visitorsAndPageViews()
+	{
 		$chartName = 'ColumnChart';
 		$tableName = 'visitorsAndPageViews';
 
 		$table = Lava::DataTable();
 		$table->addStringColumn('Visitors')->addNumberColumn('Views');
-		foreach($this->gapi->getVisitorsAndPageViews() as $row){
+		foreach ($this->gapi->getVisitorsAndPageViews() as $row) {
 			$table->addRow(array($row['visitors'], $row['pageViews']));
 		}
 
@@ -75,15 +79,16 @@ class GapiController extends Controller {
 	 * @permission view_analytics_events
 	 * @return mixed
 	 */
-	public function events(){
+	public function events()
+	{
 		$chartName = 'ColumnChart';
 		$tableName = 'events';
 
 		$table = Lava::DataTable();
 		$table->addStringColumn('Category & Action')->addNumberColumn('Times');
-		foreach($this->gapi->getEvents() as $row){
-			if(isset($row['Category']) && isset($row['Action']) && isset($row['Times'])) {
-				$table->addRow(array($row['Category'].' & ' .$row['Action'].', '.$row['Value'], $row['Times']));
+		foreach ($this->gapi->getEvents() as $row) {
+			if (isset($row['Category']) && isset($row['Action']) && isset($row['Times'])) {
+				$table->addRow(array($row['Category'] . ' & ' . $row['Action'] . ', ' . $row['Value'], $row['Times']));
 			}
 		}
 
@@ -101,7 +106,8 @@ class GapiController extends Controller {
 	 * @param $title
 	 * @return mixed
 	 */
-	private function render($chart, $table, $title){
+	private function render($chart, $table, $title)
+	{
 		return View::make('gapi')->with('title', $title)->with('chart', $chart)->with('table', $table);
 	}
 

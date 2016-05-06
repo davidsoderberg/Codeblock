@@ -4,7 +4,8 @@
  * Interface ReadRepository
  * @package App\Repositories\Read
  */
-interface ReadRepository {
+interface ReadRepository
+{
 
 	/**
 	 * Checks if user has read topic.

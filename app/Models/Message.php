@@ -4,7 +4,8 @@
  * Class Message
  * @package App\Models
  */
-class Message extends Model {
+class Message extends Model
+{
 
 	/**
 	 * The database table used by the model.
@@ -41,8 +42,9 @@ class Message extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function thread() {
-		return $this->belongsTo( 'App\Models\Thread' );
+	public function thread()
+	{
+		return $this->belongsTo('App\Models\Thread');
 	}
 
 	/**
@@ -50,8 +52,9 @@ class Message extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function user() {
-		return $this->belongsTo( 'App\Models\User' );
+	public function user()
+	{
+		return $this->belongsTo('App\Models\User');
 	}
 
 	/**
@@ -59,8 +62,9 @@ class Message extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
-	public function participants() {
-		return $this->hasMany( 'App\Models\Participant', 'thread_id', 'thread_id' );
+	public function participants()
+	{
+		return $this->hasMany('App\Models\Participant', 'thread_id', 'thread_id');
 	}
 
 	/**
@@ -68,7 +72,8 @@ class Message extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
-	public function recipients() {
-		return $this->participants()->where( 'user_id', '!=', $this->user_id );
+	public function recipients()
+	{
+		return $this->participants()->where('user_id', '!=', $this->user_id);
 	}
 }

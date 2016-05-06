@@ -4,7 +4,8 @@
  * Class Article
  * @package App\Models
  */
-class Article extends Model {
+class Article extends Model
+{
 
 	/**
 	 * The database table used by the model.
@@ -33,8 +34,8 @@ class Article extends Model {
 	 * @var array
 	 */
 	public static $rules = array(
-	    'title'  => 'required|unique:articles,title,:id:',
-	    'body' => 'required|min:3',
+		'title' => 'required|unique:articles,title,:id:',
+		'body' => 'required|min:3',
 		'slug' => 'required|min:3|unique:articles,slug,:id:',
 	);
 

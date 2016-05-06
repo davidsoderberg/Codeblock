@@ -4,21 +4,23 @@
  * Class Comment
  * @package App\Models
  */
-class Comment extends Model {
+class Comment extends Model
+{
 
 	/**
 	 * Boot method for model.
 	 */
-	public static function boot() {
-	    parent::boot();
-	    static::deleting(function($object) {
-	    	foreach ($object->children as $child) {
+	public static function boot()
+	{
+		parent::boot();
+		static::deleting(function ($object) {
+			foreach ($object->children as $child) {
 				$child->delete();
 			}
-	        foreach ($object->rates as $rate) {
+			foreach ($object->rates as $rate) {
 				$rate->delete();
 			}
-	    });
+		});
 	}
 
 	/**
@@ -55,7 +57,7 @@ class Comment extends Model {
 	 * @var array
 	 */
 	public static $rules = array(
-		'comment'  => 'required',
+		'comment' => 'required',
 		'user_id' => 'integer',
 		'post_id' => 'integer',
 		'status' => 'integer'
@@ -66,8 +68,9 @@ class Comment extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function user() {
-		return $this->belongsTo( 'App\Models\User', 'user_id', 'id');
+	public function user()
+	{
+		return $this->belongsTo('App\Models\User', 'user_id', 'id');
 	}
 
 	/**
@@ -75,8 +78,9 @@ class Comment extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function post() {
-		return $this->belongsTo( 'App\Models\Post', 'post_id', 'id');
+	public function post()
+	{
+		return $this->belongsTo('App\Models\Post', 'post_id', 'id');
 	}
 
 	/**
@@ -84,8 +88,9 @@ class Comment extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
-	public function children() {
-		return $this->hasMany( 'App\Models\Comment', 'parent', 'id');
+	public function children()
+	{
+		return $this->hasMany('App\Models\Comment', 'parent', 'id');
 	}
 
 	/**
@@ -110,8 +115,10 @@ class Comment extends Model {
 	 *
 	 * @return mixed
 	 */
-	public function getpostlinkAttribute(){
-		return \HTML::actionlink($url = array('action' => 'PostController@show', 'params' => array($this->post_id)), $this->post->name);
+	public function getpostlinkAttribute()
+	{
+		return \HTML::actionlink($url = array('action' => 'PostController@show', 'params' => array($this->post_id)),
+			$this->post->name);
 	}
 
 	/**
@@ -119,8 +126,10 @@ class Comment extends Model {
 	 *
 	 * @return mixed
 	 */
-	public function getuserlinkAttribute(){
-		return \HTML::actionlink($url = array('action' => 'UserController@show', 'params' => array($this->user_id)), $this->user['username']);
+	public function getuserlinkAttribute()
+	{
+		return \HTML::actionlink($url = array('action' => 'UserController@show', 'params' => array($this->user_id)),
+			$this->user['username']);
 	}
 
 	/**
@@ -128,8 +137,9 @@ class Comment extends Model {
 	 *
 	 * @return string
 	 */
-	public function getprintstatusAttribute(){
-		if($this->status == 0 ) {
+	public function getprintstatusAttribute()
+	{
+		if ($this->status == 0) {
 			return 'Hidden';
 		} else {
 			return 'Shown';

@@ -4,7 +4,8 @@
  * Interface NotificationRepository
  * @package App\Repositories\Notification
  */
-interface NotificationRepository {
+interface NotificationRepository
+{
 
 	/**
 	 * Fetch one or all notifications.
@@ -35,7 +36,7 @@ interface NotificationRepository {
 	 *
 	 * @return mixed
 	 */
-	public function getSubjectAndBody( \App\Models\Notification $notification);
+	public function getSubjectAndBody(\App\Models\Notification $notification);
 
 	/**
 	 * Deletes a notification.

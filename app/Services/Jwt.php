@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\Auth;
  * Class Jwt
  * @package App\Services
  */
-class Jwt {
+class Jwt
+{
 
 	/**
 	 * Creating a json web token.
@@ -15,10 +16,11 @@ class Jwt {
 	 *
 	 * @return string
 	 */
-	public static function encode( $payload ) {
-		$payload += ['exp' => strtotime( "+2 hours" )];
+	public static function encode($payload)
+	{
+		$payload += ['exp' => strtotime("+2 hours")];
 
-		return \JWT::encode( $payload, env( 'APP_KEY' ) );
+		return \JWT::encode($payload, env('APP_KEY'));
 	}
 
 	/**
@@ -28,8 +30,9 @@ class Jwt {
 	 *
 	 * @return object
 	 */
-	public static function decode( $token ) {
-		return \JWT::decode( $token, env( 'APP_KEY' ) );
+	public static function decode($token)
+	{
+		return \JWT::decode($token, env('APP_KEY'));
 	}
 
 	/**
@@ -39,14 +42,15 @@ class Jwt {
 	 *
 	 * @return bool
 	 */
-	public static function auth( $token = '' ) {
+	public static function auth($token = '')
+	{
 		try {
-			$user = Self::decode( $token );
-			Auth::loginUsingId( $user->id );
-			if ( Auth::user() ) {
+			$user = Self::decode($token);
+			Auth::loginUsingId($user->id);
+			if (Auth::user()) {
 				return true;
 			}
-		} catch( \Exception $e ) {
+		} catch (\Exception $e) {
 		}
 
 		return false;

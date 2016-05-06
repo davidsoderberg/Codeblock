@@ -9,7 +9,8 @@ use App\Services\Transformer;
  * Class UserController
  * @package App\Http\Controllers\Api
  */
-class UserController extends ApiController {
+class UserController extends ApiController
+{
 
 	/**
 	 * Shows a user.
@@ -19,10 +20,11 @@ class UserController extends ApiController {
 	 *
 	 * @return mixed
 	 */
-	public function Users(UserRepository $user, $id = null) {
-		$users = $this->getCollection( $user, $id );
+	public function Users(UserRepository $user, $id = null)
+	{
+		$users = $this->getCollection($user, $id);
 		Transformer::walker($users);
-		return $this->response( [$this->stringData => $users], 200 );
+		return $this->response([$this->stringData => $users], 200);
 	}
 
 	/**
@@ -33,15 +35,17 @@ class UserController extends ApiController {
 	 *
 	 * @return mixed
 	 */
-	public function createOrUpdateUser(UserRepository $user, $id = null) {
-		if(!is_null($id)) {
-			if($id != Auth::user()->id && !Auth::user()->hasPermission('update_users', false)) {
+	public function createOrUpdateUser(UserRepository $user, $id = null)
+	{
+		if (!is_null($id)) {
+			if ($id != Auth::user()->id && !Auth::user()->hasPermission('update_users', false)) {
 				return $this->response([$this->stringErrors => [$this->stringUser => 'You are not that user']], 400);
 			}
 		}
-		if($user->createOrUpdate($this->request->all(), $id)) {
-			if(is_null($id)) {
-				return $this->response([$this->stringMessage => 'Your user has been created, use the link in the mail to activate your user.'], 201);
+		if ($user->createOrUpdate($this->request->all(), $id)) {
+			if (is_null($id)) {
+				return $this->response([$this->stringMessage => 'Your user has been created, use the link in the mail to activate your user.'],
+					201);
 			} else {
 				return $this->response([$this->stringMessage => 'Your user has been saved.'], 201);
 			}

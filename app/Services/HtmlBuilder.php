@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Request;
  * Class HtmlBuilder
  * @package App\Services
  */
-class HtmlBuilder extends \Collective\Html\HtmlBuilder {
+class HtmlBuilder extends \Collective\Html\HtmlBuilder
+{
 
 	/**
 	 * Creating user avatar for forum.
@@ -25,10 +26,11 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder {
 	 *
 	 * @return string
 	 */
-	public function avatar( $value, $size = 48 ) {
+	public function avatar($value, $size = 48)
+	{
 		$identicon = new \Identicon\Identicon();
 
-		return $identicon->getImageDataUri( $value, $size, '272822' );
+		return $identicon->getImageDataUri($value, $size, '272822');
 		//<img alt="Avatar for {{username}}" src="{{HTML::avatar(id)}}">
 	}
 
@@ -40,10 +42,11 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder {
 	 *
 	 * @return mixed|string
 	 */
-	public function markdown( $text, $parseAll = false ) {
-		$parser = new Markdown( $parseAll );
+	public function markdown($text, $parseAll = false)
+	{
+		$parser = new Markdown($parseAll);
 
-		return $parser->text( nl2br( $text ) );
+		return $parser->text(nl2br($text));
 	}
 
 	/**
@@ -53,8 +56,9 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder {
 	 *
 	 * @return string
 	 */
-	public function version( $path ) {
-		return asset( $path ) . '?v=' . filemtime( public_path() . '/' . $path );
+	public function version($path)
+	{
+		return asset($path) . '?v=' . filemtime(public_path() . '/' . $path);
 	}
 
 	/**
@@ -66,18 +70,21 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder {
 	 *
 	 * @return mixed
 	 */
-	public function mention( $text ) {
+	public function mention($text)
+	{
 
 		preg_match('/@(\w+)/', $text, $matches);
-		if(count($matches) > 0) {
+		if (count($matches) > 0) {
 			$repo = new EloquentUserRepository();
 			$prevMatch = '';
-			foreach($matches as $match){
+			foreach ($matches as $match) {
 				$match = trim($match, '@');
-				if($match !== $prevMatch) {
-					$user = $repo->get( $match );
-					if ( !is_null( $user ) ) {
-						$text = preg_replace( '/@(\w+)/', ' <a class="mention" target="_blank" href="' . action( 'MenuController@index' ) . '/user/\1">@\1</a>', $text );
+				if ($match !== $prevMatch) {
+					$user = $repo->get($match);
+					if (!is_null($user)) {
+						$text = preg_replace('/@(\w+)/',
+							' <a class="mention" target="_blank" href="' . action('MenuController@index') . '/user/\1">@\1</a>',
+							$text);
 					}
 				}
 				$prevMatch = $match;
@@ -91,11 +98,12 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder {
 	 *
 	 * @return string
 	 */
-	public function flash() {
+	public function flash()
+	{
 		$flash = ['success', 'error', 'warning', 'info'];
-		foreach( $flash as $value ) {
-			if ( Session::has( $value ) ) {
-				return '<div class="text-center alert ' . $value . '">' . Session::get( $value ) . ' <a href="#" class="close-alert">X</a></div>';
+		foreach ($flash as $value) {
+			if (Session::has($value)) {
+				return '<div class="text-center alert ' . $value . '">' . Session::get($value) . ' <a href="#" class="close-alert">X</a></div>';
 			}
 		}
 	}
@@ -104,11 +112,12 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder {
 	 * Creating toast message.
 	 * @return string
 	 */
-	public function toast() {
+	public function toast()
+	{
 		$flash = ['success', 'error', 'warning', 'info'];
-		foreach( $flash as $value ) {
-			if ( Session::has( $value ) ) {
-				return '<div class="toast animated lightSpeedIn ' . $value . '"><a href="#" class="close-toast">X</a> ' . Session::get( $value ) . '</div>';
+		foreach ($flash as $value) {
+			if (Session::has($value)) {
+				return '<div class="toast animated lightSpeedIn ' . $value . '"><a href="#" class="close-toast">X</a> ' . Session::get($value) . '</div>';
 			}
 		}
 	}
@@ -118,8 +127,9 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder {
 	 *
 	 * @return string
 	 */
-	public function Honeypot() {
-		return '<div class="display-none">' . FormFacade::input( 'text', 'honeyName' ) . '</div>';
+	public function Honeypot()
+	{
+		return '<div class="display-none">' . FormFacade::input('text', 'honeyName') . '</div>';
 	}
 
 	/**
@@ -130,12 +140,13 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder {
 	 *
 	 * @return string
 	 */
-	public function submenu( $content, $items ) {
+	public function submenu($content, $items)
+	{
 		$list = '';
-		foreach( $items as $item ) {
-			$list .= $this->menulink( $item[0], $item[1], [], false );
+		foreach ($items as $item) {
+			$list .= $this->menulink($item[0], $item[1], [], false);
 		}
-		if ( $list == '' ) {
+		if ($list == '') {
 			return $list;
 		}
 
@@ -150,12 +161,13 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder {
 	 *
 	 * @return bool
 	 */
-	public function hasPermission( $action, $optional = false ) {
-		$action = explode( '@', $action );
-		$permissionAnnotation = New Permission( 'App\\Http\\Controllers\\' . $action[0] );
+	public function hasPermission($action, $optional = false)
+	{
+		$action = explode('@', $action);
+		$permissionAnnotation = New Permission('App\\Http\\Controllers\\' . $action[0]);
 
-		if ( Auth::check() && !Auth::user()
-		                           ->hasPermission( $permissionAnnotation->getPermission( $action[1], $optional ) )
+		if (Auth::check() && !Auth::user()
+				->hasPermission($permissionAnnotation->getPermission($action[1], $optional))
 		) {
 			return false;
 		}
@@ -173,9 +185,10 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder {
 	 *
 	 * @return string
 	 */
-	public function menulink( $url, $content, $attributes = [], $optional = true ) {
-		$link = $this->actionlink( $url, $content, $attributes, $optional );
-		if ( $link !== '' ) {
+	public function menulink($url, $content, $attributes = [], $optional = true)
+	{
+		$link = $this->actionlink($url, $content, $attributes, $optional);
+		if ($link !== '') {
 			$link = '<li>' . $link . '</li>';
 		}
 
@@ -192,23 +205,24 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder {
 	 *
 	 * @return string
 	 */
-	public function actionlink( $url, $content, $attributes = [], $optional = true ) {
-		if ( !$this->hasPermission( $url['action'], $optional ) ) {
+	public function actionlink($url, $content, $attributes = [], $optional = true)
+	{
+		if (!$this->hasPermission($url['action'], $optional)) {
 			return '';
 		}
 
-		$url = array_merge( ['action' => '', 'params' => []], $url );
+		$url = array_merge(['action' => '', 'params' => []], $url);
 
-		$attributes['href'] = URL::action( $url['action'], $url['params'] );
-		if ( Str::contains( $attributes['href'], Request::path() ) ) {
-			if ( isset( $attributes['class'] ) ) {
+		$attributes['href'] = URL::action($url['action'], $url['params']);
+		if (Str::contains($attributes['href'], Request::path())) {
+			if (isset($attributes['class'])) {
 				$attributes['class'] .= ' active';
 			} else {
 				$attributes['class'] = 'active';
 			}
 		}
 
-		return '<a' . $this->attributes( $attributes ) . '>' . $content . '</a>';
+		return '<a' . $this->attributes($attributes) . '>' . $content . '</a>';
 	}
 
 	/**
@@ -221,88 +235,92 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder {
 	 *
 	 * @return string
 	 */
-	public function table( $fields = [], $data = [], $show = [], $info ) {
+	public function table($fields = [], $data = [], $show = [], $info)
+	{
 
-		if ( count( $data ) > 0 ) {
-			$show = array_merge( ['Edit' => false, 'Delete' => false, 'View' => false, 'Pagination' => 0], $show );
+		if (count($data) > 0) {
+			$show = array_merge(['Edit' => false, 'Delete' => false, 'View' => false, 'Pagination' => 0], $show);
 
-			if ( !is_array( $data ) ) {
+			if (!is_array($data)) {
 				$data = $data->toArray();
 			}
 
-			if ( !isset( $_GET['page'] ) || !is_numeric( $_GET['page'] ) ) {
+			if (!isset($_GET['page']) || !is_numeric($_GET['page'])) {
 				$_GET['page'] = 1;
 			}
 
-			$paginator = new LengthAwarePaginator( $data, count( $data ), $show['Pagination'], $_GET['page'], ['path' => Request::path()] );
-			if ( $show['Pagination'] > 0 ) {
-				$data = array_slice( $data, ( $_GET['page'] * $show['Pagination'] ) - $show['Pagination'], $show['Pagination'] );
+			$paginator = new LengthAwarePaginator($data, count($data), $show['Pagination'], $_GET['page'],
+				['path' => Request::path()]);
+			if ($show['Pagination'] > 0) {
+				$data = array_slice($data, ($_GET['page'] * $show['Pagination']) - $show['Pagination'],
+					$show['Pagination']);
 			}
 
 			$table = '<table>';
 			$table .= '<thead><tr>';
-			foreach( $fields as $key => $field ) {
-				if ( is_array( $field ) ) {
-					$field = array_keys( $field )[0];
+			foreach ($fields as $key => $field) {
+				if (is_array($field)) {
+					$field = array_keys($field)[0];
 				}
-				$table .= '<th>' . str_replace( '_', ' ', Str::title( $field ) ) . '</th>';
+				$table .= '<th>' . str_replace('_', ' ', Str::title($field)) . '</th>';
 			}
-			if ( $show['Edit'] || $show['Delete'] || $show['View'] ) {
+			if ($show['Edit'] || $show['Delete'] || $show['View']) {
 				$table .= '<th>Actions</th>';
 			}
 			$table .= '</tr></thead>';
 
-			foreach( $data as $d ) {
+			foreach ($data as $d) {
 				$table .= '<tr>';
-				foreach( $fields as $key ) {
+				foreach ($fields as $key) {
 					$array_key = null;
-					if ( is_array( $key ) ) {
-						$array_key = array_keys( $key )[0];
+					if (is_array($key)) {
+						$array_key = array_keys($key)[0];
 						$key = $key[$array_key];
 					}
-					if ( $key != 'actions' ) {
+					if ($key != 'actions') {
 						$value = null;
-						if ( is_object( $d[$key] ) ) {
+						if (is_object($d[$key])) {
 							$value = $d[$key]->name;
 						} else {
 							$value = $d[$key];
 						}
-						if ( !is_null( $array_key ) ) {
+						if (!is_null($array_key)) {
 							$key = $array_key;
 						}
-						$table .= '<td data-title="' . str_replace( '_', ' ', Str::title( $key ) ) . '">' . $value . '</td>';
+						$table .= '<td data-title="' . str_replace('_', ' ',
+								Str::title($key)) . '">' . $value . '</td>';
 					}
 				}
-				if ( $show['Edit'] || $show['Delete'] || $show['View'] ) {
+				if ($show['Edit'] || $show['Delete'] || $show['View']) {
 					$table .= '<td data-title="Actions">';
 					$showLink = false;
-					if ( isset( $d['private'] ) ) {
-						if ( $d['private'] == true ) {
+					if (isset($d['private'])) {
+						if ($d['private'] == true) {
 							$showLink = false;
 						} else {
 							$showLink = true;
 						}
 					}
-					if ( Auth::check() && isset( $d['user_id'] ) ) {
+					if (Auth::check() && isset($d['user_id'])) {
 						$showLink = Auth::user()->id == $d['user_id'];
 					}
-					if ( $show['Edit'] ) {
-						$table .= $this->actionlink( [
+					if ($show['Edit']) {
+						$table .= $this->actionlink([
 								'action' => $show['Edit'],
 								'params' => [$d['id']],
-							], '<i class="fa fa-pencil"></i>Edit', [], $showLink ) . ' ';
+							], '<i class="fa fa-pencil"></i>Edit', [], $showLink) . ' ';
 					}
-					if ( $show['View'] ) {
-						$table .= $this->actionlink( [
+					if ($show['View']) {
+						$table .= $this->actionlink([
 								'action' => $show['View'],
 								'params' => [$d['id']],
-							], '<i class="fa fa-eye"></i>View', [], $showLink ) . ' ';
+							], '<i class="fa fa-eye"></i>View', [], $showLink) . ' ';
 					}
-					if ( $show['Delete'] ) {
-						$table .= $this->actionlink( [
+					if ($show['Delete']) {
+						$table .= $this->actionlink([
 								'action' => $show['Delete'],
 								'params' => [$d['id']],
-							], '<i class="fa fa-trash-o"></i>Delete', [], $showLink ) . ' ';
+							], '<i class="fa fa-trash-o"></i>Delete', [], $showLink) . ' ';
 					}
 					$table .= '</td>';
 				}
@@ -323,14 +341,15 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder {
 	 *
 	 * @param $lang
 	 */
-	public function codemirror( $lang ) {
+	public function codemirror($lang)
+	{
 		$codemirror = new Codemirror();
-		if ( !is_array( $lang ) ) {
-			$lang = $codemirror->jsSwitch( $lang );
+		if (!is_array($lang)) {
+			$lang = $codemirror->jsSwitch($lang);
 		}
-		foreach( $lang as $la ) {
-			if ( $codemirror->modeExists( $la ) ) {
-				echo '<script src="' . asset( 'js/codemirror/mode/' . $la . '/' . $la . '.js' ) . '"></script>';
+		foreach ($lang as $la) {
+			if ($codemirror->modeExists($la)) {
+				echo '<script src="' . asset('js/codemirror/mode/' . $la . '/' . $la . '.js') . '"></script>';
 			}
 		}
 	}
@@ -344,8 +363,9 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder {
 	 *
 	 * @return string
 	 */
-	public function excerpt( $text, $parseAll = false, $words = 10 ) {
-		return Str::words( $this->markdown( $text, $parseAll ), $words );
+	public function excerpt($text, $parseAll = false, $words = 10)
+	{
+		return Str::words($this->markdown($text, $parseAll), $words);
 	}
 
 	/**
@@ -355,27 +375,28 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder {
 	 *
 	 * @return string
 	 */
-	public function sortlink( $name ) {
+	public function sortlink($name)
+	{
 		$parameters = Request::route()->parameters();
 
-		if ( isset( $parameters['username'] ) ) {
+		if (isset($parameters['username'])) {
 			$patterns = Route::getPatterns();
-			if ( preg_match( '/' . $patterns['sort'] . '/', $parameters['username'] ) ) {
+			if (preg_match('/' . $patterns['sort'] . '/', $parameters['username'])) {
 				$parameters['sort'] = $parameters['username'];
 			}
 		}
 
 		$url = Request::url();
-		if ( isset( $parameters['sort'] ) ) {
-			$url = str_replace( $parameters['sort'], strtolower( $name ), $url );
+		if (isset($parameters['sort'])) {
+			$url = str_replace($parameters['sort'], strtolower($name), $url);
 		} else {
-			$url .= '/' . strtolower( $name );
+			$url .= '/' . strtolower($name);
 		}
 
-		if ( count( Request::all() ) > 0 ) {
+		if (count(Request::all()) > 0) {
 			$i = 0;
-			foreach( Request::all() as $key => $value ) {
-				if ( $i == 0 ) {
+			foreach (Request::all() as $key => $value) {
+				if ($i == 0) {
 					$url .= '?';
 				} else {
 					$url .= '&';
@@ -385,10 +406,10 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder {
 			}
 		}
 
-		$attributes = $this->attributes( [
+		$attributes = $this->attributes([
 			'href' => $url,
 			'class' => 'margin-bottom-half full-width-small float-none button',
-		] );
+		]);
 
 		return '<a ' . $attributes . '>' . $name . '</a>';
 	}

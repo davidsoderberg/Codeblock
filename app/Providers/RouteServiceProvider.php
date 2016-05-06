@@ -7,7 +7,8 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
  * Class RouteServiceProvider
  * @package App\Providers
  */
-class RouteServiceProvider extends ServiceProvider {
+class RouteServiceProvider extends ServiceProvider
+{
 
 	/**
 	 * This namespace is applied to the controller routes in your routes file.
@@ -21,7 +22,7 @@ class RouteServiceProvider extends ServiceProvider {
 	/**
 	 * Define your route model bindings, pattern filters, etc.
 	 *
-	 * @param  \Illuminate\Routing\Router  $router
+	 * @param  \Illuminate\Routing\Router $router
 	 * @return void
 	 */
 	public function boot(Router $router)

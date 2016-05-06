@@ -7,7 +7,8 @@ use Illuminate\Contracts\Auth\Guard;
  * Class Authenticate
  * @package App\Http\Middleware
  */
-class Authenticate {
+class Authenticate
+{
 
 	/**
 	 * The Guard implementation.
@@ -21,7 +22,8 @@ class Authenticate {
 	 *
 	 * @param  Guard $auth
 	 */
-	public function __construct( Guard $auth ) {
+	public function __construct(Guard $auth)
+	{
 		$this->auth = $auth;
 	}
 
@@ -33,16 +35,17 @@ class Authenticate {
 	 *
 	 * @return mixed
 	 */
-	public function handle( $request, Closure $next ) {
-		if ( $this->auth->guest() ) {
-			if ( $request->ajax() ) {
-				return response( 'Unauthorized.', 401 );
+	public function handle($request, Closure $next)
+	{
+		if ($this->auth->guest()) {
+			if ($request->ajax()) {
+				return response('Unauthorized.', 401);
 			} else {
-				return redirect()->guest( '/login' );
+				return redirect()->guest('/login');
 			}
 		}
 
-		return $next( $request );
+		return $next($request);
 	}
 
 }

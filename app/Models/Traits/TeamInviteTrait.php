@@ -14,7 +14,7 @@ trait TeamInviteTrait
 	 */
 	public function team()
 	{
-		return $this->hasOne( 'App\Models\Team', 'id', 'team_id' );
+		return $this->hasOne('App\Models\Team', 'id', 'team_id');
 	}
 
 	/**
@@ -24,7 +24,7 @@ trait TeamInviteTrait
 	 */
 	public function user()
 	{
-		return $this->hasOne( 'App\Models\User', 'email', 'email' );
+		return $this->hasOne('App\Models\User', 'email', 'email');
 	}
 
 }

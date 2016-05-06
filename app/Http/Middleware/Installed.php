@@ -16,8 +16,8 @@ class Installed
 	/**
 	 * Handle an incoming request.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  \Closure  $next
+	 * @param  \Illuminate\Http\Request $request
+	 * @param  \Closure $next
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next)
@@ -25,8 +25,8 @@ class Installed
 		$response = $next($request);
 		try {
 			DB::connection()->getDatabaseName();
-		} catch(\Exception $e) {
-			if(!Str::contains($request->route()->getAction()['uses'], 'InstallController')) {
+		} catch (\Exception $e) {
+			if (!Str::contains($request->route()->getAction()['uses'], 'InstallController')) {
 				return Redirect::action('InstallController@install');
 			}
 		}

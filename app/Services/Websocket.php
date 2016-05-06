@@ -1,4 +1,5 @@
 <?php namespace App\Services;
+
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
 
@@ -6,7 +7,8 @@ use Ratchet\ConnectionInterface;
  * Class Websocket
  * @package App\Services
  */
-class Websocket extends PubSub implements MessageComponentInterface {
+class Websocket extends PubSub implements MessageComponentInterface
+{
 
 	/**
 	 * Property to store clients in.
@@ -34,7 +36,8 @@ class Websocket extends PubSub implements MessageComponentInterface {
 	 *
 	 * @param ConnectionInterface $conn
 	 */
-	public function onOpen(ConnectionInterface $conn) {
+	public function onOpen(ConnectionInterface $conn)
+	{
 		$this->connections[] = $conn;
 		echo "New connection! ({$conn->resourceId})\n";
 	}
@@ -45,24 +48,28 @@ class Websocket extends PubSub implements MessageComponentInterface {
 	 * @param ConnectionInterface $from
 	 * @param string $msg
 	 */
-	public function onMessage(ConnectionInterface $from, $msg) {
+	public function onMessage(ConnectionInterface $from, $msg)
+	{
 		$msg = json_decode($msg, true);
 
-		switch($msg['channel']){
+		switch ($msg['channel']) {
 			case 'auth':
 				$user = Jwt::decode($msg['token']);
-				if(!array_key_exists($user->id, $this->clients)) {
+				if (!array_key_exists($user->id, $this->clients)) {
 					$this->clients[$user->id] = $from;
 				}
 				break;
 			case 'toast':
-				if(array_key_exists($msg['id'], $this->clients)) {
-					$this->clients[$msg['id']]->send(json_encode(array('channel' => 'toast', 'message' => $msg['message'])));
+				if (array_key_exists($msg['id'], $this->clients)) {
+					$this->clients[$msg['id']]->send(json_encode(array(
+						'channel' => 'toast',
+						'message' => $msg['message']
+					)));
 				}
 				break;
 			case 'broadcast':
-				foreach($this->connections as $conn){
-					if($conn != $from) {
+				foreach ($this->connections as $conn) {
+					if ($conn != $from) {
 						$conn->send(json_encode(array('channel' => 'toast', 'message' => $msg['message'])));
 					}
 				}
@@ -74,8 +81,8 @@ class Websocket extends PubSub implements MessageComponentInterface {
 				$this->onUnSubscribe($from, $msg['topic']);
 				break;
 			case 'publish':
-				if(isset($this->topics[$msg['topic']])) {
-					foreach($this->topics[$msg['topic']] as $id) {
+				if (isset($this->topics[$msg['topic']])) {
+					foreach ($this->topics[$msg['topic']] as $id) {
 						$conn = $this->clients[$id];
 						$msg = $this->getPublish($msg, $id);
 						$conn->send(json_encode(array('channel' => $msg['topic'], 'message' => $msg['html'])));
@@ -93,9 +100,10 @@ class Websocket extends PubSub implements MessageComponentInterface {
 	 *
 	 * @return mixed
 	 */
-	private function getPublish($msg, $user_id){
-		$msg['topic'] = explode('.',$msg['topic'])[0];
-		switch($msg['topic']){
+	private function getPublish($msg, $user_id)
+	{
+		$msg['topic'] = explode('.', $msg['topic'])[0];
+		switch ($msg['topic']) {
 			case self::TOPIC:
 				$msg['html'] = $this->topic($msg['message'], $user_id);
 				break;
@@ -109,8 +117,9 @@ class Websocket extends PubSub implements MessageComponentInterface {
 	 * @param $id
 	 * @param $topic
 	 */
-	private function onSubscribe($id, $topic){
-		if(!isset($this->topics[$topic])){
+	private function onSubscribe($id, $topic)
+	{
+		if (!isset($this->topics[$topic])) {
 			$this->topics[$topic] = array();
 		}
 		$this->topics[$topic][] = $id;
@@ -122,12 +131,13 @@ class Websocket extends PubSub implements MessageComponentInterface {
 	 * @param ConnectionInterface $conn
 	 * @param string $topic
 	 */
-	private function onUnSubscribe(ConnectionInterface $conn, $topic = ''){
-		if(false !== $id = array_search($conn, $this->clients)) {
-			if($topic != '') {
+	private function onUnSubscribe(ConnectionInterface $conn, $topic = '')
+	{
+		if (false !== $id = array_search($conn, $this->clients)) {
+			if ($topic != '') {
 				$this->removeFromTopic($topic, $id, $this->topics[$topic]);
 			} else {
-				foreach($this->topics as $topic => $array) {
+				foreach ($this->topics as $topic => $array) {
 					$this->removeFromTopic($topic, $id, $array);
 				}
 			}
@@ -141,10 +151,11 @@ class Websocket extends PubSub implements MessageComponentInterface {
 	 * @param $id
 	 * @param $array
 	 */
-	private function removeFromTopic($topic, $id, $array){
-		if(false !== $key = array_search($id, $array)) {
+	private function removeFromTopic($topic, $id, $array)
+	{
+		if (false !== $key = array_search($id, $array)) {
 			unset($this->topics[$topic][$key]);
-			if(empty($this->topics[$topic])){
+			if (empty($this->topics[$topic])) {
 				unset($this->topics[$topic]);
 			}
 		}
@@ -155,7 +166,8 @@ class Websocket extends PubSub implements MessageComponentInterface {
 	 *
 	 * @param ConnectionInterface $conn
 	 */
-	public function onClose(ConnectionInterface $conn) {
+	public function onClose(ConnectionInterface $conn)
+	{
 		$this->onUnSubscribe($conn);
 		$this->removeConn($conn);
 		echo "Connection {$conn->resourceId} has disconnected\n";
@@ -167,7 +179,8 @@ class Websocket extends PubSub implements MessageComponentInterface {
 	 * @param ConnectionInterface $conn
 	 * @param \Exception $e
 	 */
-	public function onError(ConnectionInterface $conn, \Exception $e) {
+	public function onError(ConnectionInterface $conn, \Exception $e)
+	{
 		echo "An error has occurred: {$e->getMessage()}\n";
 		$conn->close();
 	}
@@ -177,11 +190,12 @@ class Websocket extends PubSub implements MessageComponentInterface {
 	 *
 	 * @param ConnectionInterface $conn
 	 */
-	private function removeConn(ConnectionInterface $conn){
-		if(false !== $key = array_search($conn, $this->clients)){
+	private function removeConn(ConnectionInterface $conn)
+	{
+		if (false !== $key = array_search($conn, $this->clients)) {
 			unset($this->clients[$key]);
 		}
-		if(false !== $key = array_search($conn, $this->connections)){
+		if (false !== $key = array_search($conn, $this->connections)) {
 			unset($this->connections[$key]);
 		}
 	}

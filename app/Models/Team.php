@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Auth;
  * Class Team
  * @package App\Models
  */
-class Team extends Model {
+class Team extends Model
+{
 
 	use TeamTrait;
 

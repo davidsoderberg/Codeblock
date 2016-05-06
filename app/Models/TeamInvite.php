@@ -6,7 +6,8 @@ use App\Models\Traits\TeamInviteTrait;
  * Class TeamInvite
  * @package App\Models
  */
-class TeamInvite extends Model {
+class TeamInvite extends Model
+{
 
 	use TeamInviteTrait;
 

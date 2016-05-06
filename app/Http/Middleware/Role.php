@@ -12,26 +12,26 @@ use Illuminate\Support\Facades\Redirect;
 class Role
 {
 
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
-     */
-    public function handle($request, Closure $next)
-    {
+	/**
+	 * Handle an incoming request.
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @param  \Closure $next
+	 * @return mixed
+	 */
+	public function handle($request, Closure $next)
+	{
 		$route = $request->route();
 		$actions = $route->getAction();
 
-		if(array_key_exists('role', $actions)) {
-			if(Auth::check() && !Auth::user()->hasRole($actions['role'])) {
+		if (array_key_exists('role', $actions)) {
+			if (Auth::check() && !Auth::user()->hasRole($actions['role'])) {
 				return Redirect::to('/');
-			}else{
+			} else {
 				return $next($request);
 			}
-		}else{
+		} else {
 			Throw new \Exception('You have not specified a role');
 		}
-    }
+	}
 }

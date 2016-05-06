@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Redirect;
  * Class TagController
  * @package App\Http\Controllers
  */
-class TagController extends Controller {
+class TagController extends Controller
+{
 
 	/**
 	 * Constructor for TagController.
@@ -32,7 +33,7 @@ class TagController extends Controller {
 	{
 		$tag = null;
 
-		if(is_numeric($id)){
+		if (is_numeric($id)) {
 			$tag = $this->tag->get($id);
 		}
 
@@ -47,8 +48,8 @@ class TagController extends Controller {
 	 */
 	public function createOrUpdate($id = null)
 	{
-		if($this->tag->createOrUpdate($this->request->all(), $id)){
-			if(is_null($id)){
+		if ($this->tag->createOrUpdate($this->request->all(), $id)) {
+			if (is_null($id)) {
 				return Redirect::to('tags')->with('success', 'Your tag has been created.');
 			}
 			return Redirect::to('tags')->with('success', 'Your tag has been updated.');
@@ -63,8 +64,9 @@ class TagController extends Controller {
 	 * @param  int $id id for tag to delete.
 	 * @return object     redirect object.
 	 */
-	public function delete($id){
-		if($this->tag->delete($id)){
+	public function delete($id)
+	{
+		if ($this->tag->delete($id)) {
 			return Redirect::to('tags')->with('success', 'The tag has been deleted.');
 		}
 

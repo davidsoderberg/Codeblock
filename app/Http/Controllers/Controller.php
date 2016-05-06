@@ -20,7 +20,8 @@ use Illuminate\Support\Facades\Request;
  * Class Controller
  * @package App\Http\Controllers
  */
-abstract class Controller extends BaseController {
+abstract class Controller extends BaseController
+{
 
 	/**
 	 * Property to store current websocket client in.
@@ -49,7 +50,8 @@ abstract class Controller extends BaseController {
 	/**
 	 * Constructor for Controller.
 	 */
-	public function __construct(){
+	public function __construct()
+	{
 		$this->request = app('Illuminate\Http\Request');
 		$url = preg_replace("/https?:\/\//", "", URL::to('/'));
 		View::share('siteName', ucfirst($url));
@@ -63,19 +65,20 @@ abstract class Controller extends BaseController {
 	 * @param $object
 	 * @param NotificationRepository $notification
 	 */
-	protected function mentioned( $text, $object, NotificationRepository $notification ) {
+	protected function mentioned($text, $object, NotificationRepository $notification)
+	{
 		$users = [];
-		preg_match_all( '/(^|\s)@(\w+)/', $text, $users );
-		foreach( $users as $username ) {
-			if ( count( $username ) >= 1 ) {
+		preg_match_all('/(^|\s)@(\w+)/', $text, $users);
+		foreach ($users as $username) {
+			if (count($username) >= 1) {
 				$username = $username[0];
-				if ( !$notification->send( $username, NotificationType::MENTION, $object ) ) {
+				if (!$notification->send($username, NotificationType::MENTION, $object)) {
 					$errors = [
 						'username' => $username,
 						'type' => NotificationType::MENTION,
 						'errors' => $notification->errors,
 					];
-					Log::error( json_encode( $errors ) );
+					Log::error(json_encode($errors));
 				}
 			}
 		}
@@ -85,11 +88,12 @@ abstract class Controller extends BaseController {
 	 * Fetch permission for current method.
 	 * @return array|string
 	 */
-	protected function getPermission() {
+	protected function getPermission()
+	{
 		$action = debug_backtrace()[1];
-		$permissionAnnotation = New Permission( $action['class'] );
+		$permissionAnnotation = New Permission($action['class']);
 
-		return $permissionAnnotation->getPermission( $action['function'] );
+		return $permissionAnnotation->getPermission($action['function']);
 	}
 
 	/**
@@ -101,9 +105,10 @@ abstract class Controller extends BaseController {
 	 *
 	 * @return array
 	 */
-	protected function getSelectArray( $objects, $key = 'id', $value = 'name' ) {
+	protected function getSelectArray($objects, $key = 'id', $value = 'name')
+	{
 		$selectArray = [];
-		foreach( $objects as $object ) {
+		foreach ($objects as $object) {
 			$selectArray[$object[$key]] = $object[$value];
 		}
 
@@ -117,13 +122,14 @@ abstract class Controller extends BaseController {
 	 *
 	 * @return mixed
 	 */
-	protected function addHidden( $objects ) {
-		if ( $objects instanceof Collection ) {
-			foreach( $objects as $object ) {
+	protected function addHidden($objects)
+	{
+		if ($objects instanceof Collection) {
+			foreach ($objects as $object) {
 				$object->addToHidden();
 			}
 		} else {
-			if ( $objects instanceof Model ) {
+			if ($objects instanceof Model) {
 				$objects->addToHidden();
 			}
 		}
@@ -138,12 +144,14 @@ abstract class Controller extends BaseController {
 	 *
 	 * @return array
 	 */
-	public function createPaginator( Collection $data ) {
-		if ( !isset( $_GET['page'] ) || !is_numeric( $_GET['page'] ) ) {
+	public function createPaginator(Collection $data)
+	{
+		if (!isset($_GET['page']) || !is_numeric($_GET['page'])) {
 			$_GET['page'] = 1;
 		}
-		$paginator = new LengthAwarePaginator( $data, count( $data ), $this->perPage, $_GET['page'], ['path' => '/' . Request::path()] );
-		$data = $data->slice( ( $_GET['page'] * $this->perPage ) - $this->perPage, $this->perPage );
+		$paginator = new LengthAwarePaginator($data, count($data), $this->perPage, $_GET['page'],
+			['path' => '/' . Request::path()]);
+		$data = $data->slice(($_GET['page'] * $this->perPage) - $this->perPage, $this->perPage);
 
 		return ['data' => $data, 'paginator' => $paginator->render()];
 	}

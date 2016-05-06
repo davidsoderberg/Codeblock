@@ -4,7 +4,8 @@
  * Class Event
  * @package App\Events
  */
-abstract class Event {
+abstract class Event
+{
 
 	//
 

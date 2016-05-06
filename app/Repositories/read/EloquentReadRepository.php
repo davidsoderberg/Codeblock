@@ -9,15 +9,17 @@ use App\Services\CollectionService;
  * Class EloquentReadRepository
  * @package App\Repositories\Read
  */
-class EloquentReadRepository extends CRepository implements ReadRepository {
+class EloquentReadRepository extends CRepository implements ReadRepository
+{
 
 	/**
 	 * Fetch all reads.
 	 *
 	 * @return \App\Services\Model|array|\Illuminate\Database\Eloquent\Collection|null
 	 */
-	private function get() {
-		return $this->cache( 'all', Read::where( 'id', '!=', 0 ) );
+	private function get()
+	{
+		return $this->cache('all', Read::where('id', '!=', 0));
 	}
 
 
@@ -28,12 +30,13 @@ class EloquentReadRepository extends CRepository implements ReadRepository {
 	 *
 	 * @return null
 	 */
-	public function hasRead( $topic_id ) {
-		if ( Auth::check() ) {
+	public function hasRead($topic_id)
+	{
+		if (Auth::check()) {
 			$user_id = Auth::user()->id;
-			$is_null = CollectionService::filter( $this->get(), 'topic_id', $topic_id );
-			$is_null = CollectionService::filter( $is_null, 'user_id', $user_id, 'first' );
-			if ( is_null( $is_null ) ) {
+			$is_null = CollectionService::filter($this->get(), 'topic_id', $topic_id);
+			$is_null = CollectionService::filter($is_null, 'user_id', $user_id, 'first');
+			if (is_null($is_null)) {
 				$Read = new Read;
 				$Read->topic_id = $topic_id;
 				$Read->user_id = $user_id;
@@ -49,8 +52,9 @@ class EloquentReadRepository extends CRepository implements ReadRepository {
 	 *
 	 * @return null
 	 */
-	public function UpdatedRead( $topic_id ) {
-		foreach( CollectionService::filter( $this->get(), 'topic_id', $topic_id ) as $Read ) {
+	public function UpdatedRead($topic_id)
+	{
+		foreach (CollectionService::filter($this->get(), 'topic_id', $topic_id) as $Read) {
 			$Read->delete();
 		}
 	}

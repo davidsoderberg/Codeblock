@@ -4,4 +4,6 @@
  * Class NullPointerException
  * @package App\Exceptions
  */
-class NullPointerException extends \Exception {}
+class NullPointerException extends \Exception
+{
+}

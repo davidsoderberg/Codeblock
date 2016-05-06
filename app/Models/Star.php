@@ -4,7 +4,8 @@
  * Class Star
  * @package App\Models
  */
-class Star extends Model {
+class Star extends Model
+{
 
 	/**
 	 * The database table used by the model.
@@ -49,8 +50,9 @@ class Star extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function post() {
-		return $this->belongsTo( 'App\Models\Post', 'post_id' );
+	public function post()
+	{
+		return $this->belongsTo('App\Models\Post', 'post_id');
 	}
 
 }

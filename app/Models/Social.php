@@ -26,7 +26,7 @@ class Social extends Model
 	 * @var array
 	 */
 	public static $rules = array(
-		'social'  => 'required',
+		'social' => 'required',
 		'social_id' => 'required',
 		'user_id' => 'required|integer'
 	);

@@ -4,4 +4,6 @@
  * Interface StarRepository
  * @package App\Repositories\Star
  */
-interface StarRepository {}
+interface StarRepository
+{
+}

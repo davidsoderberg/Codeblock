@@ -4,7 +4,8 @@
  * Class Markdown
  * @package App\Services
  */
-class Markdown extends \ParsedownExtra{
+class Markdown extends \ParsedownExtra
+{
 
 	/**
 	 * Property store if all should be parsed.
@@ -18,8 +19,9 @@ class Markdown extends \ParsedownExtra{
 	 *
 	 * @param $parseAll
 	 */
-	public function __construct($parseAll){
-		if($parseAll === false || $parseAll === true) {
+	public function __construct($parseAll)
+	{
+		if ($parseAll === false || $parseAll === true) {
 			$this->parseAll = $parseAll;
 		}
 	}
@@ -31,8 +33,9 @@ class Markdown extends \ParsedownExtra{
 	 *
 	 * @return array|void
 	 */
-	protected function inlineImage($Excerpt){
-		if($this->parseAll){
+	protected function inlineImage($Excerpt)
+	{
+		if ($this->parseAll) {
 			return parent::inlineImage($Excerpt);
 		}
 		return;
@@ -45,9 +48,10 @@ class Markdown extends \ParsedownExtra{
 	 *
 	 * @return array|void
 	 */
-	protected function inlineLink($Excerpt){
+	protected function inlineLink($Excerpt)
+	{
 		$Excerpt = parent::inlineLink($Excerpt);
-		if(!$this->parseAll) {
+		if (!$this->parseAll) {
 			$Excerpt['element']['attributes']['rel'] = 'nofollow';
 		}
 		return $Excerpt;

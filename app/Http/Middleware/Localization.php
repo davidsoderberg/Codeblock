@@ -8,19 +8,20 @@ use Illuminate\Support\Facades\App;
  * Check what lang should be used on the website.
  * @package App\Http\Middleware
  */
-class Localization {
+class Localization
+{
 
 	/**
 	 * Handle an incoming request.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  \Closure  $next
+	 * @param  \Illuminate\Http\Request $request
+	 * @param  \Closure $next
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next)
 	{
 		$langcode = explode('.', $request->server('HTTP_HOST'))[0];
-		if ( in_array($langcode, config('languages', ['en'])) ){
+		if (in_array($langcode, config('languages', ['en']))) {
 			App::setLocale($langcode);
 		}
 

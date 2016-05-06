@@ -9,7 +9,8 @@ use Closure;
  * Checks if user has correct role.
  * @package App\Http\Middleware
  */
-class Honeypot {
+class Honeypot
+{
 
 	/**
 	 * Property to store honeypot input name in.
@@ -26,14 +27,15 @@ class Honeypot {
 	 *
 	 * @return mixed
 	 */
-	public function handle( $request, Closure $next ) {
-		if ( count( $request->all() ) > 0 ) {
-			if ( !$this->Honeypot( $request->all() ) ) {
-				return Redirect::back()->with( 'error', "The " . $this->honeyName . " field should be empty." );
+	public function handle($request, Closure $next)
+	{
+		if (count($request->all()) > 0) {
+			if (!$this->Honeypot($request->all())) {
+				return Redirect::back()->with('error', "The " . $this->honeyName . " field should be empty.");
 			}
 		}
 
-		return $next( $request );
+		return $next($request);
 	}
 
 	/**
@@ -43,9 +45,10 @@ class Honeypot {
 	 *
 	 * @return bool
 	 */
-	private function Honeypot( $data = '' ) {
-		if ( isset( $data[$this->honeyName] ) ) {
-			$v = Validator::make( [$this->honeyName => $data[$this->honeyName]], [$this->honeyName => 'honeypot'] );
+	private function Honeypot($data = '')
+	{
+		if (isset($data[$this->honeyName])) {
+			$v = Validator::make([$this->honeyName => $data[$this->honeyName]], [$this->honeyName => 'honeypot']);
 
 			return $v->passes();
 		}

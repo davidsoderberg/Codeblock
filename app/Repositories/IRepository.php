@@ -4,7 +4,8 @@
  * Interface IRepository
  * @package App\Repositories
  */
-interface IRepository {
+interface IRepository
+{
 
 	/**
 	 * Fetch one or all models.

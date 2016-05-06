@@ -9,14 +9,16 @@ use App\Services\CollectionService;
  * Class EloquentRateRepository
  * @package App\Repositories\Rate
  */
-class EloquentRateRepository extends CRepository implements RateRepository {
+class EloquentRateRepository extends CRepository implements RateRepository
+{
 
 	/**
 	 * Fetch all rates.
 	 *
 	 * @return \App\Services\Model|array|\Illuminate\Database\Eloquent\Collection|null
 	 */
-	private function get(){
+	private function get()
+	{
 		return $this->cache('all', Rate::where('id', '!=', 0));
 	}
 
@@ -32,7 +34,7 @@ class EloquentRateRepository extends CRepository implements RateRepository {
 		$rate = CollectionService::filter($this->get(), 'user_id', Auth::user()->id);
 		$rate = CollectionService::filter($rate, 'comment_id', $id, 'first');
 		//$rate = Rate::where('user_id', '=', Auth::user()->id)->where('comment_id', '=', $id)->first();
-		if(!is_null($rate)){
+		if (!is_null($rate)) {
 			return $rate->type;
 		}
 		return false;
@@ -45,7 +47,8 @@ class EloquentRateRepository extends CRepository implements RateRepository {
 	 *
 	 * @return int
 	 */
-	public function calc($id){
+	public function calc($id)
+	{
 		$first = CollectionService::filter($this->get(), 'type', '+');
 		$first = CollectionService::filter($first, 'comment_id', $id);
 		$second = CollectionService::filter($this->get(), 'type', '-');
@@ -61,8 +64,9 @@ class EloquentRateRepository extends CRepository implements RateRepository {
 	 *
 	 * @return bool
 	 */
-	public function rate($id, $type){
-		if(!$this->delete($id, $type)){
+	public function rate($id, $type)
+	{
+		if (!$this->delete($id, $type)) {
 			$rate = new Rate;
 
 			$rate->user_id = Auth::user()->id;
@@ -81,8 +85,9 @@ class EloquentRateRepository extends CRepository implements RateRepository {
 	 *
 	 * @return string
 	 */
-	private function typeSwitch($type){
-		if($type == '+'){
+	private function typeSwitch($type)
+	{
+		if ($type == '+') {
 			return '-';
 		}
 		return '+';
@@ -96,11 +101,12 @@ class EloquentRateRepository extends CRepository implements RateRepository {
 	 *
 	 * @return bool
 	 */
-	private function delete($id, $type){
+	private function delete($id, $type)
+	{
 		$rate = CollectionService::filter($this->get(), 'type', $this->typeSwitch($type));
 		$rate = CollectionService::filter($rate, 'user_id', Auth::user()->id);
 		$rate = CollectionService::filter($rate, 'comment_id', $id, 'first');
-		if(!is_null($rate)){
+		if (!is_null($rate)) {
 			return $rate->delete();
 		}
 		return false;

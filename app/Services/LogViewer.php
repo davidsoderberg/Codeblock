@@ -91,19 +91,23 @@ class LogViewer
 
 		if (!self::$file) {
 			$log_file = self::getFiles();
-			if(!count($log_file)) {
+			if (!count($log_file)) {
 				return [];
 			}
-			self::$file = $log_file[count($log_file) -1];
+			self::$file = $log_file[count($log_file) - 1];
 		}
 
-		if (File::size(self::$file) > self::MAX_FILE_SIZE) return null;
+		if (File::size(self::$file) > self::MAX_FILE_SIZE) {
+			return null;
+		}
 
 		$file = File::get(self::$file);
 
 		preg_match_all($pattern, $file, $headings);
 
-		if (!is_array($headings)) return $log;
+		if (!is_array($headings)) {
+			return $log;
+		}
 
 		$log_data = preg_split($pattern, $file);
 
@@ -112,13 +116,16 @@ class LogViewer
 		}
 
 		foreach ($headings as $h) {
-			for ($i=0, $j = count($h); $i < $j; $i++) {
+			for ($i = 0, $j = count($h); $i < $j; $i++) {
 				foreach ($log_levels as $level_key => $level_value) {
 					if (strpos(strtolower($h[$i]), '.' . $level_value)) {
 
-						preg_match('/^\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\].*?\.' . $level_key . ': (.*?)( in .*?:[0-9]+)?$/', $h[$i], $current);
+						preg_match('/^\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\].*?\.' . $level_key . ': (.*?)( in .*?:[0-9]+)?$/',
+							$h[$i], $current);
 
-						if (!isset($current[2])) continue;
+						if (!isset($current[2])) {
+							continue;
+						}
 
 						$log->add(array(
 							'level' => $level_value,

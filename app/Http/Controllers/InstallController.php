@@ -9,20 +9,22 @@ use Illuminate\Support\Str;
  * Class InstallController
  * @package App\Http\Controllers
  */
-class InstallController extends Controller {
+class InstallController extends Controller
+{
 
 	/**
 	 * Runs install.
 	 *
 	 * @return mixed
 	 */
-	public function install(){
+	public function install()
+	{
 		$envArray = $this->getEnvArray(true);
-		foreach($envArray as $key => $value){
-			if($value == 'null'){
+		foreach ($envArray as $key => $value) {
+			if ($value == 'null') {
 				$envArray[$key] = '';
 			}
-			if(Str::contains($key, 'REDIRECT') || Str::contains($key, 'APP') || Str::contains($key, 'DRIVER')){
+			if (Str::contains($key, 'REDIRECT') || Str::contains($key, 'APP') || Str::contains($key, 'DRIVER')) {
 				unset($envArray[$key]);
 			}
 		}
@@ -34,21 +36,22 @@ class InstallController extends Controller {
 	 *
 	 * @return mixed
 	 */
-	public function store(){
+	public function store()
+	{
 
 		$this->setEnv();
 
 		$error = null;
 		try {
 			Artisan::call('install');
-		} catch(\Exception $e){
+		} catch (\Exception $e) {
 			$error = $e->getMessage();
 		}
 
-		if(is_null($error)) {
+		if (is_null($error)) {
 			return Redirect::to('/')->with('success', 'You have now installed codeblock.');
-		}else{
-			if(is_null($error)){
+		} else {
+			if (is_null($error)) {
 				$error = 'We could not install codeblock for some reason, please try agian.';
 			}
 			return Redirect::back()->with('error', $error)->withInput($this->request->all());
@@ -58,20 +61,21 @@ class InstallController extends Controller {
 	/**
 	 * Sets env.
 	 */
-	public function setEnv(){
+	public function setEnv()
+	{
 		$input = $this->request->except('_token');
 		$options = array_merge($this->getEnvArray(), $input);
-		if(Str::contains(asset('/'), 'localhost')) {
+		if (Str::contains(asset('/'), 'localhost')) {
 			$options['APP_ENV'] = 'local';
 		} else {
 			$options['APP_ENV'] = 'production';
 		}
 		$options['APP_KEY'] = Str::random(12) . Str::random(12);
-		foreach($options as $key => $value) {
-			if($options[$key] == '') {
+		foreach ($options as $key => $value) {
+			if ($options[$key] == '') {
 				$options[$key] = null;
 			}
-			if(Str::contains($key, 'REDIRECT')) {
+			if (Str::contains($key, 'REDIRECT')) {
 				$options[$key] = asset('/') . $value;
 			}
 			putenv($key . '=' . $value);
@@ -89,18 +93,19 @@ class InstallController extends Controller {
 	 * @param bool $comment
 	 * @return array
 	 */
-	private function getEnvArray($comment = false){
-		$content = file_get_contents(base_path().'/.env.example');
+	private function getEnvArray($comment = false)
+	{
+		$content = file_get_contents(base_path() . '/.env.example');
 		$envArray = explode('<br />', nl2br($content));
 		$newenv = array();
-		foreach($envArray as $env){
+		foreach ($envArray as $env) {
 			$env = trim($env);
-			if($env != ''){
-				if(Str::contains($env, '#')){
-					if($comment) {
+			if ($env != '') {
+				if (Str::contains($env, '#')) {
+					if ($comment) {
 						$newenv[] = str_replace('#', '', $env);
 					}
-				}else {
+				} else {
 					$env = explode('=', $env);
 					$newenv[$env[0]] = $env[1];
 				}
@@ -115,11 +120,12 @@ class InstallController extends Controller {
 	 * @param $array
 	 * @return int
 	 */
-	private function saveEnvArray($array){
+	private function saveEnvArray($array)
+	{
 		$file = '';
-		foreach($array as $key => $value){
-			$file .= $key.'='.$value.PHP_EOL;
+		foreach ($array as $key => $value) {
+			$file .= $key . '=' . $value . PHP_EOL;
 		}
-		return file_put_contents(base_path().'/.env', $file) > 0;
+		return file_put_contents(base_path() . '/.env', $file) > 0;
 	}
 }

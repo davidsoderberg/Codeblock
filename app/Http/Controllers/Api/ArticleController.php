@@ -8,7 +8,8 @@ use App\Repositories\Article\ArticleRepository;
  * Class ArticleController
  * @package App\Http\Controllers\Api
  */
-class ArticleController extends ApiController {
+class ArticleController extends ApiController
+{
 
 	/**
 	 * Shows a article.
@@ -18,7 +19,8 @@ class ArticleController extends ApiController {
 	 *
 	 * @return mixed
 	 */
-	public function articles(ArticleRepository $article, $id = null) {
+	public function articles(ArticleRepository $article, $id = null)
+	{
 		return $this->response([$this->stringData => $this->getCollection($article, $id)], 200);
 	}
 

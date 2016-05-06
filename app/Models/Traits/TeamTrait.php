@@ -14,7 +14,7 @@ trait TeamTrait
 	 */
 	public function invites()
 	{
-		return $this->hasMany( 'App\Models\TeamInvite', 'team_id', 'id');
+		return $this->hasMany('App\Models\TeamInvite', 'team_id', 'id');
 	}
 
 	/**
@@ -22,8 +22,9 @@ trait TeamTrait
 	 *
 	 * @return mixed
 	 */
-	public function posts(){
-		return $this->hasMany( 'App\Models\Post', 'team_id', 'id');
+	public function posts()
+	{
+		return $this->hasMany('App\Models\Post', 'team_id', 'id');
 	}
 
 	/**
@@ -33,7 +34,7 @@ trait TeamTrait
 	 */
 	public function users()
 	{
-		return $this->belongsToMany('App\Models\User', 'team_user', 'team_id','user_id');
+		return $this->belongsToMany('App\Models\User', 'team_user', 'team_id', 'user_id');
 	}
 
 	/**
@@ -53,9 +54,9 @@ trait TeamTrait
 	 *
 	 * @return bool
 	 */
-	public function hasUser( Model $user )
+	public function hasUser(Model $user)
 	{
-		return $this->users()->where( $user->getKeyName(), "=", $user->getKey() )->first() ? true : false;
+		return $this->users()->where($user->getKeyName(), "=", $user->getKey())->first() ? true : false;
 	}
 
 }

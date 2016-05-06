@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Redirect;
  * Class CategoryController
  * @package App\Http\Controllers
  */
-class CategoryController extends Controller {
+class CategoryController extends Controller
+{
 
 	/**
 	 * Constructor for CategoryController.
@@ -32,11 +33,12 @@ class CategoryController extends Controller {
 	{
 		$category = null;
 
-		if(is_numeric($id)){
+		if (is_numeric($id)) {
 			$category = $this->category->get($id);
 		}
 
-		return View::make('category.index')->with('title', 'Categories')->with('categories', $this->category->get())->with('category', $category);
+		return View::make('category.index')->with('title', 'Categories')->with('categories',
+			$this->category->get())->with('category', $category);
 	}
 
 	/**
@@ -47,8 +49,8 @@ class CategoryController extends Controller {
 	 */
 	public function createOrUpdate($id = null)
 	{
-		if($this->category->createOrUpdate($this->request->all(), $id)){
-			if(is_null($id)){
+		if ($this->category->createOrUpdate($this->request->all(), $id)) {
+			if (is_null($id)) {
 				return Redirect::to('categories')->with('success', 'Your category has been created.');
 			}
 			return Redirect::to('categories')->with('success', 'Your category has been updated.');
@@ -63,8 +65,9 @@ class CategoryController extends Controller {
 	 * @param  int $id
 	 * @return object
 	 */
-	public function delete($id){
-		if($this->category->delete($id)){
+	public function delete($id)
+	{
+		if ($this->category->delete($id)) {
 			return Redirect::to('categories')->with('success', 'The category has been deleted.');
 		}
 

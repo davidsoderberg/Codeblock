@@ -8,7 +8,8 @@ use Illuminate\Session\TokenMismatchException;
  * Class VerifyCsrf
  * @package App\Http\Middleware
  */
-class VerifyCsrf extends VerifyCsrfToken {
+class VerifyCsrf extends VerifyCsrfToken
+{
 
 	/**
 	 * Handle for VerifyCsrf.

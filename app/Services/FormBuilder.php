@@ -6,15 +6,18 @@ use Collective\Html\FormFacade;
  * Class FormBuilder
  * @package App\Services
  */
-class FormBuilder extends \Collective\Html\FormBuilder{
+class FormBuilder extends \Collective\Html\FormBuilder
+{
 
 	/**
 	 * Render honeypot.
 	 *
 	 * @return string
 	 */
-	public function Honeypot(){
-		return '<div class="display-none">'.FormFacade::input('text', 'honeyName', '', array('placeholder' => 'Leave this field empty')).'</div>';
+	public function Honeypot()
+	{
+		return '<div class="display-none">' . FormFacade::input('text', 'honeyName', '',
+			array('placeholder' => 'Leave this field empty')) . '</div>';
 	}
 
 	/**
@@ -24,12 +27,13 @@ class FormBuilder extends \Collective\Html\FormBuilder{
 	 *
 	 * @return string
 	 */
-	public function close($honeypot = true){
-		if($honeypot) {
+	public function close($honeypot = true)
+	{
+		if ($honeypot) {
 			$honeypot = $this->Honeypot();
-		}else{
+		} else {
 			$honeypot = '';
 		}
-		return $honeypot.parent::close();
+		return $honeypot . parent::close();
 	}
 }

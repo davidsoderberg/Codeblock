@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Redirect;
  * Class PermissionController
  * @package App\Http\Controllers
  */
-class PermissionController extends Controller {
+class PermissionController extends Controller
+{
 
 	/**
 	 * Constructor for PermissionController
@@ -29,7 +30,8 @@ class PermissionController extends Controller {
 	 */
 	public function index($id = null)
 	{
-		return View::make('permission.index')->with('title', 'Permissions')->with('permissions', $this->permission->get())->with('permission', $this->permission->get($id));
+		return View::make('permission.index')->with('title', 'Permissions')->with('permissions',
+			$this->permission->get())->with('permission', $this->permission->get($id));
 	}
 
 	/**
@@ -37,8 +39,9 @@ class PermissionController extends Controller {
 	 * @param  int $id
 	 * @return object
 	 */
-	public function createOrUpdate($id = null){
-		if($this->permission->createOrUpdate($this->request->all(), $id)){
+	public function createOrUpdate($id = null)
+	{
+		if ($this->permission->createOrUpdate($this->request->all(), $id)) {
 			return Redirect::back()->with('success', 'The permission has been saved.');
 		}
 
@@ -52,7 +55,7 @@ class PermissionController extends Controller {
 	 */
 	public function delete($id)
 	{
-		if($this->permission->delete($id)){
+		if ($this->permission->delete($id)) {
 			return Redirect::back()->with('success', 'The permission has been deleted.');
 		}
 

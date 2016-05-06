@@ -4,20 +4,22 @@
  * Class Topic
  * @package App\Models
  */
-class Topic extends Model {
+class Topic extends Model
+{
 	/**
 	 * Boot method for Topic model.
 	 */
-	public static function boot() {
+	public static function boot()
+	{
 		parent::boot();
-		static::deleting( function ( $object ) {
-			foreach( $object->replies as $reply ) {
+		static::deleting(function ($object) {
+			foreach ($object->replies as $reply) {
 				$reply->delete();
 			}
-			foreach( $object->reads as $read ) {
+			foreach ($object->reads as $read) {
 				$read->delete();
 			}
-		} );
+		});
 	}
 
 	/**
@@ -77,8 +79,9 @@ class Topic extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
-	public function replies() {
-		return $this->hasMany( 'App\Models\Reply', 'topic_id', 'id' );
+	public function replies()
+	{
+		return $this->hasMany('App\Models\Reply', 'topic_id', 'id');
 	}
 
 	/**
@@ -86,8 +89,9 @@ class Topic extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function forum() {
-		return $this->belongsTo( 'App\Models\Forum', 'forum_id' );
+	public function forum()
+	{
+		return $this->belongsTo('App\Models\Forum', 'forum_id');
 	}
 
 	/**
@@ -95,8 +99,9 @@ class Topic extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
-	public function reads() {
-		return $this->hasMany( 'App\Models\Read', 'topic_id', 'id' );
+	public function reads()
+	{
+		return $this->hasMany('App\Models\Read', 'topic_id', 'id');
 	}
 
 	/**
@@ -104,8 +109,9 @@ class Topic extends Model {
 	 *
 	 * @return string
 	 */
-	public function getforumtitleAttribute() {
-		if ( $this->forum ) {
+	public function getforumtitleAttribute()
+	{
+		if ($this->forum) {
 			return $this->forum->title;
 		}
 
@@ -117,8 +123,9 @@ class Topic extends Model {
 	 *
 	 * @return array
 	 */
-	public function getlinksAttribute() {
-		return $this->hateoas( $this->id, 'topics' );
+	public function getlinksAttribute()
+	{
+		return $this->hateoas($this->id, 'topics');
 	}
 
 	/**

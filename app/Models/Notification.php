@@ -4,7 +4,8 @@
  * Class Notification
  * @package App\Models
  */
-class Notification extends Model {
+class Notification extends Model
+{
 
 	/**
 	 * The database table used by the model.
@@ -49,7 +50,7 @@ class Notification extends Model {
 	 */
 	public static $rules = array(
 		'user_id' => 'required|integer',
-		'type'  => 'required|min:3',
+		'type' => 'required|min:3',
 		'subject' => 'required|min:3',
 		'body' => 'required|min:3',
 		'object_id' => 'integer',
@@ -69,7 +70,8 @@ class Notification extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
 	 */
-	public function sender() {
+	public function sender()
+	{
 		return $this->hasOne('App\Models\User', 'id', 'from_id');
 	}
 
@@ -78,7 +80,8 @@ class Notification extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
 	 */
-	public function receiver(){
+	public function receiver()
+	{
 		return $this->hasOne('App\Models\User', 'id', 'user_id');
 	}
 
@@ -87,8 +90,9 @@ class Notification extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
 	 */
-	public function object() {
-		return $this->hasOne('App\\Models\\'.$this->object_type, 'id', 'object_id');
+	public function object()
+	{
+		return $this->hasOne('App\\Models\\' . $this->object_type, 'id', 'object_id');
 	}
 
 }

@@ -4,7 +4,8 @@
  * Class Tag
  * @package App\Models
  */
-class Tag extends Model {
+class Tag extends Model
+{
 
 	/**
 	 * The database table used by the model.
@@ -40,7 +41,7 @@ class Tag extends Model {
 	 * @var array
 	 */
 	public static $rules = array(
-	    'name' => 'required|min:3|unique:tags,name,:id:',
+		'name' => 'required|min:3|unique:tags,name,:id:',
 	);
 
 	/**
@@ -55,8 +56,9 @@ class Tag extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
 	 */
-	public function Posts() {
-		return $this->belongsToMany('App\Models\Post','post_tag');
+	public function Posts()
+	{
+		return $this->belongsToMany('App\Models\Post', 'post_tag');
 	}
 
 	/**
@@ -64,7 +66,8 @@ class Tag extends Model {
 	 *
 	 * @return array
 	 */
-	public function getlinksAttribute(){
+	public function getlinksAttribute()
+	{
 		return $this->hateoas($this->id, 'tags');
 	}
 

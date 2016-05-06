@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\URL;
  * Class ArticleController
  * @package App\Http\Controllers
  */
-class ArticleController extends Controller {
+class ArticleController extends Controller
+{
 
 	/**
 	 * Constructor for ArticleController.
@@ -32,25 +33,26 @@ class ArticleController extends Controller {
 	{
 		$Article = null;
 
-		if($id != null){
+		if ($id != null) {
 			$Articles = array($this->Article->get($id));
 			$Article = $Articles[0];
-		}else{
+		} else {
 			$Articles = $this->Article->get();
 			$articlesArray = [];
 			$i = 0;
-			foreach($Articles as $art) {
-				if($i < 11) {
+			foreach ($Articles as $art) {
+				if ($i < 11) {
 					$articlesArray[] = $art;
 					$i++;
-				}else{
+				} else {
 					break;
 				}
 			}
 			$Articles = $articlesArray;
 		}
 
-		return View::make('article.index')->with('title', 'Articles')->with('articles', $Articles)->with('article', $Article);
+		return View::make('article.index')->with('title', 'Articles')->with('articles', $Articles)->with('article',
+			$Article);
 	}
 
 	/**
@@ -60,7 +62,7 @@ class ArticleController extends Controller {
 	 */
 	public function create()
 	{
-		if($this->Article->createOrUpdate($this->request->all())){
+		if ($this->Article->createOrUpdate($this->request->all())) {
 			return Redirect::action('ArticleController@index')->with('success', 'Your article has been created.');
 		}
 
@@ -75,7 +77,7 @@ class ArticleController extends Controller {
 	 */
 	public function update($id)
 	{
-		if($this->Article->createOrUpdate($this->request->all(), $id)){
+		if ($this->Article->createOrUpdate($this->request->all(), $id)) {
 			return Redirect::action('ArticleController@index')->with('success', 'Your article has been updated.');
 		}
 
@@ -88,10 +90,11 @@ class ArticleController extends Controller {
 	 * @param  int $id id for article to delete.
 	 * @return object     with value where user should be redirected to.
 	 */
-	public function delete($id){
+	public function delete($id)
+	{
 		$article = $this->Article->get($id);
-		if($this->Article->delete($id)){
-			if(str_contains(URL::previous(), $id) || str_contains(URL::previous(), $article->slug)){
+		if ($this->Article->delete($id)) {
+			if (str_contains(URL::previous(), $id) || str_contains(URL::previous(), $article->slug)) {
 				return Redirect::action('ArticleController@index')->with('success', 'The Article has been deleted.');
 			}
 			return Redirect::back()->with('success', 'The Article has been deleted.');

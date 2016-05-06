@@ -14,7 +14,8 @@ use Illuminate\Http\RedirectResponse;
  * Class ApiController
  * @package App\Http\Controllers
  */
-class ApiController extends Controller {
+class ApiController extends Controller
+{
 
 	/**
 	 * Property to store current page in.
@@ -89,7 +90,8 @@ class ApiController extends Controller {
 	/**
 	 * Constructor for ApiController.
 	 */
-	public function __construct() {
+	public function __construct()
+	{
 		parent::__construct();
 		Model::$append = true;
 		$this->setParams();
@@ -99,12 +101,13 @@ class ApiController extends Controller {
 	/**
 	 * Setter for routes.
 	 */
-	private function setRoutes() {
+	private function setRoutes()
+	{
 		$routeCollection = Route::getRoutes(); // RouteCollection object
-		$routes = $this->getRoutesByPrefix( $routeCollection->getRoutes(), 'api' );
-		$routeGroups = $this->groupByVersion( $routes );
-		foreach( $routeGroups as $v => $group ) {
-			$this->routes[$v] = $this->groupByUri( $group );
+		$routes = $this->getRoutesByPrefix($routeCollection->getRoutes(), 'api');
+		$routeGroups = $this->groupByVersion($routes);
+		foreach ($routeGroups as $v => $group) {
+			$this->routes[$v] = $this->groupByUri($group);
 		}
 	}
 
@@ -113,8 +116,9 @@ class ApiController extends Controller {
 	 *
 	 * @return bool
 	 */
-	private function acceptsHtml() {
-		return str_contains( $this->request->headers->get( 'Accept' ), 'xhtml' );
+	private function acceptsHtml()
+	{
+		return str_contains($this->request->headers->get('Accept'), 'xhtml');
 	}
 
 	/**
@@ -125,12 +129,13 @@ class ApiController extends Controller {
 	 *
 	 * @return mixed
 	 */
-	protected function response( $response, $code ) {
-		$response = Response::json( $response, $code );
-		if ( str_contains( $this->request->headers->get( 'Accept' ), '/xml' ) && !$this->acceptsHtml() ) {
-			$response = $response->getData( true );
+	protected function response($response, $code)
+	{
+		$response = Response::json($response, $code);
+		if (str_contains($this->request->headers->get('Accept'), '/xml') && !$this->acceptsHtml()) {
+			$response = $response->getData(true);
 
-			return Response::xml( $response, $code );
+			return Response::xml($response, $code);
 		}
 
 		return $response;
@@ -139,29 +144,30 @@ class ApiController extends Controller {
 	/**
 	 * Setter for params.
 	 */
-	private function setParams() {
-		if ( isset( $_GET['pagination'] ) ) {
-			if ( is_numeric( $_GET['pagination'] ) ) {
+	private function setParams()
+	{
+		if (isset($_GET['pagination'])) {
+			if (is_numeric($_GET['pagination'])) {
 				$this->perPage = $_GET['pagination'];
 			}
 		} else {
 			$this->perPage = 10;
 		}
-		if ( isset( $_GET['page'] ) ) {
-			if ( is_numeric( $_GET['page'] ) ) {
+		if (isset($_GET['page'])) {
+			if (is_numeric($_GET['page'])) {
 				$this->page = $_GET['page'];
 			}
 		} else {
 			$this->page = 1;
 		}
-		if ( isset( $_GET['limit'] ) ) {
-			if ( is_numeric( $_GET['limit'] ) ) {
+		if (isset($_GET['limit'])) {
+			if (is_numeric($_GET['limit'])) {
 				$this->limit = $_GET['limit'];
 			}
 		} else {
 			$this->limit = 0;
 		}
-		if ( isset( $_GET['sort'] ) ) {
+		if (isset($_GET['sort'])) {
 			$this->sort = $_GET['sort'];
 		} else {
 			$this->sort = '';
@@ -171,16 +177,18 @@ class ApiController extends Controller {
 	/**
 	 * Paginates collection.
 	 */
-	private function paginate() {
-		if ( $this->perPage > 0 ) {
-			if($this->collection instanceof Collection) {
-				$this->collection = $this->collection->slice( ( ( $this->page - 1 ) * $this->perPage ), $this->perPage, true )
-				                                     ->all();
-			}else{
-				$this->collection = array_slice($this->collection, ( ( $this->page - 1 ) * $this->perPage ),$this->perPage);
+	private function paginate()
+	{
+		if ($this->perPage > 0) {
+			if ($this->collection instanceof Collection) {
+				$this->collection = $this->collection->slice((($this->page - 1) * $this->perPage), $this->perPage, true)
+					->all();
+			} else {
+				$this->collection = array_slice($this->collection, (($this->page - 1) * $this->perPage),
+					$this->perPage);
 			}
 
-			if ( empty( $this->collection ) ) {
+			if (empty($this->collection)) {
 				$this->collection = null;
 			} else {
 				$this->createNewCollection();
@@ -191,10 +199,11 @@ class ApiController extends Controller {
 	/**
 	 * Sorts collection.
 	 */
-	private function sort() {
-		if ( $this->sort != '' ) {
-			if ( in_array( $this->sort, array_keys( $this->collection[0]->toArray() ) ) ) {
-				$this->collection = $this->collection->sortBy( $this->sort );
+	private function sort()
+	{
+		if ($this->sort != '') {
+			if (in_array($this->sort, array_keys($this->collection[0]->toArray()))) {
+				$this->collection = $this->collection->sortBy($this->sort);
 				$this->createNewCollection();
 			}
 		}
@@ -203,10 +212,11 @@ class ApiController extends Controller {
 	/**
 	 * Limit collection to correct number of items.
 	 */
-	private function limit() {
-		if ( $this->limit > 0 ) {
-			$this->collection = $this->collection->slice( $this->limit, $this->limit, true )->all();
-			if ( empty( $this->collection ) ) {
+	private function limit()
+	{
+		if ($this->limit > 0) {
+			$this->collection = $this->collection->slice($this->limit, $this->limit, true)->all();
+			if (empty($this->collection)) {
 				$this->collection = null;
 			} else {
 				$this->createNewCollection();
@@ -217,8 +227,9 @@ class ApiController extends Controller {
 	/**
 	 * Regenerates new keys for collection.
 	 */
-	private function createNewCollection() {
-		if ( $this->collection instanceof Collection ) {
+	private function createNewCollection()
+	{
+		if ($this->collection instanceof Collection) {
 			$this->collection->values();
 		}
 	}
@@ -233,14 +244,15 @@ class ApiController extends Controller {
 	 *
 	 * @return Collection
 	 */
-	protected function filter( Collection $collection, $property, $matching, $verb = null ) {
-		$collection = $collection->filter( function ( $item ) use ( $property, $matching ) {
-			if ( $item->$property == $matching ) {
+	protected function filter(Collection $collection, $property, $matching, $verb = null)
+	{
+		$collection = $collection->filter(function ($item) use ($property, $matching) {
+			if ($item->$property == $matching) {
 				return $item;
 			}
-		} );
+		});
 
-		if ( !is_null( $verb ) ) {
+		if (!is_null($verb)) {
 			return $collection->$verb();
 		}
 
@@ -255,9 +267,10 @@ class ApiController extends Controller {
 	 *
 	 * @return mixed
 	 */
-	protected function getCollection( CRepository $repository, $id = null ) {
-		$this->collection = $this->addHidden( $repository->get( $id ) );
-		if ( is_null( $id ) ) {
+	protected function getCollection(CRepository $repository, $id = null)
+	{
+		$this->collection = $this->addHidden($repository->get($id));
+		if (is_null($id)) {
 			$this->limit();
 			$this->sort();
 			$this->paginate();
@@ -272,14 +285,15 @@ class ApiController extends Controller {
 	 *
 	 * @return mixed
 	 */
-	private function getVersion(){
+	private function getVersion()
+	{
 		$actions = $this->request->route()->getAction();
 		$actions = array_filter(explode('/', $actions['prefix']));
-		if(count($actions) == 1){
+		if (count($actions) == 1) {
 			$keys = array_keys($this->routes);
-			$key = $keys[count($keys)-1];
+			$key = $keys[count($keys) - 1];
 
-			return Redirect::to($this->request->url().'/'.$key);
+			return Redirect::to($this->request->url() . '/' . $key);
 		}
 
 		return $actions[count($actions) - 1];
@@ -291,18 +305,19 @@ class ApiController extends Controller {
 	 *
 	 * @return mixed
 	 */
-	public function index() {
+	public function index()
+	{
 
 		$version = $this->getVersion();
-		if($version instanceof RedirectResponse){
+		if ($version instanceof RedirectResponse) {
 			return $version;
 		}
 
-		if ( $this->acceptsHtml() ) {
+		if ($this->acceptsHtml()) {
 			//return View::make( 'api' )->with( 'title', 'api' );
 		}
 
-		return $this->response( $this->routes[$version], 200 );
+		return $this->response($this->routes[$version], 200);
 	}
 
 	/**
@@ -313,23 +328,24 @@ class ApiController extends Controller {
 	 *
 	 * @return Route
 	 */
-	private function getRoutesByPrefix( $routes, $name ) {
-		$routes = array_filter( $routes, function ( $route ) use ( $name ) {
+	private function getRoutesByPrefix($routes, $name)
+	{
+		$routes = array_filter($routes, function ($route) use ($name) {
 			$action = $route->getAction();
-			if ( isset( $action['prefix'] ) ) {
+			if (isset($action['prefix'])) {
 				// for the first level groups, $action['group_name'] will be a string
 				// for nested groups, $action['group_name'] will be an array
-				if ( is_array( $action['prefix'] ) ) {
-					return in_array( $name, $action['prefix'] );
+				if (is_array($action['prefix'])) {
+					return in_array($name, $action['prefix']);
 				} else {
-					return str_contains( $action['prefix'], $name );
+					return str_contains($action['prefix'], $name);
 				}
 			}
 
 			return false;
-		} );
+		});
 
-		return array_values( $routes );
+		return array_values($routes);
 	}
 
 	/**
@@ -339,20 +355,21 @@ class ApiController extends Controller {
 	 *
 	 * @return array
 	 */
-	private function groupByUri( $routes ) {
+	private function groupByUri($routes)
+	{
 		$grouped = [];
 
-		foreach( $routes as $route ) {
+		foreach ($routes as $route) {
 			$uri = $route->getUri();
 
 			$needsAuth = false;
-			if ( in_array( 'jwt', $route->middleware() ) ) {
+			if (in_array('jwt', $route->middleware())) {
 				$needsAuth = true;
 			}
 
 			$parameters = $route->parameterNames();
-			foreach( $parameters as $key => $parameter ) {
-				$optional = str_contains( $uri, '{' . $parameter . '?}' );
+			foreach ($parameters as $key => $parameter) {
+				$optional = str_contains($uri, '{' . $parameter . '?}');
 				$parameters[$key] = [
 					'name' => $parameter,
 					'optional' => $optional,
@@ -361,29 +378,29 @@ class ApiController extends Controller {
 
 			$methods = $route->getMethods();
 			$head = 'HEAD';
-			if ( in_array( $head, $methods ) ) {
-				$key = array_keys( $methods, $head )[0];
-				unset( $methods[$key] );
+			if (in_array($head, $methods)) {
+				$key = array_keys($methods, $head)[0];
+				unset($methods[$key]);
 			}
-			if ( count( $methods ) == 1 ) {
+			if (count($methods) == 1) {
 				$methods = $methods[0];
 			}
 
-			$valueUri = str_replace( '{', '[', $uri );
-			$valueUri = str_replace( '}', ']', $valueUri );
-			$valueUri = str_replace( '?', '', $valueUri );
+			$valueUri = str_replace('{', '[', $uri);
+			$valueUri = str_replace('}', ']', $valueUri);
+			$valueUri = str_replace('?', '', $valueUri);
 
 			$value = [
-				'uri' => URL::to( '/' ) . '/' . $valueUri,
+				'uri' => URL::to('/') . '/' . $valueUri,
 				'methods' => $methods,
 				'auth' => $needsAuth,
 				'parameters' => $parameters,
 			];
 
 
-			$uris = explode( '/', $uri );
-			if ( count( $uris ) > 1 ) {
-				if ( count( $uris ) > 2 ) {
+			$uris = explode('/', $uri);
+			if (count($uris) > 1) {
+				if (count($uris) > 2) {
 					$grouped[$uris[2]][] = $value;
 				} else {
 					$grouped[$uris[1]][] = $value;
@@ -393,31 +410,31 @@ class ApiController extends Controller {
 			}
 		}
 
-		$this->keys = array_keys( $grouped );
+		$this->keys = array_keys($grouped);
 
-		for( $i = 0; $i < ( count( $grouped ) - 1 ); $i++ ) {
-			usort( $grouped[$this->keys[$i]], function ( $a, $b ) {
-				if ( $a['methods'] === $b['methods'] ) {
+		for ($i = 0; $i < (count($grouped) - 1); $i++) {
+			usort($grouped[$this->keys[$i]], function ($a, $b) {
+				if ($a['methods'] === $b['methods']) {
 					return 0;
 				}
 
-				if ( $a['methods'] === 'GET' && in_array( $b['methods'], [
+				if ($a['methods'] === 'GET' && in_array($b['methods'], [
 						'POST',
 						'PUT',
 						'DELETE',
-					] ) || $a['methods'] === 'POST' && in_array( $b['methods'], [
+					]) || $a['methods'] === 'POST' && in_array($b['methods'], [
 						'PUT',
 						'DELETE',
-					] ) || $a['methods'] === 'PUT' && in_array( $b['methods'], ['DELETE'] )
+					]) || $a['methods'] === 'PUT' && in_array($b['methods'], ['DELETE'])
 				) {
 					return -1;
 				}
 
 				return 1;
-			} );
+			});
 		}
 
-		ksort( $grouped );
+		ksort($grouped);
 
 		return $grouped;
 	}
@@ -429,14 +446,15 @@ class ApiController extends Controller {
 	 *
 	 * @return array
 	 */
-	private function groupByVersion( $routes ) {
+	private function groupByVersion($routes)
+	{
 		$groupedByVersion = [];
 
-		foreach( $routes as $route ) {
+		foreach ($routes as $route) {
 			$action = $route->getAction();
-			$uris = explode( '/', $action['prefix'] );
-			unset( $uris[0] );
-			if ( preg_match( '/^v[0-9]+$/', $uris[1] ) ) {
+			$uris = explode('/', $action['prefix']);
+			unset($uris[0]);
+			if (preg_match('/^v[0-9]+$/', $uris[1])) {
 				$groupedByVersion[$uris[1]][] = $route;
 			}
 		}
@@ -453,21 +471,22 @@ class ApiController extends Controller {
 	 *
 	 * @return array
 	 */
-	protected function hateoas( $key, $match = '', $value = 0 ) {
+	protected function hateoas($key, $match = '', $value = 0)
+	{
 		$routes = $this->routes[$key];
 		$hateoas = [];
 
-		if ( !str_contains( $match, '[' ) || !str_contains( $match, ']' ) ) {
-			$match = str_replace( '[', '', $match );
-			$match = str_replace( ']', '', $match );
+		if (!str_contains($match, '[') || !str_contains($match, ']')) {
+			$match = str_replace('[', '', $match);
+			$match = str_replace(']', '', $match);
 
 			$match = '[' . $match . ']';
 		}
 
 
-		foreach( $routes as $route ) {
-			$uri = str_replace( $match, $value, $route['uri'] );
-			if ( array_key_exists( $route['methods'], $hateoas ) ) {
+		foreach ($routes as $route) {
+			$uri = str_replace($match, $value, $route['uri']);
+			if (array_key_exists($route['methods'], $hateoas)) {
 				$hateoas[$route['methods']] = [$hateoas[$route['methods']], $uri];
 			} else {
 				$hateoas[$route['methods']] = $uri;

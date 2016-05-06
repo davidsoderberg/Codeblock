@@ -11,9 +11,10 @@ class Forum extends Model
 	/**
 	 * Boot method for forum model.
 	 */
-	public static function boot() {
+	public static function boot()
+	{
 		parent::boot();
-		static::deleting(function($object) {
+		static::deleting(function ($object) {
 			foreach ($object->topics as $topic) {
 				$topic->delete();
 			}
@@ -47,7 +48,7 @@ class Forum extends Model
 	 * @var array
 	 */
 	public static $rules = array(
-		'title'  => 'required|min:3',
+		'title' => 'required|min:3',
 		'description' => 'required|min:3',
 	);
 
@@ -80,10 +81,11 @@ class Forum extends Model
 	 *
 	 * @return int
 	 */
-	public function replies(){
+	public function replies()
+	{
 		$topics = $this->topics;
 		$replies = 0;
-		foreach($topics as $topic){
+		foreach ($topics as $topic) {
 			$replies += count($topic->replies);
 		}
 		return $replies;
@@ -94,13 +96,14 @@ class Forum extends Model
 	 *
 	 * @return null
 	 */
-	public function lastReply(){
+	public function lastReply()
+	{
 		$topics = $this->topics;
 		$latestReply = null;
-		foreach($topics as $topic){
+		foreach ($topics as $topic) {
 			$reply = $topic->replies->last();
-			if(!is_null($reply)) {
-				if(is_null($latestReply) || strtotime($latestReply->created_at) < strtotime($reply->created_at)) {
+			if (!is_null($reply)) {
+				if (is_null($latestReply) || strtotime($latestReply->created_at) < strtotime($reply->created_at)) {
 					$latestReply = $reply;
 				}
 			}
@@ -113,11 +116,12 @@ class Forum extends Model
 	 *
 	 * @return bool
 	 */
-	public function hasUnreadTopics(){
-		if(Auth::check()){
+	public function hasUnreadTopics()
+	{
+		if (Auth::check()) {
 			$hasread = array();
-			foreach($this->topics as $topic){
-				if(count($topic->replies) > 0) {
+			foreach ($this->topics as $topic) {
+				if (count($topic->replies) > 0) {
 					$hasread[] = Auth::user()->hasRead($topic->id);
 				}
 			}
@@ -131,7 +135,8 @@ class Forum extends Model
 	 *
 	 * @return array
 	 */
-	public function getlinksAttribute(){
+	public function getlinksAttribute()
+	{
 		return $this->hateoas($this->id, 'forums');
 	}
 }

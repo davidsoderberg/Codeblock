@@ -4,7 +4,8 @@
  * Class Rate
  * @package App\Models
  */
-class Rate extends Model {
+class Rate extends Model
+{
 
 	/**
 	 * The database table used by the model.

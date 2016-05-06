@@ -7,14 +7,16 @@ use App\Models\Participant;
  * Class Messagable
  * @package App\Models\Traits
  */
-trait Messagable {
+trait Messagable
+{
 	/**
 	 * Message relationship
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
-	public function messages() {
-		return $this->hasMany( 'App\Models\Message' );
+	public function messages()
+	{
+		return $this->hasMany('App\Models\Message');
 	}
 
 	/**
@@ -22,8 +24,9 @@ trait Messagable {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
 	 */
-	public function threads() {
-		return $this->belongsToMany( 'App\Models\Thread', 'participants' );
+	public function threads()
+	{
+		return $this->belongsToMany('App\Models\Thread', 'participants');
 	}
 
 	/**
@@ -31,8 +34,9 @@ trait Messagable {
 	 *
 	 * @return int
 	 */
-	public function newMessagesCount() {
-		return count( $this->threadsWithNewMessages() );
+	public function newMessagesCount()
+	{
+		return count($this->threadsWithNewMessages());
 	}
 
 	/**
@@ -40,15 +44,16 @@ trait Messagable {
 	 *
 	 * @return array
 	 */
-	public function threadsWithNewMessages() {
+	public function threadsWithNewMessages()
+	{
 		$threadsWithNewMessages = [];
-		$participants = Participant::where( 'user_id', $this->id )->lists( 'last_read', 'thread_id' );
+		$participants = Participant::where('user_id', $this->id)->lists('last_read', 'thread_id');
 
-		if ( $participants ) {
-			$threads = Thread::whereIn( 'id', array_keys( $participants ) )->get();
+		if ($participants) {
+			$threads = Thread::whereIn('id', array_keys($participants))->get();
 
-			foreach( $threads as $thread ) {
-				if ( $thread->updated_at > $participants[$thread->id] ) {
+			foreach ($threads as $thread) {
+				if ($thread->updated_at > $participants[$thread->id]) {
 					$threadsWithNewMessages[] = $thread->id;
 				}
 			}

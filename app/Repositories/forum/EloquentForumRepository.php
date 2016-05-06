@@ -8,7 +8,8 @@ use App\Services\CollectionService;
  * Class EloquentForumRepository
  * @package App\Repositories\Forum
  */
-class EloquentForumRepository extends CRepository implements ForumRepository {
+class EloquentForumRepository extends CRepository implements ForumRepository
+{
 
 	/**
 	 * Fetch one or all forums.
@@ -19,9 +20,9 @@ class EloquentForumRepository extends CRepository implements ForumRepository {
 	 */
 	public function get($id = null)
 	{
-		if(!is_null($id)){
+		if (!is_null($id)) {
 			return CollectionService::filter($this->get(), 'id', $id, 'first');
-		}else{
+		} else {
 			return $this->cache('all', Forum::where('id', '!=', 0));
 		}
 	}
@@ -36,23 +37,23 @@ class EloquentForumRepository extends CRepository implements ForumRepository {
 	 */
 	public function createOrUpdate($input, $id = null)
 	{
-		if(!is_numeric($id)) {
+		if (!is_numeric($id)) {
 			$Forum = new Forum;
 		} else {
 			$Forum = $this->get($id);
 		}
 
-		if(isset($input['title'])){
+		if (isset($input['title'])) {
 			$Forum->title = $this->stripTrim($input['title']);
 		}
 
-		if(isset($input['description'])){
+		if (isset($input['description'])) {
 			$Forum->description = $this->stripTrim($input['description']);
 		}
 
-		if($Forum->save()){
+		if ($Forum->save()) {
 			return true;
-		}else{
+		} else {
 			$this->errors = $Forum::$errors;
 			return false;
 		}
@@ -65,9 +66,10 @@ class EloquentForumRepository extends CRepository implements ForumRepository {
 	 *
 	 * @return bool
 	 */
-	public function delete($id){
+	public function delete($id)
+	{
 		$Forum = $this->get($id);
-		if($Forum == null){
+		if ($Forum == null) {
 			return false;
 		}
 		return $Forum->delete();

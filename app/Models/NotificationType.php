@@ -4,7 +4,8 @@
  * Class NotificationType
  * @package App\Models
  */
-class NotificationType{
+class NotificationType
+{
 
 	/**
 	 * Constant for string Mention.
@@ -48,7 +49,8 @@ class NotificationType{
 	 *
 	 * @return bool
 	 */
-	public static function isType($type){
+	public static function isType($type)
+	{
 		$type = strtoupper($type);
 		$rc = new \ReflectionClass('App\Models\NotificationType');
 		return array_key_exists($type, $rc->getConstants());

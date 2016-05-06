@@ -6,7 +6,8 @@ use App\Repositories\IRepository;
  * Interface UserRepository
  * @package App\Repositories\User
  */
-interface UserRepository extends IRepository {
+interface UserRepository extends IRepository
+{
 
 	/**
 	 * Fetch id by username.

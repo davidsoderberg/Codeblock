@@ -6,4 +6,6 @@ use App\Repositories\IRepository;
  * Interface CategoryRepository
  * @package App\Repositories\Category
  */
-interface CategoryRepository extends IRepository {}
+interface CategoryRepository extends IRepository
+{
+}

@@ -4,7 +4,8 @@
  * Class Category
  * @package App\Models
  */
-class Category extends Model {
+class Category extends Model
+{
 
 	/**
 	 * The database table used by the model.
@@ -33,7 +34,7 @@ class Category extends Model {
 	 * @var array
 	 */
 	public static $rules = array(
-	    'name' => 'required|min:3|unique:categories,name,:id:',
+		'name' => 'required|min:3|unique:categories,name,:id:',
 	);
 
 	/**
@@ -48,8 +49,9 @@ class Category extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
-	public function posts() {
-		return $this->hasMany( 'App\Models\Post' );
+	public function posts()
+	{
+		return $this->hasMany('App\Models\Post');
 	}
 
 	/**
@@ -57,7 +59,8 @@ class Category extends Model {
 	 *
 	 * @return array
 	 */
-	public function getlinksAttribute(){
+	public function getlinksAttribute()
+	{
 		return $this->hateoas($this->id, 'categories');
 	}
 

@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * Class Participant
  * @package App\Models
  */
-class Participant extends Model {
+class Participant extends Model
+{
 
 	use SoftDeletes;
 
@@ -43,8 +44,9 @@ class Participant extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function thread() {
-		return $this->belongsTo( 'App\Models\Thread' );
+	public function thread()
+	{
+		return $this->belongsTo('App\Models\Thread');
 	}
 
 	/**
@@ -52,7 +54,8 @@ class Participant extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function user() {
-		return $this->belongsTo( 'App\Models\User' );
+	public function user()
+	{
+		return $this->belongsTo('App\Models\User');
 	}
 }

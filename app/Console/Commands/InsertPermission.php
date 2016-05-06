@@ -11,7 +11,8 @@ use Symfony\Component\Console\Input\InputArgument;
  * Class InsertPermission
  * @package App\Console\Commands
  */
-class InsertPermission extends Command {
+class InsertPermission extends Command
+{
 
 	/**
 	 * The console command name.
@@ -30,7 +31,8 @@ class InsertPermission extends Command {
 	/**
 	 * Constructor for InserPermission.
 	 */
-	public function __construct() {
+	public function __construct()
+	{
 		parent::__construct();
 	}
 
@@ -41,26 +43,27 @@ class InsertPermission extends Command {
 	 *
 	 * @return mixed
 	 */
-	public function fire( PermissionRepository $permissionRepository ) {
+	public function fire(PermissionRepository $permissionRepository)
+	{
 		// Checks if all old permissions should be deleted.
-		if ( !is_null( $this->argument( 'truncate' ) ) ) {
-			$this->deletePermissions( $permissionRepository );
-			$this->info( 'Your permission table have been truncated.' );
+		if (!is_null($this->argument('truncate'))) {
+			$this->deletePermissions($permissionRepository);
+			$this->info('Your permission table have been truncated.');
 		}
 
 		// Inserts all permission.
-		foreach( $this->getClasses() as $class ) {
+		foreach ($this->getClasses() as $class) {
 			try {
-				$permissionAnnotation = new Permission( 'App\\Http\\Controllers\\' . $class );
-			} catch( \Exception $e ) {
-				$this->error( $e->getMessage() );
+				$permissionAnnotation = new Permission('App\\Http\\Controllers\\' . $class);
+			} catch (\Exception $e) {
+				$this->error($e->getMessage());
 			}
-			foreach( $permissionAnnotation->getMethods() as $method ) {
-				$permissionRepository->createOrUpdate( ['permission' => $permissionAnnotation->getPermission( $method )] );
+			foreach ($permissionAnnotation->getMethods() as $method) {
+				$permissionRepository->createOrUpdate(['permission' => $permissionAnnotation->getPermission($method)]);
 			}
 		}
 
-		$this->info( 'All permissions has been inserted' );
+		$this->info('All permissions has been inserted');
 	}
 
 	/**
@@ -68,7 +71,8 @@ class InsertPermission extends Command {
 	 *
 	 * @return array
 	 */
-	protected function getArguments() {
+	protected function getArguments()
+	{
 		return [
 			[
 				'truncate',
@@ -83,7 +87,8 @@ class InsertPermission extends Command {
 	 *
 	 * @return array
 	 */
-	protected function getOptions() {
+	protected function getOptions()
+	{
 		return [];
 	}
 
@@ -92,12 +97,13 @@ class InsertPermission extends Command {
 	 *
 	 * @param PermissionRepository $permissionRepository
 	 */
-	private function deletePermissions( PermissionRepository $permissionRepository ) {
+	private function deletePermissions(PermissionRepository $permissionRepository)
+	{
 		$permissions = $permissionRepository->get();
-		foreach( $permissions as $permission ) {
-			$permissionRepository->delete( $permission->id );
+		foreach ($permissions as $permission) {
+			$permissionRepository->delete($permission->id);
 		}
-		DB::table( 'permissions' )->truncate();
+		DB::table('permissions')->truncate();
 	}
 
 	/**
@@ -105,11 +111,12 @@ class InsertPermission extends Command {
 	 *
 	 * @return array
 	 */
-	private function getClasses() {
-		$files = $this->getFilesFromFolder( '/Http/Controllers' );
+	private function getClasses()
+	{
+		$files = $this->getFilesFromFolder('/Http/Controllers');
 		$classes = [];
-		foreach( $files as $file ) {
-			$class = explode( '.', $file );
+		foreach ($files as $file) {
+			$class = explode('.', $file);
 			$classes[] = $class[0];
 		}
 
@@ -123,17 +130,18 @@ class InsertPermission extends Command {
 	 *
 	 * @return array
 	 */
-	private function getFilesFromFolder( $path ) {
-		if ( !Str::contains( $path, app_path() ) ) {
+	private function getFilesFromFolder($path)
+	{
+		if (!Str::contains($path, app_path())) {
 			$path = app_path() . $path;
 		}
-		$handle = opendir( $path );
+		$handle = opendir($path);
 		$files = [];
-		while( false !== ( $entry = readdir( $handle ) ) ) {
-			if ( $entry != '.' && $entry != '..' ) {
-				if ( is_dir( $path . '/' . $entry ) ) {
-					$newFiles = $this->getFilesFromFolder( $path . '/' . $entry );
-					for( $i = 0; $i < count( $newFiles ); $i++ ) {
+		while (false !== ($entry = readdir($handle))) {
+			if ($entry != '.' && $entry != '..') {
+				if (is_dir($path . '/' . $entry)) {
+					$newFiles = $this->getFilesFromFolder($path . '/' . $entry);
+					for ($i = 0; $i < count($newFiles); $i++) {
 						$newFiles[$i] = $entry . '\\' . $newFiles[$i];
 					}
 					$files += $newFiles;

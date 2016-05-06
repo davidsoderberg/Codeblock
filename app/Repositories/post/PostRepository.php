@@ -7,7 +7,8 @@ use App\Repositories\Star\StarRepository;
  * Interface PostRepository
  * @package App\Repositories\Post
  */
-interface PostRepository extends IRepository {
+interface PostRepository extends IRepository
+{
 
 	/**
 	 * Fetch id of current post.

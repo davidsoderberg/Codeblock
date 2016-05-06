@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Redirect;
  * Class RoleController
  * @package App\Http\Controllers
  */
-class RoleController extends Controller {
+class RoleController extends Controller
+{
 
 	/**
 	 * Constructor for RoleController.
@@ -17,7 +18,8 @@ class RoleController extends Controller {
 	 * @param RoleRepository $role
 	 * @param PermissionRepository $permission
 	 */
-	public function __construct( RoleRepository $role, PermissionRepository $permission ) {
+	public function __construct(RoleRepository $role, PermissionRepository $permission)
+	{
 		parent::__construct();
 		$this->role = $role;
 		$this->permission = $permission;
@@ -31,26 +33,27 @@ class RoleController extends Controller {
 	 *
 	 * @return object
 	 */
-	public function index( $id = null ) {
+	public function index($id = null)
+	{
 		$defaultId = 0;
 		$roles = $this->role->get();
-		foreach( $roles as $role ) {
-			if ( $role->default == 1 ) {
+		foreach ($roles as $role) {
+			if ($role->default == 1) {
 				$defaultId = $role->id;
 				break;
 			}
 		}
 		$role = null;
-		if ( !is_null( $id ) ) {
-			$role = $this->role->get( $id );
+		if (!is_null($id)) {
+			$role = $this->role->get($id);
 		}
 
-		return View::make( 'role.index' )
-		           ->with( 'title', 'Roles' )
-		           ->with( 'roles', $roles )
-		           ->with( 'selectList', $this->role->getSelectList() )
-		           ->with( 'default', $defaultId )
-		           ->with( 'role', $role );
+		return View::make('role.index')
+			->with('title', 'Roles')
+			->with('roles', $roles)
+			->with('selectList', $this->role->getSelectList())
+			->with('default', $defaultId)
+			->with('role', $role);
 	}
 
 	/**
@@ -61,16 +64,17 @@ class RoleController extends Controller {
 	 *
 	 * @return object
 	 */
-	public function store( $id = null ) {
-		if ( $this->role->createOrUpdate( $this->request->all(), $id ) ) {
-			if ( is_null( $id ) ) {
-				return Redirect::to( '/roles' )->with( 'success', 'The role has been created.' );
+	public function store($id = null)
+	{
+		if ($this->role->createOrUpdate($this->request->all(), $id)) {
+			if (is_null($id)) {
+				return Redirect::to('/roles')->with('success', 'The role has been created.');
 			}
 
-			return Redirect::to( '/roles' )->with( 'success', 'The role has been updated.' );
+			return Redirect::to('/roles')->with('success', 'The role has been updated.');
 		}
 
-		return Redirect::back()->withErrors( $this->role->getErrors() )->withInput( $this->request->all() );
+		return Redirect::back()->withErrors($this->role->getErrors())->withInput($this->request->all());
 
 	}
 
@@ -80,12 +84,13 @@ class RoleController extends Controller {
 	 *
 	 * @return mixed
 	 */
-	public function setDefault() {
-		if ( $this->role->setDefault( $this->request->get( 'default' ) ) ) {
-			return Redirect::back()->with( 'success', 'The default role has been updated.' );
+	public function setDefault()
+	{
+		if ($this->role->setDefault($this->request->get('default'))) {
+			return Redirect::back()->with('success', 'The default role has been updated.');
 		}
 
-		return Redirect::back()->withErrors( $this->role->getErrors() )->withInput();
+		return Redirect::back()->withErrors($this->role->getErrors())->withInput();
 	}
 
 	/**
@@ -96,14 +101,15 @@ class RoleController extends Controller {
 	 *
 	 * @return object
 	 */
-	public function delete( $id ) {
-		if ( is_numeric( $id ) && $id != 1 ) {
-			if ( $this->role->delete( $id ) ) {
-				return Redirect::back()->with( 'success', 'The role has been deleted.' );
+	public function delete($id)
+	{
+		if (is_numeric($id) && $id != 1) {
+			if ($this->role->delete($id)) {
+				return Redirect::back()->with('success', 'The role has been deleted.');
 			}
 		}
 
-		return Redirect::back()->with( 'error', 'The role could not be deleted.' );
+		return Redirect::back()->with('error', 'The role could not be deleted.');
 	}
 
 	/**
@@ -111,13 +117,14 @@ class RoleController extends Controller {
 	 * @permission edit_permission
 	 * @return object
 	 */
-	public function editRolePermission() {
-		$roles = $this->role->editRolePermission( $this->permission->get() );
+	public function editRolePermission()
+	{
+		$roles = $this->role->editRolePermission($this->permission->get());
 
-		return View::make( 'role.rolepermission' )
-		           ->with( 'title', 'Add permission to Role' )
-		           ->with( 'roles', $roles )
-		           ->with( 'permissions', $this->permission->get() );
+		return View::make('role.rolepermission')
+			->with('title', 'Add permission to Role')
+			->with('roles', $roles)
+			->with('permissions', $this->permission->get());
 	}
 
 	/**
@@ -125,11 +132,12 @@ class RoleController extends Controller {
 	 * @permission edit_permission
 	 * @return object
 	 */
-	public function updateRolePermission() {
-		if ( $this->role->updateRolePermission( $this->request->all() ) ) {
-			return Redirect::back()->with( 'success', 'The role has now the permission you selected.' );
+	public function updateRolePermission()
+	{
+		if ($this->role->updateRolePermission($this->request->all())) {
+			return Redirect::back()->with('success', 'The role has now the permission you selected.');
 		} else {
-			return Redirect::back()->with( 'error', 'The role could not get the permissions you seleted.' );
+			return Redirect::back()->with('error', 'The role could not get the permissions you seleted.');
 		}
 	}
 

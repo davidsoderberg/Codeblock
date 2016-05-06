@@ -4,7 +4,8 @@
  * Interface RateRepository
  * @package App\Repositories\Rate
  */
-interface RateRepository {
+interface RateRepository
+{
 
 	/**
 	 * Checks if user has give a comment a rate.

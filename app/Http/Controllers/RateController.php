@@ -9,14 +9,16 @@ use Illuminate\Support\Facades\Redirect;
  * Class RateController
  * @package App\Http\Controllers
  */
-class RateController extends Controller {
+class RateController extends Controller
+{
 
 	/**
 	 * Constructor for RateController.
 	 *
 	 * @param RateRepository $rate
 	 */
-	public function __construct( RateRepository $rate ) {
+	public function __construct(RateRepository $rate)
+	{
 		parent::__construct();
 		$this->rate = $rate;
 	}
@@ -29,18 +31,19 @@ class RateController extends Controller {
 	 *
 	 * @return object
 	 */
-	public function plus( CommentRepository $comment, $id ) {
+	public function plus(CommentRepository $comment, $id)
+	{
 		try {
-			$user_id = $comment->get( $id )->user_id;
-			if ( $user_id != Auth::user()->id ) {
-				if ( $this->rate->rate( $id, '+' ) ) {
-					return Redirect::back()->with( 'success', 'You have now + rated a comment.' );
+			$user_id = $comment->get($id)->user_id;
+			if ($user_id != Auth::user()->id) {
+				if ($this->rate->rate($id, '+')) {
+					return Redirect::back()->with('success', 'You have now + rated a comment.');
 				}
 			}
-		} catch( \Exception $e ) {
+		} catch (\Exception $e) {
 		}
 
-		return Redirect::back()->with( 'error', 'You could not rate that comment, please try agian.' );
+		return Redirect::back()->with('error', 'You could not rate that comment, please try agian.');
 	}
 
 	/**
@@ -51,18 +54,19 @@ class RateController extends Controller {
 	 *
 	 * @return object
 	 */
-	public function minus( CommentRepository $comment, $id ) {
+	public function minus(CommentRepository $comment, $id)
+	{
 		try {
-			$user_id = $comment->get( $id )->user_id;
-			if ( $user_id != Auth::user()->id ) {
-				if ( $this->rate->rate( $id, '-' ) ) {
-					return Redirect::back()->with( 'success', 'You have now - rated a comment.' );
+			$user_id = $comment->get($id)->user_id;
+			if ($user_id != Auth::user()->id) {
+				if ($this->rate->rate($id, '-')) {
+					return Redirect::back()->with('success', 'You have now - rated a comment.');
 				}
 			}
-		} catch( \Exception $e ) {
+		} catch (\Exception $e) {
 		}
 
-		return Redirect::back()->with( 'error', 'You could not rate that comment, please try agian.' );
+		return Redirect::back()->with('error', 'You could not rate that comment, please try agian.');
 	}
 
 }
