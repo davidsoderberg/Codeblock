@@ -22,7 +22,9 @@ class Client extends PubSub
      */
     public function __construct()
     {
-        $this->client = new \WebSocket\Client("ws://" . env('SOCKET_ADRESS') . ":" . env('SOCKET_PORT'));
+        if (!empty(env('SOCKET_ADRESS')) && !empty(env('SOCKET_PORT'))) {
+            $this->client = new \WebSocket\Client("ws://" . env('SOCKET_ADRESS') . ":" . env('SOCKET_PORT'));
+        }
     }
 
     /**
@@ -37,20 +39,22 @@ class Client extends PubSub
      */
     public function send($object, $user_id = 0, $channel = 'toast', $topic = '')
     {
-        if ($user_id == 0 || !is_numeric($user_id)) {
-            if (!isset($object->user_id)) {
-                throw new \InvalidArgumentException('The user id is not valid');
+        if (!empty($this->client)) {
+            if ($user_id == 0 || !is_numeric($user_id)) {
+                if (!isset($object->user_id)) {
+                    throw new \InvalidArgumentException('The user id is not valid');
+                }
+                $user_id = $object->user_id;
             }
-            $user_id = $object->user_id;
-        }
-        try {
-            $this->client->send(json_encode([
-                "channel" => $channel,
-                'topic' => $topic,
-                'id' => $user_id,
-                'message' => $this->checkToast($channel, $topic, $object),
-            ]));
-        } catch (ConnectionException $e) {
+            try {
+                $this->client->send(json_encode([
+                    "channel" => $channel,
+                    'topic' => $topic,
+                    'id' => $user_id,
+                    'message' => $this->checkToast($channel, $topic, $object),
+                ]));
+            } catch (ConnectionException $e) {
+            }
         }
     }
 

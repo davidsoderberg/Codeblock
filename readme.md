@@ -11,7 +11,7 @@ Repository for codeblock.se
 
 ## Config needed for pphunit tests
 If you would like to run the phpunit tests you will need following in your .env file:  
-MAIL_HOST, MAIL_PORT, FROM_ADRESS, FROM_NAME, MAIL_USERNAME, MAIL_PASSWORD, MAIL_PRETEND, SOCKET_PORT, SOCKET_ADRESS, GITHUB_TOKEN
+FROM_ADRESS, FROM_NAME, GITHUB_TOKEN
 
 
 ## Creating documentation

@@ -63,7 +63,7 @@ class Install extends Command
         if (is_null($startat)) {
             $mail = new CRepository();
             $data = array('subject' => 'Test mail', 'body' => 'This is a mail to test mail configuration.');
-            $emailInfo = array('toEmail' => env('FROM_ADRESS'), 'toName' => env('FROM_NAME'), 'subject' => 'Test mail');
+            $emailInfo = array('subject' => 'Test mail');
             if (!$mail->sendEmail('emails.notification', $emailInfo, $data)) {
                 $this->error('The mail is not configured correctly, please try agian and use option startat with "Mail" as value.');
             }

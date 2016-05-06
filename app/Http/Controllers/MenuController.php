@@ -164,8 +164,6 @@ class MenuController extends Controller
         if ($v->passes()) {
             $input['Cmessage'] = $input['message'];
             $emailInfo = [
-                'toEmail' => env('FROM_ADRESS'),
-                'toName' => env('FROM_NAME'),
                 'subject' => 'Contact message',
             ];
             if ($ClassRepo->sendEmail('emails.contact', $emailInfo, $input) == 1) {

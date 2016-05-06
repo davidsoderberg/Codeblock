@@ -40,6 +40,12 @@ class CRepository
      */
     public function sendEmail($template, $emailInfo, $data)
     {
+        if (empty($emailInfo['toEmail'])) {
+            $emailInfo['toEmail'] = env('FROM_ADRESS');
+        }
+        if (empty($emailInfo['toName'])) {
+            $emailInfo['toName'] = env('FROM_NAME');
+        }
         Mail::send($template, $data, function ($message) use ($emailInfo) {
             $message->from(env('FROM_ADRESS'), env('FROM_NAME'));
             $message->to($emailInfo['toEmail'], $emailInfo['toName'])->subject($emailInfo['subject']);
