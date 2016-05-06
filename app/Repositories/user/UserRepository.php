@@ -9,60 +9,59 @@ use App\Repositories\IRepository;
 interface UserRepository extends IRepository
 {
 
-	/**
-	 * Fetch id by username.
-	 *
-	 * @param $username
-	 *
-	 * @return mixed
-	 */
-	public function getIdByUsername($username);
+    /**
+     * Fetch id by username.
+     *
+     * @param $username
+     *
+     * @return mixed
+     */
+    public function getIdByUsername($username);
 
-	/**
-	 * Fetch id by email.
-	 *
-	 * @param $email
-	 *
-	 * @return mixed
-	 */
-	public function getIdByEmail($email);
+    /**
+     * Fetch id by email.
+     *
+     * @param $email
+     *
+     * @return mixed
+     */
+    public function getIdByEmail($email);
 
-	/**
-	 * Updates user.
-	 *
-	 * @param $input
-	 * @param $id
-	 *
-	 * @return mixed
-	 */
-	public function update($input, $id);
+    /**
+     * Updates user.
+     *
+     * @param $input
+     * @param $id
+     *
+     * @return mixed
+     */
+    public function update($input, $id);
 
-	/**
-	 * Login user.
-	 *
-	 * @param $input
-	 *
-	 * @return mixed
-	 */
-	public function login($input);
+    /**
+     * Login user.
+     *
+     * @param $input
+     *
+     * @return mixed
+     */
+    public function login($input);
 
-	/**
-	 * Send new password if user has forgot it.
-	 *
-	 * @param $input
-	 *
-	 * @return mixed
-	 */
-	public function forgotPassword($input);
+    /**
+     * Send new password if user has forgot it.
+     *
+     * @param $input
+     *
+     * @return mixed
+     */
+    public function forgotPassword($input);
 
-	/**
-	 * Activates user.
-	 *
-	 * @param $id
-	 * @param $token
-	 *
-	 * @return mixed
-	 */
-	public function activateUser($id, $token);
-
+    /**
+     * Activates user.
+     *
+     * @param $id
+     * @param $token
+     *
+     * @return mixed
+     */
+    public function activateUser($id, $token);
 }

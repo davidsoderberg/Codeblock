@@ -13,37 +13,37 @@ use Illuminate\Support\Facades\Redirect;
 class Permission
 {
 
-	/**
-	 * Constructor for Permission.
-	 *
-	 * @param Router $router
-	 */
-	public function __construct(Router $router)
-	{
-		$this->router = $router;
-	}
+    /**
+     * Constructor for Permission.
+     *
+     * @param Router $router
+     */
+    public function __construct(Router $router)
+    {
+        $this->router = $router;
+    }
 
-	/**
-	 * Handle an incoming request.
-	 *
-	 * @param  \Illuminate\Http\Request $request
-	 * @param  \Closure $next
-	 * @return mixed
-	 */
-	public function handle($request, Closure $next)
-	{
-		$action = $this->router->getRoutes()->match($request)->getAction()['uses'];
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
+     * @return mixed
+     */
+    public function handle($request, Closure $next)
+    {
+        $action = $this->router->getRoutes()->match($request)->getAction()['uses'];
 
-		// Fetch permission for current controller method.
-		$action = explode('@', $action);
-		$permissionAnnotation = New \App\Services\Annotation\Permission($action[0], false);
-		$permission = $permissionAnnotation->getPermission($action[1], true);
+        // Fetch permission for current controller method.
+        $action = explode('@', $action);
+        $permissionAnnotation = new \App\Services\Annotation\Permission($action[0], false);
+        $permission = $permissionAnnotation->getPermission($action[1], true);
 
-		// Checks if user has that permission.
-		if (Auth::check() && !Auth::user()->hasPermission($permission)) {
-			return Redirect::to('/')->with('error', 'You do not have the correct permission for that url.');
-		}
+        // Checks if user has that permission.
+        if (Auth::check() && !Auth::user()->hasPermission($permission)) {
+            return Redirect::to('/')->with('error', 'You do not have the correct permission for that url.');
+        }
 
-		return $next($request);
-	}
+        return $next($request);
+    }
 }

@@ -11,249 +11,249 @@ use Illuminate\Support\Facades\Log;
  */
 trait CacheTrait
 {
-	/**
-	 * Cache duration in minutes; 0 is forever
-	 *
-	 * @var int
-	 */
-	protected $cacheForMinutes = 0;
+    /**
+     * Cache duration in minutes; 0 is forever
+     *
+     * @var int
+     */
+    protected $cacheForMinutes = 0;
 
-	/**
-	 * Enable logging
-	 *
-	 * @var boolean
-	 */
-	protected $enableLogging = true;
+    /**
+     * Enable logging
+     *
+     * @var boolean
+     */
+    protected $enableLogging = true;
 
-	/**
-	 * Key used to store index of all service keys
-	 *
-	 * @var string
-	 */
-	protected $cacheIndexKey = 'cache-index';
+    /**
+     * Key used to store index of all service keys
+     *
+     * @var string
+     */
+    protected $cacheIndexKey = 'cache-index';
 
-	/**
-	 * Model used to get cache key.
-	 *
-	 * @var string
-	 */
-	protected $model = null;
+    /**
+     * Model used to get cache key.
+     *
+     * @var string
+     */
+    protected $model = null;
 
-	/**
-	 * Propety to store Cache key in.
-	 *
-	 * @var
-	 */
-	protected $cacheKey = '';
+    /**
+     * Propety to store Cache key in.
+     *
+     * @var
+     */
+    protected $cacheKey = '';
 
-	/**
-	 * Retrieve from cache if not empty, otherwise store results
-	 * of query in cache
-	 *
-	 * @param  string $key
-	 * @param  Builder $query
-	 * @param  string $verb Optional Builder verb to execute query
-	 *
-	 * @return Collection|Model|array|null
-	 */
-	protected function cache($key, Builder $query, $verb = 'get')
-	{
-		$this->setModel($query->getModel());
+    /**
+     * Retrieve from cache if not empty, otherwise store results
+     * of query in cache
+     *
+     * @param  string $key
+     * @param  Builder $query
+     * @param  string $verb Optional Builder verb to execute query
+     *
+     * @return Collection|Model|array|null
+     */
+    protected function cache($key, Builder $query, $verb = 'get')
+    {
+        $this->setModel($query->getModel());
 
-		$key = $this->getCacheSelector($key);
+        $key = $this->getCacheSelector($key);
 
-		$this->indexKey($key);
+        $this->indexKey($key);
 
-		$fetchData = function () use ($key, $query, $verb) {
-			$this->log('refreshing cache for ' . get_class($this) . ' (' . $key . ')');
+        $fetchData = function () use ($key, $query, $verb) {
+            $this->log('refreshing cache for ' . get_class($this) . ' (' . $key . ')');
 
-			return $query->$verb();
-		};
+            return $query->$verb();
+        };
 
-		if (env('CACHE', false)) {
-			if ($this->cacheForMinutes > 0) {
-				return Cache::remember($key, $this->cacheForMinutes, $fetchData);
-			}
+        if (env('CACHE', false)) {
+            if ($this->cacheForMinutes > 0) {
+                return Cache::remember($key, $this->cacheForMinutes, $fetchData);
+            }
 
-			return Cache::rememberForever($key, $fetchData);
-		}
+            return Cache::rememberForever($key, $fetchData);
+        }
 
-		return $fetchData();
-	}
+        return $fetchData();
+    }
 
-	/**
-	 * Get items from collection whose properties match a given attribute and value
-	 *
-	 * @param  Collection $collection
-	 * @param  string $attribute
-	 * @param  mixed $value
-	 *
-	 * @return Collection
-	 */
-	protected function getByAttributeFromCollection(Collection $collection, $attribute, $value = null)
-	{
-		return $collection->filter(function ($item) use ($attribute, $value) {
-			if (isset($item->$attribute) && $value) {
-				return $item->$attribute == $value;
-			}
+    /**
+     * Get items from collection whose properties match a given attribute and value
+     *
+     * @param  Collection $collection
+     * @param  string $attribute
+     * @param  mixed $value
+     *
+     * @return Collection
+     */
+    protected function getByAttributeFromCollection(Collection $collection, $attribute, $value = null)
+    {
+        return $collection->filter(function ($item) use ($attribute, $value) {
+            if (isset($item->$attribute) && $value) {
+                return $item->$attribute == $value;
+            }
 
-			return false;
-		});
-	}
+            return false;
+        });
+    }
 
-	/**
-	 * Get cache key from concrete service
-	 *
-	 * @return string
-	 */
-	protected function getCacheKey()
-	{
-		return $this->cacheKey;
-	}
+    /**
+     * Get cache key from concrete service
+     *
+     * @return string
+     */
+    protected function getCacheKey()
+    {
+        return $this->cacheKey;
+    }
 
-	/**
-	 * Create and get cache selector
-	 *
-	 * @param  string $id Optional id to suffix base key
-	 *
-	 * @return string
-	 */
-	protected function getCacheSelector($id = null)
-	{
-		return $this->getCacheKey() . ($id ? '.' . $id : '');
-	}
+    /**
+     * Create and get cache selector
+     *
+     * @param  string $id Optional id to suffix base key
+     *
+     * @return string
+     */
+    protected function getCacheSelector($id = null)
+    {
+        return $this->getCacheKey() . ($id ? '.' . $id : '');
+    }
 
-	/**
-	 * Get keys from key inventory
-	 *
-	 * @return array
-	 */
-	protected function getKeys()
-	{
-		return Cache::get($this->cacheIndexKey, []);
-	}
+    /**
+     * Get keys from key inventory
+     *
+     * @return array
+     */
+    protected function getKeys()
+    {
+        return Cache::get($this->cacheIndexKey, []);
+    }
 
-	/**
-	 * Get model
-	 *
-	 * @return Illuminate\Database\Eloquent\Model
-	 */
-	protected function getModel()
-	{
-		return $this->model;
-	}
+    /**
+     * Get model
+     *
+     * @return Illuminate\Database\Eloquent\Model
+     */
+    protected function getModel()
+    {
+        return $this->model;
+    }
 
-	/**
-	 * Set model
-	 *
-	 * @param $model
-	 */
-	public function setModel($model)
-	{
-		$this->cacheKey = $this->getClass($model);
-		$this->model = $model;
-	}
+    /**
+     * Set model
+     *
+     * @param $model
+     */
+    public function setModel($model)
+    {
+        $this->cacheKey = $this->getClass($model);
+        $this->model = $model;
+    }
 
-	/**
-	 * Fetch class for current object.
-	 *
-	 * @param $object
-	 *
-	 * @return string
-	 */
-	protected function getClass($object)
-	{
-		if (is_object($object)) {
-			$object = get_class($object);
-		}
+    /**
+     * Fetch class for current object.
+     *
+     * @param $object
+     *
+     * @return string
+     */
+    protected function getClass($object)
+    {
+        if (is_object($object)) {
+            $object = get_class($object);
+        }
 
-		return strtolower(str_replace('App\\Models\\', '', $object));
-	}
+        return strtolower(str_replace('App\\Models\\', '', $object));
+    }
 
-	/**
-	 * Get keys for concrete service
-	 *
-	 * @return array
-	 */
-	protected function getServiceKeys()
-	{
-		$keys = $this->getKeys();
-		$serviceKey = $this->getCacheKey();
+    /**
+     * Get keys for concrete service
+     *
+     * @return array
+     */
+    protected function getServiceKeys()
+    {
+        $keys = $this->getKeys();
+        $serviceKey = $this->getCacheKey();
 
-		if (!isset($keys[$serviceKey])) {
-			$keys[$serviceKey] = [];
-		} elseif (!is_array($keys[$serviceKey])) {
-			$keys[$serviceKey] = [$keys[$serviceKey]];
-		}
+        if (!isset($keys[$serviceKey])) {
+            $keys[$serviceKey] = [];
+        } elseif (!is_array($keys[$serviceKey])) {
+            $keys[$serviceKey] = [$keys[$serviceKey]];
+        }
 
-		return $keys[$serviceKey];
-	}
+        return $keys[$serviceKey];
+    }
 
-	/**
-	 * Index a given key in the service key inventory
-	 *
-	 * @param  string $key
-	 *
-	 * @return void
-	 */
-	protected function indexKey($key)
-	{
-		$keys = $this->getServiceKeys();
+    /**
+     * Index a given key in the service key inventory
+     *
+     * @param  string $key
+     *
+     * @return void
+     */
+    protected function indexKey($key)
+    {
+        $keys = $this->getServiceKeys();
 
-		array_push($keys, $key);
+        array_push($keys, $key);
 
-		$keys = array_unique($keys);
+        $keys = array_unique($keys);
 
-		$this->setServiceKeys($keys);
-	}
+        $this->setServiceKeys($keys);
+    }
 
-	/**
-	 * Log the message, if enabled
-	 *
-	 * @param  string $message
-	 *
-	 * @return void
-	 */
-	protected function log($message)
-	{
-		if ($this->enableLogging) {
-			Log::info($message);
-		}
-	}
+    /**
+     * Log the message, if enabled
+     *
+     * @param  string $message
+     *
+     * @return void
+     */
+    protected function log($message)
+    {
+        if ($this->enableLogging) {
+            Log::info($message);
+        }
+    }
 
-	/**
-	 * Set keys for concrete service
-	 *
-	 * @param array $keys
-	 */
-	protected function setServiceKeys($keys = [])
-	{
-		$allkeys = $this->getKeys();
-		$serviceKey = $this->getCacheKey();
+    /**
+     * Set keys for concrete service
+     *
+     * @param array $keys
+     */
+    protected function setServiceKeys($keys = [])
+    {
+        $allkeys = $this->getKeys();
+        $serviceKey = $this->getCacheKey();
 
-		$allkeys[$serviceKey] = $keys;
+        $allkeys[$serviceKey] = $keys;
 
-		Cache::forever($this->cacheIndexKey, $allkeys);
-	}
+        Cache::forever($this->cacheIndexKey, $allkeys);
+    }
 
-	/**
-	 * Flush the cache for the concrete service
-	 *
-	 * @param null $model
-	 *
-	 * @return void
-	 */
-	public function flushCache($model = null)
-	{
-		if (!is_null($model)) {
-			$this->setModel($model);
-		}
-		$keys = $this->getServiceKeys();
+    /**
+     * Flush the cache for the concrete service
+     *
+     * @param null $model
+     *
+     * @return void
+     */
+    public function flushCache($model = null)
+    {
+        if (!is_null($model)) {
+            $this->setModel($model);
+        }
+        $keys = $this->getServiceKeys();
 
-		array_map(function ($key) {
-			$this->log('flushing cache for ' . get_class($this) . ' (' . $key . ')');
+        array_map(function ($key) {
+            $this->log('flushing cache for ' . get_class($this) . ' (' . $key . ')');
 
-			Cache::forget($key);
-		}, $keys);
-	}
+            Cache::forget($key);
+        }, $keys);
+    }
 }

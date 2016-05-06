@@ -10,14 +10,13 @@ use App\Repositories\CRepository;
 class EloquentStarRepository extends CRepository implements StarRepository
 {
 
-	/**
-	 * Fetch one or all stars.
-	 *
-	 * @return \App\Services\Model|array|\Illuminate\Database\Eloquent\Collection|null
-	 */
-	public function get()
-	{
-		return $this->cache('all', Star::where('id', '!=', 0));
-	}
-
+    /**
+     * Fetch one or all stars.
+     *
+     * @return \App\Services\Model|array|\Illuminate\Database\Eloquent\Collection|null
+     */
+    public function get()
+    {
+        return $this->cache('all', Star::where('id', '!=', 0));
+    }
 }

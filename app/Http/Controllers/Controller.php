@@ -23,136 +23,136 @@ use Illuminate\Support\Facades\Request;
 abstract class Controller extends BaseController
 {
 
-	/**
-	 * Property to store current websocket client in.
-	 *
-	 * @var Client
-	 */
-	protected $client;
+    /**
+     * Property to store current websocket client in.
+     *
+     * @var Client
+     */
+    protected $client;
 
 
-	/**
-	 * Property to store current request object in.
-	 *
-	 * @var mixed
-	 */
-	protected $request;
+    /**
+     * Property to store current request object in.
+     *
+     * @var mixed
+     */
+    protected $request;
 
-	/**
-	 * Property to store number of posts to render on each paginator page.
-	 *
-	 * @var int
-	 */
-	protected $perPage = 10;
+    /**
+     * Property to store number of posts to render on each paginator page.
+     *
+     * @var int
+     */
+    protected $perPage = 10;
 
-	use DispatchesJobs, ValidatesRequests;
+    use DispatchesJobs, ValidatesRequests;
 
-	/**
-	 * Constructor for Controller.
-	 */
-	public function __construct()
-	{
-		$this->request = app('Illuminate\Http\Request');
-		$url = preg_replace("/https?:\/\//", "", URL::to('/'));
-		View::share('siteName', ucfirst($url));
-		$this->client = new Client();
-	}
+    /**
+     * Constructor for Controller.
+     */
+    public function __construct()
+    {
+        $this->request = app('Illuminate\Http\Request');
+        $url = preg_replace("/https?:\/\//", "", URL::to('/'));
+        View::share('siteName', ucfirst($url));
+        $this->client = new Client();
+    }
 
-	/**
-	 * Sends a notification to mentioned user.
-	 *
-	 * @param $text
-	 * @param $object
-	 * @param NotificationRepository $notification
-	 */
-	protected function mentioned($text, $object, NotificationRepository $notification)
-	{
-		$users = [];
-		preg_match_all('/(^|\s)@(\w+)/', $text, $users);
-		foreach ($users as $username) {
-			if (count($username) >= 1) {
-				$username = $username[0];
-				if (!$notification->send($username, NotificationType::MENTION, $object)) {
-					$errors = [
-						'username' => $username,
-						'type' => NotificationType::MENTION,
-						'errors' => $notification->errors,
-					];
-					Log::error(json_encode($errors));
-				}
-			}
-		}
-	}
+    /**
+     * Sends a notification to mentioned user.
+     *
+     * @param $text
+     * @param $object
+     * @param NotificationRepository $notification
+     */
+    protected function mentioned($text, $object, NotificationRepository $notification)
+    {
+        $users = [];
+        preg_match_all('/(^|\s)@(\w+)/', $text, $users);
+        foreach ($users as $username) {
+            if (count($username) >= 1) {
+                $username = $username[0];
+                if (!$notification->send($username, NotificationType::MENTION, $object)) {
+                    $errors = [
+                        'username' => $username,
+                        'type' => NotificationType::MENTION,
+                        'errors' => $notification->errors,
+                    ];
+                    Log::error(json_encode($errors));
+                }
+            }
+        }
+    }
 
-	/**
-	 * Fetch permission for current method.
-	 * @return array|string
-	 */
-	protected function getPermission()
-	{
-		$action = debug_backtrace()[1];
-		$permissionAnnotation = New Permission($action['class']);
+    /**
+     * Fetch permission for current method.
+     * @return array|string
+     */
+    protected function getPermission()
+    {
+        $action = debug_backtrace()[1];
+        $permissionAnnotation = new Permission($action['class']);
 
-		return $permissionAnnotation->getPermission($action['function']);
-	}
+        return $permissionAnnotation->getPermission($action['function']);
+    }
 
-	/**
-	 * Fetch select array from objects.
-	 *
-	 * @param $objects
-	 * @param string $key
-	 * @param string $value
-	 *
-	 * @return array
-	 */
-	protected function getSelectArray($objects, $key = 'id', $value = 'name')
-	{
-		$selectArray = [];
-		foreach ($objects as $object) {
-			$selectArray[$object[$key]] = $object[$value];
-		}
+    /**
+     * Fetch select array from objects.
+     *
+     * @param $objects
+     * @param string $key
+     * @param string $value
+     *
+     * @return array
+     */
+    protected function getSelectArray($objects, $key = 'id', $value = 'name')
+    {
+        $selectArray = [];
+        foreach ($objects as $object) {
+            $selectArray[$object[$key]] = $object[$value];
+        }
 
-		return $selectArray;
-	}
+        return $selectArray;
+    }
 
-	/**
-	 * Adding hidden to objects.
-	 *
-	 * @param $objects
-	 *
-	 * @return mixed
-	 */
-	protected function addHidden($objects)
-	{
-		if ($objects instanceof Collection) {
-			foreach ($objects as $object) {
-				$object->addToHidden();
-			}
-		} else {
-			if ($objects instanceof Model) {
-				$objects->addToHidden();
-			}
-		}
+    /**
+     * Adding hidden to objects.
+     *
+     * @param $objects
+     *
+     * @return mixed
+     */
+    protected function addHidden($objects)
+    {
+        if ($objects instanceof Collection) {
+            foreach ($objects as $object) {
+                $object->addToHidden();
+            }
+        } else {
+            if ($objects instanceof Model) {
+                $objects->addToHidden();
+            }
+        }
 
-		return $objects;
-	}
+        return $objects;
+    }
 
-	/**
-	 * Creates paginator.
-	 *
-	 * @param Collection $data
-	 *
-	 * @return array
-	 */
-	public function createPaginator(Collection $data)
-	{
-		if (!isset($_GET['page']) || !is_numeric($_GET['page'])) {
-			$_GET['page'] = 1;
-		}
-		$paginator = new LengthAwarePaginator($data, count($data), $this->perPage, $_GET['page'],
-			['path' => '/' . Request::path()]);
-		$data = $data->slice(($_GET['page'] * $this->perPage) - $this->perPage, $this->perPage);
+    /**
+     * Creates paginator.
+     *
+     * @param Collection $data
+     *
+     * @return array
+     */
+    public function createPaginator(Collection $data)
+    {
+        if (!isset($_GET['page']) || !is_numeric($_GET['page'])) {
+            $_GET['page'] = 1;
+        }
+        $paginator = new LengthAwarePaginator($data, count($data), $this->perPage, $_GET['page'],
+            ['path' => '/' . Request::path()]);
+        $data = $data->slice(($_GET['page'] * $this->perPage) - $this->perPage, $this->perPage);
 
-		return ['data' => $data, 'paginator' => $paginator->render()];
-	}
+        return ['data' => $data, 'paginator' => $paginator->render()];
+    }
 }
