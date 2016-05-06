@@ -11,18 +11,18 @@ use App\Services\FormBuilder;
 class MacroServiceProvider extends HtmlServiceProvider
 {
 
-	public function register()
-	{
-		parent::register();
+    public function register()
+    {
+        parent::register();
 
-		$this->app->singleton('html', function ($app) {
-			return new HtmlBuilder($app['url'], $app['view']);
-		});
+        $this->app->singleton('html', function ($app) {
+            return new HtmlBuilder($app['url'], $app['view']);
+        });
 
-		$this->app->singleton('form', function ($app) {
-			$form = new FormBuilder($app['html'], $app['url'], $app['view'], $app['session.store']->getToken());
+        $this->app->singleton('form', function ($app) {
+            $form = new FormBuilder($app['html'], $app['url'], $app['view'], $app['session.store']->getToken());
 
-			return $form->setSessionStore($app['session.store']);
-		});
-	}
+            return $form->setSessionStore($app['session.store']);
+        });
+    }
 }

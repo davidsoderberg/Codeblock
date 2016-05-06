@@ -7,6 +7,5 @@
 abstract class Event
 {
 
-	//
-
+    //
 }

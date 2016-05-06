@@ -7,32 +7,31 @@
 interface IRepository
 {
 
-	/**
-	 * Fetch one or all models.
-	 *
-	 * @param null $id
-	 *
-	 * @return mixed
-	 */
-	public function get($id = null);
+    /**
+     * Fetch one or all models.
+     *
+     * @param null $id
+     *
+     * @return mixed
+     */
+    public function get($id = null);
 
-	/**
-	 * Creates or updates a model.
-	 *
-	 * @param $input
-	 * @param null $id
-	 *
-	 * @return mixed
-	 */
-	public function createOrUpdate($input, $id = null);
+    /**
+     * Creates or updates a model.
+     *
+     * @param $input
+     * @param null $id
+     *
+     * @return mixed
+     */
+    public function createOrUpdate($input, $id = null);
 
-	/**
-	 * Delets a model.
-	 *
-	 * @param $id
-	 *
-	 * @return mixed
-	 */
-	public function delete($id);
-
+    /**
+     * Delets a model.
+     *
+     * @param $id
+     *
+     * @return mixed
+     */
+    public function delete($id);
 }

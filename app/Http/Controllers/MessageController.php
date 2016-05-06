@@ -15,106 +15,104 @@ class MessageController extends Controller
 {
 
 
-	/**
-	 * Property to store MessageRepository in.
-	 *
-	 * @var MessageRepository
-	 */
-	private $repo;
+    /**
+     * Property to store MessageRepository in.
+     *
+     * @var MessageRepository
+     */
+    private $repo;
 
-	/**
-	 * Constructor for MessageController.
-	 *
-	 * @param MessageRepository $repository
-	 */
-	public function __construct(MessageRepository $repository)
-	{
-		parent::__construct();
-		$this->repo = $repository;
-	}
+    /**
+     * Constructor for MessageController.
+     *
+     * @param MessageRepository $repository
+     */
+    public function __construct(MessageRepository $repository)
+    {
+        parent::__construct();
+        $this->repo = $repository;
+    }
 
-	/**
-	 * Render index view for messages.
-	 *
-	 * @param $id
-	 *
-	 * @return objekt
-	 */
-	public function index($id = null)
-	{
+    /**
+     * Render index view for messages.
+     *
+     * @param $id
+     *
+     * @return objekt
+     */
+    public function index($id = null)
+    {
+        $threads = $this->repo->getThread();
 
-		$threads = $this->repo->getThread();
-
-		$users = User::where('id', '!=', Auth::id())->get();
+        $users = User::where('id', '!=', Auth::id())->get();
 
 
-		if (!is_null($id)) {
-			$thread = $this->repo->getThread($id);
-			if (!is_null($thread)) {
-				$threads = $thread;
-			}
+        if (!is_null($id)) {
+            $thread = $this->repo->getThread($id);
+            if (!is_null($thread)) {
+                $threads = $thread;
+            }
 
-			$user_id = Auth::user()->id;
-			$users = User::whereNotIn('id', $this->repo->participantsUserIds($user_id))->get();
+            $user_id = Auth::user()->id;
+            $users = User::whereNotIn('id', $this->repo->participantsUserIds($user_id))->get();
 
-			$this->repo->markAsRead($user_id);
-		}
+            $this->repo->markAsRead($user_id);
+        }
 
-		$users = $users->toArray();
+        $users = $users->toArray();
 
-		$users = array_reduce($users, function ($result, $item) {
-			$result[$item['id']] = $item['username'];
+        $users = array_reduce($users, function ($result, $item) {
+            $result[$item['id']] = $item['username'];
 
-			return $result;
-		}, []);
+            return $result;
+        }, []);
 
-		return View::make('message.index')
-			->with('title', 'Threads')
-			->with('users', $users)
-			->with('threads', $threads)
-			->with('id', $id);
-	}
+        return View::make('message.index')
+            ->with('title', 'Threads')
+            ->with('users', $users)
+            ->with('threads', $threads)
+            ->with('id', $id);
+    }
 
-	/**
-	 * Creates or updates a message.
-	 *
-	 * @param $id
-	 *
-	 * @return mixed
-	 */
-	public function createOrUpdate($id = null)
-	{
-		$input = Input::all();
-		$errors = null;
-		$thread = null;
+    /**
+     * Creates or updates a message.
+     *
+     * @param $id
+     *
+     * @return mixed
+     */
+    public function createOrUpdate($id = null)
+    {
+        $input = Input::all();
+        $errors = null;
+        $thread = null;
 
-		if (!is_null($id) && is_numeric($id)) {
-			$thread = $this->repo->getThread($id);
-			$this->repo->activateAllParticipants();
-		}
+        if (!is_null($id) && is_numeric($id)) {
+            $thread = $this->repo->getThread($id);
+            $this->repo->activateAllParticipants();
+        }
 
-		if (is_null($thread)) {
-			$this->repo->CreateThread($input['subject']);
+        if (is_null($thread)) {
+            $this->repo->CreateThread($input['subject']);
 
-			$errors = $this->repo->getErrors();
-		}
+            $errors = $this->repo->getErrors();
+        }
 
-		if ($errors === null) {
-			$this->repo->CreateMessage($input['message']);
-			if ($errors === null) {
-				$this->repo->CreateParticipant();
+        if ($errors === null) {
+            $this->repo->CreateMessage($input['message']);
+            if ($errors === null) {
+                $this->repo->CreateParticipant();
 
-				if (!empty($input['recipients'])) {
-					$this->repo->addParticipants($input['recipients']);
-				}
-			}
-		}
+                if (!empty($input['recipients'])) {
+                    $this->repo->addParticipants($input['recipients']);
+                }
+            }
+        }
 
-		if ($errors === null) {
-			return Redirect::back()->with('success', 'Your message has been saved.');
-		}
+        if ($errors === null) {
+            return Redirect::back()->with('success', 'Your message has been saved.');
+        }
 
-		return Redirect::back()->withErrors($errors)->withInput();
-	}
-
+        return Redirect::back()->withErrors($errors)->withInput();
+    }
 }

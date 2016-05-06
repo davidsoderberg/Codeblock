@@ -11,12 +11,12 @@ use App\Repositories\IRepository;
 interface TeamRepository extends IRepository
 {
 
-	/**
-	 * Checks if user is owner for team.
-	 *
-	 * @param User $user user th check if is owner for team.
-	 * @param Team $team team to check if user is owner for.
-	 * @return bool if user is owner for team.
-	 */
-	public function isOwner(User $user, Team $team);
+    /**
+     * Checks if user is owner for team.
+     *
+     * @param User $user user th check if is owner for team.
+     * @param Team $team team to check if user is owner for.
+     * @return bool if user is owner for team.
+     */
+    public function isOwner(User $user, Team $team);
 }

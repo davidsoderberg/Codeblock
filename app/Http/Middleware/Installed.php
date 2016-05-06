@@ -13,23 +13,23 @@ use Illuminate\Support\Str;
 class Installed
 {
 
-	/**
-	 * Handle an incoming request.
-	 *
-	 * @param  \Illuminate\Http\Request $request
-	 * @param  \Closure $next
-	 * @return mixed
-	 */
-	public function handle($request, Closure $next)
-	{
-		$response = $next($request);
-		try {
-			DB::connection()->getDatabaseName();
-		} catch (\Exception $e) {
-			if (!Str::contains($request->route()->getAction()['uses'], 'InstallController')) {
-				return Redirect::action('InstallController@install');
-			}
-		}
-		return $response;
-	}
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
+     * @return mixed
+     */
+    public function handle($request, Closure $next)
+    {
+        $response = $next($request);
+        try {
+            DB::connection()->getDatabaseName();
+        } catch (\Exception $e) {
+            if (!Str::contains($request->route()->getAction()['uses'], 'InstallController')) {
+                return Redirect::action('InstallController@install');
+            }
+        }
+        return $response;
+    }
 }
