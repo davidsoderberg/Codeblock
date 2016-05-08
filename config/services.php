@@ -65,5 +65,7 @@ return [
 		'redirect' => env('FACEBOOK_REDIRECT'),
 	],
 
-
+    'sparkpost' => [
+        'secret' => env('SPARKPOST_SECRET'),
+    ]
 ];
