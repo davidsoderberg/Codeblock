@@ -25,6 +25,9 @@ class Installed
         $response = $next($request);
         try {
             DB::connection()->getDatabaseName();
+            if (Str::contains($request->route()->getAction()['uses'], 'InstallController')) {
+                return Redirect::action('MenuController@index');
+            }
         } catch (\Exception $e) {
             if (!Str::contains($request->route()->getAction()['uses'], 'InstallController')) {
                 return Redirect::action('InstallController@install');

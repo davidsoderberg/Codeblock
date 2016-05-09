@@ -23,6 +23,10 @@ Route::group(['prefix' => 'embed'], function () {
     Route::get('/{slug}', 'PostController@embed');
 });
 Route::get('license', 'MenuController@license');
+Route::group(['prefix' => 'install'], function () {
+   Route::get('/', 'InstallController@install');
+    Route::post('/store', 'InstallController@store');
+});
 Route::group(['prefix' => 'contact'], function () {
     Route::get('/', 'MenuController@contact');
     Route::post('/send', 'MenuController@sendContact');

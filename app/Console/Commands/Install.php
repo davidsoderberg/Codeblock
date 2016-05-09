@@ -4,13 +4,10 @@ use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Permission\PermissionRepository;
 use App\Repositories\Role\RoleRepository;
 use App\Repositories\User\UserRepository;
-use Illuminate\Support\Facades\DB;
-use App\Repositories\CRepository;
-use App\Services\Github;
+use App\Services\Installer;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 
 /**
  * Class Install
@@ -61,10 +58,7 @@ class Install extends Command
         $startat = $this->option('startat');
         // tests the smtp configs.
         if (is_null($startat)) {
-            $mail = new CRepository();
-            $data = array('subject' => 'Test mail', 'body' => 'This is a mail to test mail configuration.');
-            $emailInfo = array('subject' => 'Test mail');
-            if (!$mail->sendEmail('emails.notification', $emailInfo, $data)) {
+            if (!Installer::testDatabase()) {
                 $this->error('The mail is not configured correctly, please try agian and use option startat with "Mail" as value.');
             }
             $this->line('SMTP settings: ok');
@@ -72,8 +66,7 @@ class Install extends Command
         }
         // tests the github configs.
         if ($startat == 'Github') {
-            $github = new Github();
-            if (!$github->isToken(env('GITHUB_TOKEN', null))) {
+            if (!Installer::testGithub()) {
                 $this->error('The github token is not valid, please try agian and use option startat with "Github" as value.');
             }
             $this->line('Github token: ok');
@@ -81,9 +74,7 @@ class Install extends Command
         }
         // tests the database configs.
         if ($startat == 'Database') {
-            try {
-                DB::connection()->getDatabaseName();
-            } catch (\Exception $e) {
+            if(!Installer::testDatabase()){
                 $this->error('The database is not configured correctly, please try agian and use option startat with "Database" as value.');
             }
             $this->line('Database connection: ok');
@@ -91,9 +82,7 @@ class Install extends Command
         }
         // migrates all migrations.
         if ($startat == 'Migration') {
-            try {
-                Artisan::call('migrate');
-            } catch (\Exception $e) {
+            if(!Installer::runMigration()){
                 $this->error('The migration could not be done for some reason, please try agian and use option startat with "Migration" as value.');
             }
             $this->line('Migration: done');
@@ -101,9 +90,7 @@ class Install extends Command
         }
         // Seeds the database.
         if ($startat == 'Seed' && count($categoryRepository->get()) == 0) {
-            try {
-                Artisan::call('db:seed');
-            } catch (\Exception $e) {
+            if(!Installer::runSeed()){
                 $this->error('The seed of database could not be done for some reason, please try agian and use option startat with "Seed" as value.');
             }
             $this->line('Seed: done');
@@ -111,9 +98,7 @@ class Install extends Command
         }
         // insert all permissions.
         if ($startat == 'Permissions' && count($permissionRepository->get()) == 0 || count($permissionRepository->get()) == 0) {
-            try {
-                Artisan::call('InsertPermissions');
-            } catch (\Exception $e) {
+            if(!Installer::createPermissions()){
                 $this->error('The permissions colud not be created for some reason, please try agian and use option startat with "Permissions" as value.');
             }
             $this->line('Permissions: created');
