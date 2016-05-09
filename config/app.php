@@ -1,7 +1,7 @@
 <?php
 
 return [
-    
+
     'env' => env('APP_ENV', 'production'),
 
     /*
@@ -160,6 +160,7 @@ return [
         Irazasyed\LaravelGAMP\LaravelGAMPServiceProvider::class,
         Spatie\LaravelAnalytics\LaravelAnalyticsServiceProvider::class,
         Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
+        Vinkla\Pusher\PusherServiceProvider::class,
     ],
 
     /*
@@ -210,6 +211,7 @@ return [
         'Socialize' => 'Laravel\Socialite\Facades\Socialite',
         'GAMP'  => Irazasyed\LaravelGAMP\Facades\GAMP::class,
         'LaravelAnalytics' => Spatie\LaravelAnalytics\LaravelAnalyticsFacade::class,
+        'Pusher' => Vinkla\Pusher\Facades\Pusher::class
     ],
 
 ];

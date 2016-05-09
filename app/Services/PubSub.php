@@ -23,6 +23,16 @@ abstract class PubSub
     const COMMENT = 'Comment';
 
     /**
+     * Sending message to websocket server from the application.
+     *
+     * @param $object
+     * @param int $user_id
+     * @param string $channel
+     * @param string $topic
+     */
+    public abstract function send($object, $user_id = 0, $channel = 'toast', $topic = '');
+
+    /**
      * Adding id to Topic constant.
      * @param $id
      * @return string

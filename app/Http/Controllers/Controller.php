@@ -4,6 +4,7 @@ use App\Models\Model;
 use App\Models\NotificationType;
 use App\Repositories\Notification\NotificationRepository;
 use App\Services\PaginationPresenter;
+use App\Services\Pusher;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Routing\Controller as BaseController;
@@ -55,7 +56,7 @@ abstract class Controller extends BaseController
         $this->request = app('Illuminate\Http\Request');
         $url = preg_replace("/https?:\/\//", "", URL::to('/'));
         View::share('siteName', ucfirst($url));
-        $this->client = new Client();
+        $this->client = new Pusher();
     }
 
     /**

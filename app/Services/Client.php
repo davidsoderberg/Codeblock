@@ -10,6 +10,7 @@ use App\Services\HtmlBuilder;
  */
 class Client extends PubSub
 {
+    use \ClientTrait;
 
     /**
      * Property to store current client in.
@@ -40,12 +41,7 @@ class Client extends PubSub
     public function send($object, $user_id = 0, $channel = 'toast', $topic = '')
     {
         if (!empty($this->client)) {
-            if ($user_id == 0 || !is_numeric($user_id)) {
-                if (!isset($object->user_id)) {
-                    throw new \InvalidArgumentException('The user id is not valid');
-                }
-                $user_id = $object->user_id;
-            }
+            $user_id = $this->getUserId($user_id, $object);
             try {
                 $this->client->send(json_encode([
                     "channel" => $channel,
@@ -81,58 +77,5 @@ class Client extends PubSub
         }
 
         return $this->getMessage($object);
-    }
-
-    /**
-     * Get toast message.
-     *
-     * @param $object
-     *
-     * @return string
-     */
-    private function getMessage($object)
-    {
-        $message = 'You have a new ';
-        $html = new HtmlBuilder();
-        switch ($this->getObjectName($object)) {
-            case 'Notification':
-                $message .= $html->actionlink($url = ['action' => 'NotificationController@listNotification'],
-                    'notification');
-                break;
-            case 'Post':
-                $message .= 'comment in post: ' . $html->actionlink($url = [
-                        'action' => 'PostController@show',
-                        'params' => [$object->id],
-                    ], $object->name);
-                break;
-            case 'Topic':
-                $message .= 'reply in topic: ' . $html->actionlink($url = [
-                        'action' => 'TopicController@show',
-                        'params' => [$object->id],
-                    ], $object->title);
-                break;
-        }
-
-        return $message;
-    }
-
-    /**
-     * Return objects name.
-     *
-     * @param $object
-     *
-     * @return string
-     */
-    private function getObjectName($object)
-    {
-        if (is_object($object)) {
-            $namespaces = explode('\\', get_class($object));
-            $object_type = $namespaces[count($namespaces) - 1];
-            if (class_exists('App\\Models\\' . $object_type)) {
-                return $object_type;
-            }
-        }
-
-        return '';
     }
 }
