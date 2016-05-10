@@ -22,8 +22,8 @@ class Client extends PubSub
      */
     public function __construct()
     {
-        if (!empty(env('SOCKET_ADRESS')) && !empty(env('SOCKET_PORT'))) {
-            $this->client = new \WebSocket\Client("ws://" . env('SOCKET_ADRESS') . ":" . env('SOCKET_PORT'));
+        if (!empty(env('SOCKET_ADRESS'))) {
+            $this->client = new \WebSocket\Client(env('SOCKET_ADRESS'));
         }
     }
 

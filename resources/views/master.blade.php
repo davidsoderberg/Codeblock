@@ -82,7 +82,6 @@
 		</div>
 		<script>
 			var appConfig = {
-				SOCKET_PORT: '{{env('SOCKET_PORT')}}',
 				SOCKET_ADRESS: '{{env('SOCKET_ADRESS')}}'
 			};
 		</script>

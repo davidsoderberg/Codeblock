@@ -9,7 +9,7 @@ var	async = {
 		if(localStorage.getItem('token') == null){
 			this.getJWT();
 		}else{
-			//this.websocket();
+			this.websocket();
 		}
 		jQuery('.close-toast').click(this.closeToast);
 	},
@@ -39,7 +39,7 @@ var	async = {
 
 			if (data.token) {
 				localStorage.setItem('token', JSON.stringify({date: date, token: data.token}));
-				//self.websocket();
+				self.websocket();
 			}
 		});
 	},
@@ -63,7 +63,7 @@ var	async = {
 		var storage = JSON.parse(localStorage.getItem('token'));
 		if(storage.date > Date.now()) {
 			self.request = 0;
-			var conn = new WebSocket('ws://'+self.config.SOCKET_ADRESS+':'+self.config.SOCKET_PORT);
+			var conn = new WebSocket(self.config.SOCKET_ADRESS);
 			conn.onopen = function (e) {
 				conn.send(JSON.stringify({'channel': 'auth', 'token': storage.token}));
 			};
