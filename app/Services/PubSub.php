@@ -30,7 +30,7 @@ abstract class PubSub
      * @param string $channel
      * @param string $topic
      */
-    public abstract function send($object, $user_id = 0, $channel = 'toast', $topic = '');
+    abstract public function send($object, $user_id = 0, $channel = 'toast', $topic = '');
 
     /**
      * Adding id to Topic constant.
