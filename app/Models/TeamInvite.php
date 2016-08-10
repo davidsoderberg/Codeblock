@@ -8,7 +8,6 @@ use App\Models\Traits\TeamInviteTrait;
  */
 class TeamInvite extends Model
 {
-
     use TeamInviteTrait;
 
     /**
