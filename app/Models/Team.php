@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
  */
 class Team extends Model
 {
-
     use TeamTrait;
 
     /**
