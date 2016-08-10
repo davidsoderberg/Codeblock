@@ -225,11 +225,9 @@ Route::group(['middleware' => 'guest'], function () {
 });
 
 Route::group(['prefix' => 'api', 'middleware' => 'api'], function () {
-
     Route::get('', 'ApiController@index');
 
     Route::group(['prefix' => 'v1'], function () {
-
         Route::get('', 'ApiController@index');
 
         Route::group(['prefix' => 'articles'], function () {
@@ -321,6 +319,5 @@ Route::group(['prefix' => 'api', 'middleware' => 'api'], function () {
             Route::post('/register', 'Api\UserController@createOrUpdateUser');
             Route::post('/forgot', 'Api\AuthController@forgotPassword');
         });
-
     });
 });
