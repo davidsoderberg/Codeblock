@@ -9,7 +9,6 @@ use WebSocket\ConnectionException;
  */
 trait ClientTrait
 {
-
     protected function getUserId($user_id, $object)
     {
         if ($user_id == 0 || !is_numeric($user_id)) {
