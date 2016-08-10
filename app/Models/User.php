@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Session;
  */
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
-
     use Authenticatable, CanResetPassword, UserHasTeamsTrait, Messagable;
 
     /**

@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Mail;
  */
 class CRepository
 {
-
     use CacheTrait;
 
     /**
