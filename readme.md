@@ -19,8 +19,7 @@ FROM_ADRESS, FROM_NAME, GITHUB_TOKEN
 2. You can now view the documentation in `storage/doc/build`.
  
 ## Coding style
-You can check if your contribution passes the styleguide by using phpcs and running following in your project root:  
-1. Run `vendor/bin/phpcs --config-set installed_paths Codeblock,../../../vendor/wp-coding-standards/wpcs`.  
-2. Run `vendor/bin/phpcs --config-set default_standard Codeblock`.  
-3. Run `vendor/bin/phpcs path/to/files/to/check`. (This command should you run on all php files you are editing.)  
+You can check if your contribution passes the styleguide by using phpcs and running following in your project root:    
+1. Run `vendor/bin/phpcs --config-set default_standard PSR2`.  
+2. Run `vendor/bin/phpcs path/to/files/to/check`. (This command should you run on all php files you are editing.)  
 	
