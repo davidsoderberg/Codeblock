@@ -1,10 +1,13 @@
 {
   "devDependencies": {
-    "gulp": "^3.8.11",
-    "gulp-sass": "1.*",
-    "gulp-uglifyjs": "0.*",
-    "gulp-rename": "1.*",
-    "gulp-sourcemaps": "1.*",
-    "browser-sync": "^2.3.1"
+    "bower": "^1.7.9",
+    "browser-sync": "^2.14.0",
+    "browserify": "^13.1.0",
+    "gulp": "^3.9.1",
+    "gulp-sass": "^2.3.2",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^2.0.0",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
   }
 }

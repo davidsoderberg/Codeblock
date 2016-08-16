@@ -83,6 +83,7 @@ class PostController extends Controller
      *
      * @param $id
      * @param null $comment_id
+     * @permission view_private_post:optional
      *
      * @return mixed
      */
@@ -197,6 +198,7 @@ class PostController extends Controller
      * Render edit view for post.
      *
      * @param $id
+     * @permission admin_edit_post:optional
      *
      * @return mixed
      */
@@ -273,6 +275,7 @@ class PostController extends Controller
      * Deletes a post.
      *
      * @param $id
+     * @permission delete_post:optional
      *
      * @return mixed
      */

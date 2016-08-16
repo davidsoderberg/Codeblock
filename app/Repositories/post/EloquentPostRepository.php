@@ -70,13 +70,15 @@ class EloquentPostRepository extends CRepository implements PostRepository
         $postsCollection = new Collection();
         foreach ($posts as $post) {
             if ($id != 0) {
-                if ($post->category->id == $id) {
-                    if ($post->private != 1) {
-                        $postsCollection->add($post);
-                    } else {
-                        if (Auth::check()) {
-                            if (Auth::user()->id == $post->user_id) {
-                                $postsCollection->add($post);
+                if(isset($post->category)) {
+                    if ($post->category->id == $id) {
+                        if ($post->private != 1) {
+                            $postsCollection->add($post);
+                        } else {
+                            if (Auth::check()) {
+                                if (Auth::user()->id == $post->user_id) {
+                                    $postsCollection->add($post);
+                                }
                             }
                         }
                     }
