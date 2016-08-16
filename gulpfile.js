@@ -15,11 +15,18 @@ var js = [
 	'public/js/script.js'
 ];
 
-gulp.task('default', ['browser-sync'], function() {
+gulp.task('default', ['browser-sync', 'copy'], function() {
 	gulp.watch(['public/scss/style.scss', 'public/scss/partials/**/*.scss'], ['sass', 'reload']);
 	gulp.watch(js, ['js', 'reload']);
 	gulp.watch('resources/views/**/*', ['reload']);
 	gulp.watch('resources/themes/**/*', ['sami']);
+});
+
+gulp.task('copy', function() {
+	gulp.src(['bower_components/font-awesome/fonts/*'])
+		.pipe(gulp.dest('public/fonts/'));
+	gulp.src(['bower_components/chosen/chosen-sprite.png'])
+		.pipe(gulp.dest('public/css/'));
 });
 
 gulp.task('deploy', ['js'], function(){
@@ -28,7 +35,7 @@ gulp.task('deploy', ['js'], function(){
 		.pipe(sass({outputStyle: 'compressed'})).pipe(gulp.dest('public/css'));
 })
 
-gulp.task('sass', function () {
+gulp.task('sass', ['copy'], function () {
 	var sass = require('gulp-sass');
 	var sourcemaps = require('gulp-sourcemaps');
 	return gulp.src(['public/scss/style.scss', 'public/scss/partials/**/*.scss'])
