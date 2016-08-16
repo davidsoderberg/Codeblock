@@ -1,11 +1,11 @@
 {
   "devDependencies": {
     "bower": "^1.7.9",
-    "browser-sync": "^2.3.1",
-    "gulp": "^3.8.11",
-    "gulp-rename": "1.*",
+    "browser-sync": "^2.14.0",
+    "gulp": "^3.9.1",
+    "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.3.2",
-    "gulp-sourcemaps": "1.*",
+    "gulp-sourcemaps": "^1.6.0",
     "gulp-uglifyjs": "0.*"
   }
 }
