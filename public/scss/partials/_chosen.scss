@@ -8,6 +8,7 @@
 	.chosen-drop{
 		margin-top: -1em;
 		border:1px solid $browngray;
+		border-top: none;
 		.result-selected{
 			display: none;
 		}
