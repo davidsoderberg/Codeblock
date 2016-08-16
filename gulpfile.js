@@ -1,13 +1,12 @@
 var gulp = require('gulp');
-var vendor = 'public/js/vendor/';
 var components = 'public/js/components/';
 var js = [
-	vendor+'jquery.js',
-	vendor+'chosen.js',
-	vendor+'codemirror.js',
-	vendor+'validator.js',
-	vendor+'bootstrap-typeahead.js',
-	vendor+'mention.js',
+	'bower_components/jquery-legacy/jquery.js',
+	'bower_components/chosen/chosen.jquery.js',
+	'bower_components/codemirror/lib/codemirror.js',
+	'bower_components/mention/bootstrap-typeahead.js',
+	'bower_components/mention/mention.js',
+	components+'validator.js',
 	components+'accordion.js',
 	components+'tabs.js',
 	components+'page.js',

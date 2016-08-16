@@ -1,6 +1,7 @@
 /vendor
 .env
 /node_modules
+/bower_components
 tests/_output/*
 .idea/*
 tests/logs
