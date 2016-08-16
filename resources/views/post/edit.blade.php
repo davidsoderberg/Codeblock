@@ -56,7 +56,9 @@
 			@elseif(strtolower($category) == 'c#' || strtolower($category) == 'asp.net')
 				<script src="{{ asset('js/codemirror/mode/clike/clike.js') }}"></script>
 			@else
-				<script src="{{ asset('js/codemirror/mode/'.strtolower($category).'/'.strtolower($category).'.js') }}"></script>
+                @if(file_exists( public_path().'/js/codemirror/mode/'.strtolower($category).'/'.strtolower($category).'.js'))
+				    <script src="{{ asset('js/codemirror/mode/'.strtolower($category).'/'.strtolower($category).'.js') }}"></script>
+                @endif
 			@endif
 		@endif
 	@endforeach
