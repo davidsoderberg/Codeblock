@@ -1,4 +1,4 @@
-(function($) {
+module.exports = (function($) {
 	$.fn.accordion = function() {
 		var self = this;
 		$(self.selector+'.accordion ul li > a').click(function(event){

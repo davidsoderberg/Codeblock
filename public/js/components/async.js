@@ -1,4 +1,4 @@
-var	async = {
+module.exports = {
 	request: 0,
 	config: {},
 	init: function (config) {

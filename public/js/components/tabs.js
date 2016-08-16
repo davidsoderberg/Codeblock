@@ -1,4 +1,4 @@
-(function ($) {
+module.exports = (function ($) {
 	$.fn.tabs = function () {
 		var self = this;
 		var open = 'open';

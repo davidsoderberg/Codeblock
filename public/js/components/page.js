@@ -1,4 +1,4 @@
-var	page = {
+module.exports = {
 	init: function () {
 		this.bindEvents();
 	},

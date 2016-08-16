@@ -1,4 +1,4 @@
-var	post = {
+module.exports = {
 	editorArray: [],
 	init: function () {
 		this.bindEvents();

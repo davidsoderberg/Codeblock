@@ -1,44 +1,36 @@
 var gulp = require('gulp');
-var components = 'public/js/components/';
-var js = [
-	'bower_components/jquery-legacy/jquery.js',
-	'bower_components/chosen/chosen.jquery.js',
-	'bower_components/codemirror/lib/codemirror.js',
-	'bower_components/mention/bootstrap-typeahead.js',
-	'bower_components/mention/mention.js',
-	components+'validator.js',
-	components+'accordion.js',
-	components+'tabs.js',
-	components+'page.js',
-	components+'post.js',
-	components+'async.js',
-	'public/js/script.js'
-];
+var scss = ['public/scss/style.scss', 'public/scss/partials/**/*.scss'];
 
-gulp.task('default', ['browser-sync', 'copy'], function() {
-	gulp.watch(['public/scss/style.scss', 'public/scss/partials/**/*.scss'], ['sass', 'reload']);
-	gulp.watch(js, ['js', 'reload']);
+gulp.task('default', ['browser-sync', 'copy'], function () {
+	gulp.watch(scss, ['scss', 'reload']);
+	gulp.watch(['public/js/components/*.js', 'public/js/script.js'], ['js', 'reload']);
 	gulp.watch('resources/views/**/*', ['reload']);
 	gulp.watch('resources/themes/**/*', ['sami']);
 });
 
-gulp.task('copy', function() {
+gulp.task('copy', function () {
 	gulp.src(['bower_components/font-awesome/fonts/*'])
 		.pipe(gulp.dest('public/fonts/'));
 	gulp.src(['bower_components/chosen/chosen-sprite.png'])
 		.pipe(gulp.dest('public/css/'));
+	gulp.src(['bower_components/codemirror/addon/**/*'])
+		.pipe(gulp.dest('public/js/codemirror/addon/'))
+	gulp.src(['bower_components/codemirror/keymap/**/*'])
+		.pipe(gulp.dest('public/js/codemirror/keymap/'))
+	gulp.src(['bower_components/codemirror/mode/**/*'])
+		.pipe(gulp.dest('bower_components/codemirror/mode/'));
 });
 
-gulp.task('deploy', ['js'], function(){
+gulp.task('deploy', ['js'], function () {
 	var sass = require('gulp-sass');
-	return gulp.src(['public/scss/style.scss', 'public/scss/partials/**/*.scss'])
+	return gulp.src(scss)
 		.pipe(sass({outputStyle: 'compressed'})).pipe(gulp.dest('public/css'));
 })
 
-gulp.task('sass', ['copy'], function () {
+gulp.task('scss', ['copy'], function () {
 	var sass = require('gulp-sass');
 	var sourcemaps = require('gulp-sourcemaps');
-	return gulp.src(['public/scss/style.scss', 'public/scss/partials/**/*.scss'])
+	return gulp.src(scss)
 		.pipe(sourcemaps.init())
 		.pipe(sass({outputStyle: 'compressed'}))
 		.pipe(sourcemaps.write('./'))
@@ -46,25 +38,29 @@ gulp.task('sass', ['copy'], function () {
 });
 
 gulp.task('js', function () {
-	var uglify = require('gulp-uglifyjs');
-	var rename = require("gulp-rename");
-	return gulp.src(js)
-		.pipe(uglify({mangle: false}))
-		.pipe(rename('script.min.js'))
+	var source = require('vinyl-source-stream');
+	var browserify = require('browserify');
+	var uglify = require('gulp-uglify');
+	var buffer = require('vinyl-buffer');
+	return browserify('public/js/script.js')
+		.bundle()
+		.pipe(source('script.min.js'))
+		.pipe(buffer())
+		.pipe(uglify())
 		.pipe(gulp.dest('public/js'));
 });
 
 var browserSync = require('browser-sync');
-gulp.task('reload', function(){
+gulp.task('reload', function () {
 	browserSync.reload();
 });
 
-gulp.task('browser-sync', function() {
+gulp.task('browser-sync', function () {
 	browserSync({
 		proxy: "codeblock.dev"
 	});
 });
 
-gulp.task('sami', function(){
+gulp.task('sami', function () {
 	return gulp.src(['resources/themes/codeblock/style.css']).pipe(gulp.dest('storage/doc/build/css'));
 });
