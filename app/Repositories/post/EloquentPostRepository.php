@@ -70,7 +70,7 @@ class EloquentPostRepository extends CRepository implements PostRepository
         $postsCollection = new Collection();
         foreach ($posts as $post) {
             if ($id != 0) {
-                if(isset($post->category)) {
+                if (isset($post->category)) {
                     if ($post->category->id == $id) {
                         if ($post->private != 1) {
                             $postsCollection->add($post);
