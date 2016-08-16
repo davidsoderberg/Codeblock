@@ -3,7 +3,7 @@ module.exports = (function ($) {
 		var self = this;
 		var open = 'open';
 		var ActiveTab = 'ActiveTab';
-		var lastUl = $(self.selector + " ul:last-of-type li");
+		var lastUl = $(self.selector + ' ul:last-of-type li');
 		var inStorage = localStorage.getItem(ActiveTab);
 
 		if (inStorage !== null) {
@@ -21,5 +21,5 @@ module.exports = (function ($) {
 			$(this).parent().addClass(open);
 			$(lastUl.get($(this).parent().index())).addClass(open);
 		});
-	}
+	};
 }(jQuery));

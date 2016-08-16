@@ -1,14 +1,14 @@
-module.exports = {
+var async = {
 	request: 0,
 	config: {},
 	init: function (config) {
 		this.config = config;
-		if(jQuery('.mentionarea').length > 0) {
-			jQuery.get("/api/v1/users", this.getUsers);
+		if (jQuery('.mentionarea').length > 0) {
+			jQuery.get('/api/v1/users', this.getUsers);
 		}
-		if(localStorage.getItem('token') == null){
+		if (localStorage.getItem('token') == null) {
 			this.getJWT();
-		}else{
+		} else {
 			//this.websocket();
 		}
 		jQuery('.close-toast').click(this.closeToast);
@@ -22,18 +22,18 @@ module.exports = {
 		});
 	},
 
-	closeToast: function(event){
+	closeToast: function (event) {
 		event.preventDefault();
 		jQuery(this).parent().addClass('lightSpeedOut');
-		setTimeout(function(){
+		setTimeout(function () {
 			jQuery(this).parent().remove();
 		}, 3000);
 	},
 
-	getJWT: function() {
+	getJWT: function () {
 		var self = async;
-		jQuery.get("/api/v1/auth", function (data) {
-			var date = new Date;
+		jQuery.get('/api/v1/auth', function (data) {
+			var date = new Date();
 			date.setHours(date.getHours() + 2);
 			date = date.getTime();
 
@@ -44,49 +44,51 @@ module.exports = {
 		});
 	},
 
-	createToast: function(text){
+	createToast: function (text) {
 		var toast = jQuery('<div></div>').addClass('toast animated lightSpeedIn');
 		toast.html(text);
 
 		jQuery('#toast-container').prepend(toast);
-		setTimeout(function() {
+		setTimeout(function () {
 			toast.addClass('lightSpeedOut');
-			setTimeout(function(){
+			setTimeout(function () {
 				toast.remove();
 			}, 3000);
 		}, 5000);
 	},
 
-	websocket: function(){
+	websocket: function () {
 		var self = async;
 		var oldHtml = '';
 		var storage = JSON.parse(localStorage.getItem('token'));
-		if(storage.date > Date.now()) {
+		if (storage.date > Date.now()) {
 			self.request = 0;
-			var conn = new WebSocket('ws://'+self.config.SOCKET_ADRESS+':'+self.config.SOCKET_PORT);
-			conn.onopen = function (e) {
+			var conn = new WebSocket('ws://' + self.config.SOCKET_ADRESS + ':' + self.config.SOCKET_PORT);
+			conn.onopen = function () {
 				conn.send(JSON.stringify({'channel': 'auth', 'token': storage.token}));
 			};
 
 			conn.onmessage = function (e) {
-				data = JSON.parse(e.data);
-				switch (data.channel){
+				var data = JSON.parse(e.data);
+				switch (data.channel) {
 					case 'toast':
 						self.createToast(data.message);
 						break;
 					case 'Topic':
-						if(data.message != oldHtml) {
+						if (data.message !== oldHtml) {
 							jQuery('.forum').append(data.message);
 						}
 						oldHtml = data.message;
 						break;
 				}
 			};
-		}else{
+		} else {
 			self.request++;
-			if(self.request < 4) {
+			if (self.request < 4) {
 				self.getJWT();
 			}
 		}
 	}
-}
+};
+
+module.exports = async;

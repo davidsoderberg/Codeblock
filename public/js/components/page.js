@@ -8,18 +8,18 @@ module.exports = {
 		jQuery('li.dropdown > a').click(this.dropdownLink);
 		jQuery('.toogleModal').click(this.toggleModal);
 		jQuery('#menubutton').click(this.menu);
-		jQuery(".close-alert").click(this.closeAlert);
-		jQuery('.menu-button a:first-of-type, .close-button').on('click',this.closeMenu);
+		jQuery('.close-alert').click(this.closeAlert);
+		jQuery('.menu-button a:first-of-type, .close-button').on('click', this.closeMenu);
 	},
 
-	search: function(event){
+	search: function (event) {
 		event.preventDefault();
 		jQuery(this).remove();
-		jQuery('#header .menu li form').animate({width:'toggle'},1000);
+		jQuery('#header .menu li form').animate({width: 'toggle'}, 1000);
 		jQuery('#header .menu li form input').focus();
 	},
 
-	dropdownLink: function(event){
+	dropdownLink: function (event) {
 		event.preventDefault();
 		jQuery(this).toggleClass('hideUl');
 	},
@@ -29,18 +29,18 @@ module.exports = {
 		jQuery('.modal').toggleClass('open');
 	},
 
-	menu: function(event){
+	menu: function () {
 		jQuery(this).toggleClass('hideUl');
 	},
 
-	closeMenu : function(event){
+	closeMenu: function (event) {
 		event.preventDefault();
 		jQuery('body').toggleClass('show-menu');
 	},
 
-	closeAlert: function(){
-		jQuery(this).parent().fadeOut('slow',function(){
+	closeAlert: function () {
+		jQuery(this).parent().fadeOut('slow', function () {
 			jQuery(this).remove();
 		});
 	}
-}
+};

@@ -64,3 +64,14 @@ gulp.task('browser-sync', function () {
 gulp.task('sami', function () {
 	return gulp.src(['resources/themes/codeblock/style.css']).pipe(gulp.dest('storage/doc/build/css'));
 });
+
+gulp.task('lint', function () {
+	var jshint = require('gulp-jshint');
+	var jscs = require('gulp-jscs');
+
+	return gulp.src(['public/js/components/*.js'])
+		.pipe(jshint('.jshintrc'))
+		.pipe(jscs())
+		.pipe(jscs.reporter())
+		.pipe(jshint.reporter('jshint-stylish'));
+});
