@@ -1,46 +1,48 @@
-module.exports = {
-	init: function () {
-		this.bindEvents();
+var page = {
+	init: () => {
+		page.bindEvents();
 	},
 
-	bindEvents: function () {
-		jQuery('#header .menu li a.search').click(this.search);
-		jQuery('li.dropdown > a').click(this.dropdownLink);
-		jQuery('.toogleModal').click(this.toggleModal);
-		jQuery('#menubutton').click(this.menu);
-		jQuery('.close-alert').click(this.closeAlert);
-		jQuery('.menu-button a:first-of-type, .close-button').on('click', this.closeMenu);
+	bindEvents: () => {
+		jQuery('#header .menu li a.search').click(page.search);
+		jQuery('li.dropdown > a').click(page.dropdownLink);
+		jQuery('.toogleModal').click(page.toggleModal);
+		jQuery('#menubutton').click(page.menu);
+		jQuery('.close-alert').click(page.closeAlert);
+		jQuery('.menu-button a:first-of-type, .close-button').on('click', page.closeMenu);
 	},
 
-	search: function (event) {
+	search: (event) => {
 		event.preventDefault();
-		jQuery(this).remove();
+		jQuery(event.currentTarget).remove();
 		jQuery('#header .menu li form').animate({width: 'toggle'}, 1000);
 		jQuery('#header .menu li form input').focus();
 	},
 
-	dropdownLink: function (event) {
+	dropdownLink: (event) => {
 		event.preventDefault();
-		jQuery(this).toggleClass('hideUl');
+		jQuery(event.currentTarget).toggleClass('hideUl');
 	},
 
-	toggleModal: function (event) {
+	toggleModal: (event) => {
 		event.preventDefault();
 		jQuery('.modal').toggleClass('open');
 	},
 
-	menu: function () {
-		jQuery(this).toggleClass('hideUl');
+	menu: (event) => {
+		jQuery(event.currentTarget).toggleClass('hideUl');
 	},
 
-	closeMenu: function (event) {
+	closeMenu: (event) => {
 		event.preventDefault();
 		jQuery('body').toggleClass('show-menu');
 	},
 
-	closeAlert: function () {
-		jQuery(this).parent().fadeOut('slow', function () {
-			jQuery(this).remove();
+	closeAlert: (event) => {
+		jQuery(event.currentTarget).parent().fadeOut('slow', (event) => {
+			jQuery(event.currentTarget).remove();
 		});
 	}
 };
+
+module.exports = page;

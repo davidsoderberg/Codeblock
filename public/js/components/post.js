@@ -1,70 +1,79 @@
+global.CodeMirror = require('../../../bower_components/codemirror/lib/codemirror.js');
+
 var post = {
 	editorArray: [],
-	init: function () {
-		this.bindEvents();
+	init: () => {
+		post.bindEvents();
 	},
 
-	bindEvents: function () {
-		jQuery('.code-editor').each(this.codeEditor);
-		jQuery('.reply').click(this.reply);
-		jQuery('.confirm').click(this.confirm);
-		jQuery('#blockCategory').change(this.categoryChange);
-		if (typeof this.editorArray['blockCode'] !== 'undefined') {
-			this.editorArray['blockCode'].on('blur', this.blur);
+	bindEvents: () => {
+		jQuery('.code-editor').each(post.codeEditor);
+		jQuery('.reply').click(post.reply);
+		jQuery('.confirm').click(post.confirm);
+		jQuery('#blockCategory').change(post.categoryChange);
+		post.changeLang(jQuery('#blockCategory'));
+		if (typeof post.editorArray['blockCode'] !== 'undefined') {
+			post.editorArray['blockCode'].on('blur', post.blur);
 		}
 	},
 
-	confirm: function (event) {
+	confirm: (event) => {
 		event.preventDefault();
-		jQuery('.confirmModal .green-background').attr('href', jQuery(this).attr('href'));
+		jQuery('.confirmModal .green-background').attr('href', jQuery(event.currentTarget).attr('href'));
 		jQuery('.confirmModal').toggleClass('open');
-		jQuery('.confirmModal .red-background').click(function (event) {
+		jQuery('.confirmModal .red-background').click((event) => {
 			event.preventDefault();
 			jQuery('.confirmModal').toggleClass('open');
 		});
 	},
 
-	blur: function () {
+	blur: () => {
 		var self = post;
 		jQuery('#blockCode').val(self.editorArray['blockCode'].getValue());
 		jQuery('#blockCode').trigger('blur');
 	},
 
-	categoryChange: function () {
-		var self = post;
-		var value = jQuery(this).find('option:selected').text().toLowerCase();
-		if (value === 'html') {
-			value = 'xml';
-		}
-		self.editorArray['blockCode'].setOption('mode', value);
-		jQuery('#blockCode').attr('data-lang', value);
+	categoryChange: (event) => {
+		post.changeLang(event.currentTarget);
 	},
 
-	reply: function () {
+	changeLang: (selector) => {
+		var selected = jQuery(selector).find('option:selected');
+		if (selected.val() > 0) {
+			var value = selected.text().toLowerCase();
+			if (value === 'html') {
+				value = 'xml';
+			}
+			post.editorArray['blockCode'].setOption('mode', value);
+			jQuery('#blockCode').attr('data-lang', value);
+		}
+	},
+
+	reply: (event) => {
 		var commentForm = jQuery('#comment').html();
-		var id = jQuery(this).parent().parent().attr('id');
+		var id = jQuery(event.currentTarget).parent().parent().attr('id');
 		if (id) {
 			var splitId = id.split('-');
 			jQuery('#comment').html('');
-			jQuery(this).after(commentForm);
-			jQuery(jQuery(this).next()).find('input[name="parent"]').val(splitId[1]);
+			jQuery(event.currentTarget).after(commentForm);
+			jQuery(jQuery(event.currentTarget).next()).find('input[name="parent"]').val(splitId[1]);
 			jQuery('.close-reply').show();
-			jQuery(this).hide();
+			jQuery(event.currentTarget).hide();
 
-			jQuery('.close-reply').on('click', function () {
-				jQuery(this).hide();
-				jQuery(this).parent().parent().parent().find('.reply').show();
-				jQuery(this).parent().parent().remove();
+			jQuery('.close-reply').on('click', (event) => {
+				jQuery(event.currentTarget).hide();
+				jQuery(event.currentTarget).parent().parent().parent().find('.reply').show();
+				jQuery(event.currentTarget).parent().parent().remove();
 				jQuery('#comment').html(commentForm);
 			});
 		}
 	},
 
-	codeEditor: function () {
+	codeEditor: (index, event) => {
 		var self = post;
-		var id = jQuery(this).attr('id');
-		var readonly = jQuery(this).hasClass('readonly');
-		var mode = jQuery(this).attr('data-lang') || 'xml';
+		var id = jQuery(event).attr('id');
+		var readonly = jQuery(event).hasClass('readonly');
+		var mode = jQuery(event).attr('data-lang') || 'xml';
 		if (mode === 'html') {
 			mode = 'xml';
 		}
@@ -81,11 +90,10 @@ var post = {
 		});
 
 		self.editorArray[id] = editor;
-
-		var lines = jQuery(this).attr('data-line');
+		var lines = jQuery(event).attr('data-line');
 		if (lines !== undefined) {
 			lines = lines.split(',');
-			var htmlLines = jQuery(this).next().find('.CodeMirror-code').children();
+			var htmlLines = jQuery(event).next().find('.CodeMirror-code').children();
 			for (var i = lines.length - 1; i >= 0; i--) {
 				jQuery(htmlLines[lines[i] - 1]).addClass('CodeMirror-overlay');
 			}
