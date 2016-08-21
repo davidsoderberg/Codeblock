@@ -23,8 +23,6 @@
 		"firebase/php-jwt": "1.*",
 		"laravel/socialite": "2.*",
 		"yzalis/identicon": "*",
-		"textalk/websocket": "1.0.*",
-		"cboden/ratchet": "0.3.*",
 		"venturecraft/revisionable": "1.*",
 		"erusev/parsedown": "1.6.0",
 		"erusev/parsedown-extra": "0.7.0",
@@ -32,7 +30,7 @@
 		"irazasyed/laravel-gamp": "dev-master",
 		"spatie/laravel-analytics": "dev-master",
 		"khill/lavacharts": "2.5.*",
-		"vinkla/pusher": "2.3.*",
+		"pusher/pusher-php-server": "^2.2",
 		"predis/predis": "^1.1"
 	},
 	"require-dev": {
@@ -40,7 +38,6 @@
 		"fzaninotto/faker": "~1.4",
 		"sami/sami": "3.0",
 		"squizlabs/php_codesniffer": "*",
-		"wp-coding-standards/wpcs": "dev-develop",
 		"symfony/dom-crawler": "~3.0",
 		"symfony/css-selector": "~3.0"
 	},

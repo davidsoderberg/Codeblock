@@ -158,9 +158,8 @@ return [
         'Laravel\Socialite\SocialiteServiceProvider',
         Barryvdh\Debugbar\ServiceProvider::class,
         Irazasyed\LaravelGAMP\LaravelGAMPServiceProvider::class,
-        Spatie\LaravelAnalytics\LaravelAnalyticsServiceProvider::class,
-        Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
-        Vinkla\Pusher\PusherServiceProvider::class,
+        Spatie\Analytics\AnalyticsServiceProvider::class,
+        Khill\Lavacharts\Laravel\LavachartsServiceProvider::class
     ],
 
     /*
@@ -210,8 +209,7 @@ return [
         'HTML'      => Collective\Html\HtmlFacade::class,
         'Socialize' => 'Laravel\Socialite\Facades\Socialite',
         'GAMP'  => Irazasyed\LaravelGAMP\Facades\GAMP::class,
-        'LaravelAnalytics' => Spatie\LaravelAnalytics\LaravelAnalyticsFacade::class,
-        'Pusher' => Vinkla\Pusher\Facades\Pusher::class
+        'LaravelAnalytics' => Spatie\Analytics\AnalyticsFacade::class
     ],
 
 ];
