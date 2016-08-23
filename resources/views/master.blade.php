@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
 <!--<html manifest="{{asset('codeblock.manifest')}}">-->
 	<head>
 		<meta name="google-site-verification" content="3M7wk4STJBxWp1JZHRFZ-LNG7N8kZkYIRDqX4uRJsLk" />
@@ -35,9 +35,9 @@
 				</div>
 				<h1 id="loggo">
 					@if(Auth::check())
-						{{HTML::actionlink($url = array('action' => 'MenuController@browse'), '<span class="color-red">C</span><span class="color-green">o</span><span class="color-orange">d</span><span class="color-blue">e</span>block<img src="'.HTML::version('img/favicon.png').'" width="32" height="32" alt="">')}}
+						{{HTML::actionlink($url = array('action' => 'MenuController@browse'), '<span class="color-red">C</span><span class="color-green">o</span><span class="color-orange">d</span><span class="color-blue">e</span>block<img src="'.HTML::version('img/favicon.png').'" width="32" height="32" alt="Logotype for codeblock">')}}
 					@else
-						{{HTML::actionlink($url = array('action' => 'MenuController@index'), '<span class="color-red">C</span><span class="color-green">o</span><span class="color-orange">d</span><span class="color-blue">e</span>block<img src="'.HTML::version('img/favicon.png').'" width="32" height="32" alt="">')}}
+						{{HTML::actionlink($url = array('action' => 'MenuController@index'), '<span class="color-red">C</span><span class="color-green">o</span><span class="color-orange">d</span><span class="color-blue">e</span>block<img src="'.HTML::version('img/favicon.png').'" width="32" height="32" alt="Logotype for codeblock">')}}
 					@endif
 				</h1>
 				<div class="display-none">
@@ -82,8 +82,15 @@
 		</div>
 		<script>
 			var appConfig = {
-				SOCKET_PORT: '{{env('SOCKET_PORT')}}',
-				SOCKET_ADRESS: '{{env('SOCKET_ADRESS')}}'
+                @if(Auth::check())
+                    AUTH_ID: '{{Auth::user()->id}}',
+                @endif
+                @if($view_name === 'topic.show')
+                    TOPIC: '{{$topic->id}}',
+                @elseif($view_name === 'post.show')
+                    POST: '{{$post->id}}',
+                @endif
+                PUSHER_KEY: '{{env('PUSHER_KEY')}}'
 			};
 		</script>
 		<script src="{{ HTML::version('js/script.min.js') }}"></script>

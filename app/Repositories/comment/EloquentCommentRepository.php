@@ -13,6 +13,13 @@ class EloquentCommentRepository extends CRepository implements CommentRepository
 {
 
     /**
+     * Property to store comment object in.
+     *
+     * @var
+     */
+    public $Comment;
+
+    /**
      * Fetch on or all comments.
      *
      * @param null $id
@@ -63,6 +70,7 @@ class EloquentCommentRepository extends CRepository implements CommentRepository
         }
 
         if ($Comment->save()) {
+            $this->Comment = $Comment;
             return true;
         } else {
             $this->errors = $Comment::$errors;

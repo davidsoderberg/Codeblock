@@ -21,7 +21,7 @@ class VerifyCsrf extends VerifyCsrfToken
      */
     public function handle($request, Closure $next)
     {
-        if ($this->isReading($request) || $request->is('api/*') || $this->tokensMatch($request)) {
+        if ($this->isReading($request) || ($request->is('api/*') || $request->is('pusher/*') )|| $this->tokensMatch($request)) {
             return $this->addCookieToResponse($request, $next($request));
         }
         throw new TokenMismatchException;

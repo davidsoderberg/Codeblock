@@ -3,10 +3,12 @@
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Tag\TagRepository;
 use App\Repositories\CRepository;
+use App\Services\Jwt;
 use App\Services\LaravelLogViewer;
 use App\Services\LogViewer;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Orangehill\Iseed\Facades\Iseed;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
@@ -206,5 +208,29 @@ class MenuController extends Controller
             ->with('title', 'Log')
             ->with('logs', $logs['data'])
             ->with('paginator', $logs['paginator']);
+    }
+
+    public function pusher()
+    {
+        try {
+            $user = Jwt::decode($this->request->headers->get('X-Auth-Token'));
+
+            if (Str::contains($_POST['channel_name'], 'presence-')) {
+                return $this->client->pusher->presence_auth(
+                    $_POST['channel_name'],
+                    $_POST['socket_id'],
+                    $user->id,
+                    ['id' => $user->id]
+                );
+            }
+
+            return $this->client->pusher->socket_auth(
+                $_POST['channel_name'],
+                $_POST['socket_id'],
+                ['id' => $user->id]
+            );
+        } catch (\Exception $e){
+            return response('Forbidden', 403);
+        }
     }
 }

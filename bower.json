@@ -21,6 +21,7 @@
     "jquery": "^3.1.0",
     "jquery-legacy": "jquery#1.10",
     "font-awesome": "Font-Awesome#^4.6.3",
-    "codemirror": "^5.17.0"
+    "codemirror": "^5.17.0",
+    "pusher-websocket-iso": "pusher#^3.2.1"
   }
 }

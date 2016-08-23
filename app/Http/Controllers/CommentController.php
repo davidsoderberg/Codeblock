@@ -2,7 +2,6 @@
 
 use App\Models\NotificationType;
 use App\Repositories\Comment\CommentRepository;
-use App\Repositories\Notification\NotificationRepository;
 use App\Repositories\Post\PostRepository;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Redirect;
@@ -51,13 +50,12 @@ class CommentController extends Controller
     /**
      * Creates or updates a comment.
      *
-     * @param NotificationRepository $notification
      * @param PostRepository $post
      * @param  int $id
      *
      * @return object
      */
-    public function createOrUpdate(NotificationRepository $notification, PostRepository $post, $id = null)
+    public function createOrUpdate(PostRepository $post, $id = null)
     {
         if ($this->comment->createOrUpdate($this->request->all(), $id)) {
             if (!is_null($id)) {
@@ -68,12 +66,18 @@ class CommentController extends Controller
                     return Redirect::back()->with('success', 'This comment have been updated.');
                 }
             }
+
             $post = $post->get($this->request->get('post_id'));
-            if (Auth::user()->id != $post->user_id) {
-                $notification->send($post->user_id, NotificationType::COMMENT, $post);
-                $this->client->send($post, $post->user_id);
+            $this->mentioned($this->request->get('comment'), $post);
+            $this->client->new_comment($this->comment->Comment, Auth::user()->id, $post->id);
+
+            if ( ! in_array(Auth::user()->id, $this->client->getUsers('presence-post_' . $post->id))) {
+                if (Auth::user()->id != $post->user_id) {
+                    if ( ! $this->client->send($post, $post->user_id)) {
+                        $this->send_notification($post->user_id, NotificationType::COMMENT, $post);
+                    }
+                }
             }
-            $this->mentioned($this->request->get('comment'), $post, $notification);
 
             return Redirect::back()->with('success', 'Your comment have been created.');
         }

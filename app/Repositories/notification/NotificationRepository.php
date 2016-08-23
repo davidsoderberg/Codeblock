@@ -8,6 +8,11 @@ interface NotificationRepository
 {
 
     /**
+     *  Getter for current notifications user_id.
+     */
+    public function getUserId();
+
+    /**
      * Fetch one or all notifications.
      *
      * @param int $id
@@ -37,6 +42,13 @@ interface NotificationRepository
      * @return mixed
      */
     public function getSubjectAndBody(\App\Models\Notification $notification);
+
+    /**
+     * Sends a notification by mail.
+     *
+     * @return bool
+     */
+    public function sendNotificationEmail();
 
     /**
      * Deletes a notification.

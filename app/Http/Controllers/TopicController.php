@@ -40,9 +40,6 @@ class TopicController extends Controller
     public function show(ReadRepository $read, $id, $reply = 0)
     {
         $topic = $this->topic->get($id);
-        if (Auth::check() && !is_null($topic)) {
-            $this->client->send($topic, Auth::user()->id, 'subscribe', $this->client->getTopic($topic->id));
-        }
         $reply = $this->reply->get($reply);
         if (!Auth::user()->hasPermission('create_reply', false)) {
             if (isset($reply->user_id) && $reply->user_id != Auth::user()->id) {

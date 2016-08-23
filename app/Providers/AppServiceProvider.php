@@ -1,5 +1,6 @@
 <?php namespace App\Providers;
 
+use Illuminate\Support\Facades\View;
 use Validator;
 use Illuminate\Support\ServiceProvider;
 
@@ -19,6 +20,10 @@ class AppServiceProvider extends ServiceProvider
     {
         Validator::extend('honeypot', function ($attribute, $value, $parameters) {
             return $value == '';
+        });
+
+        View::composer('*', function ($view) {
+            View::share('view_name', $view->getName());
         });
     }
 

@@ -1,6 +1,5 @@
 <?php namespace App\Repositories\Notification;
 
-use App\Exceptions\NotANumberException;
 use App\Models\Notification;
 use App\Models\NotificationType;
 use App\Repositories\CRepository;
@@ -18,6 +17,13 @@ class EloquentNotificationRepository extends CRepository implements Notification
 {
 
     /**
+     * Property to store notification in.
+     *
+     * @var Notification
+     */
+    public $notification;
+
+    /**
      * Property to store user repository in.
      *
      * @var UserRepository
@@ -32,8 +38,22 @@ class EloquentNotificationRepository extends CRepository implements Notification
      */
     public function __construct(UserRepository $user)
     {
-        $this->user = $user;
+        $this->user    = $user;
         $this->replyId = 0;
+    }
+
+    /**
+     * Setter for is_read property on notification object.
+     *
+     * @param $user_id
+     */
+    public function setRead($user_id)
+    {
+        $notifications = CollectionService::filter($this->get(), 'user_id', $user_id);
+        foreach ($notifications as $notification) {
+            $notification->is_read = 1;
+            $notification->save();
+        }
     }
 
     /**
@@ -53,17 +73,57 @@ class EloquentNotificationRepository extends CRepository implements Notification
     }
 
     /**
-     * Setter for is_read property on notification object.
-     *
-     * @param $user_id
+     *  Getter for current notifications user_id.
      */
-    public function setRead($user_id)
+    public function getUserId()
     {
-        $notifications = CollectionService::filter($this->get(), 'user_id', $user_id);
-        foreach ($notifications as $notification) {
-            $notification->is_read = 1;
-            $notification->save();
+        return $this->notification->user_id;
+    }
+
+    /**
+     * Creates an notification object.
+     *
+     * @param      $user_id
+     * @param      $type
+     * @param      $object
+     * @param null $subject
+     * @param null $body
+     *
+     * @return bool
+     */
+    public function send($user_id, $type, $object, $subject = null, $body = null)
+    {
+        $note = new Notification();
+
+        try {
+            $note = $this->setUserId($user_id, $note);
+        } catch (InvalidParameterException $e) {
+            return false;
         }
+
+        try {
+            $note = $this->setFromId(Auth::user()->id, $note);
+        } catch (InvalidParameterException $e) {
+            return false;
+        }
+
+        if ($note->user_id !== $note->from_id) {
+
+            $note = $this->setType($type, $note);
+            $note = $this->setObject($object, $note);
+            $note = $this->setContent($subject, $body, $type, $note);
+
+            if ($note->save()) {
+                $this->notification = $note;
+                $this->errors       = [];
+
+                return true;
+            }
+        }
+
+        $this->errors = $note::$errors;
+
+        return false;
     }
 
     /**
@@ -76,10 +136,36 @@ class EloquentNotificationRepository extends CRepository implements Notification
      */
     private function setUserId($user_id, $note)
     {
-        if (!is_null($this->user->get($this->stripTrim($user_id)))) {
+        if ( ! is_integer($user_id)) {
+            $user_id = $this->user->getIdByUsername($this->stripTrim($user_id));
+        }
+
+        $user_id = intval($this->stripTrim($user_id));
+
+        if ( ! is_null($this->user->get($user_id))) {
             $note->user_id = $user_id;
         } else {
             $this->errors = ['to_user' => ['That user does not exist.']];
+            throw new InvalidParameterException();
+        }
+
+        return $note;
+    }
+
+    /**
+     * Setter for from_id property on notification object.
+     *
+     * @param $from_id
+     * @param $note
+     *
+     * @return mixed
+     */
+    private function setFromId($from_id, $note)
+    {
+        if ( ! is_null($this->user->get($from_id))) {
+            $note->from_id = $from_id;
+        } else {
+            $this->errors = ['from_user' => ['That user does not exist.']];
             throw new InvalidParameterException();
         }
 
@@ -116,10 +202,10 @@ class EloquentNotificationRepository extends CRepository implements Notification
     private function setObject($object, $note)
     {
         if (is_object($object)) {
-            $namespaces = explode('\\', get_class($object));
+            $namespaces  = explode('\\', get_class($object));
             $object_type = $namespaces[count($namespaces) - 1];
             if (class_exists('App\\Models\\' . $object_type)) {
-                $note->object_id = $object->id;
+                $note->object_id   = $object->id;
                 $note->object_type = $object_type;
             }
         }
@@ -139,9 +225,9 @@ class EloquentNotificationRepository extends CRepository implements Notification
      */
     private function setContent($subject, $body, $type, $note)
     {
-        if (!is_null($subject) && !is_null($body)) {
+        if ( ! is_null($subject) && ! is_null($body)) {
             $note->subject = $this->stripTrim($subject);
-            $note->body = $this->stripTrim($body);
+            $note->body    = $this->stripTrim($body);
         } else {
             if (isset($type) && NotificationType::isType($type)) {
                 $note = $this->setSubjectAndBody($note);
@@ -152,63 +238,69 @@ class EloquentNotificationRepository extends CRepository implements Notification
     }
 
     /**
-     * Setter for from_id property on notification object.
+     * Setter for subject and body property on notification object.
      *
-     * @param $from_id
-     * @param $note
+     * @param \App\Models\Notification $notification
      *
-     * @return mixed
+     * @return \App\Models\Notification
      */
-    private function setFromId($from_id, $note)
+    private function setSubjectAndBody(Notification $notification)
     {
-        if (!is_null($this->user->get($from_id))) {
-            $note->from_id = $from_id;
-        } else {
-            $this->errors = ['from_user' => ['That user does not exist.']];
-            throw new InvalidParameterException();
+        $object                = $notification->object;
+        $from                  = $this->user->get($notification->from_id);
+        $notification->subject = 'New ' . $notification->type;
+        $html                  = new HtmlBuilder(\App::make('url'), \App::make('view'));
+        switch ($notification->type) {
+            case NotificationType::MENTION:
+                if ($notification->object_type == 'Topic') {
+                    $type               = 'reply';
+                    $notification->body = $html->actionlink($url = [
+                            'action' => 'TopicController@show',
+                            'params' => [$object->id],
+                        ], 'topic') . '.';
+                }
+                if ($notification->object_type == 'Post') {
+                    $type               = 'comment';
+                    $notification->body = $html->actionlink($url = [
+                            'action' => 'PostController@show',
+                            'params' => [$object->id],
+                        ], 'codeblock') . '.';
+                }
+                $notification->body = 'You have been mention by ' . $from->username . ' in a ' . $type . ' on this ' . $notification->body;
+                break;
+            case NotificationType::COMMENT:
+                $notification->body = 'You have a new comment on this ' . $html->actionlink($url = [
+                        'action' => 'PostController@show',
+                        'params' => [$object->id],
+                    ], 'codeblock') . '.';
+                break;
+            case NotificationType::FAVOURITE:
+                $notification->subject = 'Your codeblock has been ' . $notification->type . 'd';
+                $notification->body    = $from->username . ' has favourited your topic.';
+                break;
+            case NotificationType::REPLY:
+                $notification->body = 'You have a new reply on this ' . $html->actionlink($url = [
+                        'action' => 'TopicController@show',
+                        'params' => [$object->id],
+                    ], 'topic') . '.';
+                break;
+            case NotificationType::ROLE:
+                $user               = $this->user->get($notification->user_id);
+                $notification->body = $from->role->name . ' have given you a role as: ' . $user->role->name;
+                break;
+            case NotificationType::STAR:
+                $notification->body = $from->username . ' has added a star to your ' . $html->actionlink($url = [
+                        'action' => 'PostController@show',
+                        'params' => [$object->id],
+                    ], 'codeblock') . '.';
+                break;
+            case NotificationType::BANNED:
+                $notification->subject = 'You have been ' . $notification->type;
+                $notification->body    = $from->role->name . ' has ' . $notification->type . ' you for some reason, please reply to this email for questions.';
+                break;
         }
 
-        return $note;
-    }
-
-    /**
-     * Creates an notification object.
-     *
-     * @param $user_id
-     * @param $type
-     * @param $object
-     * @param null $subject
-     * @param null $body
-     *
-     * @return bool
-     */
-    public function send($user_id, $type, $object, $subject = null, $body = null)
-    {
-        $note = new Notification();
-
-        try {
-            $note = $this->setUserId($user_id, $note);
-        } catch (InvalidParameterException $e) {
-            return false;
-        }
-
-        try {
-            $note = $this->setFromId(Auth::user()->id, $note);
-        } catch (InvalidParameterException $e) {
-            return false;
-        }
-
-        $note = $this->setType($type, $note);
-        $note = $this->setObject($object, $note);
-        $note = $this->setContent($subject, $body, $type, $note);
-
-        if ($note->save()) {
-            return $this->sendNotification($note);
-        } else {
-            $this->errors = $note::$errors;
-
-            return false;
-        }
+        return $notification;
     }
 
     /**
@@ -244,84 +336,27 @@ class EloquentNotificationRepository extends CRepository implements Notification
     }
 
     /**
-     * Setter for subject and body property on notification object.
-     *
-     * @param \App\Models\Notification $notification
-     *
-     * @return \App\Models\Notification
-     */
-    private function setSubjectAndBody(Notification $notification)
-    {
-        $object = $notification->object;
-        $from = $this->user->get($notification->from_id);
-        $notification->subject = 'New ' . $notification->type;
-        $html = new HtmlBuilder(\App::make('url'), \App::make('view'));
-        switch ($notification->type) {
-            case NotificationType::MENTION:
-                if ($notification->object_type == 'Topic') {
-                    $type = 'reply';
-                    $notification->body = $html->actionlink($url = [
-                            'action' => 'TopicController@show',
-                            'params' => [$object->id],
-                        ], 'topic') . '.';
-                }
-                if ($notification->object_type == 'Post') {
-                    $type = 'comment';
-                    $notification->body = $html->actionlink($url = [
-                            'action' => 'PostController@show',
-                            'params' => [$object->id],
-                        ], 'codeblock') . '.';
-                }
-                $notification->body = 'You have been mention by ' . $from->username . ' in a ' . $type . ' on this ' . $notification->body;
-                break;
-            case NotificationType::COMMENT:
-                $notification->body = 'You have a new comment on this ' . $html->actionlink($url = [
-                        'action' => 'PostController@show',
-                        'params' => [$object->id],
-                    ], 'codeblock') . '.';
-                break;
-            case NotificationType::FAVOURITE:
-                $notification->subject = 'Your codeblock has been ' . $notification->type . 'd';
-                $notification->body = $from->username . ' has favourited your topic.';
-                break;
-            case NotificationType::REPLY:
-                $notification->body = 'You have a new reply on this ' . $html->actionlink($url = [
-                        'action' => 'TopicController@show',
-                        'params' => [$object->id],
-                    ], 'topic') . '.';
-                break;
-            case NotificationType::ROLE:
-                $user = $this->user->get($notification->user_id);
-                $notification->body = $from->role->name . ' have given you a role as: ' . $user->role->name;
-                break;
-            case NotificationType::STAR:
-                $notification->body = $from->username . ' has added a star to your ' . $html->actionlink($url = [
-                        'action' => 'PostController@show',
-                        'params' => [$object->id],
-                    ], 'codeblock') . '.';
-                break;
-            case NotificationType::BANNED:
-                $notification->subject = 'You have been ' . $notification->type;
-                $notification->body = $from->role->name . ' has ' . $notification->type . ' you for some reason, please reply to this email for questions.';
-                break;
-        }
-
-        return $notification;
-    }
-
-    /**
      * Sends a notification by mail.
-     *
-     * @param \App\Models\Notification $notification
      *
      * @return bool
      */
-    private function sendNotification(Notification $notification)
+    public function sendNotificationEmail()
     {
-        $user = $this->user->get($notification->user_id);
-        $data = ['subject' => $notification->subject, 'body' => $notification->body];
-        $emailInfo = ['toEmail' => $user->email, 'toName' => $user->username, 'subject' => $notification->subject];
-        if ($this->sendEmail('emails.notification', $emailInfo, $data)) {
+        $notification = $this->notification;
+        $user         = $this->user->get($notification->user_id);
+        $emailSent    = $this->sendEmail(
+            'emails.notification',
+            [
+                'toEmail' => $user->email,
+                'toName' => $user->username,
+                'subject' => $notification->subject
+            ],
+            [
+                'subject' => $notification->subject,
+                'body' => $notification->body
+            ]
+        );
+        if ($emailSent) {
             return true;
         }
 

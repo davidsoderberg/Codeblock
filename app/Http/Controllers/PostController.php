@@ -1,7 +1,6 @@
 <?php namespace App\Http\Controllers;
 
 use App\Models\NotificationType;
-use App\Repositories\Notification\NotificationRepository;
 use App\Repositories\Post\PostRepository;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Star\StarRepository;
@@ -441,19 +440,18 @@ class PostController extends Controller
     /**
      * Adds a star to choosen post.
      *
-     * @param NotificationRepository $notification
      * @param StarRepository $starRepository
      * @param $id
      *
      * @return mixed
      */
-    public function star(NotificationRepository $notification, StarRepository $starRepository, $id)
+    public function star(StarRepository $starRepository, $id)
     {
         $star = $this->post->createOrDeleteStar($starRepository, $id);
         if ($star[0]) {
             if ($star[1] == 'create') {
                 $post = $this->post->get($id);
-                $notification->send($post->user_id, NotificationType::STAR, $post);
+                $this->send_notification($post->user_id, NotificationType::STAR, $post);
 
                 return Redirect::back()->with('success', 'You have now add a star to this codblock.');
             }

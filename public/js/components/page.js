@@ -1,6 +1,7 @@
 var page = {
 	init: () => {
 		page.bindEvents();
+		page.mention();
 	},
 
 	bindEvents: () => {
@@ -42,6 +43,18 @@ var page = {
 		jQuery(event.currentTarget).parent().fadeOut('slow', (event) => {
 			jQuery(event.currentTarget).remove();
 		});
+	},
+
+	mention: () => {
+		if (jQuery('.mentionarea').length > 0) {
+			jQuery.get('/api/v1/users', (data) => {
+				jQuery('.mentionarea').mention({
+					delimiter: '@',
+					queryBy: ['username'],
+					users: data.data
+				});
+			});
+		}
 	}
 };
 

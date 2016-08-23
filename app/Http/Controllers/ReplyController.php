@@ -49,13 +49,17 @@ class ReplyController extends Controller
             $reply = $this->reply->Reply;
             if (is_null($id)) {
                 $replies = $reply->topic->replies;
-                if (Auth::user()->id != $replies->first()->user_id) {
-                    $notification->send($replies->first()->user_id, NotificationType::REPLY, $reply->topic);
-                    $this->client->send($reply->topic, $replies->first()->user_id);
-                }
-                $this->client->send($reply, Auth::user()->id, 'publish', $this->client->getTopic($reply->topic->id));
                 $this->mentioned($this->request->get('reply'), $reply->topic, $notification);
                 $read->UpdatedRead($reply->topic->id);
+
+                $this->client->new_reply($reply, Auth::user()->id, $reply->topic->id);
+                if ( ! in_array(Auth::user()->id, $this->client->getUsers('presence-topic_' . $reply->topic->id))) {
+                    if (Auth::user()->id != $replies->first()->user_id) {
+                        if ( ! $this->client->send($reply->topic, $replies->first()->user_id)) {
+                            $notification->send($replies->first()->user_id, NotificationType::REPLY, $reply->topic);
+                        }
+                    }
+                }
             }
 
             return Redirect::action('TopicController@show', [$reply->topic->id])

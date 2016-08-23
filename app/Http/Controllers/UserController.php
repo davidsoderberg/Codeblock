@@ -244,20 +244,19 @@ class UserController extends Controller
      * Updates a user.
      * @permission update_users
      *
-     * @param NotificationRepository $notification
      * @param  int $id id for user to update.
      *
      * @return object     redirect object.
      */
-    public function update(NotificationRepository $notification, $id)
+    public function update($id)
     {
         if ($this->user->update($this->request->all(), $id)) {
             $newUser = $this->user->get($id);
             if ($newUser->active < 0) {
-                $notification->send($newUser->id, NotificationType::BANNED, $newUser);
+                $this->send_notification($newUser->id, NotificationType::BANNED, $newUser);
             }
             if ($newUser->role != $this->request->get('role') && Auth::user()->id != $newUser->id) {
-                $notification->send($newUser->id, NotificationType::ROLE, $newUser);
+                $this->send_notification($newUser->id, NotificationType::ROLE, $newUser);
             }
 
             return Redirect::back()->with('success', 'You have change users rights.');

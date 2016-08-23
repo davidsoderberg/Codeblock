@@ -224,6 +224,10 @@ Route::group(['middleware' => 'guest'], function () {
     Route::get('activate/{id}/{token}', 'UserController@activate');
 });
 
+Route::group(['prefix' => 'pusher'], function () {
+    Route::post('/auth', 'MenuController@pusher');
+});
+
 Route::group(['prefix' => 'api', 'middleware' => 'api'], function () {
     Route::get('', 'ApiController@index');
 

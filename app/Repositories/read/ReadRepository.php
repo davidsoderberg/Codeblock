@@ -11,10 +11,11 @@ interface ReadRepository
      * Checks if user has read topic.
      *
      * @param $topic_id
+     * @param $user_id
      *
      * @return mixed
      */
-    public function hasRead($topic_id);
+    public function hasRead($topic_id, $user_id = null);
 
     /**
      * Updates read model.

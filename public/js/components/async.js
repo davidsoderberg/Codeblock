@@ -1,36 +1,16 @@
 require('../../../bower_components/mention/bootstrap-typeahead.js');
 require('../../../bower_components/mention/mention.js');
+require('../../../bower_components/pusher-websocket-iso/dist/web/pusher');
+var toast = require('./toast');
 
 var async = {
 	request: 0,
+	pusher: {},
 	config: {},
 	init: (config) => {
 		async.config = config;
-		if (jQuery('.mentionarea').length > 0) {
-			jQuery.get('/api/v1/users', async.getUsers);
-		}
-		if (localStorage.getItem('token') == null) {
-			async.getJWT();
-		} else {
-			//async.websocket();
-		}
-		jQuery('.close-toast').click(async.closeToast);
-	},
-
-	getUsers: (data) => {
-		jQuery('.mentionarea').mention({
-			delimiter: '@',
-			queryBy: ['username'],
-			users: data.data
-		});
-	},
-
-	closeToast: (event) => {
-		event.preventDefault();
-		jQuery(event.currentTarget).parent().addClass('lightSpeedOut');
-		setTimeout(() => {
-			jQuery(event.currentTarget).parent().remove();
-		}, 3000);
+		toast.init();
+		async.pusher();
 	},
 
 	getJWT: () => {
@@ -41,55 +21,92 @@ var async = {
 
 			if (data.token) {
 				localStorage.setItem('token', JSON.stringify({date: date, token: data.token}));
-				//async.websocket();
+				async.pusher();
 			}
 		});
 	},
 
-	createToast: (text) => {
-		var toast = jQuery('<div></div>').addClass('toast animated lightSpeedIn');
-		toast.html(text);
-
-		jQuery('#toast-container').prepend(toast);
-		setTimeout(() => {
-			toast.addClass('lightSpeedOut');
-			setTimeout(() => {
-				toast.remove();
-			}, 3000);
-		}, 5000);
-	},
-
-	websocket: () => {
-		var self = async;
-		var oldHtml = '';
+	pusher: () => {
 		var storage = JSON.parse(localStorage.getItem('token'));
-		if (storage.date > Date.now()) {
-			self.request = 0;
-			var conn = new WebSocket('ws://' + self.config.SOCKET_ADRESS + ':' + self.config.SOCKET_PORT);
-			conn.onopen = () => {
-				conn.send(JSON.stringify({'channel': 'auth', 'token': storage.token}));
-			};
-
-			conn.onmessage = (e) => {
-				var data = JSON.parse(e.data);
-				switch (data.channel) {
-					case 'toast':
-						self.createToast(data.message);
-						break;
-					case 'Topic':
-						if (data.message !== oldHtml) {
-							jQuery('.forum').append(data.message);
-						}
-						oldHtml = data.message;
-						break;
+		if (storage !== null && storage.date > Date.now()) {
+			async.pusher = new Pusher(async.config.PUSHER_KEY, {
+				auth: {
+					headers: {
+						'X-Auth-Token': storage.token
+					}
 				}
-			};
+			});
+			async.pusher.connection.bind('error', function (err) {
+				if (err.data.code === 4004) {
+					toast.create('Please reload page to connect to the real time message service.');
+					return;
+				}
+			});
+
+			var channel = async.pusher.subscribe('presence-test_token');
+
+			channel.bind('pusher:subscription_error', () => {
+				localStorage.setItem('token', null);
+				async.getJWT();
+			});
+
+			channel.bind('pusher:subscription_succeeded', () => {
+				if (async.config.AUTH_ID) {
+					async.pusher_user();
+					if (async.config.POST) {
+						async.pusher_comment();
+					}
+					if (async.config.TOPIC) {
+						async.pusher_topic();
+					}
+				}
+				async.pusher.unsubscribe('presence-test_token');
+			});
 		} else {
-			self.request++;
-			if (self.request < 4) {
-				self.getJWT();
+			async.request++;
+			if (async.request < 3) {
+				async.getJWT();
 			}
 		}
+	},
+
+	pusher_user: () => {
+		var channel = async.pusher.subscribe('presence-user_' + async.config.AUTH_ID);
+		channel.bind('toast', (data) => {
+			toast.create(data.message);
+		});
+	},
+
+	pusher_comment: () => {
+		var oldHtml = '';
+		var channel = async.pusher.subscribe('presence-post_' + async.config.POST);
+		channel.bind('new_comment', (data) => {
+			if (data.message !== oldHtml) {
+				if (data.user_id !== async.config.AUTH_ID) {
+					if (data.parent !== 0) {
+						jQuery('#comment').before(data.message);
+					} else {
+						jQuery('#comment-' + data.parent + ' .reply').after(data.message);
+					}
+					toast.create('New comment have been added to current codeblock.');
+				}
+			}
+			oldHtml = data.message;
+		});
+	},
+
+	pusher_topic: () => {
+		var oldHtml = '';
+		var channel = async.pusher.subscribe('presence-topic_' + async.config.TOPIC);
+		channel.bind('new_reply', (data) => {
+			if (data.message !== oldHtml) {
+				if (data.user_id !== async.config.AUTH_ID) {
+					jQuery('.forum').append(data.message);
+					toast.create('New reply have been added to current topic.');
+				}
+			}
+			oldHtml = data.message;
+		});
 	}
 };
 
