@@ -4,6 +4,7 @@ use App\Http\Controllers\ApiController;
 use App\Repositories\Post\PostRepository;
 use App\Repositories\Star\StarRepository;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Transformer;
@@ -75,7 +76,7 @@ class PostController extends ApiController
                     400);
             }
         }
-        if ($post->createOrUpdate($this->request->all(), $id)) {
+        if ($post->createOrUpdate(Input::all(), $id)) {
             return $this->response([$this->stringMessage => 'Your block has been saved'], 201);
         }
 

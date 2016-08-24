@@ -4,6 +4,7 @@ use App\Exceptions\NullPointerException;
 use App\Repositories\User\UserRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use App\Repositories\TeamInvite\TeamInviteRepository;
 use App\Repositories\Team\TeamRepository;
@@ -105,7 +106,7 @@ class TeamController extends Controller
      */
     public function createOrUpdate($id = null)
     {
-        if ($this->teamRepository->createOrUpdate($this->request->all(), $id)) {
+        if ($this->teamRepository->createOrUpdate(Input::all(), $id)) {
             if (is_null($id)) {
                 return Redirect::back()->with('success', 'Your team has been created.');
             }
@@ -113,7 +114,7 @@ class TeamController extends Controller
             return Redirect::back()->with('success', 'Your team has been updated.');
         }
 
-        return Redirect::back()->withErrors($this->teamRepository->getErrors())->withInput($this->request->all());
+        return Redirect::back()->withErrors($this->teamRepository->getErrors())->withInput(Input::all());
     }
 
     /**
@@ -125,8 +126,8 @@ class TeamController extends Controller
      */
     public function invite(UserRepository $user)
     {
-        $team = $this->teamRepository->get($this->request->get('id'));
-        $user = $user->get($user->getIdByEmail($this->request->get('email')));
+        $team = $this->teamRepository->get(Input::get('id'));
+        $user = $user->get($user->getIdByEmail(Input::get('email')));
 
         if ($this->teamRepository->isOwner($user, $team)) {
             return Redirect::back()->with('error', 'You can not invite yourself to your own team.');
@@ -138,7 +139,7 @@ class TeamController extends Controller
 
         return Redirect::back()
             ->with('error', 'You could not invite ' . $user->username . ' to ' . $team->name . '.')
-            ->withInput($this->request->all());
+            ->withInput(Input::all());
     }
 
     /**

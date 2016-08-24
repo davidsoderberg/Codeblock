@@ -77,8 +77,8 @@ class TopicController extends Controller
                 }
             }
         }
-        $input = $this->request->all();
-        if ($this->topic->createOrUpdate($this->request->all(), $id)) {
+        $input = Input::all();
+        if ($this->topic->createOrUpdate(Input::all(), $id)) {
             if (is_null($id)) {
                 $input['topic_id'] = $this->topic->topic->id;
                 if (!$this->reply->createOrUpdate($input)) {

@@ -62,7 +62,7 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        if ($this->Article->createOrUpdate($this->request->all())) {
+        if ($this->Article->createOrUpdate(Input::all())) {
             return Redirect::action('ArticleController@index')->with('success', 'Your article has been created.');
         }
 
@@ -77,7 +77,7 @@ class ArticleController extends Controller
      */
     public function update($id)
     {
-        if ($this->Article->createOrUpdate($this->request->all(), $id)) {
+        if ($this->Article->createOrUpdate(Input::all(), $id)) {
             return Redirect::action('ArticleController@index')->with('success', 'Your article has been updated.');
         }
 
