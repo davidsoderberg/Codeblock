@@ -90,7 +90,7 @@ class ForumController extends Controller
      */
     public function createOrUpdate($id = null)
     {
-        if ($this->forum->createOrUpdate($this->request->all(), $id)) {
+        if ($this->forum->createOrUpdate(Input::all(), $id)) {
             if (is_null($id)) {
                 return Redirect::back()->with('success', 'Your forum has been created.');
             }

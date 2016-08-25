@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Str;
 
 /**
@@ -59,7 +60,7 @@ class CommentController extends Controller
      */
     public function createOrUpdate(NotificationRepository $notification, PostRepository $post, $id = null)
     {
-        if ($this->comment->createOrUpdate($this->request->all(), $id)) {
+        if ($this->comment->createOrUpdate(Input::all(), $id)) {
             if (!is_null($id)) {
                 if (Str::contains(URL::previous(), 'posts')) {
                     return Redirect::action('PostController@show', $this->comment->get($id)->post_id)
@@ -68,12 +69,12 @@ class CommentController extends Controller
                     return Redirect::back()->with('success', 'This comment have been updated.');
                 }
             }
-            $post = $post->get($this->request->get('post_id'));
+            $post = $post->get(Input::get('post_id'));
             if (Auth::user()->id != $post->user_id) {
                 $notification->send($post->user_id, NotificationType::COMMENT, $post);
                 $this->client->send($post, $post->user_id);
             }
-            $this->mentioned($this->request->get('comment'), $post, $notification);
+            $this->mentioned(Input::get('comment'), $post, $notification);
 
             return Redirect::back()->with('success', 'Your comment have been created.');
         }

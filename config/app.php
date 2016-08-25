@@ -1,7 +1,7 @@
 <?php
 
 return [
-    
+
     'env' => env('APP_ENV', 'production'),
 
     /*
@@ -84,7 +84,7 @@ return [
 
     'key' => env('APP_KEY', 'YourSecretKey!!!'),
 
-    'cipher' => MCRYPT_RIJNDAEL_128,
+    'cipher' => 'AES-256-CBC',
 
     /*
     |--------------------------------------------------------------------------
@@ -118,7 +118,6 @@ return [
          * Laravel Framework Service Providers...
          */
         'Illuminate\Auth\AuthServiceProvider',
-        'Collective\Bus\BusServiceProvider',
         'Illuminate\Cache\CacheServiceProvider',
         'Illuminate\Foundation\Providers\ConsoleSupportServiceProvider',
         'Illuminate\Cookie\CookieServiceProvider',
@@ -143,7 +142,6 @@ return [
          * Application Service Providers...
          */
         'App\Providers\AppServiceProvider',
-        'App\Providers\BusServiceProvider',
         'App\Providers\ConfigServiceProvider',
         'App\Providers\EventServiceProvider',
         'App\Providers\RouteServiceProvider',
@@ -158,7 +156,7 @@ return [
         'Laravel\Socialite\SocialiteServiceProvider',
         Barryvdh\Debugbar\ServiceProvider::class,
         Irazasyed\LaravelGAMP\LaravelGAMPServiceProvider::class,
-        Spatie\LaravelAnalytics\LaravelAnalyticsServiceProvider::class,
+        Spatie\Analytics\AnalyticsServiceProvider::class,
         Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
     ],
 
@@ -209,7 +207,7 @@ return [
         'HTML'      => Collective\Html\HtmlFacade::class,
         'Socialize' => 'Laravel\Socialite\Facades\Socialite',
         'GAMP'  => Irazasyed\LaravelGAMP\Facades\GAMP::class,
-        'LaravelAnalytics' => Spatie\LaravelAnalytics\LaravelAnalyticsFacade::class,
+        'LaravelAnalytics' => Spatie\Analytics\AnalyticsFacade::class,
     ],
 
 ];

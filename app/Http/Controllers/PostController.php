@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use Venturecraft\Revisionable\Revision;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Input;
 use App\Services\Analytics;
 
 /**
@@ -181,7 +182,7 @@ class PostController extends Controller
      */
     public function createOrUpdate($id = null)
     {
-        if ($this->post->createOrUpdate($this->request->all(), $id)) {
+        if ($this->post->createOrUpdate(Input::all(), $id)) {
             if (!is_null($id)) {
                 return Redirect::to('posts/' . $id)->with('success', 'Your block has been saved.');
             } else {
@@ -326,11 +327,11 @@ class PostController extends Controller
         $categories[''] = "All categories";
         $tags = $this->selectTags();
         $tags[''] = "All tags";
-        $term = trim(strip_tags($this->request->get('term')));
+        $term = trim(strip_tags(Input::get('term')));
         $filter = [
-            'category' => $this->request->get('category'),
-            'tag' => $this->request->get('tag'),
-            'only' => $this->request->get('only'),
+            'category' => Input::get('category'),
+            'tag' => Input::get('tag'),
+            'only' => Input::get('only'),
         ];
         $posts = $this->post->search($term, $filter);
 
@@ -513,7 +514,7 @@ class PostController extends Controller
     public function forkGist(Github $github)
     {
         if ($github->hasRequestLeft()) {
-            $id = $this->request->get('id');
+            $id = Input::get('id');
             if (is_numeric($id)) {
                 $data = $github->getGist($id);
                 if ($data) {
