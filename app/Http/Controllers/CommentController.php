@@ -71,9 +71,9 @@ class CommentController extends Controller
             $this->mentioned($this->request->get('comment'), $post);
             $this->client->new_comment($this->comment->Comment, Auth::user()->id, $post->id);
 
-            if ( ! in_array(Auth::user()->id, $this->client->getUsers('presence-post_' . $post->id))) {
+            if (! in_array(Auth::user()->id, $this->client->getUsers('presence-post_' . $post->id))) {
                 if (Auth::user()->id != $post->user_id) {
-                    if ( ! $this->client->send($post, $post->user_id)) {
+                    if (! $this->client->send($post, $post->user_id)) {
                         $this->send_notification($post->user_id, NotificationType::COMMENT, $post);
                     }
                 }

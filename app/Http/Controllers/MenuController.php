@@ -229,7 +229,7 @@ class MenuController extends Controller
                 $_POST['socket_id'],
                 ['id' => $user->id]
             );
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             return response('Forbidden', 403);
         }
     }

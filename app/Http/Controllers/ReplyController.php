@@ -53,9 +53,9 @@ class ReplyController extends Controller
                 $read->UpdatedRead($reply->topic->id);
 
                 $this->client->new_reply($reply, Auth::user()->id, $reply->topic->id);
-                if ( ! in_array(Auth::user()->id, $this->client->getUsers('presence-topic_' . $reply->topic->id))) {
+                if (! in_array(Auth::user()->id, $this->client->getUsers('presence-topic_' . $reply->topic->id))) {
                     if (Auth::user()->id != $replies->first()->user_id) {
-                        if ( ! $this->client->send($reply->topic, $replies->first()->user_id)) {
+                        if (! $this->client->send($reply->topic, $replies->first()->user_id)) {
                             $notification->send($replies->first()->user_id, NotificationType::REPLY, $reply->topic);
                         }
                     }

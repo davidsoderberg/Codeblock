@@ -74,7 +74,7 @@ abstract class Controller extends BaseController
     {
         $notificationRepository = App::make('App\Repositories\Notification\NotificationRepository');
         if ($notificationRepository->send($user_id, $type, $object, $subject, $body)) {
-            if ( ! $this->client->send(new Notification(), $notificationRepository->getUserId())) {
+            if (! $this->client->send(new Notification(), $notificationRepository->getUserId())) {
                 return $notificationRepository->sendNotificationEmail();
             }
 

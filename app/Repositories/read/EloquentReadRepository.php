@@ -37,7 +37,7 @@ class EloquentReadRepository extends CRepository implements ReadRepository
             $user_id = Auth::user()->id;
         }
 
-        if ( ! is_null($user_id)) {
+        if (! is_null($user_id)) {
             $is_null = CollectionService::filter($this->get(), 'topic_id', $topic_id);
             $is_null = CollectionService::filter($is_null, 'user_id', $user_id, 'first');
             if (is_null($is_null)) {
