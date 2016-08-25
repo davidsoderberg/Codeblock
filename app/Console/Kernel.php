@@ -18,7 +18,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         'App\Console\Commands\InsertPermission',
         'App\Console\Commands\Install',
-        'App\Console\Commands\Websocket'
+        'App\Console\Commands\Websocket',
+        'App\Console\Commands\Doc'
     ];
 
     /**

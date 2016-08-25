@@ -2,10 +2,10 @@ var gulp = require('gulp');
 var scss = ['public/scss/style.scss', 'public/scss/partials/**/*.scss'];
 
 gulp.task('default', ['browser-sync', 'copy'], function () {
-	//gulp.watch(scss, ['scss', 'reload']);
+	gulp.watch(scss, ['scss', 'reload']);
 	gulp.watch(['public/js/components/*.js', 'public/js/script.js'], ['js', 'reload']);
-	//gulp.watch('resources/views/**/*', ['reload']);
-	//gulp.watch('resources/themes/**/*', ['sami']);
+	gulp.watch('resources/views/**/*', ['reload']);
+	gulp.watch('resources/themes/**/*', ['sami']);
 });
 
 gulp.task('copy', function () {

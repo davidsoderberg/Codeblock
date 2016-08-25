@@ -20,4 +20,14 @@ jQuery(document).ready(() => {
 	validator({keypress: false});
 	tabs(jQuery('#browseTabs'));
 	accordion(jQuery('#accordion'));
+
+	jQuery('#documentation a').click((e) => {
+		e.preventDefault();
+
+		jQuery('#documentation .wrapper:first-of-type ul li').removeClass('active');
+		var id = jQuery(e.currentTarget).attr('href');
+		jQuery("#documentation .wrapper:first-of-type ul li a[href='" + id + "']").parent().addClass('active');
+		jQuery('#documentation .wrapper:last-of-type div').removeClass('show');
+		jQuery(id).addClass('show');
+	});
 });
