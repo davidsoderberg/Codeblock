@@ -6,6 +6,7 @@ use App\Repositories\Reply\ReplyRepository;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Transformer;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Input;
 
 /**
  * Class TopicController
@@ -51,8 +52,8 @@ class TopicController extends ApiController
                     400);
             }
         }
-        $input = $this->request->all();
-        if ($topic->createOrUpdate($this->request->all(), $id)) {
+        $input = Input::all();
+        if ($topic->createOrUpdate(Input::all(), $id)) {
             $input['topic_id'] = $topic->topic->id;
             if (is_null($id) && !$reply->createOrUpdate($input)) {
                 $topic->delete($topic->topic->id);
