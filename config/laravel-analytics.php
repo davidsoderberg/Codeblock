@@ -23,5 +23,5 @@ return
         /*
          * The directory where the underlying Google_Client will store it's cache files.
          */
-        'cache_location' => storage_path('app/laravel-google-analytics/google-cache/'),
+        'cache_location' => storage_path('app/laravel-google-analytics/google-cache'),
     ];
