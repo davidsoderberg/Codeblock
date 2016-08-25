@@ -108,7 +108,6 @@ class EloquentNotificationRepository extends CRepository implements Notification
         }
 
         if ($note->user_id !== $note->from_id) {
-
             $note = $this->setType($type, $note);
             $note = $this->setObject($object, $note);
             $note = $this->setContent($subject, $body, $type, $note);
@@ -136,13 +135,13 @@ class EloquentNotificationRepository extends CRepository implements Notification
      */
     private function setUserId($user_id, $note)
     {
-        if ( ! is_integer($user_id)) {
+        if (! is_integer($user_id)) {
             $user_id = $this->user->getIdByUsername($this->stripTrim($user_id));
         }
 
         $user_id = intval($this->stripTrim($user_id));
 
-        if ( ! is_null($this->user->get($user_id))) {
+        if (! is_null($this->user->get($user_id))) {
             $note->user_id = $user_id;
         } else {
             $this->errors = ['to_user' => ['That user does not exist.']];
@@ -162,7 +161,7 @@ class EloquentNotificationRepository extends CRepository implements Notification
      */
     private function setFromId($from_id, $note)
     {
-        if ( ! is_null($this->user->get($from_id))) {
+        if (! is_null($this->user->get($from_id))) {
             $note->from_id = $from_id;
         } else {
             $this->errors = ['from_user' => ['That user does not exist.']];
@@ -225,7 +224,7 @@ class EloquentNotificationRepository extends CRepository implements Notification
      */
     private function setContent($subject, $body, $type, $note)
     {
-        if ( ! is_null($subject) && ! is_null($body)) {
+        if (! is_null($subject) && ! is_null($body)) {
             $note->subject = $this->stripTrim($subject);
             $note->body    = $this->stripTrim($body);
         } else {

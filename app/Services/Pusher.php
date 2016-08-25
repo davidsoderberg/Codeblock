@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\View;
 
 class Pusher
 {
-
     public $pusher;
 
     public function __construct()
@@ -106,7 +105,8 @@ class Pusher
         ]);
     }
 
-    public function new_comment($comment, $user_id, $post_id){
+    public function new_comment($comment, $user_id, $post_id)
+    {
         $channel   = 'presence-post_' . $post_id;
         $user_ids  = $this->getUsers($channel);
         $view = View::make('comment.comment')
@@ -123,7 +123,6 @@ class Pusher
 
     public function getUsers($channel)
     {
-
         $result = $this->pusher->get('/channels/' . $channel . '/users');
         if (isset($result['result']['users'])) {
             $users    = $result['result']['users'];
