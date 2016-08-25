@@ -60,7 +60,7 @@ class Doc extends Command
      */
     private function createHtml()
     {
-        if ( ! is_dir(storage_path() . '/doc')) {
+        if (! is_dir(storage_path() . '/doc')) {
             mkdir(storage_path() . '/doc');
         }
         file_put_contents(storage_path() . '/doc/index.html', View::make('doc')->with('docs', $this->classes)->render());
@@ -77,7 +77,7 @@ class Doc extends Command
                 $this->create_class($reflection);
                 $class = $reflection->getName();
 
-                if ( ! empty($reflection->getTraits())) {
+                if (! empty($reflection->getTraits())) {
                     foreach ($reflection->getTraits() as $trait) {
                         $this->classes[$class]['traits'][] = $trait->getName();
                         $this->create_class($trait);
@@ -90,7 +90,8 @@ class Doc extends Command
     /**
      * @param $class
      */
-    private function create_class($class){
+    private function create_class($class)
+    {
         $class_name = $class->getName();
         $result = new DocBlock($class->getDocComment());
         if (in_array($class_name, $this->paths)) {
@@ -126,12 +127,12 @@ class Doc extends Command
      */
     private function getClasses()
     {
-        $di = new \RecursiveDirectoryIterator(app_path(),\RecursiveDirectoryIterator::SKIP_DOTS);
+        $di = new \RecursiveDirectoryIterator(app_path(), \RecursiveDirectoryIterator::SKIP_DOTS);
         $it = new \RecursiveIteratorIterator($di);
 
-        foreach($it as $file) {
+        foreach ($it as $file) {
             if (pathinfo($file, PATHINFO_EXTENSION) == "php") {
-                $file          = str_replace(base_path().'\\', '',$file->getRealPath());
+                $file          = str_replace(base_path().'\\', '', $file->getRealPath());
                 $file          = str_replace('.php', '', $file);
                 $this->paths[] = ucfirst($file);
             }

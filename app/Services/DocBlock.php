@@ -51,8 +51,9 @@ class DocBlock
      */
     public function __construct($comment = null)
     {
-        if ($comment)
+        if ($comment) {
             $this->setComment($comment);
+        }
     }
 
     /**
@@ -81,19 +82,18 @@ class DocBlock
         $comment = preg_split('/\r?\n\r?/', $comment);
 
         // Trim asterisks and whitespace from the beginning and whitespace from the end of lines
-        $comment = array_map(function($line) {
+        $comment = array_map(function ($line) {
             return ltrim(rtrim($line), "* \t\n\r\0\x0B");
         }, $comment);
 
         // Group the lines together by @tags
         $blocks = array();
         $b = -1;
-        foreach ($comment as $line)
-        {
+        foreach ($comment as $line) {
             if (self::isTagged($line)) {
                 $b++;
                 $blocks[] = array();
-            } else if($b == -1) {
+            } elseif ($b == -1) {
                 $b = 0;
                 $blocks[] = array();
             }
@@ -101,18 +101,14 @@ class DocBlock
         }
 
         // Parse the blocks
-        foreach ($blocks as $block => $body)
-        {
+        foreach ($blocks as $block => $body) {
             $body = trim(implode("\n", $body));
 
-            if ($block == 0 && !self::isTagged($body))
-            {
+            if ($block == 0 && !self::isTagged($body)) {
                 // This is the description block
                 $this->desc = $body;
                 continue;
-            }
-            else
-            {
+            } else {
                 // This block is tagged
                 $tag = substr(self::strTag($body), 1);
                 $body = ltrim(substr($body, strlen($tag)+2));
@@ -132,8 +128,7 @@ class DocBlock
                         self::$vectors[$tag],
                         $parts
                     );
-                }
-                else {
+                } else {
                     // The tagged block is only text
                     $this->tags[$tag][] = $body;
                 }
@@ -203,8 +198,9 @@ class DocBlock
      */
     public static function strTag($str)
     {
-        if (preg_match('/^@[a-z0-9_]+/', $str, $matches))
+        if (preg_match('/^@[a-z0-9_]+/', $str, $matches)) {
             return $matches[0];
+        }
         return null;
     }
 }
