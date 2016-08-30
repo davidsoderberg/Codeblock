@@ -53,8 +53,8 @@ class Doc extends Command
         $path = trim($path, '/');
         $path = '/' . $path;
 
-        if ( ! is_dir(storage_path() . $path)) {
-            if ( ! mkdir(storage_path() . $path)) {
+        if (! is_dir(storage_path() . $path)) {
+            if (! mkdir(storage_path() . $path)) {
                 $this->error('We could not create that directory, please try with another directory.');
             }
             $this->info(storage_path() . $path . ' have been created');

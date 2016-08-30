@@ -103,9 +103,10 @@ final class CodeReader
      *
      * @return Array
      */
-    private function getClassTags(){
+    private function getClassTags()
+    {
         $tags = $this->docblock->tags;
-        if(isset($tags['package'])){
+        if (isset($tags['package'])) {
             unset($tags['package']);
         }
 
@@ -206,19 +207,19 @@ final class CodeReader
                 if (isset($param['var'])) {
                     $key = $param['var'];
 
-                    if(!isset($params[$key]['var'])){
+                    if (!isset($params[$key]['var'])) {
                         $params[$key]['var'] = $key;
                     }
 
                     if (isset($param['desc'])) {
                         $params[$key]['desc'] = $param['desc'];
-                    }else{
+                    } else {
                         $params[$key]['desc'] = '';
                     }
 
                     if (isset($param['type'])) {
                         $params[$key]['type'] = $param['type'];
-                    }else{
+                    } else {
                         $params[$key]['type'] = '';
                     }
                 }
@@ -226,11 +227,11 @@ final class CodeReader
         }
         $tags['params'] = $params;
 
-        if ( ! isset($tags['return'])) {
+        if (! isset($tags['return'])) {
             $tags['return'] = [];
         }
 
-        if ( ! isset($tags['throws'])) {
+        if (! isset($tags['throws'])) {
             $tags['throws'] = [];
         }
 
