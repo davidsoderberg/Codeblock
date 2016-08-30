@@ -5,13 +5,22 @@
 		float: left;
 		width: 35%;
 		margin: 1% 0;
+		input{
+			padding: 2.5px 5px;
+		}
 		ul {
 			list-style: none;
 			li {
 				margin-bottom: 0.5em;
+				padding: 0 5px;
 				&.active {
-					list-style: square;
+					background: $browngray;
+					padding: 2.5px 5px;
+					span{
+						color: $white;
+					}
 					a {
+						color: $white;
 						text-decoration: none;
 					}
 				}

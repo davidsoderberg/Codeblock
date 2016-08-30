@@ -21,6 +21,37 @@ jQuery(document).ready(() => {
 	tabs(jQuery('#browseTabs'));
 	accordion(jQuery('#accordion'));
 
+	jQuery('#documentation #filter').keyup((e) => {
+		var val = jQuery(e.currentTarget).val().toLowerCase();
+		var number_of_classes = jQuery('#documentation .wrapper:first-of-type ul li').length;
+		if (val.length > 0) {
+			jQuery('#documentation .wrapper:first-of-type ul li').each((index, element) => {
+				var current_text = jQuery(element).find('a').text().toLowerCase();
+				if (current_text.indexOf(val) !== -1) {
+					jQuery(element).show();
+				} else {
+					jQuery(element).hide();
+				}
+
+				if (number_of_classes === (index + 1)) {
+					var visible_lis = jQuery('#documentation .wrapper:first-of-type ul li:visible');
+					var list_item = visible_lis[0];
+					jQuery(list_item).find('a').trigger('click');
+				}
+			});
+		} else {
+			jQuery('#documentation .wrapper:first-of-type ul li').each((index, element) => {
+				jQuery(element).show();
+
+				if (number_of_classes === (index + 1)) {
+					var visible_lis = jQuery('#documentation .wrapper:first-of-type ul li:visible');
+					var list_item = visible_lis[0];
+					jQuery(list_item).find('a').trigger('click');
+				}
+			});
+		}
+	});
+
 	jQuery('#documentation a').click((e) => {
 		e.preventDefault();
 

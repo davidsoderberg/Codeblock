@@ -17,7 +17,7 @@
 	],
 	"require": {
 		"laravel/framework": "5.3.*",
-		"laravelcollective/html": "5.3.x-dev",
+		"laravelcollective/html": "5.3.*",
 		"davidsoderberg/iseed": "master",
 		"firebase/php-jwt": "1.*",
 		"laravel/socialite": "2.*",
@@ -37,7 +37,6 @@
 		"phpunit/phpunit": "~4.4.0@stable",
 		"fzaninotto/faker": "~1.4",
 		"squizlabs/php_codesniffer": "*",
-		"wp-coding-standards/wpcs": "dev-develop",
 		"symfony/dom-crawler": "~3.0",
 		"symfony/css-selector": "~3.0"
 	},

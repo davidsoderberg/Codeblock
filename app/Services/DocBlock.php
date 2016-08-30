@@ -14,10 +14,10 @@ class DocBlock
      *
      * @type Array
      */
-    public static $vectors = array(
-        'param' => array('type', 'var', 'desc'),
-        'return' => array('type', 'desc'),
-    );
+    public static $vectors = [
+        'param' => ['type', 'var', 'desc'],
+        'return' => ['type', 'desc'],
+    ];
 
     /**
      * The description of the symbol
@@ -47,6 +47,7 @@ class DocBlock
 
     /**
      * CONSTRUCTOR.
+     *
      * @param String $comment The text of the docblock
      */
     public function __construct($comment = null)
@@ -58,12 +59,13 @@ class DocBlock
 
     /**
      * Set and parse the docblock comment.
+     *
      * @param String $comment The docblock
      */
     public function setComment($comment)
     {
-        $this->desc = '';
-        $this->tags = array();
+        $this->desc    = '';
+        $this->tags    = [];
         $this->comment = $comment;
 
         $this->parseComment($comment);
@@ -71,6 +73,7 @@ class DocBlock
 
     /**
      * Parse the comment into the component parts and set the state of the object.
+     *
      * @param  String $comment The docblock
      */
     protected function parseComment($comment)
@@ -87,15 +90,15 @@ class DocBlock
         }, $comment);
 
         // Group the lines together by @tags
-        $blocks = array();
-        $b = -1;
+        $blocks = [];
+        $b      = -1;
         foreach ($comment as $line) {
             if (self::isTagged($line)) {
                 $b++;
-                $blocks[] = array();
+                $blocks[] = [];
             } elseif ($b == -1) {
-                $b = 0;
-                $blocks[] = array();
+                $b        = 0;
+                $blocks[] = [];
             }
             $blocks[$b][] = $line;
         }
@@ -104,14 +107,14 @@ class DocBlock
         foreach ($blocks as $block => $body) {
             $body = trim(implode("\n", $body));
 
-            if ($block == 0 && !self::isTagged($body)) {
+            if ($block == 0 && ! self::isTagged($body)) {
                 // This is the description block
                 $this->desc = $body;
                 continue;
             } else {
                 // This block is tagged
-                $tag = substr(self::strTag($body), 1);
-                $body = ltrim(substr($body, strlen($tag)+2));
+                $tag  = substr(self::strTag($body), 1);
+                $body = ltrim(substr($body, strlen($tag) + 2));
 
                 if (isset(self::$vectors[$tag])) {
                     // The tagged block is a vector
@@ -119,7 +122,7 @@ class DocBlock
                     if ($body) {
                         $parts = preg_split('/\s+/', $body, $count);
                     } else {
-                        $parts = array();
+                        $parts = [];
                     }
                     // Default the trailing values
                     $parts = array_pad($parts, $count, null);
@@ -137,53 +140,10 @@ class DocBlock
     }
 
     /**
-     * Whether or not a docblock contains a given @tag.
-     * @param  String $tag The name of the @tag to check for
-     * @return bool
-     */
-    public function hasTag($tag)
-    {
-        return is_array($this->tags) && array_key_exists($tag, $this->tags);
-    }
-
-    /**
-     * The value of a tag
-     * @param  String $tag
-     * @return Array
-     */
-    public function tag($tag)
-    {
-        return $this->hasTag($tag) ? $this->tags[$tag] : null;
-    }
-
-    /**
-     * The value of a tag (concatenated for multiple values)
-     * @param  String $tag
-     * @param  string $sep The seperator for concatenating
-     * @return String
-     */
-    public function tagImplode($tag, $sep = ' ')
-    {
-        return $this->hasTag($tag) ? implode($sep, $this->tags[$tag]) : null;
-    }
-
-    /**
-     * The value of a tag (merged recursively)
-     * @param  String $tag
-     * @return Array
-     */
-    public function tagMerge($tag)
-    {
-        return $this->hasTag($tag) ? array_merge_recursive($this->tags[$tag]) : null;
-    }
-
-    /*
-     * ==================================
-     */
-
-    /**
      * Whether or not a string begins with a @tag
+     *
      * @param  String $str
+     *
      * @return bool
      */
     public static function isTagged($str)
@@ -193,7 +153,9 @@ class DocBlock
 
     /**
      * The tag at the beginning of a string
+     *
      * @param  String $str
+     *
      * @return String|null
      */
     public static function strTag($str)
@@ -201,6 +163,60 @@ class DocBlock
         if (preg_match('/^@[a-z0-9_]+/', $str, $matches)) {
             return $matches[0];
         }
+
         return null;
+    }
+
+    /**
+     * The value of a tag
+     *
+     * @param  String $tag
+     *
+     * @return Array
+     */
+    public function tag($tag)
+    {
+        return $this->hasTag($tag) ? $this->tags[$tag] : null;
+    }
+
+    /**
+     * Whether or not a docblock contains a given @tag.
+     *
+     * @param  String $tag The name of the @tag to check for
+     *
+     * @return bool
+     */
+    public function hasTag($tag)
+    {
+        return is_array($this->tags) && array_key_exists($tag, $this->tags);
+    }
+
+    /*
+     * ==================================
+     */
+
+    /**
+     * The value of a tag (concatenated for multiple values)
+     *
+     * @param  String $tag
+     * @param  string $sep The seperator for concatenating
+     *
+     * @return String
+     */
+    public function tagImplode($tag, $sep = ' ')
+    {
+        return $this->hasTag($tag) ? implode($sep, $this->tags[$tag]) : null;
+    }
+
+    /**
+     * The value of a tag (merged recursively)
+     *
+     * @param  String $tag
+     *
+     * @return Array
+     */
+    public function tagMerge($tag)
+    {
+        return $this->hasTag($tag) ? array_merge_recursive($this->tags[$tag]) : null;
     }
 }
