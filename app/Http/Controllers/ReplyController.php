@@ -6,6 +6,7 @@ use App\Repositories\Notification\NotificationRepository;
 use Illuminate\Support\Facades\Auth;
 use App\Models\NotificationType;
 use App\Repositories\Read\ReadRepository;
+use Illuminate\Support\Facades\Input;
 
 /**
  * Class ReplyController
@@ -45,7 +46,7 @@ class ReplyController extends Controller
                 }
             }
         }
-        if ($this->reply->createOrUpdate($this->request->all(), $id)) {
+        if ($this->reply->createOrUpdate(Input::all(), $id)) {
             $reply = $this->reply->Reply;
             if (is_null($id)) {
                 $replies = $reply->topic->replies;

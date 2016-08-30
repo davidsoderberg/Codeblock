@@ -4,6 +4,7 @@ use App\Repositories\Role\RoleRepository;
 use App\Repositories\Permission\PermissionRepository;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Input;
 
 /**
  * Class RoleController
@@ -66,7 +67,7 @@ class RoleController extends Controller
      */
     public function store($id = null)
     {
-        if ($this->role->createOrUpdate($this->request->all(), $id)) {
+        if ($this->role->createOrUpdate(Input::all(), $id)) {
             if (is_null($id)) {
                 return Redirect::to('/roles')->with('success', 'The role has been created.');
             }
@@ -74,7 +75,7 @@ class RoleController extends Controller
             return Redirect::to('/roles')->with('success', 'The role has been updated.');
         }
 
-        return Redirect::back()->withErrors($this->role->getErrors())->withInput($this->request->all());
+        return Redirect::back()->withErrors($this->role->getErrors())->withInput(Input::all());
     }
 
     /**
@@ -85,7 +86,7 @@ class RoleController extends Controller
      */
     public function setDefault()
     {
-        if ($this->role->setDefault($this->request->get('default'))) {
+        if ($this->role->setDefault(Input::get('default'))) {
             return Redirect::back()->with('success', 'The default role has been updated.');
         }
 
@@ -133,7 +134,7 @@ class RoleController extends Controller
      */
     public function updateRolePermission()
     {
-        if ($this->role->updateRolePermission($this->request->all())) {
+        if ($this->role->updateRolePermission(Input::all())) {
             return Redirect::back()->with('success', 'The role has now the permission you selected.');
         } else {
             return Redirect::back()->with('error', 'The role could not get the permissions you seleted.');

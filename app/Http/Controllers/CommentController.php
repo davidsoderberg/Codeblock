@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Str;
 
 /**
@@ -57,7 +58,7 @@ class CommentController extends Controller
      */
     public function createOrUpdate(PostRepository $post, $id = null)
     {
-        if ($this->comment->createOrUpdate($this->request->all(), $id)) {
+        if ($this->comment->createOrUpdate(Input::all(), $id)) {
             if (!is_null($id)) {
                 if (Str::contains(URL::previous(), 'posts')) {
                     return Redirect::action('PostController@show', $this->comment->get($id)->post_id)

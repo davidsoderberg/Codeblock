@@ -3,6 +3,7 @@
 use App\Http\Controllers\ApiController;
 use App\Repositories\Reply\ReplyRepository;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
 
 /**
  * Class ReplyController
@@ -31,7 +32,7 @@ class ReplyController extends ApiController
                     400);
             }
         }
-        if ($reply->createOrUpdate($this->request->all(), $id)) {
+        if ($reply->createOrUpdate(Input::all(), $id)) {
             return $this->response([$this->stringMessage => 'Your reply has been saved'], 201);
         }
 

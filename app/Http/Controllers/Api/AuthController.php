@@ -4,6 +4,7 @@ use App\Services\Jwt;
 use App\Http\Controllers\ApiController;
 use App\Repositories\User\UserRepository;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
 
 /**
  * Class AuthController
@@ -38,7 +39,7 @@ class AuthController extends ApiController
      */
     public function forgotPassword(UserRepository $user)
     {
-        if ($user->forgotPassword($this->request->all())) {
+        if ($user->forgotPassword(Input::all())) {
             return $this->response([$this->stringMessage => 'A new password have been sent to you.'], 200);
         }
 

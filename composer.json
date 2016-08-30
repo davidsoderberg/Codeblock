@@ -16,9 +16,8 @@
 		}
 	],
 	"require": {
-		"laravel/framework": "5.2.*",
-		"laravelcollective/html": "5.2.*",
-		"laravelcollective/bus": "5.2.*",
+		"laravel/framework": "5.3.*",
+		"laravelcollective/html": "5.3.*",
 		"davidsoderberg/iseed": "master",
 		"firebase/php-jwt": "1.*",
 		"laravel/socialite": "2.*",
@@ -36,7 +35,6 @@
 	"require-dev": {
 		"phpunit/phpunit": "~4.4.0@stable",
 		"fzaninotto/faker": "~1.4",
-		"sami/sami": "3.0",
 		"squizlabs/php_codesniffer": "*",
 		"symfony/dom-crawler": "~3.0",
 		"symfony/css-selector": "~3.0"
@@ -73,5 +71,6 @@
 	"config": {
 		"preferred-install": "dist"
 	},
-	"minimum-stability": "dev"
+	"minimum-stability": "dev",
+	"prefer-stable": true
 }
