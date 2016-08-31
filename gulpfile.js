@@ -5,7 +5,6 @@ gulp.task('default', ['browser-sync', 'copy'], function () {
 	gulp.watch(scss, ['scss', 'reload']);
 	gulp.watch(['public/js/components/*.js', 'public/js/script.js'], ['js', 'reload']);
 	gulp.watch('resources/views/**/*', ['reload']);
-	gulp.watch('resources/themes/**/*', ['sami']);
 });
 
 gulp.task('copy', function () {
@@ -61,10 +60,6 @@ gulp.task('browser-sync', function () {
 	browserSync({
 		proxy: "codeblock.dev"
 	});
-});
-
-gulp.task('sami', function () {
-	return gulp.src(['resources/themes/codeblock/style.css']).pipe(gulp.dest('storage/doc/build/css'));
 });
 
 gulp.task('lint', function () {
