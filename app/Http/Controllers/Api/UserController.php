@@ -87,7 +87,7 @@ class UserController extends ApiController
      */
     private function createOrUpdateUser(UserRepository $user, $id = null)
     {
-        if ( ! is_null($id)) {
+        if (! is_null($id)) {
             if ($id != Auth::user()->id && ! Auth::user()->hasPermission('update_users', false)) {
                 return $this->response([$this->stringErrors => [$this->stringUser => 'You are not that user']], 400);
             }
@@ -103,5 +103,4 @@ class UserController extends ApiController
 
         return $this->response([$this->stringErrors => $user->getErrors()], 400);
     }
-
 }

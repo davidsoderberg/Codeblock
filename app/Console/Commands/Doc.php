@@ -16,7 +16,7 @@ use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\ReplyController;
 use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\TeamController;
-Use App\Http\Controllers\Api\TopicController;
+use App\Http\Controllers\Api\TopicController;
 use App\Http\Controllers\Api\UserController;
 
 /**
@@ -56,7 +56,7 @@ class Doc extends Command
     public function fire()
     {
         $path = $this->createDocDir();
-        if ( ! is_null($path)) {
+        if (! is_null($path)) {
             $this->createApiHtml($path);
             $this->createDocHtml($path);
         }
@@ -73,8 +73,8 @@ class Doc extends Command
         $path = trim($path, '/');
         $path = storage_path() . '/' . $path;
 
-        if ( ! is_dir($path)) {
-            if ( ! mkdir($path)) {
+        if (! is_dir($path)) {
+            if (! mkdir($path)) {
                 $this->error('We could not create that directory, please try with another directory.');
             }
             $this->info($path . ' have been created');

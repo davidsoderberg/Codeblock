@@ -61,7 +61,8 @@ class CategoryController extends ApiController
      * @ApiRoute(name="/api/v1/categories")
      * @ApiParams(name="name", type="string", nullable=false, description="category name")
      */
-    public function createCategory(CategoryRepository $category){
+    public function createCategory(CategoryRepository $category)
+    {
         return $this->createOrUpdateCategory($category);
     }
 
@@ -81,7 +82,8 @@ class CategoryController extends ApiController
      * @ApiParams(name="id", type="integer", nullable=false, description="category id")
      * @ApiParams(name="name", type="string", nullable=false, description="category name")
      */
-    public function updateCategory(CategoryRepository $category, $id){
+    public function updateCategory(CategoryRepository $category, $id)
+    {
         return $this->createOrUpdateCategory($category, $id);
     }
 

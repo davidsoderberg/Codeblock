@@ -50,7 +50,8 @@ class CommentController extends ApiController
      * @ApiParams(name="post_id", type="integer", nullable=false, description="codeblock id")
      * @ApiParams(name="parent", type="integer", nullable=true, description="parent comment id")
      */
-    public function createComment(CommentRepository $comment){
+    public function createComment(CommentRepository $comment)
+    {
         return $this->createOrUpdateComment($comment);
     }
 
@@ -70,7 +71,8 @@ class CommentController extends ApiController
      * @ApiParams(name="post_id", type="integer", nullable=false, description="codeblock id")
      * @ApiParams(name="parent", type="integer", nullable=true, description="parent comment id")
      */
-    public function updateComment(CommentRepository $comment, $id){
+    public function updateComment(CommentRepository $comment, $id)
+    {
         return $this->createOrUpdateComment($comment, $id);
     }
 

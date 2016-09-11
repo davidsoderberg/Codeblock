@@ -45,7 +45,7 @@ class ReplyController extends ApiController
      */
     private function createOrUpdateReply(ReplyRepository $reply, $id = null)
     {
-        if ( ! is_null($id)) {
+        if (! is_null($id)) {
             $user_id = $reply->get($id)->user_id;
             if ($user_id != Auth::user()->id && ! Auth::user()->hasPermission('create_reply', false)) {
                 return $this->response([$this->stringErrors => [$this->stringUser => 'You have not created that reply']],
@@ -101,7 +101,7 @@ class ReplyController extends ApiController
     {
         if (count($replyRepository->get()) > 1) {
             $reply = $replyRepository->get($id);
-            if ( ! is_null($reply)) {
+            if (! is_null($reply)) {
                 if (Auth::user()
                         ->hasPermission($this->getPermission(), false) || Auth::user()->id == $reply->user_id
                 ) {
