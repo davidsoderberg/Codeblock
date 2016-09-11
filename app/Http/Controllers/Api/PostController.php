@@ -33,8 +33,8 @@ class PostController extends ApiController
     {
         $posts = $this->getCollection($post, $id);
 
-        if ( ! is_null($posts)) {
-            if ( ! Auth::check()) {
+        if (! is_null($posts)) {
+            if (! Auth::check()) {
                 if (is_array($posts)) {
                     $posts = $this->filter(Collection::make($posts), 'private', 0);
                 } else {
@@ -96,7 +96,7 @@ class PostController extends ApiController
      */
     private function createOrUpdatePost(PostRepository $post, $id = null)
     {
-        if ( ! is_null($id)) {
+        if (! is_null($id)) {
             $user_id = $post->get($id)->user_id;
             if ($user_id != Auth::user()->id) {
                 return $this - response([$this->stringErrors => [$this->stringUser => 'You have not that created that codeblock']],
@@ -152,7 +152,7 @@ class PostController extends ApiController
     public function deletePost(PostRepository $postRepository, $id)
     {
         $post = $postRepository->get($id);
-        if ( ! is_null($post)) {
+        if (! is_null($post)) {
             if (Auth::check() && Auth::user()->id == $post->user_id || Auth::user()
                                                                            ->hasPermission($this->getPermission(),
                                                                                false)

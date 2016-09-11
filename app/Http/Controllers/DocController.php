@@ -30,5 +30,4 @@ class DocController extends Controller
     {
         return File::get(storage_path() . '/doc/api.html');
     }
-
 }

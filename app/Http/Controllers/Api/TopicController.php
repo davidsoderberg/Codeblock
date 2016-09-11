@@ -48,7 +48,7 @@ class TopicController extends ApiController
      */
     private function createOrUpdateTopic(TopicRepository $topic, ReplyRepository $reply, $id = null)
     {
-        if ( ! is_null($id)) {
+        if (! is_null($id)) {
             $currentTopic = $topic->get($id);
             $replies      = $currentTopic->replies;
             $user_id      = $replies[0]->user_id;
@@ -132,7 +132,7 @@ class TopicController extends ApiController
     {
         try {
             $topic = $topicRepository->get($id);
-            if ( ! is_null($topic)) {
+            if (! is_null($topic)) {
                 $reply = $topic->replies()->first();
                 if (Auth::user()
                         ->hasPermission($this->getPermission(), false) || Auth::user()->id == $reply->user_id

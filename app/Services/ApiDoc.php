@@ -110,8 +110,7 @@ class ApiDoc
      */
     protected function generateSampleOutput($st_params, $counter)
     {
-
-        if ( ! isset($st_params['ApiReturn'])) {
+        if (! isset($st_params['ApiReturn'])) {
             $responseBody = '';
         } else {
             $ret = [];
@@ -141,7 +140,7 @@ class ApiDoc
             $responseBody = implode(PHP_EOL, $ret);
         }
 
-        if ( ! isset($st_params['ApiReturnHeaders'])) {
+        if (! isset($st_params['ApiReturnHeaders'])) {
             $responseHeaders = '';
         } else {
             $ret = [];
@@ -173,7 +172,7 @@ class ApiDoc
      */
     protected function generateHeadersTemplate($id, $st_params)
     {
-        if ( ! isset($st_params['ApiHeaders'])) {
+        if (! isset($st_params['ApiHeaders'])) {
             return;
         }
 
@@ -201,7 +200,7 @@ class ApiDoc
      */
     protected function generateParamsTemplate($id, $st_params)
     {
-        if ( ! isset($st_params['ApiParams'])) {
+        if (! isset($st_params['ApiParams'])) {
             return;
         }
 
@@ -232,7 +231,7 @@ class ApiDoc
      */
     private function generateBodyTemplate($id, $docs)
     {
-        if ( ! isset($docs['ApiBody'])) {
+        if (! isset($docs['ApiBody'])) {
             return;
         }
 
@@ -242,7 +241,6 @@ class ApiDoc
             'elt_id' => $id,
             'body' => $body['sample']
         ])->render();
-
     }
 
     /**
