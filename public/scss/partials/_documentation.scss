@@ -5,7 +5,7 @@
 		float: left;
 		width: 35%;
 		margin: 1% 0;
-		input{
+		input {
 			padding: 2.5px 5px;
 		}
 		ul {
@@ -16,7 +16,7 @@
 				&.active {
 					background: $browngray;
 					padding: 2.5px 5px;
-					span{
+					span {
 						color: $white;
 					}
 					a {
@@ -64,6 +64,19 @@
 					}
 				}
 			}
+		}
+	}
+}
+
+#api_documentation {
+	.accordion ul li {
+		.badge {
+			font-size: 80%;
+			font-weight: bolder;
+			text-transform: uppercase;
+		}
+		& > a {
+			text-decoration: none;
 		}
 	}
 }

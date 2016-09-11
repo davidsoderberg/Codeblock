@@ -19,6 +19,11 @@ class ForumController extends ApiController
      * @param null $id
      *
      * @return mixed
+     *
+     * @ApiDescription(section="Forum", description="Get all or one forum")
+     * @ApiMethod(type="get")
+     * @ApiRoute(name="/api/v1/forums/{id?}")
+     * @ApiParams(name="id", type="integer", nullable=true, description="forum id")
      */
     public function forums(ForumRepository $forum, $id = null)
     {
@@ -35,6 +40,11 @@ class ForumController extends ApiController
      * @param $id
      *
      * @return mixed
+     *
+     * @ApiDescription(section="Forum", description="Delete forum")
+     * @ApiMethod(type="delete")
+     * @ApiRoute(name="/api/v1/forums/{id}")
+     * @ApiParams(name="id", type="integer", nullable=false, description="forum id")
      */
     public function deleteForum(ForumRepository $forumRepository, $id)
     {

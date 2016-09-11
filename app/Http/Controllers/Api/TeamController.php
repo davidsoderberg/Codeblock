@@ -18,9 +18,14 @@ class TeamController extends ApiController
      * Fetch one or all teams.
      *
      * @param TeamRepository $teamRepository
-     * @param null $id
+     * @param null           $id
      *
      * @return mixed
+     *
+     * @ApiDescription(section="Team", description="Get all or one team")
+     * @ApiMethod(type="get")
+     * @ApiRoute(name="/api/v1/teams/{id?}")
+     * @ApiParams(name="id", type="integer", nullable=true, description="team id")
      */
     public function teams(TeamRepository $teamRepository, $id = null)
     {
@@ -34,14 +39,31 @@ class TeamController extends ApiController
     }
 
     /**
+     * Creates a team.
+     *
+     * @param TeamRepository $teamRepository
+     *
+     * @return mixed
+     *
+     * @ApiDescription(section="Team", description="Create team")
+     * @ApiMethod(type="post")
+     * @ApiRoute(name="/api/v1/teams")
+     * @ApiParams(name="name", type="string", nullable=false, description="team name")
+     */
+    public function createTeam(TeamRepository $teamRepository)
+    {
+        return $this->createOrUpdateTeam($teamRepository);
+    }
+
+    /**
      * Creates or updates a team.
      *
      * @param TeamRepository $teamRepository
-     * @param null $id
+     * @param null           $id
      *
      * @return mixed
      */
-    public function createOrUpdateTeam(TeamRepository $teamRepository, $id = null)
+    private function createOrUpdateTeam(TeamRepository $teamRepository, $id = null)
     {
         if ($teamRepository->createOrUpdate($this->request->all(), $id)) {
             if (is_null($id)) {
@@ -55,13 +77,38 @@ class TeamController extends ApiController
     }
 
     /**
-     * Invites a user to team.
+     * Updates a team.
      *
      * @param TeamRepository $teamRepository
-     * @param TeamInviteRepository $teamInviteRepository
-     * @param UserRepository $user
+     * @param null           $id
      *
      * @return mixed
+     *
+     * @ApiDescription(section="Team", description="Update team")
+     * @ApiMethod(type="put")
+     * @ApiRoute(name="/api/v1/teams/{id}")
+     * @ApiParams(name="id", type="integer", nullable=false, description="team id")
+     * @ApiParams(name="name", type="string", nullable=false, description="team name")
+     */
+    public function updateTeam(TeamRepository $teamRepository, $id)
+    {
+        return $this->createOrUpdateTeam($teamRepository, $id);
+    }
+
+    /**
+     * Invites a user to team.
+     *
+     * @param TeamRepository       $teamRepository
+     * @param TeamInviteRepository $teamInviteRepository
+     * @param UserRepository       $user
+     *
+     * @return mixed
+     *
+     * @ApiDescription(section="Team", description="Invite to team")
+     * @ApiMethod(type="post")
+     * @ApiRoute(name="/api/v1/teams/invite")
+     * @ApiParams(name="id", type="integer", nullable=false, description="team id")
+     * @ApiParams(name="email", type="string", nullable=false, description="user email")
      */
     public function invite(
         TeamRepository $teamRepository,
@@ -88,9 +135,14 @@ class TeamController extends ApiController
      * Make user leave a team.
      *
      * @param TeamRepository $teamRepository
-     * @param $id
+     * @param                $id
      *
      * @return mixed
+     *
+     * @ApiDescription(section="Team", description="Leave tema")
+     * @ApiMethod(type="post")
+     * @ApiRoute(name="/api/v1/teams/leave/{id}")
+     * @ApiParams(name="id", type="integer", nullable=false, description="team id")
      */
     public function leave(TeamRepository $teamRepository, $id)
     {
@@ -105,10 +157,15 @@ class TeamController extends ApiController
      * Respondes invite for user.
      *
      * @param TeamInviteRepository $teamInviteRepository
-     * @param UserRepository $userRepository
-     * @param $token
+     * @param UserRepository       $userRepository
+     * @param                      $token
      *
      * @return mixed
+     *
+     * @ApiDescription(section="Team", description="Respond to tema invite")
+     * @ApiMethod(type="post")
+     * @ApiRoute(name="/api/v1/teams/{token}")
+     * @ApiParams(name="token", type="string", nullable=false, description="invite token")
      */
     public function respondInvite(TeamInviteRepository $teamInviteRepository, UserRepository $userRepository, $token)
     {
@@ -128,10 +185,15 @@ class TeamController extends ApiController
      * Deletes a team.
      *
      * @param TeamRepository $teamRepository
-     * @param $id
+     * @param                $id
      *
      * @permission delete_team:optional
      * @return mixed
+     *
+     * @ApiDescription(section="Team", description="Delete team")
+     * @ApiMethod(type="delete")
+     * @ApiRoute(name="/api/v1/teams/{id}")
+     * @ApiParams(name="id", type="integer", nullable=false, description="team id")
      */
     public function deleteTeam(TeamRepository $teamRepository, $id)
     {

@@ -20,7 +20,7 @@ class CommentController extends ApiController
      *
      * @return mixed
      */
-    public function createOrUpdateComment(CommentRepository $comment, $id = null)
+    private function createOrUpdateComment(CommentRepository $comment, $id = null)
     {
         if (!is_null($id)) {
             $user_id = $comment->get($id)->user_id;
@@ -37,6 +37,44 @@ class CommentController extends ApiController
     }
 
     /**
+     * Creating a comment.
+     *
+     * @param CommentRepository $comment
+     *
+     * @return mixed
+     *
+     * @ApiDescription(section="Comment", description="Create comment")
+     * @ApiMethod(type="post")
+     * @ApiRoute(name="/api/v1/comments")
+     * @ApiParams(name="comment", type="string", nullable=false, description="comment")
+     * @ApiParams(name="post_id", type="integer", nullable=false, description="codeblock id")
+     * @ApiParams(name="parent", type="integer", nullable=true, description="parent comment id")
+     */
+    public function createComment(CommentRepository $comment){
+        return $this->createOrUpdateComment($comment);
+    }
+
+    /**
+     * Updating a comment.
+     *
+     * @param CommentRepository $comment
+     * @param null               $id
+     *
+     * @return mixed
+     *
+     * @ApiDescription(section="Comment", description="Update comment")
+     * @ApiMethod(type="put")
+     * @ApiRoute(name="/api/v1/comments/{id}")
+     * @ApiParams(name="id", type="integer", nullable=false, description="comment id")
+     * @ApiParams(name="comment", type="string", nullable=false, description="comment")
+     * @ApiParams(name="post_id", type="integer", nullable=false, description="codeblock id")
+     * @ApiParams(name="parent", type="integer", nullable=true, description="parent comment id")
+     */
+    public function updateComment(CommentRepository $comment, $id){
+        return $this->createOrUpdateComment($comment, $id);
+    }
+
+    /**
      * Deletes a comment.
      * @permission delete_comments:optional
      *
@@ -44,6 +82,11 @@ class CommentController extends ApiController
      * @param  int $id
      *
      * @return object
+     *
+     * @ApiDescription(section="Comment", description="Delete comment")
+     * @ApiMethod(type="delete")
+     * @ApiRoute(name="/api/v1/comments/{id}")
+     * @ApiParams(name="id", type="integer", nullable=false, description="comment id")
      */
     public function deleteComment(CommentRepository $commentRepository, $id)
     {
@@ -72,6 +115,11 @@ class CommentController extends ApiController
      * @param $id
      *
      * @return mixed
+     *
+     * @ApiDescription(section="Comment", description="Rate comment")
+     * @ApiMethod(type="post")
+     * @ApiRoute(name="/api/v1/comments/rate/{id}")
+     * @ApiParams(name="id", type="integer", nullable=false, description="comment id")
      */
     public function Rate(RateRepository $rate, $id)
     {

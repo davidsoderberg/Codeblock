@@ -17,6 +17,11 @@ class CategoryController extends ApiController
      * @param null $id
      *
      * @return mixed
+     *
+     * @ApiDescription(section="Category", description="Get all or one category")
+     * @ApiMethod(type="get")
+     * @ApiRoute(name="/api/v1/categories/{id?}")
+     * @ApiParams(name="id", type="integer", nullable=true, description="category id")
      */
     public function Categories(CategoryRepository $category, $id = null)
     {
@@ -33,13 +38,51 @@ class CategoryController extends ApiController
      *
      * @return mixed
      */
-    public function createOrUpdateCategory(CategoryRepository $category, $id = null)
+    private function createOrUpdateCategory(CategoryRepository $category, $id = null)
     {
         if ($category->createOrUpdate($this->request->all(), $id)) {
             return $this->response([$this->stringMessage => 'Your category has been saved'], 201);
         }
 
         return $this->response([$this->stringErrors => $category->getErrors()], 400);
+    }
+
+    /**
+     * Creating a category.
+     *
+     * @permission create_update_categories
+     *
+     * @param CategoryRepository $category
+     *
+     * @return mixed
+     *
+     * @ApiDescription(section="Category", description="Create category")
+     * @ApiMethod(type="post")
+     * @ApiRoute(name="/api/v1/categories")
+     * @ApiParams(name="name", type="string", nullable=false, description="category name")
+     */
+    public function createCategory(CategoryRepository $category){
+        return $this->createOrUpdateCategory($category);
+    }
+
+    /**
+     * Updating a category.
+     *
+     * @permission create_update_categories
+     *
+     * @param CategoryRepository $category
+     * @param null               $id
+     *
+     * @return mixed
+     *
+     * @ApiDescription(section="Category", description="Update category")
+     * @ApiMethod(type="put")
+     * @ApiRoute(name="/api/v1/categories/{id}")
+     * @ApiParams(name="id", type="integer", nullable=false, description="category id")
+     * @ApiParams(name="name", type="string", nullable=false, description="category name")
+     */
+    public function updateCategory(CategoryRepository $category, $id){
+        return $this->createOrUpdateCategory($category, $id);
     }
 
 
@@ -50,6 +93,11 @@ class CategoryController extends ApiController
      * @param $id
      *
      * @return mixed
+     *
+     * @ApiDescription(section="Category", description="Delete category")
+     * @ApiMethod(type="delete")
+     * @ApiRoute(name="/api/v1/categories/{id}")
+     * @ApiParams(name="id", type="integer", nullable=false, description="category id")
      */
     public function deleteCategory(CategoryRepository $categoryRepository, $id)
     {

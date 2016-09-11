@@ -17,6 +17,11 @@ class ArticleController extends ApiController
      * @param null $id
      *
      * @return mixed
+     *
+     * @ApiDescription(section="Article", description="Get all articles")
+     * @ApiMethod(type="get")
+     * @ApiRoute(name="/api/v1/articles/{id?}")
+     * @ApiParams(name="id", type="integer", nullable=true, description="article id")
      */
     public function articles(ArticleRepository $article, $id = null)
     {

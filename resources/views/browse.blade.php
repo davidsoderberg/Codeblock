@@ -6,11 +6,11 @@
 
 @section('content')
 	<h2>Browse</h2>
-	<!--
-	<div id="accordion" class="accordion">
+    <!--
+	<div id="browseAccordion" class="accordion">
 		<ul>
 			<li class="open">
-				<a href="#">Categories</a>
+				<a href="">Categories</a>
 				<div class="content">
 					{{HTML::actionlink($url = array('action' => 'PostController@category', 'params' => array(0)), 'What is new?', array('class' => 'block'))}}
 	@foreach ($categories as $category)

@@ -10,10 +10,6 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-Route::pattern('id', '[0-9]+');
-Route::pattern('username', '[-_0-9A-Za-z]+');
-Route::pattern('slug', '[-a-zA-Z0-9-]+');
-Route::pattern('sort', 'category|stars|date|comments|name');
 
 Route::get('/', 'MenuController@index');
 Route::get('browse', 'MenuController@browse');
@@ -34,6 +30,11 @@ Route::get('command/{command}/{password}/{param?}', 'MenuController@command')->w
     'password' => '[a-zA-Z0-9]+',
     'param' => '[a-zA-Z_]+',
 ]);
+
+Route::group(['prefix' => 'doc'], function () {
+    Route::get('/', 'DocController@index');
+    Route::get('/api', 'DocController@api');
+});
 
 Route::group(['prefix' => 'posts'], function () {
     Route::get('/list', 'PostController@listPosts');
@@ -222,102 +223,4 @@ Route::group(['middleware' => 'guest'], function () {
     Route::post('session/create', 'UserController@Usersession');
     Route::post('forgotpassword', 'UserController@forgotPassword');
     Route::get('activate/{id}/{token}', 'UserController@activate');
-});
-
-Route::group(['prefix' => 'api', 'middleware' => 'api'], function () {
-    Route::get('', 'ApiController@index');
-
-    Route::group(['prefix' => 'v1'], function () {
-        Route::get('', 'ApiController@index');
-
-        Route::group(['prefix' => 'articles'], function () {
-            Route::get('{id?}', 'Api\ArticleController@articles');
-        });
-
-        Route::group(['prefix' => 'notifications', 'middleware' => 'jwt'], function () {
-            Route::get('{id?}', 'Api\NotificationController@notifications');
-            Route::delete('/{id}', 'Api\NotificationController@deleteNotification');
-        });
-
-        Route::group(['prefix' => 'teams', 'middleware' => 'jwt'], function () {
-            Route::get('{id?}', 'Api\TeamController@teams');
-            Route::post('', 'Api\TeamController@createOrUpdateTeam');
-            Route::put('/{id}', 'Api\TeamController@createOrUpdateTeam');
-            Route::post('/invite', 'Api\TeamController@invite');
-            Route::post('/leave/{id}', 'Api\TeamController@leave');
-            Route::post('/{token}', 'Api\TeamController@respondInvite');
-            Route::delete('/{id}', 'Api\TeamController@deleteTeam');
-        });
-
-        Route::group(['prefix' => 'posts'], function () {
-            Route::get('{id?}', 'Api\PostController@Posts');
-            Route::group(['middleware' => 'jwt'], function () {
-                Route::post('', 'Api\PostController@createOrUpdatePost');
-                Route::delete('/{id}', 'Api\PostController@deletePost');
-                Route::put('/{id}', 'Api\PostController@createOrUpdatePost');
-                Route::post('star/{id}', 'Api\PostController@Star');
-            });
-        });
-
-        Route::group(['prefix' => 'comments', 'middleware' => 'jwt'], function () {
-            Route::post('/', 'Api\CommentController@createOrUpdateComment');
-            Route::put('/{id}', 'Api\CommentController@createOrUpdateComment');
-            Route::delete('/{id}', 'Api\CommentController@deleteComment');
-            Route::post('rate/{id}', 'Api\CommentController@Rate');
-        });
-
-        Route::group(['prefix' => 'categories'], function () {
-            Route::get('/{id?}', 'Api\CategoryController@Categories');
-            Route::group(['middleware' => 'jwt'], function () {
-                Route::post('/', 'Api\CategoryController@createOrUpdateCategory');
-                Route::put('/{id}', 'Api\CategoryController@createOrUpdateCategory');
-                Route::delete('/{id}', 'Api\CategoryController@deleteCategory');
-            });
-        });
-
-        Route::group(['prefix' => 'tags'], function () {
-            Route::get('/{id?}', 'Api\TagController@Tags');
-            Route::group(['middleware' => 'jwt'], function () {
-                Route::post('/', 'Api\TagController@createOrUpdateTag');
-                Route::put('/{id}', 'Api\TagController@createOrUpdateTag');
-                Route::delete('/{id}', 'Api\TagController@deleteTag');
-            });
-        });
-
-        Route::group(['prefix' => 'topics'], function () {
-            Route::get('/{id?}', 'Api\TopicController@topics');
-            Route::group(['middleware' => 'jwt'], function () {
-                Route::post('/', 'Api\TopicController@createOrUpdateTopic');
-                Route::put('/{id}', 'Api\TopicController@createOrUpdateTopic');
-                Route::delete('/{id}', 'Api\TopicController@deleteTopic');
-            });
-        });
-
-        Route::group(['prefix' => 'replies', 'middleware' => 'jwt'], function () {
-            Route::post('/', 'Api\ReplyController@createOrUpdateReply');
-            Route::put('/{id}', 'Api\ReplyController@createOrUpdateReply');
-            Route::delete('/{id}', 'Api\ReplyController@deleteReply');
-        });
-
-        Route::group(['prefix' => 'users'], function () {
-            Route::get('/{id?}', 'Api\UserController@Users');
-            Route::group(['middleware' => 'jwt'], function () {
-                Route::put('/{id}', 'Api\UserController@createOrUpdateUser');
-            });
-        });
-
-        Route::group(['prefix' => 'forums'], function () {
-            Route::get('/{id?}', 'Api\ForumController@forums');
-            Route::group(['middleware' => 'jwt'], function () {
-                Route::delete('/{id}', 'Api\ForumController@deleteForum');
-            });
-        });
-
-        Route::group(['prefix' => 'auth'], function () {
-            Route::get('/', 'Api\AuthController@getJwt');
-            Route::post('/', 'Api\AuthController@Auth');
-            Route::post('/register', 'Api\UserController@createOrUpdateUser');
-            Route::post('/forgot', 'Api\AuthController@forgotPassword');
-        });
-    });
 });
