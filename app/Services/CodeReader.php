@@ -52,7 +52,8 @@ final class CodeReader
 
         foreach ($it as $file) {
             if (pathinfo($file, PATHINFO_EXTENSION) == "php") {
-                $file          = str_replace(base_path() . '\\', '', $file->getRealPath());
+                $file          = str_replace(base_path() . '/', '', $file->getRealPath());
+                $file          = str_replace('/', '\\', $file);
                 $file          = str_replace('.php', '', $file);
                 $this->paths[] = ucfirst($file);
             }
