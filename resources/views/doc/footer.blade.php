@@ -6,9 +6,10 @@
         <div class="menu float-right">
             <ul>
                 <li class="divider"></li>
-                <li><a href="./" target="_blank">Code</a></li>
+                <li>{{ HTML::actionlink($url = array('action' => 'DocController@index'), 'Doc', ['target' => '_blank'])  }}</li>
                 <li class="divider"></li>
-                <li><a href="./api.html" target="_blank">Api</a></li>
+
+                <li>{{ HTML::actionlink($url = array('action' => 'DocController@api'), 'Api', ['target' => '_blank'])  }}</li>
                 <li class="divider"></li>
             </ul>
         </div>
