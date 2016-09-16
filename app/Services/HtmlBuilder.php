@@ -224,6 +224,18 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder
         return '<a' . $this->attributes($attributes) . '>' . $content . '</a>';
     }
 
+    public function methodParams( $params )
+    {
+        $return = '';
+
+        foreach($params as $key => $tag) {
+            $return .= $key . ' ' . implode( '', $tag );
+        }
+
+        return '('.$return.')';
+
+    }
+
     /**
      * Creating table.
      *

@@ -3,11 +3,7 @@
     @foreach($doc['properties'] as $key => $property)
         <p><b>{{ '$' . $key }}</b>
             @if(!is_null($property['tags']))
-                (
-                @foreach($property['tags'] as $key => $tag)
-                    {{$key}} {{ implode('', $tag) }}
-                @endforeach
-                )
+                {{ HTML::methodParams($property['tags'])}}
             @endif
         </p>
         <p><b>Modifier:</b> {{$property['modifier']}}</p>
