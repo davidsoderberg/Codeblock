@@ -26,7 +26,7 @@ abstract class Annotation
     private $values;
 
     /**
-     * Propety to store current annotation in.
+     * Property to store current annotation in.
      *
      * @var
      */

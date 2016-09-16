@@ -1,0 +1,1 @@
+<span class="badge {{ $method }}">{{ $method }}</span>

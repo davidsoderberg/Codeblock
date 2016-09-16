@@ -19,6 +19,10 @@ class NotificationController extends ApiController
      * @param NotificationRepository $notificationRepository
      *
      * @return mixed
+     *
+     * @ApiDescription(section="Notification", description="Get all or one notification")
+     * @ApiMethod(type="get")
+     * @ApiRoute(name="/api/v1/notifications")
      */
     public function notifications(NotificationRepository $notificationRepository)
     {
@@ -35,6 +39,11 @@ class NotificationController extends ApiController
      * @param $id
      *
      * @return mixed
+     *
+     * @ApiDescription(section="Notification", description="Delete notification")
+     * @ApiMethod(type="delete")
+     * @ApiRoute(name="/api/v1/notifications/{id}")
+     * @ApiParams(name="id", type="integer", nullable=false, description="notification id")
      */
     public function deleteNotification(NotificationRepository $notification, $id)
     {

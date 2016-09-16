@@ -3,9 +3,24 @@
 use App\Services\CodeReader;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\View;
+use App\Services\ApiDoc;
+use Crada\Apidoc\Exception;
+
+use App\Http\Controllers\Api\ArticleController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\ForumController;
+use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\PostController;
+use App\Http\Controllers\Api\ReplyController;
+use App\Http\Controllers\Api\TagController;
+use App\Http\Controllers\Api\TeamController;
+use App\Http\Controllers\Api\TopicController;
+use App\Http\Controllers\Api\UserController;
 
 /**
- * Class Websocket
+ * Class Doc
  * @package App\Console\Commands
  */
 class Doc extends Command
@@ -16,14 +31,14 @@ class Doc extends Command
      *
      * @var string
      */
-    protected $name = 'doc';
+    protected $name = 'make:doc';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Creates code documentation.';
+    protected $description = 'Generats api and code documentation.';
 
     /**
      * Create a new command instance.
@@ -40,37 +55,96 @@ class Doc extends Command
      */
     public function fire()
     {
-        $this->createHtml();
+        $path = $this->createDocDir();
+        if (! is_null($path)) {
+            $this->createApiHtml($path);
+            $this->createDocHtml($path);
+        }
     }
 
     /**
-     * Creates html file with documentation and saves it to storage folder doc.
+     * Create storage directory to save documentation in.
+     *
+     * @return string
      */
-    private function createHtml()
+    private function createDocDir()
     {
-        $path = $this->ask('Where should we store documentation file inside ' . storage_path() . '?', 'doc');
-
+        $path = $this->ask('Where should we store documentation files ' . storage_path() . '?', 'doc');
         $path = trim($path, '/');
-        $path = '/' . $path;
+        $path = storage_path() . '/' . $path;
 
-        if (! is_dir(storage_path() . $path)) {
-            if (! mkdir(storage_path() . $path)) {
+        if (! is_dir($path)) {
+            if (! mkdir($path)) {
                 $this->error('We could not create that directory, please try with another directory.');
             }
-            $this->info(storage_path() . $path . ' have been created');
-        }
+            $this->info($path . ' have been created');
 
+            return $path;
+        } else {
+            return $path;
+        }
+    }
+
+    /**
+     * Creates html file for api documentation and saves it to storage folder doc.
+     *
+     * @param string $path
+     */
+    private function createApiHtml($path)
+    {
+        $classes = [
+            ArticleController::class,
+            AuthController::class,
+            CategoryController::class,
+            CommentController::class,
+            ForumController::class,
+            NotificationController::class,
+            PostController::class,
+            ReplyController::class,
+            TagController::class,
+            TeamController::class,
+            TopicController::class,
+            UserController::class
+        ];
+
+        try {
+            $api_doc = new ApiDoc($classes);
+            $data    = View::make('doc.api.index')->with($api_doc->generate())->render();
+            $file    = $path . '/api.html';
+
+            if ($this->createHtmlFile($data, $file)) {
+                $this->info('Api documentation have been created.');
+            } else {
+                $this->error('We could not create the api documentation, please try agian.');
+            }
+        } catch (Exception $e) {
+            $this->error('There was an error generating the api documentation: ', $e->getMessage());
+        }
+    }
+
+    private function createHtmlFile($data, $file)
+    {
+        return file_put_contents($file, $data);
+    }
+
+    /**
+     * Creates html file for code documentation and saves it to storage folder doc.
+     *
+     * @param string $path
+     */
+    private function createDocHtml($path)
+    {
         $this->info('Fetching documentation from php files');
         $code_reader = new CodeReader(app_path());
 
         $this->info('Creating html file for documentation.');
-        $created = file_put_contents(storage_path() . $path . '/index.html',
-            View::make('doc.index')->with('docs', $code_reader->getClasses())->render());
+        $data = View::make('doc.index')->with('docs', $code_reader->getClasses())->render();
+        $file = $path . '/index.html';
 
-        if ($created === false) {
-            $this->error('We could not create the documentation for some reason, please try agian.');
-        } else {
+        if ($this->createHtmlFile($data, $file)) {
             $this->info('Documentation have been created.');
+        } else {
+            $this->error('We could not create the code documentation, please try agian.');
         }
     }
 

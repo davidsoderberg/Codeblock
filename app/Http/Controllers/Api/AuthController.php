@@ -16,6 +16,12 @@ class AuthController extends ApiController
     /**
      * Authenticate the api user.
      * @return mixed
+     *
+     * @ApiDescription(section="Auth", description="Get users token.")
+     * @ApiMethod(type="post")
+     * @ApiRoute(name="/api/v1/auth")
+     * @ApiParams(name="username", type="string", nullable=false, description="username")
+     * @ApiParams(name="password", type="string", nullable=false, description="password")
      */
     public function Auth()
     {
@@ -36,6 +42,11 @@ class AuthController extends ApiController
      * @param UserRepository $user
      *
      * @return mixed
+     *
+     * @ApiDescription(section="Auth", description="Get new password for user.")
+     * @ApiMethod(type="post")
+     * @ApiRoute(name="/api/v1/auth/forgot")
+     * @ApiParams(name="email", type="string", nullable=false, description="User email")
      */
     public function forgotPassword(UserRepository $user)
     {

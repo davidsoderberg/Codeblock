@@ -40,7 +40,7 @@ trait CacheTrait
     protected $model = null;
 
     /**
-     * Propety to store Cache key in.
+     * Property to store Cache key in.
      *
      * @var
      */

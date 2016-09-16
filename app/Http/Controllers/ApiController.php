@@ -46,28 +46,28 @@ class ApiController extends Controller
     private $collection;
 
     /**
-     * Propety to store errors string in.
+     * Property to store errors string in.
      *
      * @var string
      */
     protected $stringErrors = 'errors';
 
     /**
-     * Propety to store messsage string in.
+     * Property to store messsage string in.
      *
      * @var string
      */
     protected $stringMessage = 'messsage';
 
     /**
-     * Propety to store data string in.
+     * Property to store data string in.
      *
      * @var string
      */
     protected $stringData = 'data';
 
     /**
-     * Propety to store user string in.
+     * Property to store user string in.
      *
      * @var string
      */
@@ -453,8 +453,10 @@ class ApiController extends Controller
             $action = $route->getAction();
             $uris = explode('/', $action['prefix']);
             unset($uris[0]);
-            if (preg_match('/^v[0-9]+$/', $uris[1])) {
-                $groupedByVersion[$uris[1]][] = $route;
+            if (isset($uris[1])) {
+                if (preg_match('/^v[0-9]+$/', $uris[1])) {
+                    $groupedByVersion[$uris[1]][] = $route;
+                }
             }
         }
 

@@ -5,7 +5,7 @@
 		float: left;
 		width: 35%;
 		margin: 1% 0;
-		input{
+		input {
 			padding: 2.5px 5px;
 		}
 		ul {
@@ -16,7 +16,7 @@
 				&.active {
 					background: $browngray;
 					padding: 2.5px 5px;
-					span{
+					span {
 						color: $white;
 					}
 					a {
@@ -61,8 +61,35 @@
 						width: 50%;
 						float: left;
 						margin-bottom: 0.5em;
+						li{
+							list-style: none;
+						}
 					}
 				}
+			}
+		}
+	}
+}
+
+#api_documentation {
+	.accordion ul li {
+		.badge {
+			font-size: 80%;
+			font-weight: bolder;
+			text-transform: uppercase;
+		}
+		& > a {
+			text-decoration: none;
+		}
+	}
+}
+
+@media (max-width: 992px) {
+	#documentation, #api_documentation {
+		.wrapper{
+			width: 100%;
+			+ .wrapper {
+				width: 100%;
 			}
 		}
 	}
