@@ -23,8 +23,8 @@
 		}
 	}
 	ul:last-of-type{
-		margin-top: -1em;
 		li{
+			list-style: none;
 			@include clearfix();
 			overflow: hidden;
 			max-height: 0;
