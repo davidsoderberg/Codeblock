@@ -157,6 +157,7 @@ return [
         Irazasyed\LaravelGAMP\LaravelGAMPServiceProvider::class,
         Spatie\Analytics\AnalyticsServiceProvider::class,
         Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
+        Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
     ],
 
     /*
@@ -207,6 +208,7 @@ return [
         'Socialize' => 'Laravel\Socialite\Facades\Socialite',
         'GAMP'  => Irazasyed\LaravelGAMP\Facades\GAMP::class,
         'LaravelAnalytics' => Spatie\Analytics\AnalyticsFacade::class,
+        'Sentry' => Sentry\SentryLaravel\SentryFacade::class,
     ],
 
 ];
