@@ -9,14 +9,13 @@ Repository for codeblock.se
 4. Run `php artisan Install`.
 5. Run `php artisan websocket` with [supervisor](http://supervisord.org/).
 
-## Config needed for pphunit tests
+## Config needed for pHpunit tests
 If you would like to run the phpunit tests you will need following in your .env file:  
 FROM_ADRESS, FROM_NAME, GITHUB_TOKEN
 
-
 ## Creating documentation
-1. Run `vendor/bin/sami.php update sami.php -v`.
-2. You can now view the documentation in `storage/doc/build`.
+1. Run `php artisan make:doc`.
+2. You can now view the documentation on routes `/doc` and `/doc/api`.
  
 ## Coding style
 You can check if your contribution passes the styleguide by using phpcs and running following in your project root:    
