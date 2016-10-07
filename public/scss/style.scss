@@ -29,17 +29,14 @@
 	@include clearfix();
 }
 #loggo{
-	border: none;
 	margin: 0;
-	float: left;
-	padding-right: 15px;
-	img{
-		vertical-align: middle;
-		margin-top: -5px;
-		margin-left: 5px;
-	}
+	display:block;
+	width: auto;
+	border: none;
 	a{
-		line-height: 80px;
+		display: block;
+		width: 245px;
+		margin: 20px auto 0 auto;
 		text-decoration: none;
 	}
 	span{
@@ -51,6 +48,20 @@
 			padding-right: 5px;
 		}
 	}
+	.icon {
+		display: flex;
+		flex-direction: column;
+		flex-wrap: wrap;
+		height: 40px;
+		width: 40px;
+		float: right;
+		.cube {
+			height: 50%;
+			width: 50%;
+			flex:1 0 50%;
+		}
+	}
+	@include clearfix();
 }
 
 .alert{

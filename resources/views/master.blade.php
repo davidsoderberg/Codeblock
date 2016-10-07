@@ -35,9 +35,9 @@
 				</div>
 				<h1 id="loggo">
 					@if(Auth::check())
-						{{HTML::actionlink($url = array('action' => 'MenuController@browse'), '<span class="color-red">C</span><span class="color-green">o</span><span class="color-orange">d</span><span class="color-blue">e</span>block<img src="'.HTML::version('img/favicon.png').'" width="32" height="32" alt="">')}}
+						{{HTML::actionlink($url = array('action' => 'MenuController@browse'), HTML::logotype())}}
 					@else
-						{{HTML::actionlink($url = array('action' => 'MenuController@index'), '<span class="color-red">C</span><span class="color-green">o</span><span class="color-orange">d</span><span class="color-blue">e</span>block<img src="'.HTML::version('img/favicon.png').'" width="32" height="32" alt="">')}}
+						{{HTML::actionlink($url = array('action' => 'MenuController@index'), HTML::logotype())}}
 					@endif
 				</h1>
 				<div class="display-none">

@@ -24,19 +24,6 @@
 			color: $white
 		}
 	}
-	#loggo{
-		display: block;
-		float: none;
-		width: 100%;
-		text-align: center;
-		line-height: 1em;
-		padding: 0;
-		margin-top: 10px;
-		a{
-			line-height: 1em;
-		}
-		@include clearfix();
-	}
 	.hideUl + ul, .hideUl + .menu{
 		display: none !important;
 	}

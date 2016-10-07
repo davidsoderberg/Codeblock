@@ -83,13 +83,7 @@ body{
 		right: 0;
 	}
 }
-#loggo{
-	display: block;
-	float: none;
-	width: 100%;
-	text-align: center;
-	@include clearfix();
-}
+
 .menu-button{
 	float: right;
 	text-decoration: none;
@@ -113,13 +107,6 @@ body{
 	body{
 		#header .wrapper{
 			padding: 0 2.5%;
-		}
-	 	#loggo {
-			margin: 0;
-			display: inline;
-			float: left;
-			width: auto;
-			line-height: 80px;
 		}
 		.menu-wrap {
 			width: 100%;

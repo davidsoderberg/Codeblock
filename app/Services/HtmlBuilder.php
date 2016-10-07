@@ -35,6 +35,16 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder
     }
 
     /**
+     * Returns logotype for codeblock.
+     *
+     * @return string logotyp for codeblock.
+     */
+    public function logotype()
+    {
+        return '<span class="color-red">C</span><span class="color-green">o</span><span class="color-orange">d</span><span class="color-blue">e</span>block<div class="icon"><div class="cube background-red"></div><div class="cube background-orange"></div><div class="cube background-green"></div><div class="cube background-blue"></div></div>';
+    }
+
+    /**
      * Parse markdown string to html.
      *
      * @param $text
